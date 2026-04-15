@@ -204,6 +204,13 @@ class ExchangeRateService {
   /// For each date in [fromDate]..[toDate] where no rate exists in the DB
   /// for [currencyCode] + [source], fetches via the provider chain and inserts.
   ///
+  /// **Current limitation (2026-04):** The only active provider (DolarApiProvider /
+  /// ve.dolarapi.com) does not support historical lookups — it always returns
+  /// today's rate. Therefore, this method is effectively a no-op for any date
+  /// that is not today, since `RateProviderManager.fetchRate` returns `null`
+  /// for non-today dates. The method is kept as an extension point for when a
+  /// historical provider becomes available again.
+  ///
   /// Returns the count of rates successfully inserted.
   Future<int> backfillMissingRates({
     required DateTime fromDate,

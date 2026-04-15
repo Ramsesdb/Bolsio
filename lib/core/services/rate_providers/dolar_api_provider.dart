@@ -6,6 +6,14 @@ import 'package:wallex/core/services/rate_providers/rate_provider.dart';
 
 /// RateProvider implementation using ve.dolarapi.com.
 /// Only supports today's rate (no historical data).
+///
+/// As of 2026-04, this is the only working public Venezuelan rate API.
+/// ve.dolarapi.com /oficial and /paralelo return HTTP 200 with current BCV and
+/// parallel market rates. The /historico endpoint returns 404 and query params
+/// like ?fecha= are silently ignored (always returns today's rate).
+/// Historical rates therefore depend on local accumulation in the
+/// exchangeRates table — each app start fetches today's rates, building
+/// local history over time.
 class DolarApiProvider extends RateProvider {
   static const String _baseUrl = 'https://ve.dolarapi.com/v1';
 

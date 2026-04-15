@@ -2,36 +2,44 @@ import 'package:flutter/material.dart';
 
 import 'package:wallex/core/services/rate_providers/rate_provider.dart';
 import 'package:wallex/core/services/rate_providers/dolar_api_provider.dart';
-import 'package:wallex/core/services/rate_providers/pydolar_vzla_provider.dart';
 
 /// Manages a fallback chain of rate providers.
 ///
-/// - For today's rate: DolarApi first (faster, more reliable for current day),
-///   PyDolarVzla as fallback.
-/// - For historical rate: PyDolarVzla first (only one that supports it).
+/// Note: As of 2026-04, ve.dolarapi.com is the only working public Venezuelan
+/// rate API. PyDolarVenezuela's hosted deployment (pydolarvenezuela-api.vercel.app)
+/// returned DEPLOYMENT_NOT_FOUND when probed; the docs domain (docs.pydolarve.org)
+/// also doesn't resolve. ve.dolarapi.com has no historical endpoint, so historical
+/// rates depend on local accumulation in the exchangeRates table (each app start
+/// fetches today's BCV + paralelo into the table — over time builds local history).
 class RateProviderManager {
   static final RateProviderManager instance = RateProviderManager._();
   RateProviderManager._();
 
   final List<RateProvider> _providers = [
     DolarApiProvider(),
-    PyDolarVzlaProvider(),
   ];
 
   /// Fetch a rate with automatic fallback through the provider chain.
   ///
   /// [date] - the date for which to fetch the rate.
   /// [source] - 'bcv' or 'paralelo'.
+  ///
+  /// Returns `null` immediately for non-today dates because the only active
+  /// provider (DolarApiProvider) does not support historical lookups.
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
   }) async {
     final isToday = DateUtils.isSameDay(date, DateTime.now());
-    final ordered = isToday
-        ? _providers
-        : _providers.where((p) => p.supportsHistorical).toList();
 
-    for (final p in ordered) {
+    // No provider currently supports historical rates.
+    // Return null early to avoid unnecessary network calls.
+    if (!isToday) {
+      debugPrint('[$_tag] No historical provider available; returning null for $date');
+      return null;
+    }
+
+    for (final p in _providers) {
       try {
         final r = await p.fetchRate(date: date, source: source);
         if (r != null) return r;
