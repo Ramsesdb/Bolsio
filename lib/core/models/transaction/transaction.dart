@@ -38,6 +38,8 @@ class MoneyTransaction extends TransactionInDB {
     super.locAddress,
     super.locLatitude,
     super.locLongitude,
+    super.exchangeRateApplied,
+    super.exchangeRateSource,
     required AccountInDB account,
     AccountInDB? receivingAccount,
     required CurrencyInDB accountCurrency,
