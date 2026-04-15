@@ -1,28 +1,28 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/currencies/edit_currency_page.dart';
-import 'package:monekin/app/currencies/exchange_rate_details.dart';
-import 'package:monekin/app/currencies/exchange_rate_form.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/currencies/edit_currency_page.dart';
+import 'package:wallex/app/currencies/exchange_rate_details.dart';
+import 'package:wallex/app/currencies/exchange_rate_form.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/currency/currency.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/services/dolar_api_service.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/utils/uuid.dart';
 
 class CurrencyManagerPage extends StatelessWidget {
   const CurrencyManagerPage({super.key});
@@ -274,7 +274,7 @@ class CurrencyManagerPage extends StatelessWidget {
                               .fetchAllRates();
                           if (rates.isEmpty) {
                             if (context.mounted) {
-                              MonekinSnackbar.error(
+                              WallexSnackbar.error(
                                 SnackbarParams(
                                   'Error al obtener tasas de cambio',
                                 ),
@@ -338,7 +338,7 @@ class CurrencyManagerPage extends StatelessWidget {
                                   ),
                                 );
                             if (context.mounted) {
-                              MonekinSnackbar.success(
+                              WallexSnackbar.success(
                                 SnackbarParams(
                                   'Tasa actualizada: ${rate.promedio}',
                                 ),
@@ -346,7 +346,7 @@ class CurrencyManagerPage extends StatelessWidget {
                             }
                           } catch (e) {
                             if (context.mounted) {
-                              MonekinSnackbar.error(
+                              WallexSnackbar.error(
                                 SnackbarParams('Error: $e'),
                               );
                             }

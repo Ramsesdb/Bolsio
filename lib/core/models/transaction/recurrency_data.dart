@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class RecurrencyData extends Equatable {
   final RecurrentRuleLimit? ruleRecurrentLimit;

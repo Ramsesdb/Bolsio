@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// A widget that handles the WillPopScope for the entire app
 class HandleWillPopScope extends StatefulWidget {

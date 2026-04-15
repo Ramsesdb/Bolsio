@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/services/supported_icon/supported_icon_service.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 enum AccountType {
   /// A normal type of account The default type

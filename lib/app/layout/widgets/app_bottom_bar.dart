@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// Bottom navigation bar used in mobile layout
 class AppBottomBar extends StatelessWidget {

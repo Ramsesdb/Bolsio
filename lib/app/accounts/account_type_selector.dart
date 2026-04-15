@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/account/account.dart';
+import 'package:wallex/core/models/account/account.dart';
 
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector({
@@ -34,7 +34,7 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
           final AccountType item = AccountType.values[index];
 
           return Flexible(
-            child: MonekinFilterChip(
+            child: WallexFilterChip(
               accountType: item,
               onPressed: () {
                 setState(() {
@@ -51,8 +51,8 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
   }
 }
 
-class MonekinFilterChip extends StatelessWidget {
-  const MonekinFilterChip({
+class WallexFilterChip extends StatelessWidget {
+  const WallexFilterChip({
     super.key,
     required this.accountType,
     required this.onPressed,

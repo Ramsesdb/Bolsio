@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/form/category_form.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/column_with_reorderable_list_and_search.dart';
-import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/categories/form/category_form.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/extensions/string.extension.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/presentation/animations/animated_floating_button.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/column_with_reorderable_list_and_search.dart';
+import 'package:wallex/core/presentation/widgets/wallex_reorderable_list.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
@@ -94,7 +94,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
             final isOrderEnabled =
                 categories.length > 1 && searchQuery.isNullOrEmpty;
 
-            return MonekinReorderableList(
+            return WallexReorderableList(
               totalItemCount: categories.length,
               isOrderEnabled: isOrderEnabled,
               scrollController: _scrollController,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MonekinDropdownSelect<T> extends StatefulWidget {
-  const MonekinDropdownSelect({
+class WallexDropdownSelect<T> extends StatefulWidget {
+  const WallexDropdownSelect({
     super.key,
     required this.initial,
     required this.items,
@@ -29,17 +29,17 @@ class MonekinDropdownSelect<T> extends StatefulWidget {
   final BoxConstraints textConstraints;
 
   @override
-  State<MonekinDropdownSelect> createState() => MonekinDropdownSelectState<T>();
+  State<WallexDropdownSelect> createState() => WallexDropdownSelectState<T>();
 }
 
-/// State of the `MonekinDropdownSelect` component. Use it for creating a key and open the dropdown programatically:
+/// State of the `WallexDropdownSelect` component. Use it for creating a key and open the dropdown programatically:
 ///
 ///
 ///```
-///     late GlobalKey<MonekinDropdownSelectState>? _dropdownKey = GlobalKey();
+///     late GlobalKey<WallexDropdownSelectState>? _dropdownKey = GlobalKey();
 ///     _dropdownKey!.currentState!.openDropdown();
 ///```
-class MonekinDropdownSelectState<T> extends State<MonekinDropdownSelect<T>> {
+class WallexDropdownSelectState<T> extends State<WallexDropdownSelect<T>> {
   T? currentValue;
 
   late final GlobalKey _dropdownButtonKey = GlobalKey();

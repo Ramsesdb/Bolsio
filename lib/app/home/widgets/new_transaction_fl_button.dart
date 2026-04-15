@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_form.dart';
+import 'package:wallex/app/transactions/form/transaction_form.page.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/presentation/animations/animated_floating_button.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 void _showShouldCreateAccountWarn(BuildContext context) {
   final t = Translations.of(context);

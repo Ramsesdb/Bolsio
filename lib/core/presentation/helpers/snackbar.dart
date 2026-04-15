@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/presentation/helpers/global_snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 class SnackbarParams {
   /// The amount of time the snack bar should be displayed.
@@ -11,7 +11,7 @@ class SnackbarParams {
   final Duration duration;
   final String title;
   final String? message;
-  final List<MonekinSnackbarAction>? actions;
+  final List<WallexSnackbarAction>? actions;
 
   /// Whether to clear all previous snackbars before showing the new one.
   ///
@@ -21,7 +21,7 @@ class SnackbarParams {
   /// Whether to show the snackbar at the top of the screen using global snackbar
   /// or at the bottom using ScaffoldMessenger.
   ///
-  /// If null, uses the default defined in [MonekinSnackbar.showAtTopDefault].
+  /// If null, uses the default defined in [WallexSnackbar.showAtTopDefault].
   final bool? showAtTop;
 
   SnackbarParams(
@@ -50,7 +50,7 @@ class SnackbarParams {
   );
 }
 
-abstract class MonekinSnackbar {
+abstract class WallexSnackbar {
   /// Whether to show snackbars at the top of the screen using global snackbar
   /// or at the bottom using ScaffoldMessenger.
   static bool get showAtTopDefault => false;
@@ -88,7 +88,7 @@ abstract class MonekinSnackbar {
     required Color textColor,
     required IconData iconData,
   }) {
-    final showAtTop = options.showAtTop ?? MonekinSnackbar.showAtTopDefault;
+    final showAtTop = options.showAtTop ?? WallexSnackbar.showAtTopDefault;
 
     if (showAtTop) {
       _getScaffoldMessenger(options);
@@ -112,7 +112,7 @@ abstract class MonekinSnackbar {
         //  margin: const EdgeInsets.all(8),
         //  behavior: SnackBarBehavior.floating,
         duration: options.duration,
-        content: MonekinSnackbarContent(
+        content: WallexSnackbarContent(
           title: options.title,
           message: options.message,
           color: textColor,
@@ -124,7 +124,7 @@ abstract class MonekinSnackbar {
   }
 
   static success(SnackbarParams options) {
-    return MonekinSnackbar.openSnackbar(
+    return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.green[50]!,
       textColor: Colors.green,
@@ -133,7 +133,7 @@ abstract class MonekinSnackbar {
   }
 
   static error(SnackbarParams options) {
-    return MonekinSnackbar.openSnackbar(
+    return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
           ? Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer
@@ -146,7 +146,7 @@ abstract class MonekinSnackbar {
   }
 
   static warning(SnackbarParams options) {
-    return MonekinSnackbar.openSnackbar(
+    return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.amber[50]!,
       textColor: Colors.amber,
@@ -155,7 +155,7 @@ abstract class MonekinSnackbar {
   }
 
   static info(SnackbarParams options) {
-    return MonekinSnackbar.openSnackbar(
+    return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.blue[50]!,
       textColor: Colors.blue,
@@ -164,15 +164,15 @@ abstract class MonekinSnackbar {
   }
 }
 
-class MonekinSnackbarAction {
+class WallexSnackbarAction {
   final String label;
   final VoidCallback? onPressed;
 
-  MonekinSnackbarAction({required this.label, required this.onPressed});
+  WallexSnackbarAction({required this.label, required this.onPressed});
 }
 
-class MonekinSnackbarContent extends StatelessWidget {
-  const MonekinSnackbarContent({
+class WallexSnackbarContent extends StatelessWidget {
+  const WallexSnackbarContent({
     super.key,
     required this.title,
     required this.color,
@@ -192,7 +192,7 @@ class MonekinSnackbarContent extends StatelessWidget {
   /// `optional` color of the SnackBar/MaterialBanner body
   final IconData? icon;
 
-  final List<MonekinSnackbarAction>? actions;
+  final List<WallexSnackbarAction>? actions;
 
   @override
   Widget build(BuildContext context) {

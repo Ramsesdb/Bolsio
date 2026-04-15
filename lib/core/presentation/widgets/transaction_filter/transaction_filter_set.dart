@@ -1,12 +1,12 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:drift/drift.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/utils/drift_utils.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/utils/drift_utils.dart';
+import 'package:wallex/core/extensions/string.extension.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/utils/uuid.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 

@@ -1,26 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budget_form_page.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
-import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/budgets/budget_form_page.dart';
+import 'package:wallex/app/budgets/budgets_page.dart';
+import 'package:wallex/app/budgets/components/budget_evolution_chart.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/budget/budget_service.dart';
+import 'package:wallex/core/models/budget/budget.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
+import 'package:wallex/core/presentation/widgets/card_with_header.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:wallex/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:wallex/core/presentation/widgets/targets/target_status_card.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 
@@ -97,7 +97,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
             ],
           ),
           appBarActions: [
-            MonekinPopupMenuButton(
+            WallexPopupMenuButton(
               actionItems: [
                 ListTileActionItem(
                   label: t.budgets.form.edit,
@@ -130,12 +130,12 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                           .then((value) {
                             RouteUtils.popRoute();
 
-                            MonekinSnackbar.success(
+                            WallexSnackbar.success(
                               SnackbarParams(t.general.delete_success),
                             );
                           })
                           .catchError((err) {
-                            MonekinSnackbar.error(
+                            WallexSnackbar.error(
                               SnackbarParams.fromError(err),
                             );
                           });

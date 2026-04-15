@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// Handle when the user presses a back button key on the keyboard/mouse
 void _handleKeyBackButton() {

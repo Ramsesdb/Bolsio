@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/onboarding/onboarding.dart';
-import 'package:monekin/app/settings/widgets/display_app_icon.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/styles/big_button_style.dart';
-import 'package:monekin/core/presentation/widgets/html_text.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/onboarding/onboarding.dart';
+import 'package:wallex/app/settings/widgets/display_app_icon.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
+import 'package:wallex/core/presentation/styles/big_button_style.dart';
+import 'package:wallex/core/presentation/widgets/html_text.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -25,7 +25,7 @@ class IntroPage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Monekin',
+          'Wallex',
           style: Theme.of(
             context,
           ).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Monekin brand color.
+/// Wallex brand color.
 const brandBlue = Color(0xFF0F3375);
 
 class AppColors extends ThemeExtension<AppColors> {

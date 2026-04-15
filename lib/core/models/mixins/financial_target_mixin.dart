@@ -1,10 +1,10 @@
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
-import 'package:monekin/core/models/budget/target_timeline_status.enum.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/utils/date_utils.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/budget/target_progress_status.enum.dart';
+import 'package:wallex/core/models/budget/target_timeline_status.enum.dart';
+import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/utils/date_utils.dart';
 
 /// Interface for financial targets that can be displayed in the UI
 abstract interface class FinancialTarget {

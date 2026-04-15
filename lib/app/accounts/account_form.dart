@@ -2,36 +2,36 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_type_selector.dart';
-import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_type_selector.dart';
+import 'package:wallex/app/categories/form/icon_and_color_selector.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/extensions/lists.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/currency/currency.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:wallex/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:wallex/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:wallex/core/presentation/widgets/inline_info_card.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/presentation/widgets/show_more_content_button.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/supported_icon/supported_icon_service.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 
@@ -82,7 +82,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
               )
               .first)
           .isNotEmpty) {
-        MonekinSnackbar.warning(
+        WallexSnackbar.warning(
           SnackbarParams(t.account.form.tr_before_opening_date),
         );
 
@@ -119,7 +119,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        MonekinSnackbar.error(
+        WallexSnackbar.error(
           SnackbarParams.fromError(
             t.account.form.already_exists,
             duration: const Duration(seconds: 6),

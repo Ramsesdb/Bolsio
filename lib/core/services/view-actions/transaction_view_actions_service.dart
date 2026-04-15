@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:wallex/app/transactions/form/transaction_form.page.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/tags/tags_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/core/utils/uuid.dart';
 
 import '../../../i18n/generated/translations.g.dart';
 
@@ -92,7 +92,7 @@ class TransactionViewActionService {
           .deleteTransaction(transactionId)
           .then((value) {
             if (value == 0) {
-              MonekinSnackbar.error(
+              WallexSnackbar.error(
                 SnackbarParams('Error removing the transaction'),
               );
 
@@ -103,12 +103,12 @@ class TransactionViewActionService {
               RouteUtils.popRoute();
             }
 
-            MonekinSnackbar.success(
+            WallexSnackbar.success(
               SnackbarParams(t.transaction.delete_success),
             );
           })
           .catchError((err) {
-            MonekinSnackbar.error(SnackbarParams.fromError(err));
+            WallexSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -133,11 +133,11 @@ class TransactionViewActionService {
       try {
         await _duplicateTransaction(transaction, newTrId);
 
-        MonekinSnackbar.success(
+        WallexSnackbar.success(
           SnackbarParams(t.transaction.duplicate_success),
         );
       } catch (error) {
-        MonekinSnackbar.error(SnackbarParams.fromError(error));
+        WallexSnackbar.error(SnackbarParams.fromError(error));
       }
     });
   }

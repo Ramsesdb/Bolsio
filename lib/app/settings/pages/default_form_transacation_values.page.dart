@@ -1,23 +1,23 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
-import 'package:monekin/app/tags/tags_selector.modal.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/categories/selectors/category_picker.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
+import 'package:wallex/app/tags/tags_selector.modal.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/tags/tags_service.dart';
+import 'package:wallex/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class DefaultFormTransactionValuesPage extends StatelessWidget {
   const DefaultFormTransactionValuesPage({super.key});
@@ -46,7 +46,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MonekinTileSwitch(
+                  WallexTileSwitch(
                     title: t
                         .settings
                         .transactions

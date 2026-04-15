@@ -1,32 +1,32 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/home/widgets/click_tracker.dart';
-import 'package:monekin/app/home/widgets/dashboard_cards.dart';
-import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
-import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
-import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/page_context.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/edit_profile_modal.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/debug_page.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/presentation/widgets/trending_value.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/home/widgets/click_tracker.dart';
+import 'package:wallex/app/home/widgets/dashboard_cards.dart';
+import 'package:wallex/app/home/widgets/horizontal_scrollable_account_list.dart';
+import 'package:wallex/app/home/widgets/income_or_expense_card.dart';
+import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:wallex/app/layout/page_context.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/debug_page.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:wallex/core/presentation/widgets/trending_value.dart';
+import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/app_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -411,7 +411,7 @@ class _DashboardPageState extends State<DashboardPage> {
     await HapticFeedback.lightImpact();
 
     if (showSnackbar) {
-      MonekinSnackbar.success(
+      WallexSnackbar.success(
         SnackbarParams(
           !privateMode
               ? t.settings.security.private_mode_activated

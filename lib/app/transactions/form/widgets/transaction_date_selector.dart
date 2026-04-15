@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
-import 'package:monekin/core/utils/focus.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:wallex/core/presentation/widgets/inline_info_card.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/core/utils/date_time_picker.dart';
+import 'package:wallex/core/utils/focus.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class TransactionDateSelector extends StatelessWidget {
   const TransactionDateSelector({

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 
 class SnackbarInstance extends SnackbarParams {
@@ -203,14 +203,14 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                 ),
                 child: snackbar == null
                     ? SizedBox.shrink()
-                    : MonekinSnackbarContent(
+                    : WallexSnackbarContent(
                         title: snackbar!.title,
                         message: snackbar!.message,
                         color: snackbar!.textColor,
                         icon: snackbar!.iconData,
                         actions: snackbar!.actions
                             ?.map(
-                              (action) => MonekinSnackbarAction(
+                              (action) => WallexSnackbarAction(
                                 label: action.label,
                                 onPressed: () {
                                   action.onPressed?.call();

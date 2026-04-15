@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/goals/goal_form_page.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/goal/goal_service.dart';
-import 'package:monekin/core/models/date-utils/date_period.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/goal/goal.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
-import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/goals/goal_form_page.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/goal/goal_service.dart';
+import 'package:wallex/core/models/date-utils/date_period.dart';
+import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/models/goal/goal.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
+import 'package:wallex/core/presentation/widgets/card_with_header.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:wallex/core/presentation/widgets/no_results.dart';
+import 'package:wallex/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:wallex/core/presentation/widgets/targets/target_status_card.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class GoalDetailsPage extends StatefulWidget {
   const GoalDetailsPage({super.key, required this.goal});
@@ -79,7 +79,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
             ],
           ),
           appBarActions: [
-            MonekinPopupMenuButton(
+            WallexPopupMenuButton(
               actionItems: [
                 ListTileActionItem(
                   label: t.goals.form.edit_title,
@@ -106,12 +106,12 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                           .deleteGoal(goal.id)
                           .then((value) {
                             RouteUtils.popRoute();
-                            MonekinSnackbar.success(
+                            WallexSnackbar.success(
                               SnackbarParams(t.general.delete_success),
                             );
                           })
                           .catchError((err) {
-                            MonekinSnackbar.error(
+                            WallexSnackbar.error(
                               SnackbarParams.fromError(err),
                             );
                           });

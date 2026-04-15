@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/debouncer.dart';
+import 'package:wallex/core/utils/debouncer.dart';
 
-class MonekinTileSwitch extends StatefulWidget {
-  const MonekinTileSwitch({
+class WallexTileSwitch extends StatefulWidget {
+  const WallexTileSwitch({
     super.key,
     required this.title,
     this.subtitle,
@@ -43,10 +43,10 @@ class MonekinTileSwitch extends StatefulWidget {
   final bool disabled;
 
   @override
-  State<MonekinTileSwitch> createState() => _MonekinTileSwitchState();
+  State<WallexTileSwitch> createState() => _WallexTileSwitchState();
 }
 
-class _MonekinTileSwitchState extends State<MonekinTileSwitch> {
+class _WallexTileSwitchState extends State<WallexTileSwitch> {
   bool value = true;
   late final Debouncer _debouncer;
 
@@ -58,7 +58,7 @@ class _MonekinTileSwitchState extends State<MonekinTileSwitch> {
   }
 
   @override
-  void didUpdateWidget(MonekinTileSwitch oldWidget) {
+  void didUpdateWidget(WallexTileSwitch oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.initialValue != value && widget.syncWithInitialValue) {

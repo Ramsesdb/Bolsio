@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/presentation/responsive/app_breakpoints.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/presentation/responsive/app_breakpoints.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class ReorderableListTileStyling extends StatelessWidget {
   const ReorderableListTileStyling({super.key, required this.child});

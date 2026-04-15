@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/utils/logger.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/app-data/app_data_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/utils/logger.dart';
 
 /// Signup page for new users with Firebase Auth.
 class SignupPage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
 
-class MonekinPopupMenuButton extends StatelessWidget {
-  const MonekinPopupMenuButton({
+class WallexPopupMenuButton extends StatelessWidget {
+  const WallexPopupMenuButton({
     super.key,
     required this.actionItems,
     this.icon,

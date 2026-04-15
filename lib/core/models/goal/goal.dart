@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/date-utils/date_period.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/goal/goal_type.enum.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/models/date-utils/date_period.dart';
+import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/models/goal/goal_type.enum.dart';
+import 'package:wallex/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:wallex/core/models/mixins/financial_target_mixin.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class Goal extends GoalInDB
     with FinancialTargetMixin

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/tags/tags_selector.modal.dart';
-import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
-import 'package:monekin/app/transactions/form/widgets/tr_form_interval_selector.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/focus.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/tags/tags_selector.modal.dart';
+import 'package:wallex/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:wallex/app/transactions/form/widgets/custom_interval_selector.dart';
+import 'package:wallex/app/transactions/form/widgets/tr_form_interval_selector.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/recurrency_data.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/focus.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class TransactionStatusSelector extends StatelessWidget {
   const TransactionStatusSelector({

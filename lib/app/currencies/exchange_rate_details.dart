@@ -1,28 +1,28 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/currencies/exchange_rate_form.dart';
-import 'package:monekin/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:monekin/app/currencies/widgets/exchange_rate_evolution_chart.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/currencies/exchange_rate_form.dart';
+import 'package:wallex/app/currencies/widgets/currency_edit_fields.dart';
+import 'package:wallex/app/currencies/widgets/exchange_rate_evolution_chart.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/currency/currency.dart';
+import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/card_with_header.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/exit_without_save_warn_dialog.dart';
+import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:wallex/core/presentation/widgets/no_results.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ExchangeRateDetailsPage extends StatefulWidget {
@@ -127,14 +127,14 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       CurrencyService.instance
           .deleteCurrency(_currency.code)
           .then((value) {
-            MonekinSnackbar.success(
+            WallexSnackbar.success(
               SnackbarParams(t.currencies.currency_form.delete_success),
             );
 
             RouteUtils.popRoute();
           })
           .catchError((err) {
-            MonekinSnackbar.error(SnackbarParams.fromError(err));
+            WallexSnackbar.error(SnackbarParams.fromError(err));
           });
     }
   }
@@ -202,7 +202,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       setState(() {});
     }
 
-    MonekinSnackbar.success(
+    WallexSnackbar.success(
       SnackbarParams(t.currencies.currency_form.edit_success),
     );
     getExchangeRates();
@@ -230,7 +230,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       child: PageFramework(
         title: _currency.name,
         appBarActions: [
-          MonekinPopupMenuButton(
+          WallexPopupMenuButton(
             actionItems: [
               ListTileActionItem(
                 label: t.currencies.exchange_rate_form.remove_all,
@@ -519,7 +519,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
                     ),
                   ],
                 )
-              : MonekinPopupMenuButton(
+              : WallexPopupMenuButton(
                   actionItems: [
                     ListTileActionItem(
                       label: t.ui_actions.edit,

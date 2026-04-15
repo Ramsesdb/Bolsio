@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
-import 'package:monekin/core/models/filters/saved_filter.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/filters/saved_filters_service.dart';
+import 'package:wallex/core/models/filters/saved_filter.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class SavedFilterFormPage extends StatefulWidget {
   const SavedFilterFormPage({super.key, this.savedFilter, this.initialFilter});
@@ -74,7 +74,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
     });
 
     if (mounted) {
-      MonekinSnackbar.success(
+      WallexSnackbar.success(
         SnackbarParams(t.transaction.filters.saved.save_success),
       );
       Navigator.of(context).pop();
@@ -105,7 +105,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
         widget.savedFilter!.id,
       );
       if (mounted) {
-        MonekinSnackbar.success(
+        WallexSnackbar.success(
           SnackbarParams(t.transaction.filters.saved.delete_success),
         );
         Navigator.of(context).pop();

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/pages/appareance_settings.page.dart';
-import 'package:monekin/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:monekin/app/settings/pages/general_settings.page.dart';
-import 'package:monekin/app/settings/pages/transactions_settings.page.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
+import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:wallex/app/settings/pages/general_settings.page.dart';
+import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

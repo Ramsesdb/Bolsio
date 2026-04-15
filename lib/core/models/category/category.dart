@@ -1,5 +1,5 @@
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 
 import '../../services/supported_icon/supported_icon_service.dart';
 import '../supported-icon/supported_icon.dart';

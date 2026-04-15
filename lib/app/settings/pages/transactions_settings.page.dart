@@ -1,24 +1,24 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/pages/default_form_transacation_values.page.dart';
-import 'package:monekin/app/settings/pages/general_settings.page.dart';
-import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
-import 'package:monekin/app/settings/widgets/transaction_swipe_action_selector.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/pages/default_form_transacation_values.page.dart';
+import 'package:wallex/app/settings/pages/general_settings.page.dart';
+import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
+import 'package:wallex/app/settings/widgets/transaction_swipe_action_selector.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TransactionsSettingsPage extends StatelessWidget {
@@ -121,7 +121,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                               ),
 
                               const SizedBox(height: 16),
-                              MonekinTileSwitch(
+                              WallexTileSwitch(
                                 title: t.settings.transactions.style.show_tags,
                                 initialValue:
                                     appStateSettings[SettingKey
@@ -137,7 +137,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                                   );
                                 },
                               ),
-                              MonekinTileSwitch(
+                              WallexTileSwitch(
                                 title: t.settings.transactions.style.show_time,
                                 initialValue:
                                     appStateSettings[SettingKey

@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DefaultTransactionValues {

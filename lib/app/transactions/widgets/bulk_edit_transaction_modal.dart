@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/categories/selectors/category_picker.dart';
+import 'package:wallex/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/date_time_picker.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({
@@ -137,7 +137,7 @@ class BulkEditTransactionModal extends StatelessWidget {
 
     Future.wait(futures)
         .then((value) {
-          MonekinSnackbar.success(
+          WallexSnackbar.success(
             transactionsToEdit.length <= 1
                 ? SnackbarParams(t.transaction.edit_success)
                 : SnackbarParams(
@@ -150,7 +150,7 @@ class BulkEditTransactionModal extends StatelessWidget {
           onSuccess();
         })
         .catchError((err) {
-          MonekinSnackbar.error(SnackbarParams.fromError(err));
+          WallexSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 }

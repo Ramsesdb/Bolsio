@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/mixins/financial_target_mixin.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/no_results.dart';
+import 'package:wallex/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class TargetListWithEmptyIndicator extends StatelessWidget {
   const TargetListWithEmptyIndicator({

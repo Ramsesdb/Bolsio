@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/models/transaction/recurrency_data.dart';
+import 'package:wallex/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class IntervalSelectorPage extends StatefulWidget {
   const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});

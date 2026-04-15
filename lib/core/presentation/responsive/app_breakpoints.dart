@@ -1,4 +1,4 @@
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 
 final Set<BreakPoint> appBreakPoints = {
   const BreakPoint(BreakpointID.xs, width: 400),

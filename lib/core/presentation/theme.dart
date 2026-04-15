@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:wallex/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/presentation/styles/borders.dart';
 
 import 'app_colors.dart';
 

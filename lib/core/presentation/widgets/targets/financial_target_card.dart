@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/budgets/budget_details_page.dart';
-import 'package:monekin/app/goals/goal_details_page.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/goal/goal.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/styles/borders.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/budgets/budget_details_page.dart';
+import 'package:wallex/app/goals/goal_details_page.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/budget/budget.dart';
+import 'package:wallex/core/models/goal/goal.dart';
+import 'package:wallex/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:wallex/core/models/mixins/financial_target_mixin.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/styles/borders.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class FinancialTargetCard extends StatelessWidget {

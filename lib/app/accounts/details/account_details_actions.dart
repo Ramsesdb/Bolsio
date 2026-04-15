@@ -1,15 +1,15 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/accounts/details/account_details.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_form.dart';
+import 'package:wallex/app/accounts/details/account_details.dart';
+import 'package:wallex/app/transactions/form/transaction_form.page.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -117,13 +117,13 @@ abstract class AccountDetailsActions {
           .updateAccount(account.copyWith(closingDate: const drift.Value(null)))
           .then((value) {
             if (value) {
-              MonekinSnackbar.success(
+              WallexSnackbar.success(
                 SnackbarParams(t.account.close.unarchive_succes),
               );
             }
           })
           .catchError((err) {
-            MonekinSnackbar.error(SnackbarParams.fromError(err));
+            WallexSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -164,10 +164,10 @@ abstract class AccountDetailsActions {
               RouteUtils.popRoute();
             }
 
-            MonekinSnackbar.success(SnackbarParams(t.account.delete.success));
+            WallexSnackbar.success(SnackbarParams(t.account.delete.success));
           })
           .catchError((err) {
-            MonekinSnackbar.error(SnackbarParams.fromError(err));
+            WallexSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }

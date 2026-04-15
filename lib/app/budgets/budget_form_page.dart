@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_selector.dart';
+import 'package:wallex/app/categories/selectors/category_multi_selector.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/budget/budget_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/extensions/lists.extensions.dart';
+import 'package:wallex/core/models/budget/budget.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/count_indicator.dart';
@@ -58,14 +58,14 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     if (valueToNumber! < 0) {
-      MonekinSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
+      WallexSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
       return;
     }
 
     onSuccess() {
       RouteUtils.popRoute();
 
-      MonekinSnackbar.success(
+      WallexSnackbar.success(
         SnackbarParams(
           isEditMode
               ? t.budgets.form.edit_success
@@ -97,7 +97,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       BudgetServive.instance
@@ -106,7 +106,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }

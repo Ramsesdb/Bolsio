@@ -1,18 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/widgets/app_navigation_drawer.dart';
-import 'package:monekin/app/layout/window_bar.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/app/layout/widgets/app_navigation_drawer.dart';
+import 'package:wallex/app/layout/window_bar.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/app_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// Returns the appropriate width for the app navigation sidebar based on screen size
 double getNavigationSidebarWidth(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/goal/goal.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/models/goal/goal.dart';
 
 class GoalService {
   final AppDB db;

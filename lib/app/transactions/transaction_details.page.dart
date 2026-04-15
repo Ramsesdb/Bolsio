@@ -3,30 +3,30 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/label_value_info_table.dart';
-import 'package:monekin/app/transactions/utils/transaction_details.utils.dart';
-import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/transactions/label_value_info_table.dart';
+import 'package:wallex/app/transactions/utils/transaction_details.utils.dart';
+import 'package:wallex/app/transactions/widgets/translucent_transaction_status_card.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/extensions/string.extension.dart';
+import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/card_with_header.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/wallex_quick_actions_buttons.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
@@ -86,7 +86,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         TransactionService.instance.deleteTransaction(transaction.id).then((
           value,
         ) {
-          MonekinSnackbar.success(
+          WallexSnackbar.success(
             SnackbarParams(
               '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
             ),
@@ -104,7 +104,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       ) {
         if (inserted == 0) return;
 
-        MonekinSnackbar.success(
+        WallexSnackbar.success(
           SnackbarParams(t.transaction.next_payments.skip_success),
         );
       });
@@ -587,7 +587,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           const SizedBox(height: 16),
                           CardWithHeader(
                             title: t.general.quick_actions,
-                            body: MonekinQuickActionsButton(
+                            body: WallexQuickActionsButton(
                               actions: transactionDetailsActions,
                             ),
                           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';

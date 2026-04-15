@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class EditProfileModal extends StatefulWidget {
   const EditProfileModal({super.key});

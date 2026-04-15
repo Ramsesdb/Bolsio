@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 
 class AnimatedFloatingButton extends StatelessWidget {
   const AnimatedFloatingButton({

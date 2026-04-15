@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:monekin/core/database/utils/database_enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/utils/database_enum.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 enum GoalType implements DatabaseEnum<int> {
   expense(0),

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/recurrency_data.dart';
+import 'package:wallex/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import 'next_pay_status.enum.dart';
 import 'transaction_type.enum.dart';

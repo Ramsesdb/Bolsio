@@ -1,22 +1,22 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/tags/tags_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/extensions/lists.extensions.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:wallex/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});
@@ -61,10 +61,10 @@ class _TagFormPageState extends State<TagFormPage> {
       await TagService.instance
           .updateTag(tagToEdit)
           .then((value) {
-            MonekinSnackbar.success(SnackbarParams(t.tags.edit_success));
+            WallexSnackbar.success(SnackbarParams(t.tags.edit_success));
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       final db = AppDB.instance;
@@ -74,7 +74,7 @@ class _TagFormPageState extends State<TagFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        MonekinSnackbar.error(SnackbarParams(t.tags.already_exists));
+        WallexSnackbar.error(SnackbarParams(t.tags.already_exists));
         return;
       }
 
@@ -82,10 +82,10 @@ class _TagFormPageState extends State<TagFormPage> {
           .insertTag(tagToEdit)
           .then((value) {
             if (mounted) RouteUtils.popRoute();
-            MonekinSnackbar.success(SnackbarParams(t.tags.create_success));
+            WallexSnackbar.success(SnackbarParams(t.tags.create_success));
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }
@@ -115,12 +115,12 @@ class _TagFormPageState extends State<TagFormPage> {
                     .then((value) {
                       RouteUtils.popRoute();
 
-                      MonekinSnackbar.success(
+                      WallexSnackbar.success(
                         SnackbarParams(t.tags.delete_success),
                       );
                     })
                     .catchError((err) {
-                      MonekinSnackbar.error(SnackbarParams.fromError(err));
+                      WallexSnackbar.error(SnackbarParams.fromError(err));
                     });
               });
             },

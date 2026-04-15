@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/window_bar.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/utils/app_utils.dart';
+import 'package:wallex/app/layout/window_bar.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/utils/app_utils.dart';
 
 /// Sidebar navigation drawer used in desktop layouts only
 class SideNavigationDrawer extends StatelessWidget {

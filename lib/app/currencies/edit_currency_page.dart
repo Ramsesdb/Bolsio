@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/currencies/widgets/currency_edit_fields.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/models/currency/currency.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/exit_without_save_warn_dialog.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class EditCurrencyPage extends StatefulWidget {
   const EditCurrencyPage({super.key, required this.currency});
@@ -39,13 +39,13 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
     CurrencyService.instance
         .updateCurrency(widget.currency.code, updatedCurrency)
         .then((value) {
-          MonekinSnackbar.success(
+          WallexSnackbar.success(
             SnackbarParams(t.currencies.currency_form.edit_success),
           );
           RouteUtils.popRoute(updatedCurrency);
         })
         .catchError((err) {
-          MonekinSnackbar.error(SnackbarParams.fromError(err));
+          WallexSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 

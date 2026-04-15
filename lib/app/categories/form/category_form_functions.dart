@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/categories/subcategory_form.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/html_text.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/categories/selectors/category_picker.dart';
+import 'package:wallex/app/categories/subcategory_form.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/html_text.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/services/supported_icon/supported_icon_service.dart';
 
@@ -59,14 +59,14 @@ class CategoryFormFunctions {
       CategoryService.instance
           .deleteCategory(categoryId)
           .then((value) {
-            MonekinSnackbar.success(
+            WallexSnackbar.success(
               SnackbarParams(t.categories.delete_success),
             );
 
             RouteUtils.popRoute();
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           });
     });
   }
@@ -143,7 +143,7 @@ class CategoryFormFunctions {
         await Future.wait(futures);
 
         RouteUtils.popRoute();
-        MonekinSnackbar.success(SnackbarParams(t.categories.merge_success));
+        WallexSnackbar.success(SnackbarParams(t.categories.merge_success));
       });
     });
   }
@@ -155,7 +155,7 @@ class CategoryFormFunctions {
       category.copyWith(parentCategoryID: const drift.Value(null)),
     );
 
-    MonekinSnackbar.success(SnackbarParams(t.categories.create_success));
+    WallexSnackbar.success(SnackbarParams(t.categories.create_success));
   }
 
   static void makeSubcategory(BuildContext context, Category category) {
@@ -238,7 +238,7 @@ class CategoryFormFunctions {
         await Future.wait(futures);
 
         RouteUtils.popRoute();
-        MonekinSnackbar.success(
+        WallexSnackbar.success(
           SnackbarParams(t.categories.make_child_success),
         );
       });

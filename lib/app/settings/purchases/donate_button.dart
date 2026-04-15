@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/settings/purchases/in_app_purchase.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -48,7 +48,7 @@ class _DonateButtonState extends State<DonateButton> {
                 _subscription?.cancel();
               },
               onError: (error) {
-                MonekinSnackbar.error(
+                WallexSnackbar.error(
                   SnackbarParams.fromError(t.more.help_us.donate_err),
                 );
               },
@@ -64,11 +64,11 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          MonekinSnackbar.error(
+          WallexSnackbar.error(
             SnackbarParams.fromError(t.more.help_us.donate_err),
           );
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          MonekinSnackbar.success(
+          WallexSnackbar.success(
             SnackbarParams(t.more.help_us.donate_success),
           );
         }
@@ -90,7 +90,7 @@ class _DonateButtonState extends State<DonateButton> {
         onTap: () async {
           if (!(await IAPConnection.isAvailable())) {
             // TODO: Implement other payment methods
-            MonekinSnackbar.error(
+            WallexSnackbar.error(
               SnackbarParams.fromError(
                 'The current platform not supported or the store is not ready yet',
               ),
@@ -105,7 +105,7 @@ class _DonateButtonState extends State<DonateButton> {
               .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
-            MonekinSnackbar.error(
+            WallexSnackbar.error(
               SnackbarParams.fromError(
                 "Products not found -> ${response.notFoundIDs.join(',')}",
               ),
@@ -113,7 +113,7 @@ class _DonateButtonState extends State<DonateButton> {
 
             return;
           } else if (response.error != null) {
-            MonekinSnackbar.error(
+            WallexSnackbar.error(
               SnackbarParams.fromError(response.error!.message),
             );
 

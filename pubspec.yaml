@@ -1,5 +1,5 @@
-name: monekin
-description: A Church Finance management tool adapted from Monekin.
+name: wallex
+description: Personal finance management app for multi-currency users (USD/VES).
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

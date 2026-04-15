@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
-import 'package:monekin/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 
 class CategoryService {
   final AppDB db;

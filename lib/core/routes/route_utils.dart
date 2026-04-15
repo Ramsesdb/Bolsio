@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 abstract class RouteUtils {
   static Future<T?> pushRoute<T extends Object>(

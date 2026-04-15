@@ -1,24 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/app/transactions/transaction_details.page.dart';
-import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/transactions/form/transaction_form.page.dart';
+import 'package:wallex/app/transactions/transaction_details.page.dart';
+import 'package:wallex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -492,7 +492,7 @@ Future<bool> executeTransactionSwipeAction(
         newTrStatus,
       );
 
-      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      WallexSnackbar.success(SnackbarParams(t.transaction.edit_success));
       break;
   }
 

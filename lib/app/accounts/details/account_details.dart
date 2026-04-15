@@ -4,30 +4,30 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/accounts/details/account_details_actions.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/label_value_info_list.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_form.dart';
+import 'package:wallex/app/accounts/details/account_details_actions.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/transactions/label_value_info_list.dart';
+import 'package:wallex/app/transactions/transactions.page.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/card_with_header.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:wallex/core/presentation/widgets/inline_info_card.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/presentation/widgets/wallex_quick_actions_buttons.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({
@@ -53,12 +53,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         onPressed: () {
           Clipboard.setData(ClipboardData(text: value))
               .then((_) {
-                MonekinSnackbar.success(
+                WallexSnackbar.success(
                   SnackbarParams(t.general.clipboard.success(x: title)),
                 );
               })
               .catchError((_) {
-                MonekinSnackbar.error(
+                WallexSnackbar.error(
                   SnackbarParams(t.general.clipboard.error),
                 );
               });
@@ -222,7 +222,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                       const SizedBox(height: 16),
                       CardWithHeader(
                         title: t.general.quick_actions,
-                        body: MonekinQuickActionsButton(
+                        body: WallexQuickActionsButton(
                           actions: accountDetailsActions,
                         ),
                       ),
@@ -404,14 +404,14 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                         .then((value) {
                           RouteUtils.popRoute(true);
 
-                          MonekinSnackbar.success(
+                          WallexSnackbar.success(
                             SnackbarParams(t.account.close.success),
                           );
                         })
                         .catchError((err) {
                           RouteUtils.popRoute();
 
-                          MonekinSnackbar.error(SnackbarParams.fromError(err));
+                          WallexSnackbar.error(SnackbarParams.fromError(err));
                         });
                   },
           ),

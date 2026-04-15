@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/home/dashboard.page.dart';
-import 'package:monekin/app/settings/more_actions.page.dart';
-import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/budgets/budgets_page.dart';
+import 'package:wallex/app/home/dashboard.page.dart';
+import 'package:wallex/app/settings/more_actions.page.dart';
+import 'package:wallex/app/stats/stats_page.dart';
+import 'package:wallex/app/transactions/transactions.page.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 // GlobalKeys for each destination page
 final GlobalKey<State<StatefulWidget>> dashboardPageKey = GlobalKey();

@@ -1,4 +1,4 @@
-import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
 
 class TrDistributionChartItem<T> {
   final T category;

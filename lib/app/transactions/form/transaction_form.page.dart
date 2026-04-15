@@ -1,39 +1,39 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/database/utils/drift_utils.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/animations/shake_widget.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_selector.dart';
+import 'package:wallex/app/categories/selectors/category_picker.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:wallex/app/transactions/form/widgets/transaction_account_selector_row.dart';
+import 'package:wallex/app/transactions/form/widgets/transaction_amount_display.dart';
+import 'package:wallex/app/transactions/form/widgets/transaction_date_selector.dart';
+import 'package:wallex/app/transactions/form/widgets/transaction_form_fields.dart';
+import 'package:wallex/app/transactions/form/widgets/transaction_selectors.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/tags/tags_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/utils/drift_utils.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/models/transaction/recurrency_data.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/presentation/animations/shake_widget.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -261,7 +261,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     final t = Translations.of(context);
 
     if (transactionValue == 0) {
-      MonekinSnackbar.warning(
+      WallexSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.zero),
       );
 
@@ -269,7 +269,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (transactionValue < 0 && transactionType.isTransfer) {
-      MonekinSnackbar.warning(
+      WallexSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.negative_transfer),
       );
 
@@ -277,7 +277,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
-      MonekinSnackbar.warning(
+      WallexSnackbar.warning(
         SnackbarParams(
           t.transaction.form.validators.date_after_account_creation,
         ),
@@ -380,7 +380,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             );
 
             // Show success message FIRST
-            MonekinSnackbar.success(
+            WallexSnackbar.success(
               SnackbarParams(
                 isEditMode
                     ? t.transaction.edit_success
@@ -396,12 +396,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               setState(() => _isSaving = false);
               RouteUtils.popRoute();
             }
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            WallexSnackbar.error(SnackbarParams.fromError(error));
           }
         })
         .catchError((error) {
           if (mounted) setState(() => _isSaving = false);
-          MonekinSnackbar.error(SnackbarParams.fromError(error));
+          WallexSnackbar.error(SnackbarParams.fromError(error));
         });
   }
 
@@ -606,7 +606,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
                         submitForm();
                       } else {
-                        MonekinSnackbar.error(
+                        WallexSnackbar.error(
                           SnackbarParams(t.general.validations.form_error),
                         );
                       }

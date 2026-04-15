@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/tags/tag.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/models/tags/tag.dart';
 
 class TagService {
   final AppDB db;

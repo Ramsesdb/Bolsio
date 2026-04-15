@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
+import 'package:wallex/app/transactions/form/dialogs/evaluate_expression.dart';
 
 void main() {
   group('evaluateExpression tests', () {

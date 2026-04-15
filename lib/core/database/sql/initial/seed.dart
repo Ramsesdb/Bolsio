@@ -1,5 +1,5 @@
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/services/app-data/app_data_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 
 String appDataInitialSeedSQL(int schemaVersion) {
   return """

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
 
 /// Useful class if you want to differentiate the dismissal of the modal from a return of a result with a null value
 class ModalResult<T> {

@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/goal/goal_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/goal/goal.dart';
-import 'package:monekin/core/models/goal/goal_type.enum.dart';
-import 'package:monekin/core/models/goal/goal_type_selector.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/count_indicator.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_selector.dart';
+import 'package:wallex/app/categories/selectors/category_multi_selector.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/goal/goal_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/extensions/lists.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/goal/goal.dart';
+import 'package:wallex/core/models/goal/goal_type.enum.dart';
+import 'package:wallex/core/models/goal/goal_type_selector.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/count_indicator.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/list_tile_field.dart';
+import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class GoalFormPage extends StatefulWidget {
   const GoalFormPage({super.key, this.goalToEdit});
@@ -102,7 +102,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     _formKey.currentState!.save();
 
     if ((amountToNumber ?? 0) < 0 || (initialAmountToNumber ?? 0) < 0) {
-      MonekinSnackbar.warning(SnackbarParams(t.goals.form.negative_warn));
+      WallexSnackbar.warning(SnackbarParams(t.goals.form.negative_warn));
       return;
     }
 
@@ -128,7 +128,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     saveOperation
         .then((value) {
           RouteUtils.popRoute();
-          MonekinSnackbar.success(
+          WallexSnackbar.success(
             SnackbarParams(
               isEditMode
                   ? t.goals.form.edit_success
@@ -137,7 +137,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
           );
         })
         .catchError((error) {
-          MonekinSnackbar.error(SnackbarParams.fromError(error));
+          WallexSnackbar.error(SnackbarParams.fromError(error));
         });
   }
 

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/extensions/bool.extension.dart';
-import 'package:monekin/core/extensions/numbers.extensions.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/routes/route_utils.dart';
+import 'package:wallex/app/transactions/form/dialogs/evaluate_expression.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/extensions/bool.extension.dart';
+import 'package:wallex/core/extensions/numbers.extensions.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/routes/route_utils.dart';
 
 class AmountSelector extends StatefulWidget {
   const AmountSelector({

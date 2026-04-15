@@ -3,26 +3,26 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/page_context.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:wallex/app/layout/page_context.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/transactions/widgets/bulk_edit_transaction_modal.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:wallex/core/presentation/widgets/no_results.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -338,7 +338,7 @@ class TransactionsPageState extends State<TransactionsPage> {
         t.transaction.list.selected_short(n: selectedTransactions.length),
       ),
       actions: [
-        MonekinPopupMenuButton(
+        WallexPopupMenuButton(
           actionItems: [
             ListTileActionItem(
               label: t.ui_actions.edit,
@@ -390,7 +390,7 @@ class TransactionsPageState extends State<TransactionsPage> {
 
                   Future.wait(futures)
                       .then((value) {
-                        MonekinSnackbar.success(
+                        WallexSnackbar.success(
                           SnackbarParams(
                             selectedTransactions.length <= 1
                                 ? t.transaction.delete_success
@@ -403,7 +403,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                         cleanSelectedTransactions();
                       })
                       .catchError((err) {
-                        MonekinSnackbar.error(SnackbarParams.fromError(err));
+                        WallexSnackbar.error(SnackbarParams.fromError(err));
                       });
                 });
               },

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
-import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
+import 'package:wallex/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:wallex/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:wallex/core/presentation/widgets/wallex_dropdown_select.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
-final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey = GlobalKey();
+final GlobalKey<WallexDropdownSelectState> _themeDropdownKey = GlobalKey();
 
 class AppareanceSettingsPage extends StatelessWidget {
   const AppareanceSettingsPage({super.key});
@@ -66,7 +66,7 @@ class AppareanceSettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              MonekinTileSwitch(
+              WallexTileSwitch(
                 title: t.settings.appearance.amoled_mode,
                 subtitle: t.settings.appearance.amoled_mode_descr,
                 initialValue: appStateSettings[SettingKey.amoledMode] == '1',
@@ -80,7 +80,7 @@ class AppareanceSettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              MonekinTileSwitch(
+              WallexTileSwitch(
                 title: t.settings.appearance.dynamic_colors,
                 subtitle: t.settings.appearance.dynamic_colors_descr,
                 initialValue:
@@ -222,7 +222,7 @@ class AppareanceSettingsPage extends StatelessWidget {
     return Focus(
       canRequestFocus: false,
       descendantsAreFocusable: false,
-      child: MonekinDropdownSelect(
+      child: WallexDropdownSelect(
         key: _themeDropdownKey,
         initial: theme,
         compact: true,

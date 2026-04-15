@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_date_separator.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_date_separator.dart';
+import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({

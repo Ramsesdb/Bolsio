@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart' hide BottomNavigationBar;
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/indexed_stacks/fade_indexed_stack.dart';
-import 'package:monekin/app/layout/page_context.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/layout/widgets/app_bottom_bar.dart';
-import 'package:monekin/app/transactions/animate_fab.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/app/budgets/budgets_page.dart';
+import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:wallex/app/layout/indexed_stacks/fade_indexed_stack.dart';
+import 'package:wallex/app/layout/page_context.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/layout/widgets/app_bottom_bar.dart';
+import 'package:wallex/app/transactions/animate_fab.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/utils/app_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// This page is the entry point of the app once the user has complete onboarding
 ///

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 ThemeMode getThemeFromString(String? themeString) {
   if (themeString == null) return ThemeMode.system;

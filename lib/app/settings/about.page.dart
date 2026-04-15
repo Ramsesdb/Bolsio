@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/display_app_icon.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/utils/open_external_url.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/widgets/display_app_icon.dart';
+import 'package:wallex/core/extensions/padding.extension.dart';
+import 'package:wallex/core/extensions/string.extension.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/utils/open_external_url.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              snapshot.data?.appName.capitalize() ?? 'Monekin',
+                              snapshot.data?.appName.capitalize() ?? 'Wallex',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
                             Text(

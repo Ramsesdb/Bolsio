@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/presentation/animations/animated_expanded.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class ShowMoreContentButton extends StatefulWidget {
   const ShowMoreContentButton({

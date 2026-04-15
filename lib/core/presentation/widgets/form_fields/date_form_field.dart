@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
 
 /// A [FormField] that contains a [DateTimeField].
 ///

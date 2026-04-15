@@ -1,12 +1,12 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/extensions/date.extensions.dart';
-import 'package:monekin/core/models/date-utils/date_period.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/extensions/date.extensions.dart';
+import 'package:wallex/core/models/date-utils/date_period.dart';
+import 'package:wallex/core/models/date-utils/period_type.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 part 'date_period_state.g.dart';
 

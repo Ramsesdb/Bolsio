@@ -2,22 +2,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/pages/backup/export_page.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
-import 'package:monekin/core/extensions/numbers.extensions.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/app/settings/pages/backup/export_page.dart';
+import 'package:wallex/app/settings/pages/backup/import_csv.page.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/backup/backup_database_service.dart';
+import 'package:wallex/core/extensions/numbers.extensions.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
-import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
 import '../../widgets/settings_list_utils.dart';
-import 'package:monekin/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 
 class BackupSettingsPage extends StatefulWidget {
   const BackupSettingsPage({super.key});
@@ -64,7 +64,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                           if (!value) {
                             RouteUtils.popRoute();
 
-                            MonekinSnackbar.info(
+                            WallexSnackbar.info(
                               SnackbarParams(t.backup.no_file_selected),
                             );
 
@@ -77,14 +77,14 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                             AppMenuDestinationsID.dashboard,
                           );
 
-                          MonekinSnackbar.success(
+                          WallexSnackbar.success(
                             SnackbarParams(t.backup.import.success),
                           );
                         })
                         .catchError((err) {
                           RouteUtils.popRoute();
 
-                          MonekinSnackbar.error(SnackbarParams.fromError(err));
+                          WallexSnackbar.error(SnackbarParams.fromError(err));
                         });
                   });
                 },
@@ -174,7 +174,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       await CategoryService.instance.initializeCategories();
 
                       if (context.mounted) {
-                        MonekinSnackbar.success(
+                        WallexSnackbar.success(
                           SnackbarParams(
                             'Datos reparados exitosamente. Reinicia la app.',
                           ),
@@ -182,7 +182,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        MonekinSnackbar.error(SnackbarParams('Error: $e'));
+                        WallexSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }
@@ -223,7 +223,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       await FirebaseSyncService.instance.pushAllData();
 
                       if (context.mounted) {
-                        MonekinSnackbar.success(
+                        WallexSnackbar.success(
                           SnackbarParams(
                             'Datos subidos exitosamente a la nube',
                           ),
@@ -231,7 +231,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        MonekinSnackbar.error(SnackbarParams('Error: $e'));
+                        WallexSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }
@@ -282,16 +282,16 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                                     '${errors > 0 ? 'Errores: $errors. $firstErr' : ''}'
                                 .trim();
                         if (errors > 0) {
-                          MonekinSnackbar.error(SnackbarParams(msg));
+                          WallexSnackbar.error(SnackbarParams(msg));
                         } else {
-                          MonekinSnackbar.success(
+                          WallexSnackbar.success(
                             SnackbarParams('$msg Reinicia la app para verlos.'),
                           );
                         }
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        MonekinSnackbar.error(SnackbarParams('Error: $e'));
+                        WallexSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }

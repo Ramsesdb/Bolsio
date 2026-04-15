@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budget_form_page.dart';
-import 'package:monekin/app/layout/page_context.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/budgets/budget_form_page.dart';
+import 'package:wallex/app/layout/page_context.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/services/budget/budget_service.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class BudgetsPage extends StatefulWidget {
   const BudgetsPage({super.key});

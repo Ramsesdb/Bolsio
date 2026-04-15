@@ -4,13 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/stats/utils/common_axis_titles.dart';
+import 'package:wallex/app/stats/widgets/fund_evolution_info.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/models/budget/budget.dart';
+import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:wallex/core/utils/constants.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
   const BudgetEvolutionChart({super.key, required this.budget});

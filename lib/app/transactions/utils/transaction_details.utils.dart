@@ -1,15 +1,15 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/services/tags/tags_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 List<ListTileActionItem> getPayActions(
   BuildContext context,
@@ -68,7 +68,7 @@ List<ListTileActionItem> getPayActions(
 
         await transactionService.deleteTransaction(transaction.id);
 
-        MonekinSnackbar.success(
+        WallexSnackbar.success(
           SnackbarParams(
             '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
           ),
@@ -90,10 +90,10 @@ List<ListTileActionItem> getPayActions(
           .setTransactionNextPayment(transaction);
 
       if (nextPaymentResult > 0) {
-        MonekinSnackbar.success(SnackbarParams(t.transaction.new_success));
+        WallexSnackbar.success(SnackbarParams(t.transaction.new_success));
       }
     } else {
-      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      WallexSnackbar.success(SnackbarParams(t.transaction.edit_success));
     }
   }
 

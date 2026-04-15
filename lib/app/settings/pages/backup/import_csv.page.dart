@@ -3,31 +3,31 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/app/accounts/account_selector.dart';
+import 'package:wallex/app/categories/selectors/category_picker.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/backup/backup_database_service.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
+import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/loading_overlay.dart';
+import 'package:wallex/core/routes/destinations.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/supported_icon/supported_icon_service.dart';
+import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/text_field_utils.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});
@@ -92,7 +92,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       );
 
       if (!allRowsSameLength) {
-        MonekinSnackbar.error(
+        WallexSnackbar.error(
           SnackbarParams(
             'All rows in the CSV must have the same number of columns.',
           ),
@@ -105,7 +105,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         csvData = parsedCSV;
       });
     } catch (err) {
-      MonekinSnackbar.error(SnackbarParams.fromError(err));
+      WallexSnackbar.error(SnackbarParams.fromError(err));
     }
   }
 
@@ -184,7 +184,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       RouteUtils.popAllRoutesExceptFirst();
       tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
 
-      MonekinSnackbar.success(
+      WallexSnackbar.success(
         SnackbarParams(
           t.backup.import.manual_import.success(x: csvData!.slice(1).length),
         ),
@@ -192,7 +192,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     }
 
     if (amountColumn == null) {
-      MonekinSnackbar.warning(SnackbarParams('Amount column can not be null'));
+      WallexSnackbar.warning(SnackbarParams('Amount column can not be null'));
       return;
     }
 
@@ -320,7 +320,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       Logger.printDebug(e);
       loadingOverlay.hide();
 
-      MonekinSnackbar.error(SnackbarParams.fromError(e));
+      WallexSnackbar.error(SnackbarParams.fromError(e));
     }
   }
 

@@ -7,34 +7,34 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/auth/login_page.dart';
-import 'package:monekin/app/auth/signup_page.dart';
-import 'package:monekin/app/layout/page_switcher.dart';
-import 'package:monekin/app/layout/widgets/app_navigation_sidebar.dart';
-import 'package:monekin/app/layout/window_bar.dart';
-import 'package:monekin/app/onboarding/intro.page.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/routes/handle_will_pop_scope.dart';
-import 'package:monekin/core/routes/root_navigator_observer.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/firebase_sync_service.dart';
-import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/core/utils/keyboard_intents.dart';
-import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/core/utils/scroll_behavior_override.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/core/services/dolar_api_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:wallex/app/auth/login_page.dart';
+import 'package:wallex/app/auth/signup_page.dart';
+import 'package:wallex/app/layout/page_switcher.dart';
+import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
+import 'package:wallex/app/layout/window_bar.dart';
+import 'package:wallex/app/onboarding/intro.page.dart';
+import 'package:wallex/core/database/services/app-data/app_data_service.dart';
+import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:wallex/core/presentation/helpers/global_snackbar.dart';
+import 'package:wallex/core/presentation/theme.dart';
+import 'package:wallex/core/routes/handle_will_pop_scope.dart';
+import 'package:wallex/core/routes/root_navigator_observer.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/utils/app_utils.dart';
+import 'package:wallex/core/utils/keyboard_intents.dart';
+import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/scroll_behavior_override.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
+import 'package:wallex/core/utils/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:monekin/core/database/app_db.dart';
+import 'package:wallex/core/database/app_db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,12 +103,12 @@ class _InitializeAppState extends State<InitializeApp> {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
-    return MonekinAppEntryPoint(key: const ValueKey('App Entry Point'));
+    return WallexAppEntryPoint(key: const ValueKey('App Entry Point'));
   }
 }
 
-class MonekinAppEntryPoint extends StatelessWidget {
-  const MonekinAppEntryPoint({super.key});
+class WallexAppEntryPoint extends StatelessWidget {
+  const WallexAppEntryPoint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +218,7 @@ class MaterialAppContainer extends StatelessWidget {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp(
-          title: 'Monekin',
+          title: 'Wallex',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
           shortcuts: appShortcuts,

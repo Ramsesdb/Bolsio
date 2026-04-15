@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/utils/demo_app_seeders.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
-import 'package:monekin/core/utils/logger.dart';
+import 'package:wallex/app/layout/page_framework.dart';
+import 'package:wallex/core/database/utils/demo_app_seeders.dart';
+import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/loading_overlay.dart';
+import 'package:wallex/core/utils/logger.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -228,7 +228,7 @@ class DebugPage extends StatelessWidget {
                     .then((value) {
                       loadingOverlay.hide();
 
-                      MonekinSnackbar.success(
+                      WallexSnackbar.success(
                         SnackbarParams('Demo data inserted successfully!'),
                       );
 
@@ -237,7 +237,7 @@ class DebugPage extends StatelessWidget {
                     .catchError((error) {
                       loadingOverlay.hide();
                       Logger.printDebug(error);
-                      MonekinSnackbar.error(SnackbarParams.fromError(error));
+                      WallexSnackbar.error(SnackbarParams.fromError(error));
                     });
               },
               child: Text("DEMO DATA"),

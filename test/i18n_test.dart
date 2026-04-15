@@ -1,6 +1,6 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 void main() {
   group('i18n', () {

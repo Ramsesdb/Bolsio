@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/extensions/lists.extensions.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/date-utils/periodicity.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/uuid.dart';
 
 const _cashAccountID = 'acc1';
 const _bankAccountID = 'acc2';

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_selector.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/filters/saved_filters_service.dart';
+import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/modal_container.dart';
+import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/saved_filters_selector.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/utils/app_utils.dart';
+import 'package:wallex/core/utils/list_tile_action_item.dart';
+import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 Future<TransactionFilterSet?> openFilterSheetModal(
   BuildContext context,
@@ -119,7 +119,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 });
 
                 if (context.mounted) {
-                  MonekinSnackbar.success(
+                  WallexSnackbar.success(
                     SnackbarParams(
                       t.transaction.filters.saved.save_success,
                       showAtTop: true,
@@ -128,7 +128,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  MonekinSnackbar.error(SnackbarParams.fromError(e));
+                  WallexSnackbar.error(SnackbarParams.fromError(e));
                 }
               }
             },
