@@ -4,10 +4,10 @@ import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
 import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
 import 'package:wallex/app/settings/pages/general_settings.page.dart';
 import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -18,6 +18,44 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late bool _syncEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+    _syncEnabled =
+        appStateSettings[SettingKey.firebaseSyncEnabled] == '1';
+  }
+
+  Future<void> _onSyncToggled(bool value) async {
+    setState(() => _syncEnabled = value);
+
+    await FirebaseSyncService.instance.setSyncEnabled(value);
+
+    if (!mounted) return;
+
+    if (value) {
+      // Turning ON — warn that app restart is needed for Firebase init
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Sync activado. Reinicia la app para conectar con Firebase.',
+          ),
+          duration: Duration(seconds: 4),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Sync desactivado. Tus datos siguen siendo locales.',
+          ),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -56,6 +94,31 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: t.more.data.display_descr,
               icon: Icons.save_rounded,
               onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
+            ),
+            const Divider(),
+
+            // ── Sync section ──────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 12, bottom: 4),
+              child: Text(
+                'Sincronizacion (opcional)',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            SwitchListTile(
+              secondary: const Icon(Icons.cloud_sync, size: 26),
+              title: const Text(
+                'Firebase Sync',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              subtitle: const Text(
+                'Sincroniza datos con Google (requiere configuracion Firebase)',
+              ),
+              value: _syncEnabled,
+              onChanged: _onSyncToggled,
             ),
           ],
         ),
