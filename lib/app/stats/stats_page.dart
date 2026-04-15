@@ -4,6 +4,7 @@ import 'package:wallex/app/stats/widgets/balance_bar_chart.dart';
 import 'package:wallex/app/stats/widgets/finance_health_details.dart';
 import 'package:wallex/app/stats/widgets/fund_evolution_info.dart';
 import 'package:wallex/app/stats/widgets/income_expense_comparason.dart';
+import 'package:wallex/app/stats/widgets/income_by_source/income_by_source_tab.dart';
 import 'package:wallex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:wallex/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
@@ -53,7 +54,7 @@ class _StatsPageState extends State<StatsPage>
     dateRangeService = widget.dateRangeService;
 
     _tabController = TabController(
-      length: 4,
+      length: 5,
       initialIndex: widget.initialIndex,
       vsync: this,
     );
@@ -131,6 +132,7 @@ class _StatsPageState extends State<StatsPage>
         controller: _tabController,
         tabs: [
           Tab(text: t.financial_health.display),
+          const Tab(text: 'Ingresos', icon: Icon(Icons.trending_up, size: 18)), // TODO: i18n
           Tab(text: t.stats.distribution),
           Tab(text: t.stats.balance),
           Tab(text: t.stats.cash_flow),
@@ -183,6 +185,10 @@ class _StatsPageState extends State<StatsPage>
                     ),
                   ),
                 ]),
+                IncomeBySourceTab(
+                  filters: filters,
+                  dateRangeService: dateRangeService,
+                ),
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.by_categories,
