@@ -92,6 +92,21 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   String? _selectedExchangeSource;
   String? _preferredCurrencyCode;
 
+  /// Tracks whether the user manually edited the destination amount field.
+  /// When true, changes to the exchange rate selector will NOT overwrite the
+  /// destination value; instead, the effective rate is recalculated from
+  /// valueInDestiny / transactionValue.
+  bool _destinyManuallyOverridden = false;
+
+  /// Whether this is a cross-currency transfer (from and to accounts have
+  /// different currencies). Used to conditionally show valueInDestiny field.
+  bool get _isCrossCurrencyTransfer {
+    return transactionType.isTransfer &&
+        fromAccount != null &&
+        transferAccount != null &&
+        fromAccount!.currency.code != transferAccount!.currency.code;
+  }
+
   /// Whether to show the exchange rate selector.
   /// True when the account currency differs from the user's preferred currency
   /// (income/expense) or when transfer accounts have different currencies.
@@ -328,6 +343,23 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     final newTrID = widget.transactionToEdit?.id ?? generateUUID();
 
+    // Determine effective exchange rate and source.
+    // If the user manually edited the destination amount, the effective rate
+    // is valueInDestiny / transactionValue and the source is 'manual'.
+    double? effectiveExchangeRate = _showExchangeRateSelector
+        ? _selectedExchangeRate
+        : null;
+    String? effectiveExchangeSource = _showExchangeRateSelector
+        ? _selectedExchangeSource
+        : null;
+
+    if (_destinyManuallyOverridden &&
+        valueInDestinyToNumber != null &&
+        transactionValue > 0) {
+      effectiveExchangeRate = valueInDestinyToNumber! / transactionValue;
+      effectiveExchangeSource = 'manual';
+    }
+
     final transactionToPost = TransactionInDB(
       id: newTrID,
       date: date,
@@ -357,12 +389,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
-      exchangeRateApplied: _showExchangeRateSelector
-          ? _selectedExchangeRate
-          : null,
-      exchangeRateSource: _showExchangeRateSelector
-          ? _selectedExchangeSource
-          : null,
+      exchangeRateApplied: effectiveExchangeRate,
+      exchangeRateSource: effectiveExchangeSource,
       createdAt: DateTime.now(),
     );
 
@@ -504,6 +532,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     _selectedExchangeRate = transaction.exchangeRateApplied;
     _selectedExchangeSource = transaction.exchangeRateSource;
 
+    // If editing a TX that already had a destination amount, mark as manually
+    // overridden so the exchange rate selector won't overwrite it.
+    if (transaction.valueInDestiny != null) {
+      _destinyManuallyOverridden = true;
+    }
+
     setState(() {});
   }
 
@@ -584,7 +618,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       // - Recurrency (too complex)
       // - Status (always reconciled by default)
       // - Tags (unnecessary)
-      // - Value in destiny (complicates transfers)
       // TransactionRecurrencySelector(
       //   recurrentRule: recurrentRule,
       //   onRecurrencyChanged: (newRule) =>
@@ -602,14 +635,18 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       //   onTagsChanged: (newTags) => setState(() => tags = newTags),
       // ),
       // const Divider(),
-      // if (transactionType.isTransfer) ...[
-      //   TransactionValueInDestinyField(
-      //     controller: valueInDestinyController,
-      //     transferAccount: transferAccount,
-      //     onChanged: () => setState(() {}),
-      //   ),
-      //   const Divider(),
-      // ],
+      if (_isCrossCurrencyTransfer) ...[
+        TransactionValueInDestinyField(
+          controller: valueInDestinyController,
+          transferAccount: transferAccount,
+          onChanged: () {
+            setState(() {
+              _destinyManuallyOverridden = true;
+            });
+          },
+        ),
+        const Divider(),
+      ],
       if (_showExchangeRateSelector) ...[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -625,6 +662,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             onChanged: (rate, source) {
               _selectedExchangeRate = rate;
               _selectedExchangeSource = source;
+              // Auto-fill valueInDestiny when not manually overridden
+              if (_isCrossCurrencyTransfer && !_destinyManuallyOverridden) {
+                final computed = transactionValue * rate;
+                valueInDestinyController.text = computed.toStringAsFixed(2);
+              }
             },
           ),
         ),
