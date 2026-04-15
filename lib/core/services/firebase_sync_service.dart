@@ -113,6 +113,8 @@ class FirebaseSyncService {
         'status': transaction.status?.name,
         'categoryID': transaction.categoryID,
         'isHidden': transaction.isHidden,
+        'exchangeRateApplied': transaction.exchangeRateApplied,
+        'exchangeRateSource': transaction.exchangeRateSource,
         'intervalEach': transaction.intervalEach,
         'intervalPeriod': transaction.intervalPeriod?.name,
         'endDate': transaction.endDate?.toIso8601String(),
@@ -229,6 +231,7 @@ class FirebaseSyncService {
         'date': rate.date.toIso8601String(),
         'currencyCode': rate.currencyCode,
         'exchangeRate': rate.exchangeRate,
+        'source': rate.source,
         'updatedAt': FieldValue.serverTimestamp(),
         'updatedBy': currentUserEmail,
       });
@@ -459,6 +462,7 @@ class FirebaseSyncService {
           date: DateTime.parse(data['date'] as String),
           currencyCode: data['currencyCode'] as String,
           exchangeRate: (data['exchangeRate'] as num).toDouble(),
+          source: data['source'] as String?,
         );
 
         await db.into(db.exchangeRates).insertOnConflictUpdate(rate);
@@ -542,6 +546,10 @@ class FirebaseSyncService {
               : TransactionStatus.reconciled,
           categoryID: data['categoryID'] as String?,
           isHidden: data['isHidden'] as bool? ?? false,
+          exchangeRateApplied: data['exchangeRateApplied'] != null
+              ? (data['exchangeRateApplied'] as num).toDouble()
+              : null,
+          exchangeRateSource: data['exchangeRateSource'] as String?,
           createdAt: data['createdAt'] != null
               ? DateTime.parse(data['createdAt'] as String)
               : DateTime.now(),
@@ -650,6 +658,8 @@ class FirebaseSyncService {
             status: tx.status,
             categoryID: tx.category?.id,
             isHidden: tx.isHidden,
+            exchangeRateApplied: tx.exchangeRateApplied,
+            exchangeRateSource: tx.exchangeRateSource,
             createdAt: DateTime.now(),
             intervalEach: tx.recurrentInfo.intervalEach,
             intervalPeriod: tx.recurrentInfo.intervalPeriod,

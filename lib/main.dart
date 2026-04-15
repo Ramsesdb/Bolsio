@@ -30,8 +30,8 @@ import 'package:wallex/core/utils/scroll_behavior_override.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/services/rate_providers/rate_provider_manager.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
 import 'package:wallex/core/utils/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallex/core/database/app_db.dart';
@@ -432,38 +432,76 @@ class InitialPageRouteNavigator extends StatelessWidget {
   }
 }
 
-/// Helper to auto-update currency rate once a day
+/// Helper to auto-update currency rates (BCV + paralelo) once a day.
+///
+/// Fetches both sources via [RateProviderManager] (fallback chain) and stores
+/// each one with its source tag. Also maintains backwards-compatible insertion
+/// without source for existing callers.
 Future<void> _checkAndAutoUpdateCurrencyRate() async {
   final prefs = await SharedPreferences.getInstance();
-  final lastUpdateStr = prefs.getString('last_currency_auto_update_v2');
+  final lastUpdateStr = prefs.getString('last_currency_auto_update_v3');
   final now = DateTime.now();
 
-  // If updated less than 24h ago, skip
+  // If updated less than 12h ago, skip
   if (lastUpdateStr != null) {
     final lastUpdate = DateTime.parse(lastUpdateStr);
-    if (now.difference(lastUpdate).inHours < 24) {
+    if (now.difference(lastUpdate).inHours < 12) {
       return;
     }
   }
 
-  // Fetch rates
-  final rates = await DolarApiService.instance.fetchAllRates();
-  if (rates.isEmpty) return;
+  final sources = ['bcv', 'paralelo'];
+  bool anyInserted = false;
 
-  final oficial = DolarApiService.instance.oficialRate;
-  if (oficial == null) return;
+  for (final source in sources) {
+    try {
+      final result = await RateProviderManager.instance.fetchRate(
+        date: now,
+        source: source,
+      );
 
-  // Insert rate
-  await ExchangeRateService.instance.insertOrUpdateExchangeRate(
-    ExchangeRateInDB(
-      id: generateUUID(),
-      date: now,
-      currencyCode: 'USD',
-      exchangeRate: oficial.promedio,
-    ),
-  );
+      if (result != null) {
+        // Insert with source tag (new system)
+        await ExchangeRateService.instance.insertOrUpdateExchangeRateWithSource(
+          currencyCode: 'USD',
+          date: now,
+          rate: result.rate,
+          source: source,
+        );
 
-  // Save new timestamp
-  await prefs.setString('last_currency_auto_update_v2', now.toIso8601String());
-  debugPrint('Currency rate auto-updated to: ${oficial.promedio}');
+        // For BCV, also insert without source for backwards compatibility
+        // (existing display widgets use the source-less rate)
+        if (source == 'bcv') {
+          await ExchangeRateService.instance.insertOrUpdateExchangeRate(
+            ExchangeRateInDB(
+              id: generateUUID(),
+              date: now,
+              currencyCode: 'USD',
+              exchangeRate: result.rate,
+            ),
+          );
+        }
+
+        debugPrint(
+          'Currency rate auto-updated ($source): ${result.rate} '
+          'via ${result.providerName}',
+        );
+        anyInserted = true;
+      }
+    } catch (e) {
+      debugPrint('Error fetching $source rate: $e');
+    }
+  }
+
+  // Also try the legacy DolarApi fetch for caching (used by other callers)
+  try {
+    await DolarApiService.instance.fetchAllRates();
+  } catch (_) {}
+
+  if (anyInserted) {
+    await prefs.setString(
+      'last_currency_auto_update_v3',
+      now.toIso8601String(),
+    );
+  }
 }
