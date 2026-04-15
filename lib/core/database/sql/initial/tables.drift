@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS exchangeRates (
     id TEXT NOT NULL PRIMARY KEY,
     date DATETIME NOT NULL,
     currencyCode TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
-    exchangeRate REAL NOT NULL
+    exchangeRate REAL NOT NULL,
+    source TEXT
 ) AS ExchangeRateInDB;
 
 CREATE TABLE IF NOT EXISTS accounts (
@@ -101,13 +102,7 @@ CREATE TABLE IF NOT EXISTS categories (
     -- Parent category of this category (if any)
     parentCategoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
-    -- Indicates if incomes in this category should be included in the pastoral tithe calculation
-    calcTithe BOOLEAN NOT NULL DEFAULT 1,
-
-    -- The percentage of the income that should be allocated to the sub-fund representing this category
-    subFundPercent REAL NOT NULL DEFAULT 0,
-
-    --- Color and type are not needed in child categories. They are inherited from the parent 
+    --- Color and type are not needed in child categories. They are inherited from the parent
     CHECK ((parentCategoryID IS NULL) != (color IS NULL AND type IS NULL)),
     CHECK ((color IS NULL) == (type IS NULL))
 ) AS CategoryInDB;
@@ -156,8 +151,11 @@ CREATE TABLE IF NOT EXISTS transactions (
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   isHidden BOOLEAN NOT NULL DEFAULT 0,
 
-  -- Allows overriding the category's titheable status on a per-transaction basis
-  calcTithe BOOLEAN NOT NULL DEFAULT 1,
+  -- The exchange rate that was applied when this transaction was created (for audit/traceability)
+  exchangeRateApplied REAL,
+
+  -- The source of the exchange rate applied to this transaction
+  exchangeRateSource TEXT CHECK(exchangeRateSource IN ('bcv','paralelo','manual','auto')),
 
   ----------- Audit data --------------
 
@@ -328,29 +326,3 @@ CREATE TABLE IF NOT EXISTS appData (
   appDataValue TEXT
 );
 
-CREATE TABLE IF NOT EXISTS auditLogs (
-  id TEXT NOT NULL PRIMARY KEY,
-  
-  -- The type of entity being modified (e.g. 'thought', 'account')
-  entityType TEXT NOT NULL,
-  
-  -- The ID of the entity being modified
-  entityId TEXT NOT NULL,
-  
-  -- JSON string representing the state of the entity BEFORE the change (null for CREATE)
-  previousValue TEXT,
-  
-  -- JSON string representing the state of the entity AFTER the change (null for DELETE)
-  newValue TEXT,
-  
-  -- ID of the user who performed the action
-  userId TEXT,
-  
-  -- Email of the user who performed the action
-  userEmail TEXT,
-  
-  -- When the action occurred
-  timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-  [action] TEXT NOT NULL
-);

@@ -81,7 +81,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration {
