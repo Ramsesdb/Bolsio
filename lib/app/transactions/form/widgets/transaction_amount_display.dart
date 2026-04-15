@@ -92,7 +92,7 @@ class TransactionAmountDisplay extends StatelessWidget {
                 ],
               ),
               if (fromAccount != null)
-                StreamBuilder(
+                StreamBuilder<double?>(
                   stream: ExchangeRateService.instance
                       .calculateExchangeRateToPreferredCurrency(
                         fromCurrency: fromAccount!.currency.code,
@@ -101,7 +101,8 @@ class TransactionAmountDisplay extends StatelessWidget {
                   builder: (context, exchangeRateSnapshot) {
                     final shouldHide =
                         !exchangeRateSnapshot.hasData ||
-                        exchangeRateSnapshot.data! == transactionValue;
+                        exchangeRateSnapshot.data == null ||
+                        exchangeRateSnapshot.data == transactionValue;
 
                     final valueInPrefCurrencyIndicator = Column(
                       children: [

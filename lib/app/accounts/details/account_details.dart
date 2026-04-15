@@ -293,7 +293,7 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
                           currency: account.currency,
                         ),
                       ),
-                      StreamBuilder(
+                      StreamBuilder<double?>(
                         stream: ExchangeRateService.instance
                             .calculateExchangeRateToPreferredCurrency(
                               amount: snapshot.data!,
@@ -302,8 +302,8 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
                         builder: (context, currencySnapshot) {
                           if (currencySnapshot.connectionState ==
                                   ConnectionState.waiting ||
-                              currencySnapshot.data != 0 &&
-                                  currencySnapshot.data! == snapshot.data ||
+                              currencySnapshot.data == null ||
+                              currencySnapshot.data == snapshot.data ||
                               snapshot.data! == 0) {
                             return Container();
                           }
