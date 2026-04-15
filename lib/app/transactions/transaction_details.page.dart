@@ -438,6 +438,22 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     ),
                                     label: t.transfer.form.to,
                                   ),
+                                // --- Received amount in destination currency ---
+                                if (transaction.isTransfer &&
+                                    transaction.valueInDestiny != null &&
+                                    transaction.receivingAccount != null &&
+                                    transaction.receivingAccount!.currency.code !=
+                                        transaction.account.currency.code)
+                                  LabelValueInfoItem(
+                                    value: CurrencyDisplayer(
+                                      amountToConvert: transaction.valueInDestiny!,
+                                      currency: transaction.receivingAccount!.currency,
+                                      integerStyle: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    label: 'Recibido', // TODO: i18n
+                                  ),
                                 LabelValueInfoItem(
                                   value: Text(
                                     DateFormat.yMMMMd().format(
