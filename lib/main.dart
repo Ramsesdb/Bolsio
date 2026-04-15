@@ -1,5 +1,4 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/auth/login_page.dart';
-import 'package:wallex/app/auth/signup_page.dart';
+import 'package:wallex/app/auth/welcome_screen.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:wallex/app/layout/window_bar.dart';
@@ -39,13 +37,22 @@ import 'package:wallex/core/database/app_db.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  try {
-    await Firebase.initializeApp();
-    await FirebaseSyncService.instance.initialize();
-  } catch (e) {
-    // Firebase init can fail on some devices - app should still work offline
-    debugPrint('Firebase initialization failed: $e');
+  // Initialize settings first so we can check the sync flag
+  await UserSettingService.instance.initializeGlobalStateMap();
+  await AppDataService.instance.initializeGlobalStateMap();
+
+  // Initialize Firebase ONLY if sync is enabled (opt-in)
+  final syncEnabled = appStateSettings[SettingKey.firebaseSyncEnabled] == '1';
+  if (syncEnabled) {
+    try {
+      await Firebase.initializeApp();
+      await FirebaseSyncService.instance.initialize();
+    } catch (e) {
+      // Firebase init can fail on some devices - app should still work offline
+      debugPrint('Firebase initialization failed: $e');
+    }
+  } else {
+    debugPrint('Firebase sync disabled — skipping Firebase.initializeApp()');
   }
 
   // --- Auto-update Currency Rate (Daily) ---
@@ -55,9 +62,6 @@ void main() async {
     debugPrint('Error auto-updating currency rate: $e');
   }
   // -----------------------------------------
-
-  await UserSettingService.instance.initializeGlobalStateMap();
-  await AppDataService.instance.initializeGlobalStateMap();
 
   PrivateModeService.instance.setPrivateMode(
     appStateSettings[SettingKey.privateModeAtLaunch] == '1',
@@ -312,7 +316,14 @@ class MaterialAppContainer extends StatelessWidget {
   }
 }
 
-// Handles onboarding and authentication!
+/// Handles onboarding and optional authentication.
+///
+/// Flow:
+/// 1. If not onboarded → WelcomeScreen (first run)
+/// 2. If onboarded but introSeen is false → IntroPage (currency/category setup)
+/// 3. Otherwise → PageSwitcher (main app)
+///
+/// Firebase sync is triggered in the background only when enabled + logged in.
 class InitialPageRouteNavigator extends StatelessWidget {
   const InitialPageRouteNavigator({super.key, required this.introSeen});
 
@@ -320,114 +331,40 @@ class InitialPageRouteNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        Logger.printDebug(
-          'AUTH STATE: connectionState=${snapshot.connectionState}, '
-          'hasData=${snapshot.hasData}, user=${snapshot.data?.email}',
-        );
+    final onboarded = appStateData[AppDataKey.onboarded] == '1';
 
-        // Show loading while checking auth state
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+    Logger.printDebug(
+      'ROUTE STATE: onboarded=$onboarded, introSeen=$introSeen, '
+      'syncAvailable=${FirebaseSyncService.instance.isFirebaseAvailable}',
+    );
 
-        // Not logged in -> show login page
-        if (!snapshot.hasData || snapshot.data == null) {
-          return Navigator(
-            key: navigatorKey,
-            onGenerateRoute: (settings) {
-              if (settings.name == '/signup') {
-                return RouteUtils.getPageRouteBuilder(const SignupPage());
-              }
-              return RouteUtils.getPageRouteBuilder(const LoginPage());
-            },
-          );
-        }
+    // First run: show welcome screen
+    if (!onboarded) {
+      return HeroControllerScope(
+        controller: MaterialApp.createMaterialHeroController(),
+        child: Navigator(
+          key: navigatorKey,
+          onGenerateRoute: (settings) =>
+              RouteUtils.getPageRouteBuilder(const WelcomeScreen()),
+        ),
+      );
+    }
 
-        // Logged in -> Check whitelist before allowing access
-        return FutureBuilder<bool>(
-          future: FirebaseSyncService.instance.isUserWhitelisted(),
-          builder: (context, whitelistSnapshot) {
-            // Still checking whitelist
-            if (whitelistSnapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Verificando permisos...'),
-                    ],
-                  ),
-                ),
-              );
-            }
+    // Trigger background sync if Firebase is available and user is logged in
+    if (FirebaseSyncService.instance.isFirebaseAvailable) {
+      FirebaseSyncService.instance.pullAllData();
+    }
 
-            // Not whitelisted -> Sign out and show error
-            if (whitelistSnapshot.data != true) {
-              // Sign out immediately
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                FirebaseSyncService.instance.signOut();
-              });
-
-              return Scaffold(
-                body: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.block, size: 64, color: Colors.red),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Acceso Denegado',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Tu correo (${snapshot.data?.email}) no está '
-                          'autorizado para usar esta aplicación.',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 24),
-                        const Text(
-                          'Contacta al administrador para solicitar acceso.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            // Whitelisted -> Sync data and show main app
-            FirebaseSyncService.instance.pullAllData();
-
-            return HeroControllerScope(
-              controller: MaterialApp.createMaterialHeroController(),
-              child: Navigator(
-                key: navigatorKey,
-                onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-                  introSeen
-                      ? PageSwitcher(key: tabsPageKey)
-                      : const IntroPage(),
-                ),
-              ),
-            );
-          },
-        );
-      },
+    return HeroControllerScope(
+      controller: MaterialApp.createMaterialHeroController(),
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
+          introSeen
+              ? PageSwitcher(key: tabsPageKey)
+              : const IntroPage(),
+        ),
+      ),
     );
   }
 }
