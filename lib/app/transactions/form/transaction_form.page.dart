@@ -9,9 +9,11 @@ import 'package:wallex/app/transactions/form/widgets/transaction_account_selecto
 import 'package:wallex/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:wallex/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:wallex/app/transactions/form/widgets/transaction_form_fields.dart';
+import 'package:wallex/app/transactions/form/widgets/exchange_rate_selector.dart';
 import 'package:wallex/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/currency/currency_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/tags/tags_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
@@ -85,6 +87,32 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
   List<Tag> tags = [];
 
+  // --- FX Fields ---
+  double? _selectedExchangeRate;
+  String? _selectedExchangeSource;
+  String? _preferredCurrencyCode;
+
+  /// Whether to show the exchange rate selector.
+  /// True when the account currency differs from the user's preferred currency
+  /// (income/expense) or when transfer accounts have different currencies.
+  bool get _showExchangeRateSelector {
+    if (_preferredCurrencyCode == null) return false;
+
+    if (transactionType.isTransfer) {
+      // Transfer: show when fromAccount and transferAccount have different currencies
+      if (fromAccount != null && transferAccount != null) {
+        return fromAccount!.currency.code != transferAccount!.currency.code;
+      }
+      return false;
+    } else {
+      // Income/Expense: show when account currency differs from preferred
+      if (fromAccount != null) {
+        return fromAccount!.currency.code != _preferredCurrencyCode;
+      }
+      return false;
+    }
+  }
+
   // --- End Form Fields ---
 
   bool _isSaving = false;
@@ -123,6 +151,16 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     );
 
     _tabController.addListener(_onTabSelectionChanged);
+
+    // Load the user's preferred currency code for FX selector logic
+    CurrencyService.instance
+        .ensureAndGetPreferredCurrency()
+        .first
+        .then((currency) {
+      if (mounted) {
+        setState(() => _preferredCurrencyCode = currency.code);
+      }
+    });
 
     if (widget.transactionToEdit != null) {
       _fillForm(widget.transactionToEdit!);
@@ -319,6 +357,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
+      exchangeRateApplied: _showExchangeRateSelector
+          ? _selectedExchangeRate
+          : null,
+      exchangeRateSource: _showExchangeRateSelector
+          ? _selectedExchangeSource
+          : null,
       createdAt: DateTime.now(),
     );
 
@@ -456,6 +500,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
 
+    // Restore FX fields for editing
+    _selectedExchangeRate = transaction.exchangeRateApplied;
+    _selectedExchangeSource = transaction.exchangeRateSource;
+
     setState(() {});
   }
 
@@ -562,6 +610,26 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       //   ),
       //   const Divider(),
       // ],
+      if (_showExchangeRateSelector) ...[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: ExchangeRateSelector(
+            fromCurrency: transactionType.isTransfer
+                ? (fromAccount?.currency.code ?? 'USD')
+                : (fromAccount?.currency.code ?? 'USD'),
+            toCurrency: transactionType.isTransfer
+                ? (transferAccount?.currency.code ?? _preferredCurrencyCode ?? 'VES')
+                : (_preferredCurrencyCode ?? 'VES'),
+            initialRate: _selectedExchangeRate,
+            initialSource: _selectedExchangeSource,
+            onChanged: (rate, source) {
+              _selectedExchangeRate = rate;
+              _selectedExchangeSource = source;
+            },
+          ),
+        ),
+        const Divider(),
+      ],
       TransactionDescriptionField(controller: notesController),
       const Divider(),
     ];
