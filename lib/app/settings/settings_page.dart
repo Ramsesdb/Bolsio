@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
@@ -5,9 +7,11 @@ import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
 import 'package:wallex/app/settings/pages/general_settings.page.dart';
 import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -25,6 +29,66 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     _syncEnabled =
         appStateSettings[SettingKey.firebaseSyncEnabled] == '1';
+  }
+
+  Future<void> _runPersonalVESeeder() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Insertar datos de Venezuela'),
+        content: const Text(
+          'Se crearan cuentas bancarias venezolanas, categorias de '
+          'ingreso/gasto y tags utiles.\n\n'
+          'Si ya tienes cuentas creadas, no se insertara nada (idempotente).',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Insertar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    // Show loading overlay
+    unawaited(showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    ));
+
+    try {
+      await PersonalVESeeder.seedAll();
+
+      if (mounted) {
+        Navigator.of(context).pop(); // dismiss loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Datos de Venezuela insertados correctamente.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      Logger.printDebug('Settings: PersonalVESeeder error: $e');
+      if (mounted) {
+        Navigator.of(context).pop(); // dismiss loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al insertar datos: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _onSyncToggled(bool value) async {
@@ -119,6 +183,30 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               value: _syncEnabled,
               onChanged: _onSyncToggled,
+            ),
+            const Divider(),
+
+            // ── Datos personales VE ──────────────────────────────
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 12, bottom: 4),
+              child: Text(
+                'Datos iniciales',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_balance, size: 26),
+              title: const Text(
+                'Insertar datos de Venezuela',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              subtitle: const Text(
+                'Crea cuentas bancarias VE, categorias y tags predefinidos',
+              ),
+              onTap: _runPersonalVESeeder,
             ),
           ],
         ),
