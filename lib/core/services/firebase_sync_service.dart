@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drift/drift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
@@ -14,25 +16,72 @@ import 'package:wallex/core/utils/logger.dart';
 
 /// Service that syncs local data to Firestore for multi-device sharing.
 ///
-/// Uses a shared organization ID so all users see the same data.
+/// Gated behind [SettingKey.firebaseSyncEnabled]. When disabled (default),
+/// all sync operations are no-ops and the app works fully offline.
+/// Uses per-user Firestore paths: `users/{uid}/...`
 class FirebaseSyncService {
   FirebaseSyncService._();
   static final FirebaseSyncService instance = FirebaseSyncService._();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseFirestore? _firestore;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _initialized = false;
 
-  /// Hardcoded organization ID for the church
-  static const String orgId = 'finanzasGethsemani';
+  /// Whether Firebase is initialized AND sync is enabled.
+  bool get isFirebaseAvailable => _initialized;
+
+  /// Check if Firebase core has been initialized (app-level).
+  bool get _isFirebaseCoreReady {
+    try {
+      Firebase.app();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   /// Initialize the sync service.
   /// Call this after Firebase.initializeApp() in main.dart.
+  /// Checks [SettingKey.firebaseSyncEnabled] — if '0' or absent, returns early.
   Future<void> initialize() async {
     if (_initialized) return;
+
+    // Check the opt-in flag
+    final syncFlag = appStateSettings[SettingKey.firebaseSyncEnabled];
+    if (syncFlag != '1') {
+      Logger.printDebug(
+        'FirebaseSyncService: sync disabled (flag=$syncFlag), skipping init',
+      );
+      return;
+    }
+
+    // Check that Firebase core is actually available
+    if (!_isFirebaseCoreReady) {
+      Logger.printDebug(
+        'FirebaseSyncService: Firebase core not initialized, skipping',
+      );
+      return;
+    }
+
+    _firestore = FirebaseFirestore.instance;
     _initialized = true;
     Logger.printDebug('FirebaseSyncService initialized');
+  }
+
+  /// Enable or disable sync at runtime. Writes the setting and updates
+  /// internal state. Does NOT call Firebase.initializeApp() — that requires
+  /// an app restart.
+  Future<void> setSyncEnabled(bool enabled) async {
+    await UserSettingService.instance.setItem(
+      SettingKey.firebaseSyncEnabled,
+      enabled ? '1' : '0',
+    );
+    if (!enabled) {
+      _initialized = false;
+      _firestore = null;
+    }
+    Logger.printDebug('FirebaseSyncService: sync ${enabled ? "enabled" : "disabled"}');
   }
 
   /// Get the current user's UID, or null if not logged in.
@@ -41,42 +90,22 @@ class FirebaseSyncService {
   /// Get the current user's email.
   String? get currentUserEmail => _auth.currentUser?.email;
 
+  /// Base Firestore path for the current user: `users/{uid}`
+  String get _userBasePath {
+    final uid = currentUserId;
+    if (uid == null) throw StateError('No user logged in');
+    return 'users/$uid';
+  }
+
   // ============================================================
   // SECURITY - Whitelist Verification
   // ============================================================
 
-  /// Check if the current user's email is in the organization whitelist.
-  /// Returns true if whitelisted, false otherwise.
+  /// Check if the current user is allowed to use sync.
+  /// In the personal edition, any authenticated user is whitelisted.
   Future<bool> isUserWhitelisted() async {
-    try {
-      final email = currentUserEmail?.toLowerCase();
-      if (email == null) {
-        Logger.printDebug(
-          'FirebaseSyncService: No user email, not whitelisted',
-        );
-        return false;
-      }
-
-      // Check if document with email as ID exists in whitelist collection
-      final docRef = _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('whitelist')
-          .doc(email);
-
-      final doc = await docRef.get();
-
-      final isWhitelisted = doc.exists;
-      Logger.printDebug(
-        'FirebaseSyncService: User $email whitelisted: $isWhitelisted',
-      );
-
-      return isWhitelisted;
-    } catch (e) {
-      Logger.printDebug('FirebaseSyncService: Error checking whitelist: $e');
-      // On error, deny access for safety
-      return false;
-    }
+    // Personal edition: if user is logged in, they are whitelisted
+    return currentUserId != null;
   }
 
   /// Sign out the current user
@@ -91,13 +120,12 @@ class FirebaseSyncService {
 
   /// Push a transaction to Firestore (create or update)
   Future<void> pushTransaction(TransactionInDB transaction) async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) return;
 
-      final docRef = _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('transactions')
+      final docRef = _firestore!
+          .collection('$_userBasePath/transactions')
           .doc(transaction.id);
 
       await docRef.set({
@@ -133,13 +161,12 @@ class FirebaseSyncService {
 
   /// Delete a transaction from Firestore
   Future<void> deleteTransaction(String transactionId) async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) return;
 
-      await _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('transactions')
+      await _firestore!
+          .collection('$_userBasePath/transactions')
           .doc(transactionId)
           .delete();
 
@@ -153,13 +180,12 @@ class FirebaseSyncService {
 
   /// Push an account to Firestore
   Future<void> pushAccount(AccountInDB account) async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) return;
 
-      final docRef = _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('accounts')
+      final docRef = _firestore!
+          .collection('$_userBasePath/accounts')
           .doc(account.id);
 
       await docRef.set({
@@ -188,13 +214,12 @@ class FirebaseSyncService {
 
   /// Push a category to Firestore
   Future<void> pushCategory(CategoryInDB category) async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) return;
 
-      final docRef = _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('categories')
+      final docRef = _firestore!
+          .collection('$_userBasePath/categories')
           .doc(category.id);
 
       await docRef.set({
@@ -217,13 +242,12 @@ class FirebaseSyncService {
 
   /// Push an exchange rate to Firestore
   Future<void> pushExchangeRate(ExchangeRateInDB rate) async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) return;
 
-      final docRef = _firestore
-          .collection('organizations')
-          .doc(orgId)
-          .collection('exchangeRates')
+      final docRef = _firestore!
+          .collection('$_userBasePath/exchangeRates')
           .doc(rate.id);
 
       await docRef.set({
@@ -246,7 +270,7 @@ class FirebaseSyncService {
   // PULL METHODS - Fetch data from Firestore to local DB
   // ============================================================
 
-  /// Pull all organization data from Firestore and merge with local DB.
+  /// Pull all user data from Firestore and merge with local DB.
   /// Uses last-write-wins strategy based on updatedAt timestamp.
   /// Returns a map with counts of pulled items and first error message.
   Future<Map<String, dynamic>> pullAllData() async {
@@ -258,6 +282,8 @@ class FirebaseSyncService {
       'errors': 0,
       'firstError': '',
     };
+
+    if (!_initialized || _firestore == null) return result;
 
     try {
       if (currentUserId == null) {
@@ -307,10 +333,8 @@ class FirebaseSyncService {
   }
 
   Future<Map<String, dynamic>> _pullAccounts() async {
-    final snapshot = await _firestore
-        .collection('organizations')
-        .doc(orgId)
-        .collection('accounts')
+    final snapshot = await _firestore!
+        .collection('$_userBasePath/accounts')
         .get();
 
     final db = AppDB.instance;
@@ -404,10 +428,8 @@ class FirebaseSyncService {
   }
 
   Future<int> _pullCategories() async {
-    final snapshot = await _firestore
-        .collection('organizations')
-        .doc(orgId)
-        .collection('categories')
+    final snapshot = await _firestore!
+        .collection('$_userBasePath/categories')
         .get();
 
     final db = AppDB.instance;
@@ -444,10 +466,8 @@ class FirebaseSyncService {
   }
 
   Future<int> _pullExchangeRates() async {
-    final snapshot = await _firestore
-        .collection('organizations')
-        .doc(orgId)
-        .collection('exchangeRates')
+    final snapshot = await _firestore!
+        .collection('$_userBasePath/exchangeRates')
         .get();
 
     final db = AppDB.instance;
@@ -481,10 +501,8 @@ class FirebaseSyncService {
   }
 
   Future<Map<String, dynamic>> _pullTransactions() async {
-    final snapshot = await _firestore
-        .collection('organizations')
-        .doc(orgId)
-        .collection('transactions')
+    final snapshot = await _firestore!
+        .collection('$_userBasePath/transactions')
         .get();
 
     final db = AppDB.instance;
@@ -554,7 +572,7 @@ class FirebaseSyncService {
               ? DateTime.parse(data['createdAt'] as String)
               : DateTime.now(),
           intervalEach: data['intervalEach'] as int?,
-          intervalPeriod: null, // Simplified for church use
+          intervalPeriod: null, // Simplified for personal use
           endDate: data['endDate'] != null
               ? DateTime.parse(data['endDate'] as String)
               : null,
@@ -591,6 +609,7 @@ class FirebaseSyncService {
 
   /// Push all local data to Firestore (useful for initial sync)
   Future<void> pushAllData() async {
+    if (!_initialized || _firestore == null) return;
     try {
       if (currentUserId == null) {
         Logger.printDebug(
@@ -681,5 +700,4 @@ class FirebaseSyncService {
       Logger.printDebug('FirebaseSyncService: Error in full push: $e');
     }
   }
-
 }
