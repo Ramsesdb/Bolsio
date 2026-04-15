@@ -151,23 +151,9 @@ class MonekinAppEntryPoint extends StatelessWidget {
     }
 
     Logger.printDebug(
-      'App language not found in DB. Setting the app locale to SPANISH (Church Config)...',
+      'App language not found in DB. Using device locale...',
     );
 
-    if (lang != null) {
-      UserSettingService.instance.setItem(SettingKey.appLanguage, 'es');
-    }
-
-    // Force Spanish:
-    LocaleSettings.setLocaleRaw('es').then((_) {
-      Logger.printDebug('App language forcefully set to Spanish (es)');
-    });
-
-    // Also save it to settings so it persists explicitly
-    UserSettingService.instance.setItem(SettingKey.appLanguage, 'es');
-    return;
-
-    /*
     // Uses locale of the device, fallbacks to base locale. Returns the locale which has been set:
     LocaleSettings.useDeviceLocale()
         .then((setLocale) {
@@ -186,7 +172,6 @@ class MonekinAppEntryPoint extends StatelessWidget {
             'Current locale: ${LocaleSettings.currentLocale.languageTag}',
           );
         });
-    */
   }
 }
 

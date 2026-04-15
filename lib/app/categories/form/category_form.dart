@@ -40,10 +40,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
   SupportedIcon _icon = Category.unkown().icon;
   String _color = defaultColorPickerOptions.randomItem();
   CategoryType _type = CategoryType.E;
-  bool _calcTithe = true;
-  final TextEditingController _subFundPercentController = TextEditingController(
-    text: '0.0',
-  );
 
   @override
   void initState() {
@@ -64,20 +60,15 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
         _icon = categoryToEdit!.icon;
         _color = categoryToEdit!.color;
         _type = categoryToEdit!.type;
-        _calcTithe = categoryToEdit!.calcTithe;
       });
 
       _nameController.value = TextEditingValue(text: categoryToEdit!.name);
-      _subFundPercentController.value = TextEditingValue(
-        text: categoryToEdit!.subFundPercent.toString().replaceAll('.0', ''),
-      );
     });
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _subFundPercentController.dispose();
 
     super.dispose();
   }
@@ -92,8 +83,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
         color: _color,
         parentCategory: categoryToEdit!.parentCategory,
         type: categoryToEdit!.type,
-        calcTithe: _calcTithe,
-        subFundPercent: double.tryParse(_subFundPercentController.text) ?? 0.0,
       );
 
       await CategoryService.instance
@@ -125,9 +114,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               displayOrder: 10,
               type: _type,
               color: _color,
-              calcTithe: _calcTithe,
-              subFundPercent:
-                  double.tryParse(_subFundPercentController.text) ?? 0.0,
             ),
           )
           .then((value) {
@@ -279,47 +265,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                 },
                         ),
                         const SizedBox(height: 16),
-                        SwitchListTile(
-                          title: const Text('Incluir en Diezmo Pastoral'),
-                          subtitle: const Text(
-                            'Considerar ingresos de esta categoría para el cálculo del % pastoral',
-                          ),
-                          value: _calcTithe,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _calcTithe = value;
-                            });
-                          },
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _subFundPercentController,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          decoration: const InputDecoration(
-                            labelText: 'Porcentaje de Apartado (%)',
-                            hintText: 'Ej: 10',
-                            helperText:
-                                'El saldo del apartado se calculará usando este % sobre el ingreso general.',
-                            suffixText: '%',
-                          ),
-                          validator: (value) {
-                            if (value != null && value.isNotEmpty) {
-                              final parsed = double.tryParse(value);
-                              if (parsed == null ||
-                                  parsed < 0 ||
-                                  parsed > 100) {
-                                return 'Ingrese un porcentaje válido entre 0 y 100';
-                              }
-                            }
-                            return null;
-                          },
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textInputAction: TextInputAction.done,
-                        ),
-                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -423,9 +368,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                               displayOrder: 10,
                                               name: name,
                                               iconId: icon.id,
-                                              calcTithe: subcategory.calcTithe,
-                                              subFundPercent:
-                                                  subcategory.subFundPercent,
                                               parentCategoryID:
                                                   widget.categoryUUID!,
                                             ),
@@ -459,8 +401,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                               displayOrder: 10,
                               name: name,
                               iconId: icon.id,
-                              calcTithe: true,
-                              subFundPercent: 0,
                               parentCategoryID: categoryToEdit!.id,
                             ),
                           );

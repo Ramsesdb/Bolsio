@@ -1,13 +1,10 @@
 import 'dart:math';
 
-import 'package:drift/drift.dart';
-
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
@@ -96,7 +93,7 @@ Future<void> fillWithDemoData() async {
           categoryID: '10', // Salary
           isHidden: false,
           status: TransactionStatus.reconciled,
-          calcTithe: true,
+
           createdAt: DateTime.now(),
         ),
       );
@@ -174,7 +171,7 @@ Future<void> fillWithDemoData() async {
             title: title,
             isHidden: false,
             status: TransactionStatus.reconciled,
-            calcTithe: true,
+  
             createdAt: DateTime.now(),
           ),
         );
@@ -232,7 +229,7 @@ Future<void> fillWithDemoData() async {
             title: title,
             isHidden: false,
             status: TransactionStatus.reconciled,
-            calcTithe: true,
+  
             createdAt: DateTime.now(),
           ),
         );
@@ -287,187 +284,3 @@ Future<void> fillWithDemoData() async {
   Logger.printDebug('Demo data seeding finished.');
 }
 
-Future<void> fillWithChurchData() async {
-  Logger.printDebug('Starting CHURCH data seeding...');
-  final db = AppDB.instance;
-
-  // 1. Force Spanish Language (just in case, though main.dart handles launch)
-  await UserSettingService.instance.setItem(SettingKey.appLanguage, 'es');
-
-  // 2. Set Preferred Currency to VES (Bolívares)
-  await UserSettingService.instance.setItem(
-    SettingKey.preferredCurrency,
-    'VES',
-  );
-
-  // 3. Create Accounts
-  final accounts = <AccountInDB>[
-    AccountInDB(
-      id: generateUUID(),
-      name: 'Banco',
-      displayOrder: 1,
-      type: AccountType.normal,
-      currencyId: 'VES',
-      iniValue: 0,
-      date: DateTime.now(),
-      iconId: 'bank',
-    ),
-    AccountInDB(
-      id: generateUUID(),
-      name: 'Efectivo Bs',
-      displayOrder: 2,
-      type: AccountType.normal,
-      currencyId: 'VES',
-      iniValue: 0,
-      date: DateTime.now(),
-      iconId: 'wallet',
-    ),
-    AccountInDB(
-      id: generateUUID(),
-      name: 'Zelle',
-      displayOrder: 3,
-      type: AccountType.normal,
-      currencyId: 'USD',
-      iniValue: 0,
-      date: DateTime.now(),
-      iconId: 'smartphone', // approximates digital/Zelle
-    ),
-    AccountInDB(
-      id: generateUUID(),
-      name: 'Efectivo USD',
-      displayOrder: 4,
-      type: AccountType.normal,
-      currencyId: 'USD',
-      iniValue: 0,
-      date: DateTime.now(),
-      iconId: 'attach_money',
-    ),
-  ];
-
-  await db.batch((batch) {
-    batch.insertAll(db.accounts, accounts);
-  });
-
-  Logger.printDebug('Church data seeding finished.');
-}
-
-Future<void> fillWithChurchCategories() async {
-  Logger.printDebug('Seeding CHURCH Categories...');
-  final db = AppDB.instance;
-
-  final categories = <CategoryInDB>[
-    // --- INGRESOS (INCOME) ---
-    CategoryInDB(
-      id: 'c_diezmo',
-      name: 'Diezmo',
-      iconId: 'volunteer_activism',
-      color: '4C9141', // Green
-      displayOrder: 1,
-      type: CategoryType.I,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_ofrenda',
-      name: 'Ofrenda',
-      iconId: 'redeem',
-      color: 'F4A900', // Gold
-      displayOrder: 2,
-      type: CategoryType.I,
-      calcTithe: false,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_protemplo',
-      name: 'Pro-Templo',
-      iconId: 'church',
-      color: '1E2460', // Blue
-      displayOrder: 3,
-      type: CategoryType.I,
-      calcTithe: false,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_eventos_in',
-      name: 'Eventos (Ingreso)',
-      iconId: 'event',
-      color: 'FF7514', // Orange
-      displayOrder: 4,
-      type: CategoryType.I,
-      calcTithe: false,
-      subFundPercent: 0,
-    ),
-
-    // --- EGRESOS (EXPENSE) ---
-    CategoryInDB(
-      id: 'c_servicios',
-      name: 'Servicios',
-      iconId: 'bolt',
-      color: '2A6478', // Teal
-      displayOrder: 10,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_mantenimiento',
-      name: 'Mantenimiento',
-      iconId: 'build',
-      color: '4E5452', // Gray
-      displayOrder: 11,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_ayuda',
-      name: 'Ayuda Social',
-      iconId: 'favorite',
-      color: 'CC0605', // Red
-      displayOrder: 12,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_sueldos',
-      name: 'Sueldos/Honorarios',
-      iconId: 'work',
-      color: '3D642D', // Green
-      displayOrder: 13,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_insumos',
-      name: 'Insumos',
-      iconId: 'shopping_bag',
-      color: '84C3BE', // Light Teal
-      displayOrder: 14,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-    CategoryInDB(
-      id: 'c_otros',
-      name: 'Otros',
-      iconId: 'inventory_2',
-      color: '403A3A', // Dark
-      displayOrder: 15,
-      type: CategoryType.E,
-      calcTithe: true,
-      subFundPercent: 0,
-    ),
-  ];
-
-  await db.batch((batch) {
-    batch.insertAll(
-      db.categories,
-      categories,
-      mode: InsertMode.insertOrReplace,
-    );
-  });
-
-  Logger.printDebug('Church Categories seeded.');
-}

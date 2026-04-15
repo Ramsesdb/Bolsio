@@ -15,11 +15,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import 'package:monekin/core/database/utils/demo_app_seeders.dart';
-import 'package:monekin/core/services/dolar_api_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/utils/uuid.dart';
+import 'package:monekin/core/database/services/category/category_service.dart';
 import '../../widgets/settings_list_utils.dart';
 import 'package:monekin/core/services/firebase_sync_service.dart';
 
@@ -150,7 +146,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
 
               ListTile(
                 title: const Text('Reparar Datos'),
-                subtitle: const Text('Crear cuentas por defecto si faltan'),
+                subtitle: const Text('Reinicializar categorías por defecto'),
                 leading: const Icon(Icons.build_rounded, color: Colors.orange),
                 onTap: () async {
                   final confirmed = await showDialog<bool>(
@@ -158,7 +154,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                     builder: (context) => AlertDialog(
                       title: const Text('¿Reparar datos?'),
                       content: const Text(
-                        'Esto intentará crear las cuentas predeterminadas nuevamente. No borrará tus datos actuales.',
+                        'Esto intentará crear las categorías predeterminadas nuevamente. No borrará tus datos actuales.',
                       ),
                       actions: [
                         TextButton(
@@ -175,8 +171,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
 
                   if (confirmed == true) {
                     try {
-                      await fillWithChurchData();
-                      await fillWithChurchCategories();
+                      await CategoryService.instance.initializeCategories();
 
                       if (context.mounted) {
                         MonekinSnackbar.success(

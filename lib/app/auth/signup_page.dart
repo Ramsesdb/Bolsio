@@ -4,7 +4,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/utils/logger.dart';
 
 /// Signup page for new users with Firebase Auth.
@@ -82,16 +81,6 @@ class _SignupPageState extends State<SignupPage> {
         _nameController.text.trim(),
         updateGlobalState: true,
       );
-
-      // Pre-seed Church Data (Accounts: Banco, Efectivo, Zelle, etc.)
-      try {
-        await fillWithChurchData();
-        await fillWithChurchCategories();
-        Logger.printDebug('Church data seeded successfully!');
-      } catch (seedError) {
-        Logger.printDebug('Warning: Church seeding failed: $seedError');
-        // Continue anyway - user can add data manually
-      }
 
       // Show success message and navigate
       if (mounted) {
@@ -198,15 +187,6 @@ class _SignupPageState extends State<SignupPage> {
           user!.displayName,
           updateGlobalState: true,
         );
-      }
-
-      // Pre-seed Church Data
-      try {
-        await fillWithChurchData();
-        await fillWithChurchCategories();
-        Logger.printDebug('Church data seeded successfully!');
-      } catch (seedError) {
-        Logger.printDebug('Warning: Church seeding failed: $seedError');
       }
 
       if (mounted) {
@@ -326,7 +306,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Únete para administrar las finanzas de tu iglesia',
+                          'Gestiona tus finanzas personales',
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),

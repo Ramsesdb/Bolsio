@@ -68,8 +68,6 @@ class Category extends CategoryInDB {
     String? color,
     CategoryType? type,
     CategoryInDB? parentCategory,
-    super.calcTithe = true,
-    super.subFundPercent = 0.0,
   }) : _color = color,
        _type = type,
        parentCategory = parentCategory != null
@@ -94,8 +92,6 @@ class Category extends CategoryInDB {
         parentCategory: parentCategory,
         color: cat.color,
         type: cat.type,
-        calcTithe: cat.calcTithe,
-        subFundPercent: cat.subFundPercent,
       );
 
   static Category unkown() => Category(
@@ -105,7 +101,5 @@ class Category extends CategoryInDB {
     name: 'Unknown Category',
     type: CategoryType.B,
     color: '737373',
-    calcTithe: true,
-    subFundPercent: 0.0,
   );
 }

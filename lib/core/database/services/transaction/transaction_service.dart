@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:monekin/core/services/audit_service.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -47,14 +46,6 @@ class TransactionService {
     return db.transaction(() async {
       final toReturn = await db.into(db.transactions).insert(transaction);
 
-      // Audit Log
-      await AuditService.instance.logTransactionAction(
-        db,
-        'CREATE',
-        null,
-        transaction,
-      );
-
       // Push to organization collection for multi-device sync (Fire and forget)
       FirebaseSyncService.instance.pushTransaction(transaction);
 
@@ -68,20 +59,7 @@ class TransactionService {
   /// Update a transaction atomically with audit log
   Future<int> updateTransaction(TransactionInDB transaction) async {
     return db.transaction(() async {
-      // Fetch old transaction for diffing
-      final oldTx = await (db.select(
-        db.transactions,
-      )..where((t) => t.id.equals(transaction.id))).getSingleOrNull();
-
       final toReturn = await db.update(db.transactions).replace(transaction);
-
-      // Audit Log
-      await AuditService.instance.logTransactionAction(
-        db,
-        'UPDATE',
-        oldTx,
-        transaction,
-      );
 
       // Push to organization collection for multi-device sync (Fire and forget)
       FirebaseSyncService.instance.pushTransaction(transaction);
@@ -115,27 +93,12 @@ class TransactionService {
   /// Delete a transaction atomically with audit log
   Future<int> deleteTransaction(String transactionId) async {
     return db.transaction(() async {
-      // Fetch old transaction for logging
-      final oldTx = await (db.select(
-        db.transactions,
-      )..where((t) => t.id.equals(transactionId))).getSingleOrNull();
-
       // Delete from organization collection for multi-device sync (Fire and forget)
       FirebaseSyncService.instance.deleteTransaction(transactionId);
 
       final result = await (db.delete(
         db.transactions,
       )..where((tbl) => tbl.id.equals(transactionId))).go();
-
-      if (result > 0) {
-        // Audit Log
-        await AuditService.instance.logTransactionAction(
-          db,
-          'DELETE',
-          oldTx,
-          null,
-        );
-      }
 
       // Notify streams watching these tables to update balance displays
       db.markTablesUpdated([db.accounts, db.transactions]);

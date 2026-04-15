@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
-import 'package:monekin/app/reports/pages/settlement_report_page.dart';
 import 'package:monekin/app/settings/more_actions.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
@@ -14,8 +13,6 @@ final GlobalKey budgetsPageKey = GlobalKey();
 final GlobalKey<TransactionsPageState> transactionsPageKey = GlobalKey();
 final GlobalKey<State<StatefulWidget>> statsPageKey = GlobalKey();
 final GlobalKey<State<StatefulWidget>> settingsPageKey = GlobalKey();
-final GlobalKey<State<StatefulWidget>> churchReportPageKey = GlobalKey();
-
 enum AppMenuDestinationsID {
   dashboard,
   budgets,
@@ -25,7 +22,6 @@ enum AppMenuDestinationsID {
   stats,
   settings,
   categories,
-  churchReport,
 }
 
 class MainMenuDestination {
@@ -125,14 +121,6 @@ List<MainMenuDestination> getAllDestinations() {
       pageKey: statsPageKey,
     ),
     MainMenuDestination(
-      AppMenuDestinationsID.churchReport,
-      label: 'Reporte Iglesia',
-      icon: Icons.church_outlined,
-      selectedIcon: Icons.church,
-      destination: SettlementReportPage(key: churchReportPageKey),
-      pageKey: churchReportPageKey,
-    ),
-    MainMenuDestination(
       AppMenuDestinationsID.settings,
       label: t.more.title,
       selectedIcon: Icons.more_horiz_rounded,
@@ -165,7 +153,7 @@ List<MainMenuDestination> getDestinations(
           (element) => [
             AppMenuDestinationsID.dashboard,
             AppMenuDestinationsID.transactions,
-            AppMenuDestinationsID.churchReport,
+            AppMenuDestinationsID.stats,
             AppMenuDestinationsID.settings,
           ].contains(element.id),
         )

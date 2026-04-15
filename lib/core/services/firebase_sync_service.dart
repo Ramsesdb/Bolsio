@@ -113,7 +113,6 @@ class FirebaseSyncService {
         'status': transaction.status?.name,
         'categoryID': transaction.categoryID,
         'isHidden': transaction.isHidden,
-        'calcTithe': transaction.calcTithe,
         'intervalEach': transaction.intervalEach,
         'intervalPeriod': transaction.intervalPeriod?.name,
         'endDate': transaction.endDate?.toIso8601String(),
@@ -203,8 +202,6 @@ class FirebaseSyncService {
         'color': category.color,
         'displayOrder': category.displayOrder,
         'type': category.type?.name,
-        'calcTithe': category.calcTithe,
-        'subFundPercent': category.subFundPercent,
         'parentCategoryID': category.parentCategoryID,
         'updatedAt': FieldValue.serverTimestamp(),
         'updatedBy': currentUserEmail,
@@ -427,8 +424,6 @@ class FirebaseSyncService {
             (e) => e.name == data['type'],
             orElse: () => CategoryType.E,
           ),
-          calcTithe: data['calcTithe'] as bool? ?? true,
-          subFundPercent: (data['subFundPercent'] as num?)?.toDouble() ?? 0.0,
           parentCategoryID: data['parentCategoryID'] as String?,
         );
 
@@ -547,7 +542,6 @@ class FirebaseSyncService {
               : TransactionStatus.reconciled,
           categoryID: data['categoryID'] as String?,
           isHidden: data['isHidden'] as bool? ?? false,
-          calcTithe: data['calcTithe'] as bool? ?? true,
           createdAt: data['createdAt'] != null
               ? DateTime.parse(data['createdAt'] as String)
               : DateTime.now(),
@@ -632,8 +626,6 @@ class FirebaseSyncService {
             color: category.color,
             displayOrder: category.displayOrder,
             type: category.type,
-            calcTithe: category.calcTithe,
-            subFundPercent: category.subFundPercent,
             parentCategoryID: category.parentCategory?.id,
           ),
         );
@@ -658,7 +650,6 @@ class FirebaseSyncService {
             status: tx.status,
             categoryID: tx.category?.id,
             isHidden: tx.isHidden,
-            calcTithe: tx.calcTithe,
             createdAt: DateTime.now(),
             intervalEach: tx.recurrentInfo.intervalEach,
             intervalPeriod: tx.recurrentInfo.intervalPeriod,
@@ -681,46 +672,4 @@ class FirebaseSyncService {
     }
   }
 
-  // ============================================================
-  // AUDIT LOG (Legacy - kept for compatibility)
-  // ============================================================
-
-  /// Sync a transaction to Firestore audit log (legacy method)
-  Future<void> syncTransactionToFirestore({
-    required String transactionId,
-    required String action,
-    required Map<String, dynamic> transactionData,
-  }) async {
-    try {
-      final userId = currentUserId;
-      final userEmail = currentUserEmail;
-
-      if (userId == null) {
-        Logger.printDebug(
-          'FirebaseSyncService: No user logged in, skipping sync',
-        );
-        return;
-      }
-
-      final auditLogRef = _firestore.collection('audit_log').doc();
-
-      final auditEntry = {
-        'transactionId': transactionId,
-        'action': action,
-        'data': transactionData,
-        'userId': userId,
-        'userEmail': userEmail,
-        'timestamp': FieldValue.serverTimestamp(),
-        'deviceTime': DateTime.now().toIso8601String(),
-      };
-
-      await auditLogRef.set(auditEntry);
-
-      Logger.printDebug(
-        'FirebaseSyncService: Synced transaction $transactionId ($action)',
-      );
-    } catch (e) {
-      Logger.printDebug('FirebaseSyncService: Error syncing to Firestore: $e');
-    }
-  }
 }

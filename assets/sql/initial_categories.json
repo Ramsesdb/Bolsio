@@ -1,285 +1,550 @@
 [
   {
     "names": {
-      "en": "Tithe",
-      "es": "Diezmo"
+      "en": "Salary",
+      "es": "Salario",
+      "de": "Gehalt",
+      "fr": "Salaire",
+      "hu": "Fizetes",
+      "it": "Stipendio",
+      "tr": "Maas",
+      "uk": "Zарплата",
+      "zh_CN": "工资",
+      "zh_TW": "薪資"
     },
     "id": "C01",
-    "icon": "volunteer_activism",
-    "color": "4C9141",
+    "icon": "work",
+    "color": "1565C0",
     "type": "I"
   },
   {
     "names": {
-      "en": "Offering",
-      "es": "Ofrenda"
+      "en": "Freelance",
+      "es": "Freelance",
+      "de": "Freiberuflich",
+      "fr": "Freelance",
+      "hu": "Szabaduszas",
+      "it": "Freelance",
+      "tr": "Serbest",
+      "uk": "Фріланс",
+      "zh_CN": "自由职业",
+      "zh_TW": "自由職業"
     },
     "id": "C02",
-    "icon": "redeem",
-    "color": "F4A900",
-    "type": "I",
+    "icon": "laptop_mac",
+    "color": "2E7D32",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Other Income",
+      "es": "Otros Ingresos",
+      "de": "Sonstige Einnahmen",
+      "fr": "Autres Revenus",
+      "hu": "Egyeb Jovedelem",
+      "it": "Altre Entrate",
+      "tr": "Diger Gelir",
+      "uk": "Інші Доходи",
+      "zh_CN": "其他收入",
+      "zh_TW": "其他收入"
+    },
+    "id": "C03",
+    "icon": "payments",
+    "color": "757575",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Food",
+      "es": "Alimentacion",
+      "de": "Essen",
+      "fr": "Alimentation",
+      "hu": "Elelmiszer",
+      "it": "Alimentazione",
+      "tr": "Yiyecek",
+      "uk": "Їжа",
+      "zh_CN": "餐饮",
+      "zh_TW": "餐飲"
+    },
+    "id": "C10",
+    "icon": "restaurant",
+    "color": "E65100",
+    "type": "E",
     "subcategories": [
       {
-        "icon": "card_giftcard",
+        "icon": "shopping_cart",
         "names": {
-          "en": "General",
-          "es": "General"
+          "en": "Groceries",
+          "es": "Mercado",
+          "de": "Lebensmittel",
+          "fr": "Courses",
+          "hu": "Elelmiszer bolt",
+          "it": "Spesa",
+          "tr": "Market",
+          "uk": "Продукти",
+          "zh_CN": "超市",
+          "zh_TW": "超市"
         }
       },
       {
-        "icon": "favorite",
+        "icon": "restaurant_menu",
         "names": {
-          "en": "Special",
-          "es": "Especial"
+          "en": "Restaurants",
+          "es": "Restaurantes",
+          "de": "Restaurants",
+          "fr": "Restaurants",
+          "hu": "Ettermek",
+          "it": "Ristoranti",
+          "tr": "Restoranlar",
+          "uk": "Ресторани",
+          "zh_CN": "餐厅",
+          "zh_TW": "餐廳"
         }
       },
       {
-        "icon": "public",
+        "icon": "delivery_dining",
         "names": {
-          "en": "Missions",
-          "es": "Misiones"
+          "en": "Delivery",
+          "es": "Delivery",
+          "de": "Lieferung",
+          "fr": "Livraison",
+          "hu": "Hazhozszallitas",
+          "it": "Consegna",
+          "tr": "Teslimat",
+          "uk": "Доставка",
+          "zh_CN": "外卖",
+          "zh_TW": "外送"
         }
       }
     ]
   },
   {
     "names": {
-      "en": "Temple Fund",
-      "es": "Pro-Templo"
+      "en": "Transport",
+      "es": "Transporte",
+      "de": "Transport",
+      "fr": "Transport",
+      "hu": "Kozlekedes",
+      "it": "Trasporto",
+      "tr": "Ulasim",
+      "uk": "Транспорт",
+      "zh_CN": "交通",
+      "zh_TW": "交通"
     },
-    "id": "C03",
-    "icon": "church",
-    "color": "1E2460",
-    "type": "I",
+    "id": "C11",
+    "icon": "directions_car",
+    "color": "4527A0",
+    "type": "E",
     "subcategories": [
       {
-        "icon": "construction",
+        "icon": "local_gas_station",
         "names": {
-          "en": "Construction",
-          "es": "Construcción"
+          "en": "Gas",
+          "es": "Gasolina",
+          "de": "Benzin",
+          "fr": "Essence",
+          "hu": "Benzin",
+          "it": "Benzina",
+          "tr": "Benzin",
+          "uk": "Бензин",
+          "zh_CN": "加油",
+          "zh_TW": "加油"
+        }
+      },
+      {
+        "icon": "local_taxi",
+        "names": {
+          "en": "Uber/Taxi",
+          "es": "Uber/Taxi",
+          "de": "Uber/Taxi",
+          "fr": "Uber/Taxi",
+          "hu": "Uber/Taxi",
+          "it": "Uber/Taxi",
+          "tr": "Uber/Taxi",
+          "uk": "Uber/Taxi",
+          "zh_CN": "打车",
+          "zh_TW": "計程車"
+        }
+      },
+      {
+        "icon": "directions_bus",
+        "names": {
+          "en": "Public Transit",
+          "es": "Transporte publico",
+          "de": "OPNV",
+          "fr": "Transport public",
+          "hu": "Tomegkozlekedes",
+          "it": "Trasporto pubblico",
+          "tr": "Toplu tasima",
+          "uk": "Громадський транспорт",
+          "zh_CN": "公共交通",
+          "zh_TW": "公共運輸"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Housing",
+      "es": "Vivienda",
+      "de": "Wohnen",
+      "fr": "Logement",
+      "hu": "Lakas",
+      "it": "Alloggio",
+      "tr": "Konut",
+      "uk": "Житло",
+      "zh_CN": "住房",
+      "zh_TW": "住房"
+    },
+    "id": "C12",
+    "icon": "home",
+    "color": "00695C",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "apartment",
+        "names": {
+          "en": "Rent",
+          "es": "Alquiler",
+          "de": "Miete",
+          "fr": "Loyer",
+          "hu": "Berleti dij",
+          "it": "Affitto",
+          "tr": "Kira",
+          "uk": "Оренда",
+          "zh_CN": "房租",
+          "zh_TW": "房租"
+        }
+      },
+      {
+        "icon": "bolt",
+        "names": {
+          "en": "Utilities",
+          "es": "Servicios",
+          "de": "Nebenkosten",
+          "fr": "Services",
+          "hu": "Kozuzemi dijak",
+          "it": "Utenze",
+          "tr": "Faturalar",
+          "uk": "Комунальні",
+          "zh_CN": "水电费",
+          "zh_TW": "水電費"
         }
       },
       {
         "icon": "build",
         "names": {
-          "en": "Repair",
-          "es": "Reparación"
+          "en": "Maintenance",
+          "es": "Mantenimiento",
+          "de": "Instandhaltung",
+          "fr": "Entretien",
+          "hu": "Karbantartas",
+          "it": "Manutenzione",
+          "tr": "Bakim",
+          "uk": "Обслуговування",
+          "zh_CN": "维修",
+          "zh_TW": "維修"
         }
       }
     ]
   },
   {
     "names": {
-      "en": "Social Aid Received",
-      "es": "Ayuda Social Recibida"
-    },
-    "id": "C04",
-    "icon": "favorite",
-    "color": "BB4B4B",
-    "type": "I"
-  },
-  {
-    "names": {
-      "en": "Events Income",
-      "es": "Eventos (Ingreso)"
-    },
-    "id": "C05",
-    "icon": "event",
-    "color": "FF7514",
-    "type": "I",
-    "subcategories": [
-      {
-        "icon": "water_drop",
-        "names": {
-          "en": "Baptisms",
-          "es": "Bautizos"
-        }
-      },
-      {
-        "icon": "favorite",
-        "names": {
-          "en": "Weddings",
-          "es": "Bodas"
-        }
-      },
-      {
-        "icon": "hiking",
-        "names": {
-          "en": "Retreats",
-          "es": "Retiros"
-        }
-      }
-    ]
-  },
-  {
-    "names": {
-      "en": "Utilities",
-      "es": "Servicios"
-    },
-    "id": "C10",
-    "icon": "bolt",
-    "color": "2A6478",
-    "type": "E",
-    "subcategories": [
-      {
-        "icon": "bolt",
-        "names": {
-          "en": "Electricity",
-          "es": "Luz"
-        }
-      },
-      {
-        "icon": "water",
-        "names": {
-          "en": "Water",
-          "es": "Agua"
-        }
-      },
-      {
-        "icon": "language",
-        "names": {
-          "en": "Internet",
-          "es": "Internet"
-        }
-      },
-      {
-        "icon": "call",
-        "names": {
-          "en": "Phone",
-          "es": "Teléfono"
-        }
-      }
-    ]
-  },
-  {
-    "names": {
-      "en": "Maintenance",
-      "es": "Mantenimiento"
-    },
-    "id": "C11",
-    "icon": "build",
-    "color": "4E5452",
-    "type": "E",
-    "subcategories": [
-      {
-        "icon": "home",
-        "names": {
-          "en": "Building",
-          "es": "Edificio"
-        }
-      },
-      {
-        "icon": "computer",
-        "names": {
-          "en": "Equipment",
-          "es": "Equipos"
-        }
-      }
-    ]
-  },
-  {
-    "names": {
-      "en": "Social Aid",
-      "es": "Ayuda Social"
-    },
-    "id": "C12",
-    "icon": "volunteer_activism",
-    "color": "CC0605",
-    "type": "E",
-    "subcategories": [
-      {
-        "icon": "family_restroom",
-        "names": {
-          "en": "Families",
-          "es": "Familias"
-        }
-      },
-      {
-        "icon": "emergency",
-        "names": {
-          "en": "Emergencies",
-          "es": "Emergencias"
-        }
-      }
-    ]
-  },
-  {
-    "names": {
-      "en": "Salaries",
-      "es": "Sueldos"
+      "en": "Health",
+      "es": "Salud",
+      "de": "Gesundheit",
+      "fr": "Sante",
+      "hu": "Egeszseg",
+      "it": "Salute",
+      "tr": "Saglik",
+      "uk": "Здоров'я",
+      "zh_CN": "医疗",
+      "zh_TW": "醫療"
     },
     "id": "C13",
-    "icon": "work",
-    "color": "3D642D",
+    "icon": "local_hospital",
+    "color": "C62828",
     "type": "E",
     "subcategories": [
       {
-        "icon": "person",
+        "icon": "medical_services",
         "names": {
-          "en": "Pastor",
-          "es": "Pastor"
+          "en": "Appointments",
+          "es": "Consultas",
+          "de": "Arztbesuche",
+          "fr": "Consultations",
+          "hu": "Vizsgalatok",
+          "it": "Visite",
+          "tr": "Randevular",
+          "uk": "Консультації",
+          "zh_CN": "就诊",
+          "zh_TW": "就診"
         }
       },
       {
-        "icon": "group",
+        "icon": "medication",
         "names": {
-          "en": "Staff",
-          "es": "Personal"
+          "en": "Medicine",
+          "es": "Medicinas",
+          "de": "Medikamente",
+          "fr": "Medicaments",
+          "hu": "Gyogyszerek",
+          "it": "Medicinali",
+          "tr": "Ilaclar",
+          "uk": "Ліки",
+          "zh_CN": "药品",
+          "zh_TW": "藥品"
+        }
+      },
+      {
+        "icon": "health_and_safety",
+        "names": {
+          "en": "Insurance",
+          "es": "Seguro",
+          "de": "Versicherung",
+          "fr": "Assurance",
+          "hu": "Biztositas",
+          "it": "Assicurazione",
+          "tr": "Sigorta",
+          "uk": "Страхування",
+          "zh_CN": "保险",
+          "zh_TW": "保險"
         }
       }
     ]
   },
   {
     "names": {
-      "en": "Supplies",
-      "es": "Insumos"
+      "en": "Entertainment",
+      "es": "Entretenimiento",
+      "de": "Unterhaltung",
+      "fr": "Divertissement",
+      "hu": "Szorakozas",
+      "it": "Intrattenimento",
+      "tr": "Eglence",
+      "uk": "Розваги",
+      "zh_CN": "娱乐",
+      "zh_TW": "娛樂"
     },
     "id": "C14",
-    "icon": "shopping_bag",
-    "color": "84C3BE",
+    "icon": "movie",
+    "color": "AD1457",
     "type": "E",
     "subcategories": [
       {
-        "icon": "library_books",
+        "icon": "subscriptions",
         "names": {
-          "en": "Office",
-          "es": "Oficina"
+          "en": "Subscriptions",
+          "es": "Suscripciones",
+          "de": "Abonnements",
+          "fr": "Abonnements",
+          "hu": "Elofizetesek",
+          "it": "Abbonamenti",
+          "tr": "Abonelikler",
+          "uk": "Підписки",
+          "zh_CN": "订阅",
+          "zh_TW": "訂閱"
         }
       },
       {
-        "icon": "cleaning_services",
+        "icon": "nightlife",
         "names": {
-          "en": "Cleaning",
-          "es": "Limpieza"
+          "en": "Going Out",
+          "es": "Salidas",
+          "de": "Ausgehen",
+          "fr": "Sorties",
+          "hu": "Kimenni",
+          "it": "Uscite",
+          "tr": "Disari cikmak",
+          "uk": "Вихід",
+          "zh_CN": "外出",
+          "zh_TW": "外出"
         }
       },
       {
-        "icon": "church",
+        "icon": "sports_esports",
         "names": {
-          "en": "Worship",
-          "es": "Culto"
+          "en": "Hobbies",
+          "es": "Hobbies",
+          "de": "Hobbys",
+          "fr": "Loisirs",
+          "hu": "Hobbik",
+          "it": "Hobby",
+          "tr": "Hobiler",
+          "uk": "Хобі",
+          "zh_CN": "爱好",
+          "zh_TW": "嗜好"
         }
       }
     ]
   },
   {
     "names": {
-      "en": "Events Expense",
-      "es": "Eventos (Egreso)"
+      "en": "Education",
+      "es": "Educacion",
+      "de": "Bildung",
+      "fr": "Education",
+      "hu": "Oktatas",
+      "it": "Istruzione",
+      "tr": "Egitim",
+      "uk": "Освіта",
+      "zh_CN": "教育",
+      "zh_TW": "教育"
     },
     "id": "C15",
-    "icon": "celebration",
-    "color": "F39F18",
+    "icon": "school",
+    "color": "F57F17",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "cast_for_education",
+        "names": {
+          "en": "Courses",
+          "es": "Cursos",
+          "de": "Kurse",
+          "fr": "Cours",
+          "hu": "Tanfolyamok",
+          "it": "Corsi",
+          "tr": "Kurslar",
+          "uk": "Курси",
+          "zh_CN": "课程",
+          "zh_TW": "課程"
+        }
+      },
+      {
+        "icon": "menu_book",
+        "names": {
+          "en": "Books",
+          "es": "Libros",
+          "de": "Bucher",
+          "fr": "Livres",
+          "hu": "Konyvek",
+          "it": "Libri",
+          "tr": "Kitaplar",
+          "uk": "Книги",
+          "zh_CN": "书籍",
+          "zh_TW": "書籍"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Clothing",
+      "es": "Ropa",
+      "de": "Kleidung",
+      "fr": "Vetements",
+      "hu": "Ruhazat",
+      "it": "Abbigliamento",
+      "tr": "Giyim",
+      "uk": "Одяг",
+      "zh_CN": "服装",
+      "zh_TW": "服裝"
+    },
+    "id": "C16",
+    "icon": "checkroom",
+    "color": "6A1B9A",
     "type": "E"
   },
   {
     "names": {
-      "en": "Others",
-      "es": "Otros"
+      "en": "Technology",
+      "es": "Tecnologia",
+      "de": "Technologie",
+      "fr": "Technologie",
+      "hu": "Technologia",
+      "it": "Tecnologia",
+      "tr": "Teknoloji",
+      "uk": "Технології",
+      "zh_CN": "科技",
+      "zh_TW": "科技"
     },
-    "id": "C16",
-    "icon": "inventory_2",
-    "color": "403A3A",
+    "id": "C17",
+    "icon": "devices",
+    "color": "37474F",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "computer",
+        "names": {
+          "en": "Hardware",
+          "es": "Hardware",
+          "de": "Hardware",
+          "fr": "Materiel",
+          "hu": "Hardver",
+          "it": "Hardware",
+          "tr": "Donanim",
+          "uk": "Обладнання",
+          "zh_CN": "硬件",
+          "zh_TW": "硬體"
+        }
+      },
+      {
+        "icon": "apps",
+        "names": {
+          "en": "Software",
+          "es": "Software",
+          "de": "Software",
+          "fr": "Logiciel",
+          "hu": "Szoftver",
+          "it": "Software",
+          "tr": "Yazilim",
+          "uk": "Програми",
+          "zh_CN": "软件",
+          "zh_TW": "軟體"
+        }
+      },
+      {
+        "icon": "cloud",
+        "names": {
+          "en": "Cloud",
+          "es": "Cloud",
+          "de": "Cloud",
+          "fr": "Cloud",
+          "hu": "Felho",
+          "it": "Cloud",
+          "tr": "Bulut",
+          "uk": "Хмара",
+          "zh_CN": "云服务",
+          "zh_TW": "雲端"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Family/Gifts",
+      "es": "Familia/Regalos",
+      "de": "Familie/Geschenke",
+      "fr": "Famille/Cadeaux",
+      "hu": "Csalad/Ajandek",
+      "it": "Famiglia/Regali",
+      "tr": "Aile/Hediyeler",
+      "uk": "Сім'я/Подарунки",
+      "zh_CN": "家庭/礼物",
+      "zh_TW": "家庭/禮物"
+    },
+    "id": "C18",
+    "icon": "card_giftcard",
+    "color": "D84315",
+    "type": "E"
+  },
+  {
+    "names": {
+      "en": "Other Expenses",
+      "es": "Otros Gastos",
+      "de": "Sonstige Ausgaben",
+      "fr": "Autres Depenses",
+      "hu": "Egyeb Kiadasok",
+      "it": "Altre Spese",
+      "tr": "Diger Giderler",
+      "uk": "Інші Витрати",
+      "zh_CN": "其他支出",
+      "zh_TW": "其他支出"
+    },
+    "id": "C19",
+    "icon": "more_horiz",
+    "color": "455A64",
     "type": "B"
   }
 ]

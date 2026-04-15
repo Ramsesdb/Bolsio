@@ -87,8 +87,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
   // --- End Form Fields ---
 
-  bool _calcTithe = true;
-
   bool _isSaving = false;
 
   bool get isEditMode => widget.transactionToEdit != null;
@@ -214,9 +212,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       selectedCategory = await CategoryService.instance
           .getCategoryById(categoryIdToLoad)
           .first;
-      if (selectedCategory != null) {
-        _calcTithe = selectedCategory!.calcTithe;
-      }
+      // category loaded
     }
 
     // 3. Status
@@ -317,7 +313,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,
-      calcTithe: _calcTithe,
       categoryID: transactionType.isIncomeOrExpense
           ? selectedCategory?.id
           : null,
@@ -436,7 +431,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     if (modalRes != null) {
       setState(() {
         selectedCategory = modalRes;
-        _calcTithe = modalRes.calcTithe;
       });
     }
   }
@@ -454,7 +448,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     titleController.text = transaction.title ?? '';
     transactionValue = transaction.value;
     transactionType = transaction.type;
-    _calcTithe = transaction.calcTithe;
 
     if (transactionType == TransactionType.expense) {
       transactionValue = transactionValue * -1;
@@ -569,22 +562,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       //   ),
       //   const Divider(),
       // ],
-      if (transactionType == TransactionType.income) ...[
-        SwitchListTile(
-          title: const Text('Diezmable'),
-          subtitle: const Text(
-            'Indica si este ingreso cuenta para el diezmo pastoral',
-          ),
-          value: _calcTithe,
-          onChanged: (bool value) {
-            setState(() {
-              _calcTithe = value;
-            });
-          },
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-        ),
-        const Divider(),
-      ],
       TransactionDescriptionField(controller: notesController),
       const Divider(),
     ];

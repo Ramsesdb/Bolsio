@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Login page with email/password authentication via Firebase.
 class LoginPage extends StatefulWidget {
@@ -155,17 +153,6 @@ class _LoginPageState extends State<LoginPage> {
             )
           ''');
 
-        // Check if we need to seed data (if user has no accounts)
-        final accounts = await db.select(db.accounts).get();
-        if (accounts.isEmpty) {
-          try {
-            await fillWithChurchData();
-            await fillWithChurchCategories();
-            Logger.printDebug('Church data seeded successfully (Login Flow)!');
-          } catch (seedError) {
-            Logger.printDebug('Warning: Church seeding failed: $seedError');
-          }
-        }
       }
 
       // Update app state
@@ -278,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                         // Header Section
                         const SizedBox(height: 20),
                         Icon(
-                          Icons.church,
+                          Icons.account_balance_wallet,
                           size: 64,
                           color: colorScheme.primary,
                         ),
@@ -293,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Inicia sesión para gestionar las finanzas',
+                          'Inicia sesión para gestionar tus finanzas',
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
