@@ -51,6 +51,11 @@ enum SettingKey {
 
   /// Whether to show the time of the transaction in the transaction list tiles
   transactionTileShowTime,
+
+  /// Whether Firebase sync is enabled. '1' = enabled, '0' or null = disabled.
+  /// When disabled, Firebase.initializeApp() is not called and
+  /// FirebaseSyncService does not attempt any network operations.
+  firebaseSyncEnabled,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

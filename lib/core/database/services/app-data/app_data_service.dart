@@ -3,7 +3,7 @@ import 'package:wallex/core/database/services/shared/key_value_pair.dart';
 import 'package:wallex/core/database/services/shared/key_value_service.dart';
 
 /// The keys of the avalaible settings of the app
-enum AppDataKey { dbVersion, introSeen, lastExportDate }
+enum AppDataKey { dbVersion, introSeen, lastExportDate, onboarded }
 
 final Map<AppDataKey, String?> appStateData = {};
 
