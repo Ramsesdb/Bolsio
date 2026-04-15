@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -5,6 +7,7 @@ import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
@@ -28,9 +31,54 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future<void> _continueWithoutAccount() async {
+    // Ask whether to preload personal VE accounts & categories
+    final shouldSeed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Precargar tus cuentas?'),
+        content: const Text(
+          'Wallex puede crear automaticamente tus cuentas bancarias '
+          '(BDV, BNC, Banplus, Provincial, Binance, Zinli, etc.), '
+          'categorias de ingreso/gasto y tags utiles.\n\n'
+          'Puedes editarlos o eliminarlos despues.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('No, empezar vacio'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Si, precargar'),
+          ),
+        ],
+      ),
+    );
+
+    if (!mounted) return;
     setState(() => _isLoading = true);
 
     try {
+      if (shouldSeed == true) {
+        Logger.printDebug('WelcomeScreen: user accepted personal VE seed');
+        // Show loading overlay while seeding (fire-and-forget; popped below)
+        unawaited(showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const Center(child: CircularProgressIndicator()),
+        ));
+
+        try {
+          await PersonalVESeeder.seedAll();
+        } catch (e) {
+          Logger.printDebug('WelcomeScreen: seeding error: $e');
+        }
+
+        if (mounted) {
+          Navigator.of(context).pop(); // dismiss loading overlay
+        }
+      }
+
       // Mark onboarding as completed
       await AppDataService.instance.setItem(
         AppDataKey.onboarded,
