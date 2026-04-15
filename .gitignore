@@ -56,6 +56,7 @@ ios/Runner/GoogleService-Info.plist
 *.apk
 *.aab
 
-# User artifacts (church-era spreadsheets)
+# Local user artifacts (spreadsheets, scripts, exports)
 *.xlsx
-generate_excel_iglesia.py
+*.xls
+generate_excel_*.py
