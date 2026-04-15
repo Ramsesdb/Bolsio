@@ -60,6 +60,22 @@ class TransactionDetailsPage extends StatefulWidget {
 }
 
 class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
+  /// Maps exchange rate source codes to user-facing labels.
+  String _exchangeRateSourceLabel(String? source) {
+    switch (source) {
+      case 'bcv':
+        return 'BCV';
+      case 'paralelo':
+        return 'Paralelo';
+      case 'manual':
+        return 'Manual';
+      case 'auto':
+        return 'Automatica'; // TODO: i18n
+      default:
+        return source ?? 'Desconocida'; // TODO: i18n
+    }
+  }
+
   void showSkipTransactionModal(
     BuildContext context,
     MoneyTransaction transaction,
@@ -440,6 +456,58 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   ),
                                   label: t.general.time.time,
                                 ),
+                                // --- Applied exchange rate row ---
+                                if (transaction.exchangeRateApplied != null)
+                                  LabelValueInfoItem(
+                                    value: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.currency_exchange_rounded,
+                                          size: 14,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Flexible(
+                                          child: Text(
+                                            '${transaction.exchangeRateApplied!.toStringAsFixed(2)} Bs/USD (${_exchangeRateSourceLabel(transaction.exchangeRateSource)})', // TODO: i18n
+                                            softWrap: false,
+                                            overflow: TextOverflow.fade,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    label: 'Tasa aplicada', // TODO: i18n
+                                  )
+                                else if (transaction.account.currencyId !=
+                                    (transaction.receivingAccount?.currencyId ??
+                                        transaction.account.currencyId))
+                                  LabelValueInfoItem(
+                                    value: Tooltip(
+                                      message:
+                                          'Esta transaccion es anterior a la version que registra tasas. '
+                                          'Edita la transaccion para asignar una tasa retroactiva.', // TODO: i18n
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.info_outline,
+                                            size: 14,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          const Text(
+                                            'no registrada', // TODO: i18n
+                                            style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    label: 'Tasa aplicada', // TODO: i18n
+                                  ),
                               ],
                             ),
                           ),
@@ -491,7 +559,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       ),
                                   body: Column(
                                     children: [
-                                      StreamBuilder(
+                                      StreamBuilder<double?>(
                                         stream: ExchangeRateService.instance
                                             .getLastExchangeRateOf(
                                               currencyCode: transaction
@@ -502,10 +570,31 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             )
                                             .map(
                                               (event) =>
-                                                  event?.exchangeRate ?? 1,
+                                                  event?.exchangeRate,
                                             ),
-                                        initialData: 1,
                                         builder: (context, snapshot) {
+                                          final rate = snapshot.data;
+
+                                          if (rate == null) {
+                                            return buildInfoListTile(
+                                              title: t.general.today,
+                                              subtitle: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons
+                                                        .currency_exchange_rounded,
+                                                    size: 12,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  const Text(
+                                                    'Tasa no disponible', // TODO: i18n
+                                                  ),
+                                                ],
+                                              ),
+                                              trailing: const Text('--'),
+                                            );
+                                          }
+
                                           return buildInfoListTile(
                                             title: t.general.today,
                                             subtitle: Row(
@@ -517,7 +606,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  '1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}',
+                                                  '1 ${transaction.account.currency.code} = ${rate.toStringAsFixed(2)} ${userCurrency.code}',
                                                 ),
                                               ],
                                             ),
@@ -527,13 +616,13 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
-                                                  snapshot.data! *
+                                                  rate *
                                                   transaction.value,
                                             ),
                                           );
                                         },
                                       ),
-                                      StreamBuilder(
+                                      StreamBuilder<double?>(
                                         stream: ExchangeRateService.instance
                                             .getLastExchangeRateOf(
                                               currencyCode: transaction
@@ -543,11 +632,40 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                               date: transaction.date,
                                             )
                                             .map(
-                                              (event) =>
-                                                  event?.exchangeRate ?? 1,
+                                              (event) {
+                                                // Prefer the stored transaction rate over the DB lookup
+                                                if (transaction.exchangeRateApplied != null) {
+                                                  return transaction.exchangeRateApplied;
+                                                }
+                                                return event?.exchangeRate;
+                                              },
                                             ),
-                                        initialData: 1,
                                         builder: (context, snapshot) {
+                                          final rate = snapshot.data;
+
+                                          if (rate == null) {
+                                            return buildInfoListTile(
+                                              title: t
+                                                  .transaction
+                                                  .form
+                                                  .exchange_to_preferred_in_date,
+                                              subtitle: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons
+                                                        .currency_exchange_rounded,
+                                                    size: 12,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  const Text(
+                                                    'Tasa no disponible', // TODO: i18n
+                                                  ),
+                                                ],
+                                              ),
+                                              trailing: const Text('--'),
+                                            );
+                                          }
+
                                           return buildInfoListTile(
                                             title: t
                                                 .transaction
@@ -562,7 +680,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  '1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}',
+                                                  '1 ${transaction.account.currency.code} = ${rate.toStringAsFixed(2)} ${userCurrency.code}',
                                                 ),
                                               ],
                                             ),
@@ -572,7 +690,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
-                                                  snapshot.data! *
+                                                  rate *
                                                   transaction.value,
                                             ),
                                           );
