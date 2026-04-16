@@ -51,14 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
 
-    _balanceVariationStream = AccountService.instance.getAccounts().switchMap(
-      (accounts) => AccountService.instance.getAccountsMoneyVariation(
-        accounts: accounts,
-        startDate: dateRangeService.startDate,
-        endDate: dateRangeService.endDate,
-        convertToPreferredCurrency: true,
-      ),
-    );
+    _balanceVariationStream = _getBalanceVariationStream();
 
     _totalBalanceStream = AccountService.instance.getAccountsMoney();
   }
@@ -69,6 +62,17 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
+  Stream<double> _getBalanceVariationStream() {
+    return AccountService.instance.getAccounts().switchMap(
+      (accounts) => AccountService.instance.getAccountsMoneyVariation(
+        accounts: accounts,
+        startDate: dateRangeService.startDate,
+        endDate: dateRangeService.endDate,
+        convertToPreferredCurrency: true,
+      ),
+    );
+  }
+
   bool _isIncomeExpenseAtSameLevel(BuildContext context) {
     return BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.sm);
   }
@@ -76,14 +80,7 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Refresh data streams when user pulls down
   Future<void> _refreshData() async {
     setState(() {
-      _balanceVariationStream = AccountService.instance.getAccounts().switchMap(
-        (accounts) => AccountService.instance.getAccountsMoneyVariation(
-          accounts: accounts,
-          startDate: dateRangeService.startDate,
-          endDate: dateRangeService.endDate,
-          convertToPreferredCurrency: true,
-        ),
-      );
+      _balanceVariationStream = _getBalanceVariationStream();
       _totalBalanceStream = AccountService.instance.getAccountsMoney();
     });
     await Future.delayed(const Duration(milliseconds: 300));
@@ -268,6 +265,8 @@ class _DashboardPageState extends State<DashboardPage> {
               periodModifier: 0,
               datePeriod: value,
             );
+
+            _balanceVariationStream = _getBalanceVariationStream();
           });
         });
       },

@@ -46,7 +46,7 @@ dependencies:
   slang_flutter: ^4.4.0
 
   # Drift
-  drift: ^2.8.1
+  drift: ^2.30.0
   path_provider: ^2.0.13
   http: ^1.5.0
   sqlite3: ^2.0.0
@@ -76,6 +76,13 @@ dependencies:
   bitsdojo_window: ^0.1.6
   skeletonizer: ^2.1.2
   shared_preferences: ^2.5.4
+  another_telephony: ^0.4.1
+  flutter_local_notifications: ^18.0.1
+  notification_listener_service: ^0.3.5
+  flutter_background_service: ^5.0.14
+  flutter_background_service_android: ^6.2.7
+  flutter_secure_storage: ^9.2.4
+  crypto: ^3.0.6
 
 dev_dependencies:
   flutter_test:
@@ -85,10 +92,10 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   # Generators:
-  build_runner: 2.10.1
+  build_runner: 2.12.1
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
-  drift_dev: ^2.13.2
+  drift_dev: ^2.30.0
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^10.0.1
   freezed: ^3.0.6

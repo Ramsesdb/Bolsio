@@ -82,7 +82,6 @@ List<MainMenuDestination> getAllDestinations() {
       destination: DashboardPage(key: dashboardPageKey),
       pageKey: dashboardPageKey,
     ),
-    /*
     MainMenuDestination(
       AppMenuDestinationsID.budgets,
       label: t.budgets.title,
@@ -91,7 +90,6 @@ List<MainMenuDestination> getAllDestinations() {
       destination: BudgetsPage(key: budgetsPageKey),
       pageKey: budgetsPageKey,
     ),
-    */
     /*   MainMenuDestination(
       AppMenuDestinationsID.accounts,
       label: t.general.accounts,

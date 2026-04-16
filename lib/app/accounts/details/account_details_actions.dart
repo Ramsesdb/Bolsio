@@ -89,19 +89,18 @@ abstract class AccountDetailsActions {
           );
         },
       ),
-      // DELETE BUTTON DISABLED FOR CHURCH USE (prevents accidental deletion)
-      // ListTileActionItem(
-      //   label: t.ui_actions.delete,
-      //   icon: Icons.delete,
-      //   role: ListTileActionRole.delete,
-      //   onClick: () {
-      //     deleteAccountWithAlertAndSnackBar(
-      //       context,
-      //       accountId: account.id,
-      //       navigateBack: navigateBackOnDelete,
-      //     );
-      //   },
-      // ),
+      ListTileActionItem(
+        label: t.ui_actions.delete,
+        icon: Icons.delete,
+        role: ListTileActionRole.delete,
+        onClick: () {
+          deleteAccountWithAlertAndSnackBar(
+            context,
+            accountId: account.id,
+            navigateBack: navigateBackOnDelete,
+          );
+        },
+      ),
     ];
   }
 

@@ -614,27 +614,23 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         onDateChanged: (newDate) => setState(() => date = newDate),
       ),
       const Divider(),
-      // SIMPLIFIED FOR CHURCH USE - Removed complex fields:
-      // - Recurrency (too complex)
-      // - Status (always reconciled by default)
-      // - Tags (unnecessary)
-      // TransactionRecurrencySelector(
-      //   recurrentRule: recurrentRule,
-      //   onRecurrencyChanged: (newRule) =>
-      //       setState(() => recurrentRule = newRule),
-      // ),
-      // const Divider(),
-      // TransactionStatusSelector(
-      //   date: date,
-      //   status: status,
-      //   onStatusChanged: (newStatus) => setState(() => status = newStatus),
-      // ),
-      // const Divider(),
-      // TransactionTagsSelector(
-      //   tags: tags,
-      //   onTagsChanged: (newTags) => setState(() => tags = newTags),
-      // ),
-      // const Divider(),
+      TransactionRecurrencySelector(
+        recurrentRule: recurrentRule,
+        onRecurrencyChanged: (newRule) =>
+            setState(() => recurrentRule = newRule),
+      ),
+      const Divider(),
+      TransactionStatusSelector(
+        date: date,
+        status: status,
+        onStatusChanged: (newStatus) => setState(() => status = newStatus),
+      ),
+      const Divider(),
+      TransactionTagsSelector(
+        tags: tags,
+        onTagsChanged: (newTags) => setState(() => tags = newTags),
+      ),
+      const Divider(),
       if (_isCrossCurrencyTransfer) ...[
         TransactionValueInDestinyField(
           controller: valueInDestinyController,

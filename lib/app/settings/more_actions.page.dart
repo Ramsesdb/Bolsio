@@ -40,7 +40,6 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 8,
           children: [
-            // --- Logout Button (Relocated) ---
             SettingCardItem(
               title: 'Cerrar Sesión',
               subtitle: 'Salir de la cuenta actual',
@@ -81,7 +80,6 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
                 }
               },
             ),
-            // -------------------------------
             SettingCardItem(
               title: t.settings.title_long,
               subtitle: t.settings.description,
@@ -123,12 +121,11 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
 
     // 2. Define all possible items
     final allItems = [
-      /*
       _ActionItem(
         title: t.goals.title,
         icon: Goal.icon,
         onTap: () => RouteUtils.pushRoute(const GoalsPage()),
-        id: null, // Goals is not yet in the main menu enum/list
+        id: null,
       ),
       _ActionItem(
         title: t.budgets.title,
@@ -136,21 +133,18 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         onTap: () => RouteUtils.pushRoute(const BudgetsPage()),
         id: AppMenuDestinationsID.budgets,
       ),
-      */
       _ActionItem(
         title: t.stats.title,
         icon: Icons.area_chart_rounded,
         onTap: () => RouteUtils.pushRoute(const StatsPage()),
         id: AppMenuDestinationsID.stats,
       ),
-      /*
       _ActionItem(
         title: t.recurrent_transactions.title_short,
         icon: Icons.repeat_rounded,
         onTap: () => RouteUtils.pushRoute(const RecurrentTransactionPage()),
         id: AppMenuDestinationsID.recurrentTransactions,
       ),
-      */
       _ActionItem(
         title: t.general.categories,
         icon: Icons.category_rounded,

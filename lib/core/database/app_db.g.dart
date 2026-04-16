@@ -7116,6 +7116,960 @@ class AppDataCompanion extends UpdateCompanion<AppDataData> {
   }
 }
 
+class PendingImports extends Table
+    with TableInfo<PendingImports, PendingImportInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  PendingImports(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _accountIdMeta = const VerificationMeta(
+    'accountId',
+  );
+  late final GeneratedColumn<String> accountId = GeneratedColumn<String>(
+    'accountId',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'REFERENCES accounts(id)ON DELETE SET NULL',
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _currencyIdMeta = const VerificationMeta(
+    'currencyId',
+  );
+  late final GeneratedColumn<String> currencyId = GeneratedColumn<String>(
+    'currencyId',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (type IN (\'E\', \'I\'))',
+  );
+  static const VerificationMeta _counterpartyNameMeta = const VerificationMeta(
+    'counterpartyName',
+  );
+  late final GeneratedColumn<String> counterpartyName = GeneratedColumn<String>(
+    'counterpartyName',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _bankRefMeta = const VerificationMeta(
+    'bankRef',
+  );
+  late final GeneratedColumn<String> bankRef = GeneratedColumn<String>(
+    'bankRef',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _rawTextMeta = const VerificationMeta(
+    'rawText',
+  );
+  late final GeneratedColumn<String> rawText = GeneratedColumn<String>(
+    'rawText',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _channelMeta = const VerificationMeta(
+    'channel',
+  );
+  late final GeneratedColumn<String> channel = GeneratedColumn<String>(
+    'channel',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (channel IN (\'sms\', \'notification\', \'api\'))',
+  );
+  static const VerificationMeta _senderMeta = const VerificationMeta('sender');
+  late final GeneratedColumn<String> sender = GeneratedColumn<String>(
+    'sender',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0.0',
+    defaultValue: const CustomExpression('0.0'),
+  );
+  static const VerificationMeta _proposedCategoryIdMeta =
+      const VerificationMeta('proposedCategoryId');
+  late final GeneratedColumn<String> proposedCategoryId =
+      GeneratedColumn<String>(
+        'proposedCategoryId',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        $customConstraints: 'REFERENCES categories(id)ON DELETE SET NULL',
+      );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT \'pending\' CHECK (status IN (\'pending\', \'confirmed\', \'rejected\', \'duplicate\'))',
+    defaultValue: const CustomExpression('\'pending\''),
+  );
+  static const VerificationMeta _createdTransactionIdMeta =
+      const VerificationMeta('createdTransactionId');
+  late final GeneratedColumn<String> createdTransactionId =
+      GeneratedColumn<String>(
+        'createdTransactionId',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        $customConstraints: 'REFERENCES transactions(id)ON DELETE SET NULL',
+      );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'createdAt',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT CURRENT_TIMESTAMP',
+    defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    accountId,
+    amount,
+    currencyId,
+    date,
+    type,
+    counterpartyName,
+    bankRef,
+    rawText,
+    channel,
+    sender,
+    confidence,
+    proposedCategoryId,
+    status,
+    createdTransactionId,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pendingImports';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PendingImportInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('accountId')) {
+      context.handle(
+        _accountIdMeta,
+        accountId.isAcceptableOrUnknown(data['accountId']!, _accountIdMeta),
+      );
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('currencyId')) {
+      context.handle(
+        _currencyIdMeta,
+        currencyId.isAcceptableOrUnknown(data['currencyId']!, _currencyIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_currencyIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('counterpartyName')) {
+      context.handle(
+        _counterpartyNameMeta,
+        counterpartyName.isAcceptableOrUnknown(
+          data['counterpartyName']!,
+          _counterpartyNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('bankRef')) {
+      context.handle(
+        _bankRefMeta,
+        bankRef.isAcceptableOrUnknown(data['bankRef']!, _bankRefMeta),
+      );
+    }
+    if (data.containsKey('rawText')) {
+      context.handle(
+        _rawTextMeta,
+        rawText.isAcceptableOrUnknown(data['rawText']!, _rawTextMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_rawTextMeta);
+    }
+    if (data.containsKey('channel')) {
+      context.handle(
+        _channelMeta,
+        channel.isAcceptableOrUnknown(data['channel']!, _channelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_channelMeta);
+    }
+    if (data.containsKey('sender')) {
+      context.handle(
+        _senderMeta,
+        sender.isAcceptableOrUnknown(data['sender']!, _senderMeta),
+      );
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    }
+    if (data.containsKey('proposedCategoryId')) {
+      context.handle(
+        _proposedCategoryIdMeta,
+        proposedCategoryId.isAcceptableOrUnknown(
+          data['proposedCategoryId']!,
+          _proposedCategoryIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('createdTransactionId')) {
+      context.handle(
+        _createdTransactionIdMeta,
+        createdTransactionId.isAcceptableOrUnknown(
+          data['createdTransactionId']!,
+          _createdTransactionIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PendingImportInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PendingImportInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      accountId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}accountId'],
+      ),
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      currencyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}currencyId'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      counterpartyName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}counterpartyName'],
+      ),
+      bankRef: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}bankRef'],
+      ),
+      rawText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rawText'],
+      )!,
+      channel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}channel'],
+      )!,
+      sender: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sender'],
+      ),
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      )!,
+      proposedCategoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}proposedCategoryId'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      createdTransactionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}createdTransactionId'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}createdAt'],
+      )!,
+    );
+  }
+
+  @override
+  PendingImports createAlias(String alias) {
+    return PendingImports(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class PendingImportInDB extends DataClass
+    implements Insertable<PendingImportInDB> {
+  final String id;
+
+  /// Account that this import should be associated with (resolved by the bank profile)
+  final String? accountId;
+
+  /// Monetary amount captured from the SMS/notification
+  final double amount;
+
+  /// Currency code (e.g. 'VES', 'USD')
+  final String currencyId;
+
+  /// Date/time when the transaction occurred
+  final DateTime date;
+
+  /// Transaction type: 'E' = expense, 'I' = income
+  final String type;
+
+  /// Name or identifier of the counterparty (phone number, merchant, etc.)
+  final String? counterpartyName;
+
+  /// Bank reference number for deduplication across channels
+  final String? bankRef;
+
+  /// Original raw text from the SMS or notification
+  final String rawText;
+
+  /// Capture channel: 'sms', 'notification', or 'api'
+  final String channel;
+
+  /// Sender identifier (SMS number or package name)
+  final String? sender;
+
+  /// Parser confidence score (0.0 to 1.0)
+  final double confidence;
+
+  /// Suggested category (resolved by profile or auto-categorizer)
+  final String? proposedCategoryId;
+
+  /// Proposal status: pending (awaiting review), confirmed, rejected, or duplicate
+  final String status;
+
+  /// ID of the transaction created when the proposal is confirmed
+  final String? createdTransactionId;
+
+  /// Timestamp when this pending import was created
+  final DateTime createdAt;
+  const PendingImportInDB({
+    required this.id,
+    this.accountId,
+    required this.amount,
+    required this.currencyId,
+    required this.date,
+    required this.type,
+    this.counterpartyName,
+    this.bankRef,
+    required this.rawText,
+    required this.channel,
+    this.sender,
+    required this.confidence,
+    this.proposedCategoryId,
+    required this.status,
+    this.createdTransactionId,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    if (!nullToAbsent || accountId != null) {
+      map['accountId'] = Variable<String>(accountId);
+    }
+    map['amount'] = Variable<double>(amount);
+    map['currencyId'] = Variable<String>(currencyId);
+    map['date'] = Variable<DateTime>(date);
+    map['type'] = Variable<String>(type);
+    if (!nullToAbsent || counterpartyName != null) {
+      map['counterpartyName'] = Variable<String>(counterpartyName);
+    }
+    if (!nullToAbsent || bankRef != null) {
+      map['bankRef'] = Variable<String>(bankRef);
+    }
+    map['rawText'] = Variable<String>(rawText);
+    map['channel'] = Variable<String>(channel);
+    if (!nullToAbsent || sender != null) {
+      map['sender'] = Variable<String>(sender);
+    }
+    map['confidence'] = Variable<double>(confidence);
+    if (!nullToAbsent || proposedCategoryId != null) {
+      map['proposedCategoryId'] = Variable<String>(proposedCategoryId);
+    }
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || createdTransactionId != null) {
+      map['createdTransactionId'] = Variable<String>(createdTransactionId);
+    }
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  PendingImportsCompanion toCompanion(bool nullToAbsent) {
+    return PendingImportsCompanion(
+      id: Value(id),
+      accountId: accountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(accountId),
+      amount: Value(amount),
+      currencyId: Value(currencyId),
+      date: Value(date),
+      type: Value(type),
+      counterpartyName: counterpartyName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(counterpartyName),
+      bankRef: bankRef == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bankRef),
+      rawText: Value(rawText),
+      channel: Value(channel),
+      sender: sender == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sender),
+      confidence: Value(confidence),
+      proposedCategoryId: proposedCategoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(proposedCategoryId),
+      status: Value(status),
+      createdTransactionId: createdTransactionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdTransactionId),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory PendingImportInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PendingImportInDB(
+      id: serializer.fromJson<String>(json['id']),
+      accountId: serializer.fromJson<String?>(json['accountId']),
+      amount: serializer.fromJson<double>(json['amount']),
+      currencyId: serializer.fromJson<String>(json['currencyId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      type: serializer.fromJson<String>(json['type']),
+      counterpartyName: serializer.fromJson<String?>(json['counterpartyName']),
+      bankRef: serializer.fromJson<String?>(json['bankRef']),
+      rawText: serializer.fromJson<String>(json['rawText']),
+      channel: serializer.fromJson<String>(json['channel']),
+      sender: serializer.fromJson<String?>(json['sender']),
+      confidence: serializer.fromJson<double>(json['confidence']),
+      proposedCategoryId: serializer.fromJson<String?>(
+        json['proposedCategoryId'],
+      ),
+      status: serializer.fromJson<String>(json['status']),
+      createdTransactionId: serializer.fromJson<String?>(
+        json['createdTransactionId'],
+      ),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'accountId': serializer.toJson<String?>(accountId),
+      'amount': serializer.toJson<double>(amount),
+      'currencyId': serializer.toJson<String>(currencyId),
+      'date': serializer.toJson<DateTime>(date),
+      'type': serializer.toJson<String>(type),
+      'counterpartyName': serializer.toJson<String?>(counterpartyName),
+      'bankRef': serializer.toJson<String?>(bankRef),
+      'rawText': serializer.toJson<String>(rawText),
+      'channel': serializer.toJson<String>(channel),
+      'sender': serializer.toJson<String?>(sender),
+      'confidence': serializer.toJson<double>(confidence),
+      'proposedCategoryId': serializer.toJson<String?>(proposedCategoryId),
+      'status': serializer.toJson<String>(status),
+      'createdTransactionId': serializer.toJson<String?>(createdTransactionId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  PendingImportInDB copyWith({
+    String? id,
+    Value<String?> accountId = const Value.absent(),
+    double? amount,
+    String? currencyId,
+    DateTime? date,
+    String? type,
+    Value<String?> counterpartyName = const Value.absent(),
+    Value<String?> bankRef = const Value.absent(),
+    String? rawText,
+    String? channel,
+    Value<String?> sender = const Value.absent(),
+    double? confidence,
+    Value<String?> proposedCategoryId = const Value.absent(),
+    String? status,
+    Value<String?> createdTransactionId = const Value.absent(),
+    DateTime? createdAt,
+  }) => PendingImportInDB(
+    id: id ?? this.id,
+    accountId: accountId.present ? accountId.value : this.accountId,
+    amount: amount ?? this.amount,
+    currencyId: currencyId ?? this.currencyId,
+    date: date ?? this.date,
+    type: type ?? this.type,
+    counterpartyName: counterpartyName.present
+        ? counterpartyName.value
+        : this.counterpartyName,
+    bankRef: bankRef.present ? bankRef.value : this.bankRef,
+    rawText: rawText ?? this.rawText,
+    channel: channel ?? this.channel,
+    sender: sender.present ? sender.value : this.sender,
+    confidence: confidence ?? this.confidence,
+    proposedCategoryId: proposedCategoryId.present
+        ? proposedCategoryId.value
+        : this.proposedCategoryId,
+    status: status ?? this.status,
+    createdTransactionId: createdTransactionId.present
+        ? createdTransactionId.value
+        : this.createdTransactionId,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  PendingImportInDB copyWithCompanion(PendingImportsCompanion data) {
+    return PendingImportInDB(
+      id: data.id.present ? data.id.value : this.id,
+      accountId: data.accountId.present ? data.accountId.value : this.accountId,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      currencyId: data.currencyId.present
+          ? data.currencyId.value
+          : this.currencyId,
+      date: data.date.present ? data.date.value : this.date,
+      type: data.type.present ? data.type.value : this.type,
+      counterpartyName: data.counterpartyName.present
+          ? data.counterpartyName.value
+          : this.counterpartyName,
+      bankRef: data.bankRef.present ? data.bankRef.value : this.bankRef,
+      rawText: data.rawText.present ? data.rawText.value : this.rawText,
+      channel: data.channel.present ? data.channel.value : this.channel,
+      sender: data.sender.present ? data.sender.value : this.sender,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+      proposedCategoryId: data.proposedCategoryId.present
+          ? data.proposedCategoryId.value
+          : this.proposedCategoryId,
+      status: data.status.present ? data.status.value : this.status,
+      createdTransactionId: data.createdTransactionId.present
+          ? data.createdTransactionId.value
+          : this.createdTransactionId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingImportInDB(')
+          ..write('id: $id, ')
+          ..write('accountId: $accountId, ')
+          ..write('amount: $amount, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('date: $date, ')
+          ..write('type: $type, ')
+          ..write('counterpartyName: $counterpartyName, ')
+          ..write('bankRef: $bankRef, ')
+          ..write('rawText: $rawText, ')
+          ..write('channel: $channel, ')
+          ..write('sender: $sender, ')
+          ..write('confidence: $confidence, ')
+          ..write('proposedCategoryId: $proposedCategoryId, ')
+          ..write('status: $status, ')
+          ..write('createdTransactionId: $createdTransactionId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    accountId,
+    amount,
+    currencyId,
+    date,
+    type,
+    counterpartyName,
+    bankRef,
+    rawText,
+    channel,
+    sender,
+    confidence,
+    proposedCategoryId,
+    status,
+    createdTransactionId,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PendingImportInDB &&
+          other.id == this.id &&
+          other.accountId == this.accountId &&
+          other.amount == this.amount &&
+          other.currencyId == this.currencyId &&
+          other.date == this.date &&
+          other.type == this.type &&
+          other.counterpartyName == this.counterpartyName &&
+          other.bankRef == this.bankRef &&
+          other.rawText == this.rawText &&
+          other.channel == this.channel &&
+          other.sender == this.sender &&
+          other.confidence == this.confidence &&
+          other.proposedCategoryId == this.proposedCategoryId &&
+          other.status == this.status &&
+          other.createdTransactionId == this.createdTransactionId &&
+          other.createdAt == this.createdAt);
+}
+
+class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
+  final Value<String> id;
+  final Value<String?> accountId;
+  final Value<double> amount;
+  final Value<String> currencyId;
+  final Value<DateTime> date;
+  final Value<String> type;
+  final Value<String?> counterpartyName;
+  final Value<String?> bankRef;
+  final Value<String> rawText;
+  final Value<String> channel;
+  final Value<String?> sender;
+  final Value<double> confidence;
+  final Value<String?> proposedCategoryId;
+  final Value<String> status;
+  final Value<String?> createdTransactionId;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const PendingImportsCompanion({
+    this.id = const Value.absent(),
+    this.accountId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.currencyId = const Value.absent(),
+    this.date = const Value.absent(),
+    this.type = const Value.absent(),
+    this.counterpartyName = const Value.absent(),
+    this.bankRef = const Value.absent(),
+    this.rawText = const Value.absent(),
+    this.channel = const Value.absent(),
+    this.sender = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.proposedCategoryId = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdTransactionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PendingImportsCompanion.insert({
+    required String id,
+    this.accountId = const Value.absent(),
+    required double amount,
+    required String currencyId,
+    required DateTime date,
+    required String type,
+    this.counterpartyName = const Value.absent(),
+    this.bankRef = const Value.absent(),
+    required String rawText,
+    required String channel,
+    this.sender = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.proposedCategoryId = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdTransactionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       amount = Value(amount),
+       currencyId = Value(currencyId),
+       date = Value(date),
+       type = Value(type),
+       rawText = Value(rawText),
+       channel = Value(channel);
+  static Insertable<PendingImportInDB> custom({
+    Expression<String>? id,
+    Expression<String>? accountId,
+    Expression<double>? amount,
+    Expression<String>? currencyId,
+    Expression<DateTime>? date,
+    Expression<String>? type,
+    Expression<String>? counterpartyName,
+    Expression<String>? bankRef,
+    Expression<String>? rawText,
+    Expression<String>? channel,
+    Expression<String>? sender,
+    Expression<double>? confidence,
+    Expression<String>? proposedCategoryId,
+    Expression<String>? status,
+    Expression<String>? createdTransactionId,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (accountId != null) 'accountId': accountId,
+      if (amount != null) 'amount': amount,
+      if (currencyId != null) 'currencyId': currencyId,
+      if (date != null) 'date': date,
+      if (type != null) 'type': type,
+      if (counterpartyName != null) 'counterpartyName': counterpartyName,
+      if (bankRef != null) 'bankRef': bankRef,
+      if (rawText != null) 'rawText': rawText,
+      if (channel != null) 'channel': channel,
+      if (sender != null) 'sender': sender,
+      if (confidence != null) 'confidence': confidence,
+      if (proposedCategoryId != null) 'proposedCategoryId': proposedCategoryId,
+      if (status != null) 'status': status,
+      if (createdTransactionId != null)
+        'createdTransactionId': createdTransactionId,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PendingImportsCompanion copyWith({
+    Value<String>? id,
+    Value<String?>? accountId,
+    Value<double>? amount,
+    Value<String>? currencyId,
+    Value<DateTime>? date,
+    Value<String>? type,
+    Value<String?>? counterpartyName,
+    Value<String?>? bankRef,
+    Value<String>? rawText,
+    Value<String>? channel,
+    Value<String?>? sender,
+    Value<double>? confidence,
+    Value<String?>? proposedCategoryId,
+    Value<String>? status,
+    Value<String?>? createdTransactionId,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return PendingImportsCompanion(
+      id: id ?? this.id,
+      accountId: accountId ?? this.accountId,
+      amount: amount ?? this.amount,
+      currencyId: currencyId ?? this.currencyId,
+      date: date ?? this.date,
+      type: type ?? this.type,
+      counterpartyName: counterpartyName ?? this.counterpartyName,
+      bankRef: bankRef ?? this.bankRef,
+      rawText: rawText ?? this.rawText,
+      channel: channel ?? this.channel,
+      sender: sender ?? this.sender,
+      confidence: confidence ?? this.confidence,
+      proposedCategoryId: proposedCategoryId ?? this.proposedCategoryId,
+      status: status ?? this.status,
+      createdTransactionId: createdTransactionId ?? this.createdTransactionId,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (accountId.present) {
+      map['accountId'] = Variable<String>(accountId.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (currencyId.present) {
+      map['currencyId'] = Variable<String>(currencyId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (counterpartyName.present) {
+      map['counterpartyName'] = Variable<String>(counterpartyName.value);
+    }
+    if (bankRef.present) {
+      map['bankRef'] = Variable<String>(bankRef.value);
+    }
+    if (rawText.present) {
+      map['rawText'] = Variable<String>(rawText.value);
+    }
+    if (channel.present) {
+      map['channel'] = Variable<String>(channel.value);
+    }
+    if (sender.present) {
+      map['sender'] = Variable<String>(sender.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (proposedCategoryId.present) {
+      map['proposedCategoryId'] = Variable<String>(proposedCategoryId.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdTransactionId.present) {
+      map['createdTransactionId'] = Variable<String>(
+        createdTransactionId.value,
+      );
+    }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingImportsCompanion(')
+          ..write('id: $id, ')
+          ..write('accountId: $accountId, ')
+          ..write('amount: $amount, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('date: $date, ')
+          ..write('type: $type, ')
+          ..write('counterpartyName: $counterpartyName, ')
+          ..write('bankRef: $bankRef, ')
+          ..write('rawText: $rawText, ')
+          ..write('channel: $channel, ')
+          ..write('sender: $sender, ')
+          ..write('confidence: $confidence, ')
+          ..write('proposedCategoryId: $proposedCategoryId, ')
+          ..write('status: $status, ')
+          ..write('createdTransactionId: $createdTransactionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDB extends GeneratedDatabase {
   _$AppDB(QueryExecutor e) : super(e);
   $AppDBManager get managers => $AppDBManager(this);
@@ -7134,6 +8088,7 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final SavedFilters savedFilters = SavedFilters(this);
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
+  late final PendingImports pendingImports = PendingImports(this);
   Selectable<Account> getAccountsWithFullData({
     GetAccountsWithFullData$predicate? predicate,
     GetAccountsWithFullData$orderBy? orderBy,
@@ -7700,6 +8655,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     savedFilters,
     userSettings,
     appData,
+    pendingImports,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -7870,6 +8826,27 @@ abstract class _$AppDB extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('savedFilters', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'categories',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'transactions',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
     ),
   ]);
   @override
@@ -8343,6 +9320,27 @@ final class $AccountsReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<PendingImports, List<PendingImportInDB>>
+  _pendingImportsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.pendingImports,
+    aliasName: $_aliasNameGenerator(
+      db.accounts.id,
+      db.pendingImports.accountId,
+    ),
+  );
+
+  $PendingImportsProcessedTableManager get pendingImportsRefs {
+    final manager = $PendingImportsTableManager(
+      $_db,
+      $_db.pendingImports,
+    ).filter((f) => f.accountId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_pendingImportsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
@@ -8435,6 +9433,31 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
           ),
     );
     return composer;
+  }
+
+  Expression<bool> pendingImportsRefs(
+    Expression<bool> Function($PendingImportsFilterComposer f) f,
+  ) {
+    final $PendingImportsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.accountId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsFilterComposer(
+            $db: $db,
+            $table: $db.pendingImports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -8602,6 +9625,31 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     );
     return composer;
   }
+
+  Expression<T> pendingImportsRefs<T extends Object>(
+    Expression<T> Function($PendingImportsAnnotationComposer a) f,
+  ) {
+    final $PendingImportsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.accountId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsAnnotationComposer(
+            $db: $db,
+            $table: $db.pendingImports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $AccountsTableManager
@@ -8617,7 +9665,7 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({bool currencyId})
+          PrefetchHooks Function({bool currencyId, bool pendingImportsRefs})
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -8699,47 +9747,71 @@ class $AccountsTableManager
                 (e) => (e.readTable(table), $AccountsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({currencyId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (currencyId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.currencyId,
-                                referencedTable: $AccountsReferences
-                                    ._currencyIdTable(db),
-                                referencedColumn: $AccountsReferences
-                                    ._currencyIdTable(db)
-                                    .code,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({currencyId = false, pendingImportsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (pendingImportsRefs) db.pendingImports,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (currencyId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.currencyId,
+                                    referencedTable: $AccountsReferences
+                                        ._currencyIdTable(db),
+                                    referencedColumn: $AccountsReferences
+                                        ._currencyIdTable(db)
+                                        .code,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (pendingImportsRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          PendingImportInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences
+                              ._pendingImportsRefsTable(db),
+                          managerFromTypedResult: (p0) => $AccountsReferences(
+                            db,
+                            table,
+                            p0,
+                          ).pendingImportsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -8756,7 +9828,7 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({bool currencyId})
+      PrefetchHooks Function({bool currencyId, bool pendingImportsRefs})
     >;
 typedef $CategoriesCreateCompanionBuilder =
     CategoriesCompanion Function({
@@ -8801,6 +9873,27 @@ final class $CategoriesReferences
     ).filter((f) => f.categoryID.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<PendingImports, List<PendingImportInDB>>
+  _pendingImportsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.pendingImports,
+    aliasName: $_aliasNameGenerator(
+      db.categories.id,
+      db.pendingImports.proposedCategoryId,
+    ),
+  );
+
+  $PendingImportsProcessedTableManager get pendingImportsRefs {
+    final manager = $PendingImportsTableManager($_db, $_db.pendingImports)
+        .filter(
+          (f) => f.proposedCategoryId.id.sqlEquals($_itemColumn<String>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(_pendingImportsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -8867,6 +9960,31 @@ class $CategoriesFilterComposer extends Composer<_$AppDB, Categories> {
           }) => $TransactionsFilterComposer(
             $db: $db,
             $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> pendingImportsRefs(
+    Expression<bool> Function($PendingImportsFilterComposer f) f,
+  ) {
+    final $PendingImportsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.proposedCategoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsFilterComposer(
+            $db: $db,
+            $table: $db.pendingImports,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -8978,6 +10096,31 @@ class $CategoriesAnnotationComposer extends Composer<_$AppDB, Categories> {
     );
     return f(composer);
   }
+
+  Expression<T> pendingImportsRefs<T extends Object>(
+    Expression<T> Function($PendingImportsAnnotationComposer a) f,
+  ) {
+    final $PendingImportsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.proposedCategoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsAnnotationComposer(
+            $db: $db,
+            $table: $db.pendingImports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $CategoriesTableManager
@@ -8993,7 +10136,10 @@ class $CategoriesTableManager
           $CategoriesUpdateCompanionBuilder,
           (CategoryInDB, $CategoriesReferences),
           CategoryInDB,
-          PrefetchHooks Function({bool transactionsRefs})
+          PrefetchHooks Function({
+            bool transactionsRefs,
+            bool pendingImportsRefs,
+          })
         > {
   $CategoriesTableManager(_$AppDB db, Categories table)
     : super(
@@ -9052,32 +10198,61 @@ class $CategoriesTableManager
                     (e.readTable(table), $CategoriesReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({transactionsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (transactionsRefs) db.transactions],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (transactionsRefs)
-                    await $_getPrefetchedData<
-                      CategoryInDB,
-                      Categories,
-                      TransactionInDB
-                    >(
-                      currentTable: table,
-                      referencedTable: $CategoriesReferences
-                          ._transactionsRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $CategoriesReferences(db, table, p0).transactionsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.categoryID == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({transactionsRefs = false, pendingImportsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (transactionsRefs) db.transactions,
+                    if (pendingImportsRefs) db.pendingImports,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (transactionsRefs)
+                        await $_getPrefetchedData<
+                          CategoryInDB,
+                          Categories,
+                          TransactionInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $CategoriesReferences
+                              ._transactionsRefsTable(db),
+                          managerFromTypedResult: (p0) => $CategoriesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).transactionsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.categoryID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (pendingImportsRefs)
+                        await $_getPrefetchedData<
+                          CategoryInDB,
+                          Categories,
+                          PendingImportInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $CategoriesReferences
+                              ._pendingImportsRefsTable(db),
+                          managerFromTypedResult: (p0) => $CategoriesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).pendingImportsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.proposedCategoryId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -9094,7 +10269,7 @@ typedef $CategoriesProcessedTableManager =
       $CategoriesUpdateCompanionBuilder,
       (CategoryInDB, $CategoriesReferences),
       CategoryInDB,
-      PrefetchHooks Function({bool transactionsRefs})
+      PrefetchHooks Function({bool transactionsRefs, bool pendingImportsRefs})
     >;
 typedef $UsersCreateCompanionBuilder =
     UsersCompanion Function({
@@ -9487,6 +10662,28 @@ final class $TransactionsReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<PendingImports, List<PendingImportInDB>>
+  _pendingImportsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.pendingImports,
+    aliasName: $_aliasNameGenerator(
+      db.transactions.id,
+      db.pendingImports.createdTransactionId,
+    ),
+  );
+
+  $PendingImportsProcessedTableManager get pendingImportsRefs {
+    final manager = $PendingImportsTableManager($_db, $_db.pendingImports)
+        .filter(
+          (f) =>
+              f.createdTransactionId.id.sqlEquals($_itemColumn<String>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(_pendingImportsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
@@ -9731,6 +10928,31 @@ class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
           }) => $TransactionTagsFilterComposer(
             $db: $db,
             $table: $db.transactionTags,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> pendingImportsRefs(
+    Expression<bool> Function($PendingImportsFilterComposer f) f,
+  ) {
+    final $PendingImportsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.createdTransactionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsFilterComposer(
+            $db: $db,
+            $table: $db.pendingImports,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10193,6 +11415,31 @@ class $TransactionsAnnotationComposer extends Composer<_$AppDB, Transactions> {
     );
     return f(composer);
   }
+
+  Expression<T> pendingImportsRefs<T extends Object>(
+    Expression<T> Function($PendingImportsAnnotationComposer a) f,
+  ) {
+    final $PendingImportsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.pendingImports,
+      getReferencedColumn: (t) => t.createdTransactionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PendingImportsAnnotationComposer(
+            $db: $db,
+            $table: $db.pendingImports,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $TransactionsTableManager
@@ -10215,6 +11462,7 @@ class $TransactionsTableManager
             bool createdBy,
             bool modifiedBy,
             bool transactionTagsRefs,
+            bool pendingImportsRefs,
           })
         > {
   $TransactionsTableManager(_$AppDB db, Transactions table)
@@ -10354,11 +11602,13 @@ class $TransactionsTableManager
                 createdBy = false,
                 modifiedBy = false,
                 transactionTagsRefs = false,
+                pendingImportsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (transactionTagsRefs) db.transactionTags,
+                    if (pendingImportsRefs) db.pendingImports,
                   ],
                   addJoins:
                       <
@@ -10467,6 +11717,27 @@ class $TransactionsTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (pendingImportsRefs)
+                        await $_getPrefetchedData<
+                          TransactionInDB,
+                          Transactions,
+                          PendingImportInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $TransactionsReferences
+                              ._pendingImportsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $TransactionsReferences(
+                                db,
+                                table,
+                                p0,
+                              ).pendingImportsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.createdTransactionId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -10494,6 +11765,7 @@ typedef $TransactionsProcessedTableManager =
         bool createdBy,
         bool modifiedBy,
         bool transactionTagsRefs,
+        bool pendingImportsRefs,
       })
     >;
 typedef $ExchangeRatesCreateCompanionBuilder =
@@ -13424,6 +14696,735 @@ typedef $AppDataProcessedTableManager =
       AppDataData,
       PrefetchHooks Function()
     >;
+typedef $PendingImportsCreateCompanionBuilder =
+    PendingImportsCompanion Function({
+      required String id,
+      Value<String?> accountId,
+      required double amount,
+      required String currencyId,
+      required DateTime date,
+      required String type,
+      Value<String?> counterpartyName,
+      Value<String?> bankRef,
+      required String rawText,
+      required String channel,
+      Value<String?> sender,
+      Value<double> confidence,
+      Value<String?> proposedCategoryId,
+      Value<String> status,
+      Value<String?> createdTransactionId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $PendingImportsUpdateCompanionBuilder =
+    PendingImportsCompanion Function({
+      Value<String> id,
+      Value<String?> accountId,
+      Value<double> amount,
+      Value<String> currencyId,
+      Value<DateTime> date,
+      Value<String> type,
+      Value<String?> counterpartyName,
+      Value<String?> bankRef,
+      Value<String> rawText,
+      Value<String> channel,
+      Value<String?> sender,
+      Value<double> confidence,
+      Value<String?> proposedCategoryId,
+      Value<String> status,
+      Value<String?> createdTransactionId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $PendingImportsReferences
+    extends BaseReferences<_$AppDB, PendingImports, PendingImportInDB> {
+  $PendingImportsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Accounts _accountIdTable(_$AppDB db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.pendingImports.accountId, db.accounts.id),
+  );
+
+  $AccountsProcessedTableManager? get accountId {
+    final $_column = $_itemColumn<String>('accountId');
+    if ($_column == null) return null;
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_accountIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Categories _proposedCategoryIdTable(_$AppDB db) =>
+      db.categories.createAlias(
+        $_aliasNameGenerator(
+          db.pendingImports.proposedCategoryId,
+          db.categories.id,
+        ),
+      );
+
+  $CategoriesProcessedTableManager? get proposedCategoryId {
+    final $_column = $_itemColumn<String>('proposedCategoryId');
+    if ($_column == null) return null;
+    final manager = $CategoriesTableManager(
+      $_db,
+      $_db.categories,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_proposedCategoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Transactions _createdTransactionIdTable(_$AppDB db) =>
+      db.transactions.createAlias(
+        $_aliasNameGenerator(
+          db.pendingImports.createdTransactionId,
+          db.transactions.id,
+        ),
+      );
+
+  $TransactionsProcessedTableManager? get createdTransactionId {
+    final $_column = $_itemColumn<String>('createdTransactionId');
+    if ($_column == null) return null;
+    final manager = $TransactionsTableManager(
+      $_db,
+      $_db.transactions,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(
+      _createdTransactionIdTable($_db),
+    );
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $PendingImportsFilterComposer extends Composer<_$AppDB, PendingImports> {
+  $PendingImportsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get currencyId => $composableBuilder(
+    column: $table.currencyId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get counterpartyName => $composableBuilder(
+    column: $table.counterpartyName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bankRef => $composableBuilder(
+    column: $table.bankRef,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rawText => $composableBuilder(
+    column: $table.rawText,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get channel => $composableBuilder(
+    column: $table.channel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sender => $composableBuilder(
+    column: $table.sender,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $AccountsFilterComposer get accountId {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $CategoriesFilterComposer get proposedCategoryId {
+    final $CategoriesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.proposedCategoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CategoriesFilterComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TransactionsFilterComposer get createdTransactionId {
+    final $TransactionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdTransactionId,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsFilterComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $PendingImportsOrderingComposer
+    extends Composer<_$AppDB, PendingImports> {
+  $PendingImportsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get currencyId => $composableBuilder(
+    column: $table.currencyId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get counterpartyName => $composableBuilder(
+    column: $table.counterpartyName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bankRef => $composableBuilder(
+    column: $table.bankRef,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rawText => $composableBuilder(
+    column: $table.rawText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get channel => $composableBuilder(
+    column: $table.channel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sender => $composableBuilder(
+    column: $table.sender,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $AccountsOrderingComposer get accountId {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $CategoriesOrderingComposer get proposedCategoryId {
+    final $CategoriesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.proposedCategoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CategoriesOrderingComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TransactionsOrderingComposer get createdTransactionId {
+    final $TransactionsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdTransactionId,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsOrderingComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $PendingImportsAnnotationComposer
+    extends Composer<_$AppDB, PendingImports> {
+  $PendingImportsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get currencyId => $composableBuilder(
+    column: $table.currencyId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get counterpartyName => $composableBuilder(
+    column: $table.counterpartyName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get bankRef =>
+      $composableBuilder(column: $table.bankRef, builder: (column) => column);
+
+  GeneratedColumn<String> get rawText =>
+      $composableBuilder(column: $table.rawText, builder: (column) => column);
+
+  GeneratedColumn<String> get channel =>
+      $composableBuilder(column: $table.channel, builder: (column) => column);
+
+  GeneratedColumn<String> get sender =>
+      $composableBuilder(column: $table.sender, builder: (column) => column);
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $AccountsAnnotationComposer get accountId {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $CategoriesAnnotationComposer get proposedCategoryId {
+    final $CategoriesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.proposedCategoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CategoriesAnnotationComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TransactionsAnnotationComposer get createdTransactionId {
+    final $TransactionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.createdTransactionId,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsAnnotationComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $PendingImportsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          PendingImports,
+          PendingImportInDB,
+          $PendingImportsFilterComposer,
+          $PendingImportsOrderingComposer,
+          $PendingImportsAnnotationComposer,
+          $PendingImportsCreateCompanionBuilder,
+          $PendingImportsUpdateCompanionBuilder,
+          (PendingImportInDB, $PendingImportsReferences),
+          PendingImportInDB,
+          PrefetchHooks Function({
+            bool accountId,
+            bool proposedCategoryId,
+            bool createdTransactionId,
+          })
+        > {
+  $PendingImportsTableManager(_$AppDB db, PendingImports table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $PendingImportsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $PendingImportsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $PendingImportsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String?> accountId = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<String> currencyId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String?> counterpartyName = const Value.absent(),
+                Value<String?> bankRef = const Value.absent(),
+                Value<String> rawText = const Value.absent(),
+                Value<String> channel = const Value.absent(),
+                Value<String?> sender = const Value.absent(),
+                Value<double> confidence = const Value.absent(),
+                Value<String?> proposedCategoryId = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> createdTransactionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PendingImportsCompanion(
+                id: id,
+                accountId: accountId,
+                amount: amount,
+                currencyId: currencyId,
+                date: date,
+                type: type,
+                counterpartyName: counterpartyName,
+                bankRef: bankRef,
+                rawText: rawText,
+                channel: channel,
+                sender: sender,
+                confidence: confidence,
+                proposedCategoryId: proposedCategoryId,
+                status: status,
+                createdTransactionId: createdTransactionId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<String?> accountId = const Value.absent(),
+                required double amount,
+                required String currencyId,
+                required DateTime date,
+                required String type,
+                Value<String?> counterpartyName = const Value.absent(),
+                Value<String?> bankRef = const Value.absent(),
+                required String rawText,
+                required String channel,
+                Value<String?> sender = const Value.absent(),
+                Value<double> confidence = const Value.absent(),
+                Value<String?> proposedCategoryId = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> createdTransactionId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PendingImportsCompanion.insert(
+                id: id,
+                accountId: accountId,
+                amount: amount,
+                currencyId: currencyId,
+                date: date,
+                type: type,
+                counterpartyName: counterpartyName,
+                bankRef: bankRef,
+                rawText: rawText,
+                channel: channel,
+                sender: sender,
+                confidence: confidence,
+                proposedCategoryId: proposedCategoryId,
+                status: status,
+                createdTransactionId: createdTransactionId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $PendingImportsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                accountId = false,
+                proposedCategoryId = false,
+                createdTransactionId = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (accountId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.accountId,
+                                    referencedTable: $PendingImportsReferences
+                                        ._accountIdTable(db),
+                                    referencedColumn: $PendingImportsReferences
+                                        ._accountIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (proposedCategoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.proposedCategoryId,
+                                    referencedTable: $PendingImportsReferences
+                                        ._proposedCategoryIdTable(db),
+                                    referencedColumn: $PendingImportsReferences
+                                        ._proposedCategoryIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (createdTransactionId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.createdTransactionId,
+                                    referencedTable: $PendingImportsReferences
+                                        ._createdTransactionIdTable(db),
+                                    referencedColumn: $PendingImportsReferences
+                                        ._createdTransactionIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $PendingImportsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      PendingImports,
+      PendingImportInDB,
+      $PendingImportsFilterComposer,
+      $PendingImportsOrderingComposer,
+      $PendingImportsAnnotationComposer,
+      $PendingImportsCreateCompanionBuilder,
+      $PendingImportsUpdateCompanionBuilder,
+      (PendingImportInDB, $PendingImportsReferences),
+      PendingImportInDB,
+      PrefetchHooks Function({
+        bool accountId,
+        bool proposedCategoryId,
+        bool createdTransactionId,
+      })
+    >;
 
 class $AppDBManager {
   final _$AppDB _db;
@@ -13451,6 +15452,8 @@ class $AppDBManager {
   $UserSettingsTableManager get userSettings =>
       $UserSettingsTableManager(_db, _db.userSettings);
   $AppDataTableManager get appData => $AppDataTableManager(_db, _db.appData);
+  $PendingImportsTableManager get pendingImports =>
+      $PendingImportsTableManager(_db, _db.pendingImports);
 }
 
 typedef GetAccountsWithFullData$predicate =
