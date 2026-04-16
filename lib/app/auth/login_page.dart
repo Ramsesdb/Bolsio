@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
               '${user.uid}',
               '${user.email ?? ''}',
               '${(user.displayName ?? '').replaceAll("'", "''")}',
-              'treasurer',
+              'user',
               datetime('now'),
               datetime('now')
             )

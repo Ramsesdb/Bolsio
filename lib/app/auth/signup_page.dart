@@ -63,7 +63,7 @@ class _SignupPageState extends State<SignupPage> {
           '${credential.user!.uid}',
           '${_emailController.text.trim()}',
           '${_nameController.text.trim().replaceAll("'", "''")}',
-          'treasurer',
+          'user',
           datetime('now'),
           datetime('now')
         )
@@ -174,7 +174,7 @@ class _SignupPageState extends State<SignupPage> {
             '${user.uid}',
             '${user.email ?? ''}',
             '${(user.displayName ?? '').replaceAll("'", "''")}',
-            'treasurer',
+            'user',
             datetime('now'),
             datetime('now')
           )
