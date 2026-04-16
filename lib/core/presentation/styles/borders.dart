@@ -3,6 +3,16 @@ import 'package:wallex/core/presentation/app_colors.dart';
 
 Radius get inputBorderRadius => Radius.circular(6);
 
+UnderlineInputBorder get appInputBorder => UnderlineInputBorder(
+  borderSide: BorderSide.none,
+  borderRadius: BorderRadius.only(
+    topLeft: inputBorderRadius,
+    topRight: inputBorderRadius,
+    bottomLeft: inputBorderRadius,
+    bottomRight: inputBorderRadius,
+  ),
+);
+
 List<BoxShadow> boxShadowGeneral(BuildContext context) {
   return [
     BoxShadow(

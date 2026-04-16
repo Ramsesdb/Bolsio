@@ -52,6 +52,7 @@ class TranslationsEs implements Translations {
 	@override late final _TranslationsCategoriesEs categories = _TranslationsCategoriesEs._(_root);
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
 	@override late final _TranslationsGoalsEs goals = _TranslationsGoalsEs._(_root);
+	@override late final _TranslationsDebtsEs debts = _TranslationsDebtsEs._(_root);
 	@override late final _TranslationsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
@@ -254,6 +255,7 @@ class _TranslationsTransactionEs implements TranslationsTransactionEn {
 		one: 'Transacción',
 		other: 'Transacciones',
 	);
+	@override String get select => 'Seleccionar transacción';
 	@override String get create => 'Nueva transacción';
 	@override String get new_income => 'Nuevo ingreso';
 	@override String get new_expense => 'Nuevo gasto';
@@ -473,6 +475,25 @@ class _TranslationsGoalsEs implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsEs details = _TranslationsGoalsDetailsEs._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsGoalsProgressEs progress = _TranslationsGoalsProgressEs._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsEs implements TranslationsDebtsEn {
+	_TranslationsDebtsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Deuda',
+		other: 'Deudas',
+	);
+	@override late final _TranslationsDebtsFormEs form = _TranslationsDebtsFormEs._(_root);
+	@override late final _TranslationsDebtsDirectionEs direction = _TranslationsDebtsDirectionEs._(_root);
+	@override late final _TranslationsDebtsStatusEs status = _TranslationsDebtsStatusEs._(_root);
+	@override late final _TranslationsDebtsDetailsEs details = _TranslationsDebtsDetailsEs._(_root);
+	@override late final _TranslationsDebtsEmptyEs empty = _TranslationsDebtsEmptyEs._(_root);
+	@override late final _TranslationsDebtsActionsEs actions = _TranslationsDebtsActionsEs._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1174,6 +1195,89 @@ class _TranslationsGoalsProgressEs implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionEs description = _TranslationsGoalsProgressDescriptionEs._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormEs implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre de la deuda';
+	@override String get initial_amount => 'Monto inicial';
+	@override String get total_amount => 'Monto total';
+	@override String get step_initial_value => 'Valor inicial';
+	@override String get step_details => 'Detalles';
+	@override late final _TranslationsDebtsFormFromTransactionEs from_transaction = _TranslationsDebtsFormFromTransactionEs._(_root);
+	@override late final _TranslationsDebtsFormFromAmountEs from_amount = _TranslationsDebtsFormFromAmountEs._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionEs implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Presté';
+	@override String get borrowed => 'Me prestaron';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusEs implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Activas';
+	@override String get close => 'Cerradas';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsEs implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Monto cobrado';
+	@override String get remaining => 'Restante';
+	@override String get no_deadline => 'Sin fecha límite';
+	@override String in_days({required Object x}) => 'En ${x} días';
+	@override String get due_today => 'Vencimiento hoy';
+	@override String days_ago({required Object x}) => 'Hace ${x} días';
+	@override String overdue_by({required Object x}) => 'Vencido por ${x} días';
+	@override String get per_day => '/ día';
+	@override String get no_transactions => 'No se encontraron transacciones para esta deuda';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyEs implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'No se encontraron deudas activas. Comience creando una nueva deuda haciendo clic en el botón de abajo';
+	@override String get no_debts_closed => 'No se encontraron deudas cerradas. Una deuda se cierra cuando has cobrado todo el dinero de ella o has pagado todo el dinero que debías.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsEs implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditEs edit = _TranslationsDebtsActionsEditEs._(_root);
+	@override late final _TranslationsDebtsActionsDeleteEs delete = _TranslationsDebtsActionsDeleteEs._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterEs add_register = _TranslationsDebtsActionsAddRegisterEs._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionEs link_transaction = _TranslationsDebtsActionsLinkTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionEs unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionEs new_transaction = _TranslationsDebtsActionsNewTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsCreateEs create = _TranslationsDebtsActionsCreateEs._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportEs implements TranslationsBackupExportEn {
 	_TranslationsBackupExportEs._(this._root);
@@ -1620,6 +1724,111 @@ class _TranslationsGoalsProgressDescriptionEs implements TranslationsGoalsProgre
 	@override String fail({required Object amount}) => 'No has alcanzado tu objetivo por ${amount}.';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionEs implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'De una transacción';
+	@override String get tap_to_select => 'Toque para seleccionar una transacción';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountEs implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'A partir de un importe inicial';
+	@override String get description => 'Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto.';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditEs implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Editar deuda';
+	@override String get success => 'Deuda editada exitosamente';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteEs implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => '¿Eliminar esta deuda?';
+	@override String get warning_text => 'Esta acción no se puede deshacer. Las transacciones vinculadas no se eliminarán pero ya no estarán asociadas con esta deuda.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterEs implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Agregar movimiento';
+	@override String get success => 'Movimiento agregado exitosamente';
+	@override String get fab_label => 'Añadir registro';
+	@override String get modal_title => 'Añadir registro a esta deuda';
+	@override String get modal_subtitle => 'Elija una de las siguientes opciones para vincular una transacción a esta deuda';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionEs implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Vincular transacción existente';
+	@override String get description => 'Elija un registro existente para vincularlo a esta deuda';
+	@override String get success => 'Transacción vinculada a deuda';
+	@override String creating({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionEs implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Desvincular de la deuda';
+	@override String get warning_text => 'Esta transacción ya no estará asociada a esta deuda.';
+	@override String get success => 'Transacción desvinculada de la deuda';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionEs implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Agregar nueva transacción';
+	@override String get description => 'Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateEs implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Crear deuda';
+	@override String get success => 'Deuda creada exitosamente';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportEs implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportEs._(this._root);
@@ -1643,7 +1852,7 @@ class _TranslationsBackupImportManualImportEs implements TranslationsBackupImpor
 	];
 	@override List<String> get steps_descr => [
 		'Selecciona un fichero .csv de tu dispositivo. Asegurate de que este tenga una primera fila que describa el nombre de cada columna',
-		'Selecciona la columna donde se especifica el valor de cada transacción. Usa valores negativos para los gastos y positivos para los ingresos. Usa un punto como separador decimal',
+		'Selecciona la columna donde se especifica el valor de cada transacción. Usa valores negativos para los gastos y positivos para los ingresos.',
 		'Selecciona la columna donde se especifica la cuenta a la que pertenece cada transacción. Podrás también seleccionar una cuenta por defecto en el caso de que no encontremos la cuenta que desea. Si no se especifica una cuenta por defecto, crearemos una con el mismo nombre',
 		'Especifica la columna donde se encuentra el nombre de la categoría de la transacción. Debes especificar una categoría por defecto para que asignemos esta categoría a las transacciones, en caso de que la categoría no se pueda encontrar',
 		'Selecciona la columna donde se especifica la fecha de cada transacción. En caso de no especificarse, se crearan transacciones con la fecha actual',
@@ -2091,6 +2300,7 @@ extension on TranslationsEs {
 				one: 'Transacción',
 				other: 'Transacciones',
 			);
+		map['transaction.select'] = 'Seleccionar transacción';
 		map['transaction.create'] = 'Nueva transacción';
 		map['transaction.new_income'] = 'Nuevo ingreso';
 		map['transaction.new_expense'] = 'Nuevo gasto';
@@ -2441,6 +2651,54 @@ extension on TranslationsEs {
 		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Necesitas ${amount} más para alcanzar tu objetivo.';
 		map['goals.progress.description.success'] = '¡Felicidades! Has alcanzado tu objetivo.';
 		map['goals.progress.description.fail'] = ({required Object amount}) => 'No has alcanzado tu objetivo por ${amount}.';
+		map['debts.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Deuda',
+				other: 'Deudas',
+			);
+		map['debts.form.name'] = 'Nombre de la deuda';
+		map['debts.form.initial_amount'] = 'Monto inicial';
+		map['debts.form.total_amount'] = 'Monto total';
+		map['debts.form.step_initial_value'] = 'Valor inicial';
+		map['debts.form.step_details'] = 'Detalles';
+		map['debts.form.from_transaction.title'] = 'De una transacción';
+		map['debts.form.from_transaction.tap_to_select'] = 'Toque para seleccionar una transacción';
+		map['debts.form.from_amount.title'] = 'A partir de un importe inicial';
+		map['debts.form.from_amount.description'] = 'Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto.';
+		map['debts.direction.lent'] = 'Presté';
+		map['debts.direction.borrowed'] = 'Me prestaron';
+		map['debts.status.active'] = 'Activas';
+		map['debts.status.close'] = 'Cerradas';
+		map['debts.details.collected_amount'] = 'Monto cobrado';
+		map['debts.details.remaining'] = 'Restante';
+		map['debts.details.no_deadline'] = 'Sin fecha límite';
+		map['debts.details.in_days'] = ({required Object x}) => 'En ${x} días';
+		map['debts.details.due_today'] = 'Vencimiento hoy';
+		map['debts.details.days_ago'] = ({required Object x}) => 'Hace ${x} días';
+		map['debts.details.overdue_by'] = ({required Object x}) => 'Vencido por ${x} días';
+		map['debts.details.per_day'] = '/ día';
+		map['debts.details.no_transactions'] = 'No se encontraron transacciones para esta deuda';
+		map['debts.empty.no_debts_active'] = 'No se encontraron deudas activas. Comience creando una nueva deuda haciendo clic en el botón de abajo';
+		map['debts.empty.no_debts_closed'] = 'No se encontraron deudas cerradas. Una deuda se cierra cuando has cobrado todo el dinero de ella o has pagado todo el dinero que debías.';
+		map['debts.actions.edit.title'] = 'Editar deuda';
+		map['debts.actions.edit.success'] = 'Deuda editada exitosamente';
+		map['debts.actions.delete.warning_header'] = '¿Eliminar esta deuda?';
+		map['debts.actions.delete.warning_text'] = 'Esta acción no se puede deshacer. Las transacciones vinculadas no se eliminarán pero ya no estarán asociadas con esta deuda.';
+		map['debts.actions.add_register.title'] = 'Agregar movimiento';
+		map['debts.actions.add_register.success'] = 'Movimiento agregado exitosamente';
+		map['debts.actions.add_register.fab_label'] = 'Añadir registro';
+		map['debts.actions.add_register.modal_title'] = 'Añadir registro a esta deuda';
+		map['debts.actions.add_register.modal_subtitle'] = 'Elija una de las siguientes opciones para vincular una transacción a esta deuda';
+		map['debts.actions.link_transaction.title'] = 'Vincular transacción existente';
+		map['debts.actions.link_transaction.description'] = 'Elija un registro existente para vincularlo a esta deuda';
+		map['debts.actions.link_transaction.success'] = 'Transacción vinculada a deuda';
+		map['debts.actions.link_transaction.creating'] = ({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>';
+		map['debts.actions.unlink_transaction.title'] = 'Desvincular de la deuda';
+		map['debts.actions.unlink_transaction.warning_text'] = 'Esta transacción ya no estará asociada a esta deuda.';
+		map['debts.actions.unlink_transaction.success'] = 'Transacción desvinculada de la deuda';
+		map['debts.actions.new_transaction.title'] = 'Agregar nueva transacción';
+		map['debts.actions.new_transaction.description'] = 'Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda';
+		map['debts.actions.create.title'] = 'Crear deuda';
+		map['debts.actions.create.success'] = 'Deuda creada exitosamente';
 		map['target_timeline_statuses.active'] = 'Activo';
 		map['target_timeline_statuses.past'] = 'Finalizado';
 		map['target_timeline_statuses.future'] = 'Futuro';
@@ -2485,7 +2743,7 @@ extension on TranslationsEs {
 		map['backup.import.manual_import.steps.4'] = 'Columna para la fecha';
 		map['backup.import.manual_import.steps.5'] = 'Otras columnas';
 		map['backup.import.manual_import.steps_descr.0'] = 'Selecciona un fichero .csv de tu dispositivo. Asegurate de que este tenga una primera fila que describa el nombre de cada columna';
-		map['backup.import.manual_import.steps_descr.1'] = 'Selecciona la columna donde se especifica el valor de cada transacción. Usa valores negativos para los gastos y positivos para los ingresos. Usa un punto como separador decimal';
+		map['backup.import.manual_import.steps_descr.1'] = 'Selecciona la columna donde se especifica el valor de cada transacción. Usa valores negativos para los gastos y positivos para los ingresos.';
 		map['backup.import.manual_import.steps_descr.2'] = 'Selecciona la columna donde se especifica la cuenta a la que pertenece cada transacción. Podrás también seleccionar una cuenta por defecto en el caso de que no encontremos la cuenta que desea. Si no se especifica una cuenta por defecto, crearemos una con el mismo nombre';
 		map['backup.import.manual_import.steps_descr.3'] = 'Especifica la columna donde se encuentra el nombre de la categoría de la transacción. Debes especificar una categoría por defecto para que asignemos esta categoría a las transacciones, en caso de que la categoría no se pueda encontrar';
 		map['backup.import.manual_import.steps_descr.4'] = 'Selecciona la columna donde se especifica la fecha de cada transacción. En caso de no especificarse, se crearan transacciones con la fecha actual';

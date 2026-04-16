@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:wallex/app/transactions/form/transaction_form.page.dart';
 import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/debts/debt_service.dart';
 import 'package:wallex/core/database/services/tags/tags_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
@@ -165,5 +166,35 @@ class TransactionViewActionService {
     return (db.update(db.transactions)
           ..where((transaction) => transaction.id.equals(transactionId)))
         .write(TransactionsCompanion(status: Value(statusCodeString)));
+  }
+
+  void unlinkTransactionFromDebtWithAlertAndSnackbar(
+    BuildContext context, {
+    required String transactionId,
+  }) {
+    final t = Translations.of(context);
+
+    confirmDialog(
+      context,
+      icon: Icons.link_off_rounded,
+      dialogTitle: t.debts.actions.unlink_transaction.title,
+      contentParagraphs: [
+        Text(t.debts.actions.unlink_transaction.warning_text),
+      ],
+      confirmationText: t.ui_actions.continue_text,
+    ).then((isConfirmed) {
+      if (isConfirmed != true) return;
+
+      DebtService.instance
+          .unlinkTransactionFromDebt(transactionId)
+          .then((value) {
+            WallexSnackbar.success(
+              SnackbarParams(t.debts.actions.unlink_transaction.success),
+            );
+          })
+          .catchError((err) {
+            WallexSnackbar.error(SnackbarParams.fromError(err));
+          });
+    });
   }
 }

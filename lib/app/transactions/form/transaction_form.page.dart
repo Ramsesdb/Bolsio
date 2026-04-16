@@ -35,6 +35,8 @@ import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/app/transactions/form/widgets/debt_link_banner.dart';
+import 'package:wallex/core/models/debt/debt.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
@@ -45,6 +47,7 @@ class TransactionFormPage extends StatefulWidget {
     this.mode,
     this.fromAccount,
     this.transactionToEdit,
+    this.linkedDebt,
   });
 
   final TransactionType? mode;
@@ -52,6 +55,9 @@ class TransactionFormPage extends StatefulWidget {
   final MoneyTransaction? transactionToEdit;
 
   final Account? fromAccount;
+
+  /// When non-null, the transaction being created will be pre-linked to this debt.
+  final Debt? linkedDebt;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -391,6 +397,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           : null,
       exchangeRateApplied: effectiveExchangeRate,
       exchangeRateSource: effectiveExchangeSource,
+      debtId: widget.linkedDebt?.id,
       createdAt: DateTime.now(),
     );
 
@@ -761,7 +768,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildHeader(context),
-
+                if (widget.linkedDebt != null)
+                  DebtLinkBanner(debt: widget.linkedDebt!),
                 //   const Divider(),
                 Expanded(
                   child: SingleChildScrollView(

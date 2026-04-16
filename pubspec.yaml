@@ -35,7 +35,7 @@ dependencies:
   # General
   cupertino_icons: ^1.0.0
   collection: ^1.18.0
-  equatable: ^2.0.5
+  equatable: ^2.0.8
   path: ^1.8.2
   async: ^2.10.0
   rxdart: ^0.28.0
@@ -56,17 +56,18 @@ dependencies:
   flutter_svg: ^2.0.5
   permission_handler: ^12.0.1
   json_annotation: ^4.8.1
-  file_picker: ^10.3.3
+  file_picker: ^10.3.10
   fl_chart: ^1.1.1
   share_plus: ^12.0.1
   url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
   excel: ^4.0.0
+  flutter_expandable_fab: ^2.5.2
   dotted_border: ^3.1.0
   package_info_plus: ^9.0.0
   dynamic_color: ^1.7.0
-  copy_with_extension: ^10.0.1
+  copy_with_extension: ^11.0.0
   freezed_annotation: ^3.1.0
   in_app_purchase: ^3.1.11
   flutter_colorpicker: ^1.1.0
@@ -83,6 +84,7 @@ dependencies:
   flutter_background_service_android: ^6.2.7
   flutter_secure_storage: ^9.2.4
   crypto: ^3.0.6
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -93,18 +95,18 @@ dev_dependencies:
 
   # Generators:
   build_runner: 2.12.1
-  json_serializable: ^6.2.0
+  json_serializable: ^6.11.0
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.30.0
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
-  copy_with_extension_gen: ^10.0.1
-  freezed: ^3.0.6
+  copy_with_extension_gen: ^11.0.0
+  freezed: ^3.2.5
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
   android: true
   adaptive_icon_foreground: 'assets/resources/appIcon_foreground.png'
-  adaptive_icon_background: '#0F3375'
+  adaptive_icon_background: '#0D0D1A'
   ios: false
   windows:
     generate: true

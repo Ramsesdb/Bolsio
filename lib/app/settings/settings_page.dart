@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
 import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:wallex/app/settings/pages/auto_import/auto_import_settings.page.dart';
 import 'package:wallex/app/settings/pages/general_settings.page.dart';
 import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
@@ -158,6 +159,26 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: t.more.data.display_descr,
               icon: Icons.save_rounded,
               onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
+            ),
+            const Divider(),
+
+            // ── Auto-import section ──────────────────────────
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 12, bottom: 4),
+              child: Text(
+                'Automatizacion',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            _SettingRouteTile(
+              title: 'Auto-import bancario',
+              subtitle: 'Captura automatica de SMS, notificaciones y APIs',
+              icon: Icons.auto_mode,
+              onTap: () => RouteUtils.pushRoute(
+                  const AutoImportSettingsPage()),
             ),
             const Divider(),
 

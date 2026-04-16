@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/app/stats/stats_page.dart';
+import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
 import 'package:wallex/app/stats/widgets/balance_bar_chart.dart';
 import 'package:wallex/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:wallex/app/stats/widgets/fund_evolution_info.dart';
@@ -22,7 +24,34 @@ class DashboardCards extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ResponsiveRowColumn.withSymetricSpacing(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Auto-import pending card (visible only if count > 0)
+        StreamBuilder<int>(
+          stream: PendingImportService.instance.watchPendingCount(),
+          initialData: 0,
+          builder: (context, snapshot) {
+            final count = snapshot.data ?? 0;
+            if (count == 0) return const SizedBox.shrink();
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: CardWithHeader(
+                title: 'Movimientos por revisar',
+                body: ListTile(
+                  leading: const Icon(Icons.inbox, color: Colors.orange),
+                  title: Text('Ver $count pendiente(s)'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => RouteUtils.pushRoute(
+                      const PendingImportsPage()),
+                ),
+              ),
+            );
+          },
+        ),
+
+        ResponsiveRowColumn.withSymetricSpacing(
       direction: BreakPoint.of(context).isLargerThan(BreakpointID.md)
           ? Axis.horizontal
           : Axis.vertical,
@@ -130,6 +159,8 @@ class DashboardCards extends StatelessWidget {
             ],
           ),
         ),
+      ],
+    ),
       ],
     );
   }

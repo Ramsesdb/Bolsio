@@ -24,7 +24,11 @@ class FirebaseSyncService {
   static final FirebaseSyncService instance = FirebaseSyncService._();
 
   FirebaseFirestore? _firestore;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth? _auth;
+  FirebaseAuth get auth {
+    _auth ??= FirebaseAuth.instance;
+    return _auth!;
+  }
 
   bool _initialized = false;
 
@@ -80,15 +84,17 @@ class FirebaseSyncService {
     if (!enabled) {
       _initialized = false;
       _firestore = null;
+    } else {
+      await initialize();
     }
     Logger.printDebug('FirebaseSyncService: sync ${enabled ? "enabled" : "disabled"}');
   }
 
   /// Get the current user's UID, or null if not logged in.
-  String? get currentUserId => _auth.currentUser?.uid;
+  String? get currentUserId => _isFirebaseCoreReady ? auth.currentUser?.uid : null;
 
   /// Get the current user's email.
-  String? get currentUserEmail => _auth.currentUser?.email;
+  String? get currentUserEmail => _isFirebaseCoreReady ? auth.currentUser?.email : null;
 
   /// Base Firestore path for the current user: `users/{uid}`
   String get _userBasePath {
@@ -110,7 +116,7 @@ class FirebaseSyncService {
 
   /// Sign out the current user
   Future<void> signOut() async {
-    await _auth.signOut();
+    await auth.signOut();
     Logger.printDebug('FirebaseSyncService: User signed out');
   }
 

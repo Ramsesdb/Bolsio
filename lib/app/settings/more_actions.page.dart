@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/all_accounts_page.dart';
+import 'package:wallex/app/auth/welcome_screen.dart';
 import 'package:wallex/app/budgets/budgets_page.dart';
+import 'package:wallex/app/debts/debts_page.dart';
 import 'package:wallex/app/categories/categories_list_page.dart';
 import 'package:wallex/app/currencies/currency_manager.dart';
 import 'package:wallex/app/goals/goals_page.dart';
@@ -11,12 +13,13 @@ import 'package:wallex/app/settings/widgets/setting_card_item.dart';
 import 'package:wallex/app/stats/stats_page.dart';
 import 'package:wallex/app/tags/tag_list.page.dart';
 import 'package:wallex/app/transactions/recurrent_transactions_page.dart';
+import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/models/goal/goal.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/routes/destinations.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 /// "More Actions" Page that contains links to various other pages. Usually at last place in the main navbar
@@ -65,17 +68,37 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
                 );
 
                 if (confirmed == true) {
-                  await FirebaseAuth.instance.signOut();
-                  try {
-                    await GoogleSignIn().signOut();
-                  } catch (e) {
-                    // Google sign out might fail if not signed in with google, safe to ignore
+                  // Sign out from Firebase/Google only if Firebase is available
+                  if (FirebaseSyncService.instance.isFirebaseAvailable) {
+                    try {
+                      await FirebaseSyncService.instance.signOut();
+                    } catch (_) {}
+                    try {
+                      await GoogleSignIn().signOut();
+                    } catch (_) {
+                      // Google sign out might fail if not signed in with Google
+                    }
                   }
 
+                  // Clear onboarding state so the app returns to WelcomeScreen
+                  await AppDataService.instance.setItem(
+                    AppDataKey.onboarded,
+                    null,
+                    updateGlobalState: true,
+                  );
+                  await AppDataService.instance.setItem(
+                    AppDataKey.introSeen,
+                    null,
+                    updateGlobalState: true,
+                  );
+
                   if (context.mounted) {
-                    Navigator.of(
-                      context,
-                    ).pushNamedAndRemoveUntil('/login', (route) => false);
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => const WelcomeScreen(),
+                      ),
+                      (route) => false,
+                    );
                   }
                 }
               },
@@ -121,6 +144,12 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
 
     // 2. Define all possible items
     final allItems = [
+      _ActionItem(
+        title: t.debts.display(n: 2),
+        icon: Icons.payments_rounded,
+        onTap: () => RouteUtils.pushRoute(const DebtsPage()),
+        id: null,
+      ),
       _ActionItem(
         title: t.goals.title,
         icon: Goal.icon,

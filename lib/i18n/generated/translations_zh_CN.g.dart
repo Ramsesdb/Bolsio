@@ -52,6 +52,7 @@ class TranslationsZhCn implements Translations {
 	@override late final _TranslationsCategoriesZhCn categories = _TranslationsCategoriesZhCn._(_root);
 	@override late final _TranslationsBudgetsZhCn budgets = _TranslationsBudgetsZhCn._(_root);
 	@override late final _TranslationsGoalsZhCn goals = _TranslationsGoalsZhCn._(_root);
+	@override late final _TranslationsDebtsZhCn debts = _TranslationsDebtsZhCn._(_root);
 	@override late final _TranslationsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsTargetTimelineStatusesZhCn._(_root);
 	@override late final _TranslationsBackupZhCn backup = _TranslationsBackupZhCn._(_root);
 	@override late final _TranslationsSettingsZhCn settings = _TranslationsSettingsZhCn._(_root);
@@ -254,6 +255,7 @@ class _TranslationsTransactionZhCn implements TranslationsTransactionEn {
 		one: '交易',
 		other: '交易',
 	);
+	@override String get select => 'Select a transaction';
 	@override String get create => '新交易';
 	@override String get new_income => '新收入';
 	@override String get new_expense => '新开支';
@@ -473,6 +475,25 @@ class _TranslationsGoalsZhCn implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsZhCn details = _TranslationsGoalsDetailsZhCn._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesZhCn._(_root);
 	@override late final _TranslationsGoalsProgressZhCn progress = _TranslationsGoalsProgressZhCn._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsZhCn implements TranslationsDebtsEn {
+	_TranslationsDebtsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+		one: 'Debt',
+		other: 'Debts',
+	);
+	@override late final _TranslationsDebtsFormZhCn form = _TranslationsDebtsFormZhCn._(_root);
+	@override late final _TranslationsDebtsDirectionZhCn direction = _TranslationsDebtsDirectionZhCn._(_root);
+	@override late final _TranslationsDebtsStatusZhCn status = _TranslationsDebtsStatusZhCn._(_root);
+	@override late final _TranslationsDebtsDetailsZhCn details = _TranslationsDebtsDetailsZhCn._(_root);
+	@override late final _TranslationsDebtsEmptyZhCn empty = _TranslationsDebtsEmptyZhCn._(_root);
+	@override late final _TranslationsDebtsActionsZhCn actions = _TranslationsDebtsActionsZhCn._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1174,6 +1195,89 @@ class _TranslationsGoalsProgressZhCn implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionZhCn description = _TranslationsGoalsProgressDescriptionZhCn._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormZhCn implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Debt name';
+	@override String get initial_amount => 'Initial amount';
+	@override String get total_amount => 'Total amount';
+	@override String get step_initial_value => 'Initial value';
+	@override String get step_details => 'Details';
+	@override late final _TranslationsDebtsFormFromTransactionZhCn from_transaction = _TranslationsDebtsFormFromTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsFormFromAmountZhCn from_amount = _TranslationsDebtsFormFromAmountZhCn._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionZhCn implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Lent';
+	@override String get borrowed => 'Borrowed';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusZhCn implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Active';
+	@override String get close => 'Closed';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsZhCn implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Collected amount';
+	@override String get remaining => 'Remaining';
+	@override String get no_deadline => 'No deadline';
+	@override String in_days({required Object x}) => 'In ${x} days';
+	@override String get due_today => 'Due today';
+	@override String days_ago({required Object x}) => '${x} days ago';
+	@override String overdue_by({required Object x}) => 'Overdue by ${x} days';
+	@override String get per_day => '/ day';
+	@override String get no_transactions => 'No transactions found';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyZhCn implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'No active debts found';
+	@override String get no_debts_closed => 'No closed debts found';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsZhCn implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditZhCn edit = _TranslationsDebtsActionsEditZhCn._(_root);
+	@override late final _TranslationsDebtsActionsDeleteZhCn delete = _TranslationsDebtsActionsDeleteZhCn._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterZhCn add_register = _TranslationsDebtsActionsAddRegisterZhCn._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionZhCn link_transaction = _TranslationsDebtsActionsLinkTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionZhCn unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionZhCn new_transaction = _TranslationsDebtsActionsNewTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsCreateZhCn create = _TranslationsDebtsActionsCreateZhCn._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 	_TranslationsBackupExportZhCn._(this._root);
@@ -1617,6 +1721,111 @@ class _TranslationsGoalsProgressDescriptionZhCn implements TranslationsGoalsProg
 	@override String active_indeterminate({required Object amount}) => '您还需要 ${amount} 才能实现目标。';
 	@override String get success => '恭喜！你达到了你的目标。';
 	@override String fail({required Object amount}) => '您与目标相差了 ${amount}。';
+}
+
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionZhCn implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'From a transaction';
+	@override String get tap_to_select => 'Tap to select a transaction';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountZhCn implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'From an initial amount';
+	@override String get description => 'This amount will not be taken into account for statistics';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditZhCn implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Edit debt';
+	@override String get success => 'Debt edited successfully';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteZhCn implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Delete this debt?';
+	@override String get warning_text => 'This action cannot be undone.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterZhCn implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Add movement';
+	@override String get success => 'Movement added';
+	@override String get fab_label => 'Add register';
+	@override String get modal_title => 'Add register to this debt';
+	@override String get modal_subtitle => 'Choose an option';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionZhCn implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Link existing transaction';
+	@override String get description => 'Choose a record to link';
+	@override String get success => 'Transaction linked';
+	@override String creating({required Object name}) => 'Creating a transaction linked to <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionZhCn implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Unlink from debt';
+	@override String get warning_text => 'This transaction will no longer be associated.';
+	@override String get success => 'Transaction unlinked';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionZhCn implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Add new transaction';
+	@override String get description => 'Create a new transaction linked to this debt';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateZhCn implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Create debt';
+	@override String get success => 'Debt created successfully';
 }
 
 // Path: backup.import.manual_import
@@ -2089,6 +2298,7 @@ extension on TranslationsZhCn {
 				one: '交易',
 				other: '交易',
 			);
+		map['transaction.select'] = 'Select a transaction';
 		map['transaction.create'] = '新交易';
 		map['transaction.new_income'] = '新收入';
 		map['transaction.new_expense'] = '新开支';
@@ -2439,6 +2649,54 @@ extension on TranslationsZhCn {
 		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => '您还需要 ${amount} 才能实现目标。';
 		map['goals.progress.description.success'] = '恭喜！你达到了你的目标。';
 		map['goals.progress.description.fail'] = ({required Object amount}) => '您与目标相差了 ${amount}。';
+		map['debts.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+				one: 'Debt',
+				other: 'Debts',
+			);
+		map['debts.form.name'] = 'Debt name';
+		map['debts.form.initial_amount'] = 'Initial amount';
+		map['debts.form.total_amount'] = 'Total amount';
+		map['debts.form.step_initial_value'] = 'Initial value';
+		map['debts.form.step_details'] = 'Details';
+		map['debts.form.from_transaction.title'] = 'From a transaction';
+		map['debts.form.from_transaction.tap_to_select'] = 'Tap to select a transaction';
+		map['debts.form.from_amount.title'] = 'From an initial amount';
+		map['debts.form.from_amount.description'] = 'This amount will not be taken into account for statistics';
+		map['debts.direction.lent'] = 'Lent';
+		map['debts.direction.borrowed'] = 'Borrowed';
+		map['debts.status.active'] = 'Active';
+		map['debts.status.close'] = 'Closed';
+		map['debts.details.collected_amount'] = 'Collected amount';
+		map['debts.details.remaining'] = 'Remaining';
+		map['debts.details.no_deadline'] = 'No deadline';
+		map['debts.details.in_days'] = ({required Object x}) => 'In ${x} days';
+		map['debts.details.due_today'] = 'Due today';
+		map['debts.details.days_ago'] = ({required Object x}) => '${x} days ago';
+		map['debts.details.overdue_by'] = ({required Object x}) => 'Overdue by ${x} days';
+		map['debts.details.per_day'] = '/ day';
+		map['debts.details.no_transactions'] = 'No transactions found';
+		map['debts.empty.no_debts_active'] = 'No active debts found';
+		map['debts.empty.no_debts_closed'] = 'No closed debts found';
+		map['debts.actions.edit.title'] = 'Edit debt';
+		map['debts.actions.edit.success'] = 'Debt edited successfully';
+		map['debts.actions.delete.warning_header'] = 'Delete this debt?';
+		map['debts.actions.delete.warning_text'] = 'This action cannot be undone.';
+		map['debts.actions.add_register.title'] = 'Add movement';
+		map['debts.actions.add_register.success'] = 'Movement added';
+		map['debts.actions.add_register.fab_label'] = 'Add register';
+		map['debts.actions.add_register.modal_title'] = 'Add register to this debt';
+		map['debts.actions.add_register.modal_subtitle'] = 'Choose an option';
+		map['debts.actions.link_transaction.title'] = 'Link existing transaction';
+		map['debts.actions.link_transaction.description'] = 'Choose a record to link';
+		map['debts.actions.link_transaction.success'] = 'Transaction linked';
+		map['debts.actions.link_transaction.creating'] = ({required Object name}) => 'Creating a transaction linked to <b>${name}</b>';
+		map['debts.actions.unlink_transaction.title'] = 'Unlink from debt';
+		map['debts.actions.unlink_transaction.warning_text'] = 'This transaction will no longer be associated.';
+		map['debts.actions.unlink_transaction.success'] = 'Transaction unlinked';
+		map['debts.actions.new_transaction.title'] = 'Add new transaction';
+		map['debts.actions.new_transaction.description'] = 'Create a new transaction linked to this debt';
+		map['debts.actions.create.title'] = 'Create debt';
+		map['debts.actions.create.success'] = 'Debt created successfully';
 		map['target_timeline_statuses.active'] = '进行中';
 		map['target_timeline_statuses.past'] = '已完成';
 		map['target_timeline_statuses.future'] = '未开始';

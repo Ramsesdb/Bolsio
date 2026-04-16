@@ -9,16 +9,26 @@ import './../../../models/account/account.dart';
 import './../../../models/category/category.dart';
 import './../../../models/budget/budget.dart';
 import './../../../models/goal/goal.dart';
+import './../../../models/debt/debt.dart';
 import './../../../models/exchange-rate/exchange_rate.dart';
 import './../../../models/transaction/transaction.dart';
 import './../../../models/filters/saved_filter.dart';
 
-getAccountsWithFullData($predicate = TRUE) WITH Account: 
-    SELECT a.*, currency.** 
-    FROM accounts a 
-        INNER JOIN currencies currency 
-        ON a.currencyId = currency.code 
-    WHERE $predicate 
+getAccountsWithFullData($predicate = TRUE) WITH Account:
+    SELECT a.*, currency.**
+    FROM accounts a
+        INNER JOIN currencies currency
+        ON a.currencyId = currency.code
+    WHERE $predicate
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+getDebtsWithFullData($predicate = TRUE) WITH Debt:
+    SELECT d.*, currency.**
+    FROM debts d
+        INNER JOIN currencies currency
+        ON d.currencyId = currency.code
+    WHERE $predicate
     ORDER BY $orderBy
     LIMIT $limit;
 

@@ -56,6 +56,44 @@ enum SettingKey {
   /// When disabled, Firebase.initializeApp() is not called and
   /// FirebaseSyncService does not attempt any network operations.
   firebaseSyncEnabled,
+
+  // ──── Auto-import settings ────
+
+  /// Master toggle for the auto-import feature. '1' = enabled, '0' or null = disabled.
+  autoImportEnabled,
+
+  /// Whether SMS capture is enabled. '1' = enabled, '0' or null = disabled.
+  smsImportEnabled,
+
+  /// Whether notification listener capture is enabled. '1' = enabled, '0' or null = disabled.
+  notifListenerEnabled,
+
+  /// Whether the BDV SMS bank profile is active. '1' (default) = enabled, '0' = disabled.
+  bdvSmsProfileEnabled,
+
+  /// Whether the BDV notification bank profile is active. '1' (default) = enabled, '0' = disabled.
+  bdvNotifProfileEnabled,
+
+  /// Whether the Binance notification bank profile is active. '1' (default) = enabled, '0' = disabled.
+  binanceNotifProfileEnabled,
+
+  /// Whether the Zinli notification bank profile is active. '1' (default) = enabled, '0' = disabled.
+  zinliNotifProfileEnabled,
+
+  /// Whether the Binance API integration is enabled. '1' = enabled, '0' or null = disabled.
+  binanceApiEnabled,
+
+  /// Whether the Binance API bank profile is active. '1' (default) = enabled, '0' = disabled.
+  binanceApiProfileEnabled,
+
+  /// Last poll timestamp (ms since epoch) for SMS capture. '0' or null = never polled.
+  autoImportLastPollSms,
+
+  /// Last poll timestamp (ms since epoch) for notification capture. '0' or null = never polled.
+  autoImportLastPollNotif,
+
+  /// Last poll timestamp (ms since epoch) for Binance API capture. '0' or null = never polled.
+  autoImportLastPollBinance,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

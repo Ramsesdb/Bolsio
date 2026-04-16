@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:wallex/app/auth/biometric_lock_screen.dart';
 import 'package:wallex/app/auth/welcome_screen.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
@@ -27,6 +30,10 @@ import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/core/utils/scroll_behavior_override.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
+import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/core/services/dolar_api_service.dart';
 import 'package:wallex/core/services/rate_providers/rate_provider_manager.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -62,6 +69,52 @@ void main() async {
     debugPrint('Error auto-updating currency rate: $e');
   }
   // -----------------------------------------
+
+  // --- Local notifications bootstrap ---
+  unawaited(
+    LocalNotificationService.instance
+        .initialize(
+          onTap: (response) {
+            // Navigate to PendingImportsPage when user taps the notification
+            if (response.payload == 'pending_imports') {
+              RouteUtils.pushRoute(const PendingImportsPage());
+            }
+          },
+        )
+        .catchError((e) {
+          debugPrint('Local notification init error: $e');
+        }),
+  );
+  // -----------------------------------------
+
+  // --- Background service + Auto-import bootstrap ---
+  final autoImportEnabled =
+      appStateSettings[SettingKey.autoImportEnabled] == '1';
+
+  // Initialize background service (configures but does not start)
+  unawaited(
+    WallexBackgroundService.instance.initialize().then((_) async {
+      if (autoImportEnabled) {
+        // Wire the orchestrator's callback so the main isolate can show
+        // local notifications when a new pending import arrives.
+        // NOTE: We do NOT call applySettings() here — the background
+        // isolate's _onStart already starts the orchestrator.  Running it
+        // in both isolates caused duplicate captures.
+        CaptureOrchestrator.instance.onNewPendingImport =
+            (int count) async {
+          await LocalNotificationService.instance
+              .showNewPendingNotification(count);
+        };
+
+        // Start the background service — it runs CaptureOrchestrator
+        // independently so capture survives app close.
+        await WallexBackgroundService.instance.startService();
+      }
+    }).catchError((e) {
+      debugPrint('Auto-import bootstrap error: $e');
+    }),
+  );
+  // ---------------------------------------------------
 
   PrivateModeService.instance.setPrivateMode(
     appStateSettings[SettingKey.privateModeAtLaunch] == '1',
@@ -100,12 +153,30 @@ class InitializeApp extends StatefulWidget {
 }
 
 class _InitializeAppState extends State<InitializeApp> {
+  bool _biometricPassed = false;
+
   void refreshAppState() {
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_biometricPassed) {
+      // Show biometric lock gate before any app content.
+      // Uses a minimal MaterialApp so the lock screen has a theme.
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(useMaterial3: true),
+        darkTheme: ThemeData.dark(useMaterial3: true),
+        themeMode: ThemeMode.system,
+        home: BiometricLockScreen(
+          onAuthenticated: () {
+            setState(() => _biometricPassed = true);
+          },
+        ),
+      );
+    }
+
     // ignore: prefer_const_constructors
     return WallexAppEntryPoint(key: const ValueKey('App Entry Point'));
   }

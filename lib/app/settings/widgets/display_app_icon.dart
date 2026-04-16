@@ -24,7 +24,7 @@ class DisplayAppIcon extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.white.withOpacity(0.5)),
         borderRadius: borderRadius,
-        color: ColorHex.get('0F3375'),
+        color: ColorHex.get('0D0D1A'),
       ),
       child: Container(
         decoration: BoxDecoration(borderRadius: borderRadius),

@@ -297,6 +297,7 @@
       "one": "Transaktion",
       "other": "Transaktionen"
     },
+    "select": "Select a transaction",
     "create": "Neue Transaktion",
     "new.income": "Neues Einkommen",
     "new.expense": "Neue Ausgabe",
@@ -742,6 +743,44 @@
         "success": "Glückwunsch! Du hast dein Ziel erreicht.",
         "fail": "Sie haben Ihr Ziel um {{ amount }} verfehlt."
       }
+    }
+  },
+  "DEBTS": {
+    "display": { "one": "Debt", "other": "Debts" },
+    "FORM": {
+      "name": "Debt name",
+      "initial_amount": "Initial amount",
+      "total_amount": "Total amount",
+      "step_initial_value": "Initial value",
+      "step_details": "Details",
+      "from_transaction": { "title": "From a transaction", "tap_to_select": "Tap to select a transaction" },
+      "from_amount": { "title": "From an initial amount", "description": "This amount will not be taken into account for statistics" }
+    },
+    "DIRECTION": { "lent": "Lent", "borrowed": "Borrowed" },
+    "STATUS": { "active": "Active", "close": "Closed" },
+    "DETAILS": {
+      "collected_amount": "Collected amount",
+      "remaining": "Remaining",
+      "no_deadline": "No deadline",
+      "in_days": "In {{x}} days",
+      "due_today": "Due today",
+      "days_ago": "{{x}} days ago",
+      "overdue_by": "Overdue by {{x}} days",
+      "per_day": "/ day",
+      "no_transactions": "No transactions found"
+    },
+    "EMPTY": {
+      "no_debts_active": "No active debts found",
+      "no_debts_closed": "No closed debts found"
+    },
+    "ACTIONS": {
+      "edit": { "title": "Edit debt", "success": "Debt edited successfully" },
+      "delete": { "warning_header": "Delete this debt?", "warning_text": "This action cannot be undone." },
+      "add_register": { "title": "Add movement", "success": "Movement added", "fab_label": "Add register", "modal_title": "Add register to this debt", "modal_subtitle": "Choose an option" },
+      "link_transaction": { "title": "Link existing transaction", "description": "Choose a record to link", "success": "Transaction linked", "creating": "Creating a transaction linked to <b>{{ name }}</b>" },
+      "unlink_transaction": { "title": "Unlink from debt", "warning_text": "This transaction will no longer be associated.", "success": "Transaction unlinked" },
+      "new_transaction": { "title": "Add new transaction", "description": "Create a new transaction linked to this debt" },
+      "create": { "title": "Create debt", "success": "Debt created successfully" }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

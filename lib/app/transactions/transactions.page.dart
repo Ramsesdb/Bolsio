@@ -17,10 +17,13 @@ import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
 import 'package:wallex/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
 import 'package:wallex/core/presentation/widgets/no_results.dart';
 import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/list_tile_action_item.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -296,6 +299,26 @@ class TransactionsPageState extends State<TransactionsPage> {
             : Text(t.transaction.display(n: 10)),
       ),
       actions: [
+        if (!searchActive)
+          StreamBuilder<int>(
+            stream: PendingImportService.instance.watchPendingCount(),
+            initialData: 0,
+            builder: (context, snapshot) {
+              final count = snapshot.data ?? 0;
+              return IconButton(
+                icon: count > 0
+                    ? Badge.count(
+                        count: count,
+                        child: const Icon(Icons.inbox),
+                      )
+                    : const Icon(Icons.inbox_outlined),
+                tooltip: 'Auto-import',
+                onPressed: () {
+                  RouteUtils.pushRoute(const PendingImportsPage());
+                },
+              );
+            },
+          ),
         if (!searchActive)
           IconButton(
             icon: const Icon(Icons.search),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Wallex brand color.
-const brandBlue = Color(0xFF0F3375);
+const brandBlue = Color(0xFF0D0D1A);
 
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({required this.colors});

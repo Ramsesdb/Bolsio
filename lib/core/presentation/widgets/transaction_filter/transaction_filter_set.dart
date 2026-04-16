@@ -43,6 +43,12 @@ class TransactionFilterSet {
 
   final Iterable<String?>? tagsIDs;
 
+  /// Filter transactions that belong to a specific debt
+  final String? debtId;
+
+  /// Exclude transactions that belong to a specific debt (useful when linking new transactions)
+  final String? excludeDebtId;
+
   const TransactionFilterSet({
     this.minDate,
     this.maxDate,
@@ -57,6 +63,8 @@ class TransactionFilterSet {
     this.categoriesIds,
     this.status,
     this.tagsIDs,
+    this.debtId,
+    this.excludeDebtId,
   });
 
   /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
@@ -103,6 +111,8 @@ class TransactionFilterSet {
     categoriesIds,
     status,
     tagsIDs,
+    debtId,
+    excludeDebtId,
   ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
@@ -182,6 +192,10 @@ class TransactionFilterSet {
       if (categoriesIds != null && !includeParentCategoriesInSearch)
         transaction.categoryID.isIn(categoriesIds!),
       if (status != null) transaction.status.isInValues(status!),
+      if (debtId != null) transaction.debtId.equals(debtId!),
+      if (excludeDebtId != null)
+        (transaction.debtId.isNull() |
+            transaction.debtId.equals(excludeDebtId!).not()),
       if (extraFilters != null)
         buildDriftExpr(
           extraFilters(

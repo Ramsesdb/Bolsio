@@ -40,6 +40,7 @@ class MoneyTransaction extends TransactionInDB {
     super.locLongitude,
     super.exchangeRateApplied,
     super.exchangeRateSource,
+    super.debtId,
     required AccountInDB account,
     AccountInDB? receivingAccount,
     required CurrencyInDB accountCurrency,
