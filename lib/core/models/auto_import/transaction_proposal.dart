@@ -56,6 +56,12 @@ class TransactionProposal {
   /// Identifier of the sender profile that parsed this event (e.g. 'bdv_sms').
   final String? parsedBySender;
 
+  /// (Transfer only) Destination account ID.
+  final String? receivingAccountId;
+
+  /// (Transfer only) Amount arriving at destination (net of fees).
+  final double? valueInDestiny;
+
   const TransactionProposal({
     required this.id,
     this.accountId,
@@ -72,7 +78,49 @@ class TransactionProposal {
     this.proposedCategoryId,
     this.dedupeMatched = false,
     this.parsedBySender,
+    this.receivingAccountId,
+    this.valueInDestiny,
   });
+
+  TransactionProposal copyWith({
+    String? id,
+    String? accountId,
+    double? amount,
+    String? currencyId,
+    DateTime? date,
+    TransactionType? type,
+    String? counterpartyName,
+    String? bankRef,
+    String? rawText,
+    CaptureChannel? channel,
+    String? sender,
+    double? confidence,
+    String? proposedCategoryId,
+    bool? dedupeMatched,
+    String? parsedBySender,
+    String? receivingAccountId,
+    double? valueInDestiny,
+  }) {
+    return TransactionProposal(
+      id: id ?? this.id,
+      accountId: accountId ?? this.accountId,
+      amount: amount ?? this.amount,
+      currencyId: currencyId ?? this.currencyId,
+      date: date ?? this.date,
+      type: type ?? this.type,
+      counterpartyName: counterpartyName ?? this.counterpartyName,
+      bankRef: bankRef ?? this.bankRef,
+      rawText: rawText ?? this.rawText,
+      channel: channel ?? this.channel,
+      sender: sender ?? this.sender,
+      confidence: confidence ?? this.confidence,
+      proposedCategoryId: proposedCategoryId ?? this.proposedCategoryId,
+      dedupeMatched: dedupeMatched ?? this.dedupeMatched,
+      parsedBySender: parsedBySender ?? this.parsedBySender,
+      receivingAccountId: receivingAccountId ?? this.receivingAccountId,
+      valueInDestiny: valueInDestiny ?? this.valueInDestiny,
+    );
+  }
 
   /// Create a new proposal with an auto-generated UUID.
   factory TransactionProposal.newProposal({
@@ -90,6 +138,8 @@ class TransactionProposal {
     String? proposedCategoryId,
     bool dedupeMatched = false,
     String? parsedBySender,
+    String? receivingAccountId,
+    double? valueInDestiny,
   }) {
     return TransactionProposal(
       id: generateUUID(),
@@ -107,6 +157,8 @@ class TransactionProposal {
       proposedCategoryId: proposedCategoryId,
       dedupeMatched: dedupeMatched,
       parsedBySender: parsedBySender,
+      receivingAccountId: receivingAccountId,
+      valueInDestiny: valueInDestiny,
     );
   }
 
@@ -131,6 +183,8 @@ class TransactionProposal {
       confidence: Value(confidence),
       proposedCategoryId: Value(proposedCategoryId),
       status: Value(status.dbValue),
+      receivingAccountId: Value(receivingAccountId),
+      valueInDestiny: Value(valueInDestiny),
     );
   }
 
@@ -143,6 +197,8 @@ class TransactionProposal {
         'channel: ${channel.dbValue}, '
         'bankRef: $bankRef, '
         'confidence: $confidence'
+        '${receivingAccountId != null ? ', receivingAccountId: $receivingAccountId' : ''}'
+        '${valueInDestiny != null ? ', valueInDestiny: $valueInDestiny' : ''}'
         ')';
   }
 }

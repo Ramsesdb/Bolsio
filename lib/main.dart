@@ -447,7 +447,7 @@ class InitialPageRouteNavigator extends StatelessWidget {
 /// without source for existing callers.
 Future<void> _checkAndAutoUpdateCurrencyRate() async {
   final prefs = await SharedPreferences.getInstance();
-  final lastUpdateStr = prefs.getString('last_currency_auto_update_v3');
+  final lastUpdateStr = prefs.getString('last_currency_auto_update_v4');
   final now = DateTime.now();
 
   // If updated less than 12h ago, skip
@@ -501,6 +501,34 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
     }
   }
 
+  // Also fetch EUR rates
+  for (final source in sources) {
+    try {
+      final result = await RateProviderManager.instance.fetchRate(
+        date: now,
+        source: source,
+        currencyCode: 'EUR',
+      );
+
+      if (result != null) {
+        await ExchangeRateService.instance.insertOrUpdateExchangeRateWithSource(
+          currencyCode: 'EUR',
+          date: now,
+          rate: result.rate,
+          source: source,
+        );
+
+        debugPrint(
+          'EUR rate auto-updated ($source): ${result.rate} '
+          'via ${result.providerName}',
+        );
+        anyInserted = true;
+      }
+    } catch (e) {
+      debugPrint('Error fetching EUR $source rate: $e');
+    }
+  }
+
   // Also try the legacy DolarApi fetch for caching (used by other callers)
   try {
     await DolarApiService.instance.fetchAllRates();
@@ -508,7 +536,7 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
 
   if (anyInserted) {
     await prefs.setString(
-      'last_currency_auto_update_v3',
+      'last_currency_auto_update_v4',
       now.toIso8601String(),
     );
   }

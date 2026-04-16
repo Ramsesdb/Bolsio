@@ -33,12 +33,14 @@ class AccountSelectorModal extends StatefulWidget {
     required this.allowMultiSelection,
     required this.filterSavingAccounts,
     this.includeArchivedAccounts = true,
+    this.currencyCode,
     this.selectedAccounts = const [],
   });
 
   final bool allowMultiSelection;
   final bool filterSavingAccounts;
   final bool includeArchivedAccounts;
+  final String? currencyCode;
 
   final List<Account> selectedAccounts;
 
@@ -89,6 +91,9 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
                 if (widget.filterSavingAccounts)
                   acc.type.equalsValue(AccountType.saving).not(),
                 if (!widget.includeArchivedAccounts) acc.closingDate.isNull(),
+                if (widget.currencyCode != null &&
+                    widget.currencyCode!.isNotEmpty)
+                  acc.currencyId.equals(widget.currencyCode!.toUpperCase()),
               ]),
             ),
             builder: (context, snapshot) {

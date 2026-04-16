@@ -124,11 +124,18 @@ class BinanceApiProfile implements BankProfile {
     String? accountId, {
     required bool isDeposit,
   }) {
-    final status = item['status'] as String?;
-    if (status != 'Successful') return null;
+    final status = (item['status'] as String? ?? '').toLowerCase();
+    final isCompleted = status == 'successful' ||
+        status == 'completed' ||
+        status == 'success';
+    if (!isCompleted) return null;
 
     final fiatCurrency = item['fiatCurrency'] as String? ?? 'USD';
-    final amount = double.tryParse('${item['amount']}') ?? 0.0;
+    final amount = double.tryParse('${item['amount']}') ??
+        double.tryParse('${item['indicatedAmount']}') ??
+        double.tryParse('${item['totalPrice']}') ??
+        0.0;
+    if (amount <= 0) return null;
     final createTime = item['createTime'] as int?;
     final date = createTime != null
         ? DateTime.fromMillisecondsSinceEpoch(createTime)
@@ -140,7 +147,7 @@ class BinanceApiProfile implements BankProfile {
       currencyId: fiatCurrency == 'USD' ? 'USD' : fiatCurrency,
       date: date,
       type: isDeposit ? TransactionType.income : TransactionType.expense,
-      counterpartyName: item['method'] as String?,
+      counterpartyName: (item['method'] as String?) ?? (item['sourceType'] as String?),
       bankRef: item['orderNo'] as String?,
       rawText: event.rawText,
       channel: CaptureChannel.api,

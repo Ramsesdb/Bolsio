@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,8 @@ import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/services/dolar_api_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/extensions/color.extensions.dart';
@@ -47,13 +51,17 @@ class _DashboardPageState extends State<DashboardPage> {
   late Stream<double> _balanceVariationStream;
   late Stream<double> _totalBalanceStream;
 
+  String _rateSource = 'bcv';
+  late Stream<double> _totalBalanceInVesStream;
+
   @override
   void initState() {
     super.initState();
 
     _balanceVariationStream = _getBalanceVariationStream();
 
-    _totalBalanceStream = AccountService.instance.getAccountsMoney();
+    _totalBalanceStream = _getTotalBalanceStream();
+    _totalBalanceInVesStream = _getTotalBalanceInVesStream();
   }
 
   @override
@@ -63,7 +71,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Stream<double> _getBalanceVariationStream() {
-    return AccountService.instance.getAccounts().switchMap(
+    return AccountService.instance
+        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
+        .switchMap(
       (accounts) => AccountService.instance.getAccountsMoneyVariation(
         accounts: accounts,
         startDate: dateRangeService.startDate,
@@ -71,6 +81,107 @@ class _DashboardPageState extends State<DashboardPage> {
         convertToPreferredCurrency: true,
       ),
     );
+  }
+
+  Stream<double> _getTotalBalanceStream() {
+    return AccountService.instance
+        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
+        .switchMap((accounts) {
+      if (accounts.isEmpty) return Stream.value(0);
+
+      final accountMoneyStreams = accounts
+          .map(
+            (account) => AccountService.instance.getAccountMoney(
+              account: account,
+              convertToPreferredCurrency: false,
+            ),
+          )
+          .toList();
+
+      final preferredCurrencyCode =
+          appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+      return Rx.combineLatestList<double>(accountMoneyStreams).switchMap(
+        (balances) {
+          final convertedStreams = List.generate(accounts.length, (i) {
+            final account = accounts[i];
+            final balance = i < balances.length ? balances[i] : 0.0;
+
+            if (account.currency.code == preferredCurrencyCode) {
+              return Stream.value(balance);
+            }
+
+            return ExchangeRateService.instance
+                .calculateExchangeRate(
+                  fromCurrency: account.currency.code,
+                  toCurrency: preferredCurrencyCode,
+                  amount: balance,
+                  source: _rateSource,
+                )
+                .map((v) => v ?? 0);
+          });
+
+          return Rx.combineLatestList<double>(convertedStreams).map((values) {
+            final total = values.fold<double>(0, (sum, value) => sum + value);
+
+            if (kDebugMode) {
+              final details = List.generate(accounts.length, (i) {
+                final account = accounts[i];
+                final rawBalance = i < balances.length ? balances[i] : 0.0;
+                final converted = i < values.length ? values[i] : 0.0;
+                return '${account.name}: ${rawBalance.toStringAsFixed(2)} ${account.currency.code} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
+              }).join(' | ');
+
+              debugPrint(
+                'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
+              );
+            }
+
+            return total;
+          });
+        },
+      );
+    });
+  }
+
+  Stream<double> _getTotalBalanceInVesStream() {
+    return AccountService.instance
+        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
+        .switchMap((accounts) {
+      if (accounts.isEmpty) return Stream.value(0);
+
+      final accountMoneyStreams = accounts
+          .map((account) => AccountService.instance.getAccountMoney(
+                account: account,
+                convertToPreferredCurrency: false,
+              ))
+          .toList();
+
+      return Rx.combineLatestList<double>(accountMoneyStreams).switchMap(
+        (balances) {
+          final convertedStreams = List.generate(accounts.length, (i) {
+            final account = accounts[i];
+            final balance = i < balances.length ? balances[i] : 0.0;
+
+            if (account.currency.code == 'VES') {
+              return Stream.value(balance);
+            }
+
+            return ExchangeRateService.instance
+                .calculateExchangeRate(
+                  fromCurrency: account.currency.code,
+                  toCurrency: 'VES',
+                  amount: balance,
+                  source: _rateSource,
+                )
+                .map((v) => v ?? 0);
+          });
+
+          return Rx.combineLatestList<double>(convertedStreams)
+              .map((values) => values.fold<double>(0, (sum, v) => sum + v));
+        },
+      );
+    });
   }
 
   bool _isIncomeExpenseAtSameLevel(BuildContext context) {
@@ -81,7 +192,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Future<void> _refreshData() async {
     setState(() {
       _balanceVariationStream = _getBalanceVariationStream();
-      _totalBalanceStream = AccountService.instance.getAccountsMoney();
+      _totalBalanceStream = _getTotalBalanceStream();
+      _totalBalanceInVesStream = _getTotalBalanceInVesStream();
     });
     await Future.delayed(const Duration(milliseconds: 300));
   }
@@ -116,6 +228,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
               HorizontalScrollableAccountList(
                 dateRangeService: dateRangeService,
+              ),
+
+              // ── Exchange Rates Card ──
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: _buildRatesCard(context),
               ),
 
               // ── Stats Cards ──
@@ -496,6 +614,40 @@ class _DashboardPageState extends State<DashboardPage> {
             },
           ),
 
+          // ----- RATE SOURCE TOGGLE -----
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
+            children: [
+              _buildRateChip(context, 'bcv', 'BCV'),
+              const SizedBox(width: 8),
+              _buildRateChip(context, 'paralelo', 'Paralelo'),
+            ],
+          ),
+
+          // ----- VES EQUIVALENT -----
+          const SizedBox(height: 2),
+          StreamBuilder(
+            stream: _totalBalanceInVesStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const SizedBox.shrink();
+              final vesTotal = snapshot.data!;
+              final formatted = vesTotal.toStringAsFixed(2).replaceAllMapped(
+                RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                (m) => '${m[1]}.',
+              );
+              return Text(
+                '= $formatted Bs',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: onHeaderSmallTextColor(context),
+                  fontSize: 13,
+                ),
+              );
+            },
+          ),
+
           //  ----- BALANCE TRENDING VALUE DURING THE SELECTED PERIOD -----
           if (dateRangeService.startDate != null &&
               dateRangeService.endDate != null)
@@ -516,6 +668,188 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRateChip(BuildContext context, String source, String label) {
+    final isSelected = _rateSource == source;
+    return GestureDetector(
+      onTap: () {
+        if (_rateSource == source) return;
+        setState(() {
+          _rateSource = source;
+          _totalBalanceStream = _getTotalBalanceStream();
+          _totalBalanceInVesStream = _getTotalBalanceInVesStream();
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.of(context).onConsistentPrimary.withOpacity(0.2)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.of(context).onConsistentPrimary.withOpacity(
+              isSelected ? 0.6 : 0.3,
+            ),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: AppColors.of(context).onConsistentPrimary.withOpacity(
+              isSelected ? 1.0 : 0.6,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Fetches rates from DolarApiService (API call with cache)
+  /// and displays them in a table. Falls back to DB rates if API fails.
+  Widget _buildRatesCard(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.currency_exchange, size: 18,
+                    color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'Tasas de cambio',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            FutureBuilder(
+              future: _fetchRatesForDisplay(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  );
+                }
+
+                final data = snapshot.data;
+                final usdBcv = data?['usdBcv'];
+                final usdPar = data?['usdPar'];
+                final eurBcv = data?['eurBcv'];
+                final eurPar = data?['eurPar'];
+
+                final usdAvg = (usdBcv != null && usdPar != null)
+                    ? (usdBcv + usdPar) / 2
+                    : null;
+                final eurAvg = (eurBcv != null && eurPar != null)
+                    ? (eurBcv + eurPar) / 2
+                    : null;
+
+                return Table(
+                  columnWidths: const {
+                    0: FlexColumnWidth(1.2),
+                    1: FlexColumnWidth(1),
+                    2: FlexColumnWidth(1),
+                    3: FlexColumnWidth(1),
+                  },
+                  children: [
+                    _rateTableHeader(context),
+                    _rateTableRow(context, '\$ USD', usdBcv, usdPar, usdAvg),
+                    _rateTableRow(context, '€ EUR', eurBcv, eurPar, eurAvg),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<Map<String, double?>> _fetchRatesForDisplay() async {
+    final api = DolarApiService.instance;
+
+    // Use cached values if fresh, otherwise fetch
+    if (api.isStale) {
+      await api.fetchAll();
+    }
+
+    return {
+      'usdBcv': api.oficialRate?.promedio,
+      'usdPar': api.paraleloRate?.promedio,
+      'eurBcv': api.eurOficialRate?.promedio,
+      'eurPar': api.eurParaleloRate?.promedio,
+    };
+  }
+
+  TableRow _rateTableHeader(BuildContext context) {
+    final style = Theme.of(context).textTheme.labelSmall!.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+    );
+    return TableRow(
+      children: [
+        const SizedBox(height: 24),
+        Center(child: Text('BCV', style: style)),
+        Center(child: Text('Paralelo', style: style)),
+        Center(child: Text('Promedio', style: style)),
+      ],
+    );
+  }
+
+  TableRow _rateTableRow(
+    BuildContext context,
+    String label,
+    double? bcv,
+    double? paralelo,
+    double? avg,
+  ) {
+    final labelStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
+      fontWeight: FontWeight.w600,
+    );
+    final valueStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
+
+    String fmt(double? v) => v != null ? v.toStringAsFixed(2) : '--';
+
+    return TableRow(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(label, style: labelStyle),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(fmt(bcv), style: valueStyle),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(fmt(paralelo), style: valueStyle),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(
+              fmt(avg),
+              style: valueStyle.copyWith(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

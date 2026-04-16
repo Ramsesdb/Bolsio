@@ -7751,7 +7751,7 @@ class PendingImports extends Table
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL CHECK (type IN (\'E\', \'I\'))',
+    $customConstraints: 'NOT NULL CHECK (type IN (\'E\', \'I\', \'T\'))',
   );
   static const VerificationMeta _counterpartyNameMeta = const VerificationMeta(
     'counterpartyName',
@@ -7864,6 +7864,28 @@ class PendingImports extends Table
     $customConstraints: 'NOT NULL DEFAULT CURRENT_TIMESTAMP',
     defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
   );
+  static const VerificationMeta _receivingAccountIdMeta =
+      const VerificationMeta('receivingAccountId');
+  late final GeneratedColumn<String> receivingAccountId =
+      GeneratedColumn<String>(
+        'receivingAccountId',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        $customConstraints: 'REFERENCES accounts(id)ON DELETE SET NULL',
+      );
+  static const VerificationMeta _valueInDestinyMeta = const VerificationMeta(
+    'valueInDestiny',
+  );
+  late final GeneratedColumn<double> valueInDestiny = GeneratedColumn<double>(
+    'valueInDestiny',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -7882,6 +7904,8 @@ class PendingImports extends Table
     status,
     createdTransactionId,
     createdAt,
+    receivingAccountId,
+    valueInDestiny,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -8011,6 +8035,24 @@ class PendingImports extends Table
         createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
       );
     }
+    if (data.containsKey('receivingAccountId')) {
+      context.handle(
+        _receivingAccountIdMeta,
+        receivingAccountId.isAcceptableOrUnknown(
+          data['receivingAccountId']!,
+          _receivingAccountIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('valueInDestiny')) {
+      context.handle(
+        _valueInDestinyMeta,
+        valueInDestiny.isAcceptableOrUnknown(
+          data['valueInDestiny']!,
+          _valueInDestinyMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -8084,6 +8126,14 @@ class PendingImports extends Table
         DriftSqlType.dateTime,
         data['${effectivePrefix}createdAt'],
       )!,
+      receivingAccountId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}receivingAccountId'],
+      ),
+      valueInDestiny: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}valueInDestiny'],
+      ),
     );
   }
 
@@ -8144,6 +8194,12 @@ class PendingImportInDB extends DataClass
 
   /// Timestamp when this pending import was created
   final DateTime createdAt;
+
+  /// (Transfer only) Destination account for transfer proposals
+  final String? receivingAccountId;
+
+  /// (Transfer only) Amount arriving at destination (net of fees)
+  final double? valueInDestiny;
   const PendingImportInDB({
     required this.id,
     this.accountId,
@@ -8161,6 +8217,8 @@ class PendingImportInDB extends DataClass
     required this.status,
     this.createdTransactionId,
     required this.createdAt,
+    this.receivingAccountId,
+    this.valueInDestiny,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -8193,6 +8251,12 @@ class PendingImportInDB extends DataClass
       map['createdTransactionId'] = Variable<String>(createdTransactionId);
     }
     map['createdAt'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || receivingAccountId != null) {
+      map['receivingAccountId'] = Variable<String>(receivingAccountId);
+    }
+    if (!nullToAbsent || valueInDestiny != null) {
+      map['valueInDestiny'] = Variable<double>(valueInDestiny);
+    }
     return map;
   }
 
@@ -8226,6 +8290,12 @@ class PendingImportInDB extends DataClass
           ? const Value.absent()
           : Value(createdTransactionId),
       createdAt: Value(createdAt),
+      receivingAccountId: receivingAccountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receivingAccountId),
+      valueInDestiny: valueInDestiny == null && nullToAbsent
+          ? const Value.absent()
+          : Value(valueInDestiny),
     );
   }
 
@@ -8255,6 +8325,10 @@ class PendingImportInDB extends DataClass
         json['createdTransactionId'],
       ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      receivingAccountId: serializer.fromJson<String?>(
+        json['receivingAccountId'],
+      ),
+      valueInDestiny: serializer.fromJson<double?>(json['valueInDestiny']),
     );
   }
   @override
@@ -8277,6 +8351,8 @@ class PendingImportInDB extends DataClass
       'status': serializer.toJson<String>(status),
       'createdTransactionId': serializer.toJson<String?>(createdTransactionId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'receivingAccountId': serializer.toJson<String?>(receivingAccountId),
+      'valueInDestiny': serializer.toJson<double?>(valueInDestiny),
     };
   }
 
@@ -8297,6 +8373,8 @@ class PendingImportInDB extends DataClass
     String? status,
     Value<String?> createdTransactionId = const Value.absent(),
     DateTime? createdAt,
+    Value<String?> receivingAccountId = const Value.absent(),
+    Value<double?> valueInDestiny = const Value.absent(),
   }) => PendingImportInDB(
     id: id ?? this.id,
     accountId: accountId.present ? accountId.value : this.accountId,
@@ -8320,6 +8398,12 @@ class PendingImportInDB extends DataClass
         ? createdTransactionId.value
         : this.createdTransactionId,
     createdAt: createdAt ?? this.createdAt,
+    receivingAccountId: receivingAccountId.present
+        ? receivingAccountId.value
+        : this.receivingAccountId,
+    valueInDestiny: valueInDestiny.present
+        ? valueInDestiny.value
+        : this.valueInDestiny,
   );
   PendingImportInDB copyWithCompanion(PendingImportsCompanion data) {
     return PendingImportInDB(
@@ -8349,6 +8433,12 @@ class PendingImportInDB extends DataClass
           ? data.createdTransactionId.value
           : this.createdTransactionId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      receivingAccountId: data.receivingAccountId.present
+          ? data.receivingAccountId.value
+          : this.receivingAccountId,
+      valueInDestiny: data.valueInDestiny.present
+          ? data.valueInDestiny.value
+          : this.valueInDestiny,
     );
   }
 
@@ -8370,7 +8460,9 @@ class PendingImportInDB extends DataClass
           ..write('proposedCategoryId: $proposedCategoryId, ')
           ..write('status: $status, ')
           ..write('createdTransactionId: $createdTransactionId, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('receivingAccountId: $receivingAccountId, ')
+          ..write('valueInDestiny: $valueInDestiny')
           ..write(')'))
         .toString();
   }
@@ -8393,6 +8485,8 @@ class PendingImportInDB extends DataClass
     status,
     createdTransactionId,
     createdAt,
+    receivingAccountId,
+    valueInDestiny,
   );
   @override
   bool operator ==(Object other) =>
@@ -8413,7 +8507,9 @@ class PendingImportInDB extends DataClass
           other.proposedCategoryId == this.proposedCategoryId &&
           other.status == this.status &&
           other.createdTransactionId == this.createdTransactionId &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.receivingAccountId == this.receivingAccountId &&
+          other.valueInDestiny == this.valueInDestiny);
 }
 
 class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
@@ -8433,6 +8529,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
   final Value<String> status;
   final Value<String?> createdTransactionId;
   final Value<DateTime> createdAt;
+  final Value<String?> receivingAccountId;
+  final Value<double?> valueInDestiny;
   final Value<int> rowid;
   const PendingImportsCompanion({
     this.id = const Value.absent(),
@@ -8451,6 +8549,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
     this.status = const Value.absent(),
     this.createdTransactionId = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.receivingAccountId = const Value.absent(),
+    this.valueInDestiny = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PendingImportsCompanion.insert({
@@ -8470,6 +8570,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
     this.status = const Value.absent(),
     this.createdTransactionId = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.receivingAccountId = const Value.absent(),
+    this.valueInDestiny = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        amount = Value(amount),
@@ -8495,6 +8597,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
     Expression<String>? status,
     Expression<String>? createdTransactionId,
     Expression<DateTime>? createdAt,
+    Expression<String>? receivingAccountId,
+    Expression<double>? valueInDestiny,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -8515,6 +8619,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
       if (createdTransactionId != null)
         'createdTransactionId': createdTransactionId,
       if (createdAt != null) 'createdAt': createdAt,
+      if (receivingAccountId != null) 'receivingAccountId': receivingAccountId,
+      if (valueInDestiny != null) 'valueInDestiny': valueInDestiny,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -8536,6 +8642,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
     Value<String>? status,
     Value<String?>? createdTransactionId,
     Value<DateTime>? createdAt,
+    Value<String?>? receivingAccountId,
+    Value<double?>? valueInDestiny,
     Value<int>? rowid,
   }) {
     return PendingImportsCompanion(
@@ -8555,6 +8663,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
       status: status ?? this.status,
       createdTransactionId: createdTransactionId ?? this.createdTransactionId,
       createdAt: createdAt ?? this.createdAt,
+      receivingAccountId: receivingAccountId ?? this.receivingAccountId,
+      valueInDestiny: valueInDestiny ?? this.valueInDestiny,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -8612,6 +8722,12 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
     if (createdAt.present) {
       map['createdAt'] = Variable<DateTime>(createdAt.value);
     }
+    if (receivingAccountId.present) {
+      map['receivingAccountId'] = Variable<String>(receivingAccountId.value);
+    }
+    if (valueInDestiny.present) {
+      map['valueInDestiny'] = Variable<double>(valueInDestiny.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -8637,6 +8753,8 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
           ..write('status: $status, ')
           ..write('createdTransactionId: $createdTransactionId, ')
           ..write('createdAt: $createdAt, ')
+          ..write('receivingAccountId: $receivingAccountId, ')
+          ..write('valueInDestiny: $valueInDestiny, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

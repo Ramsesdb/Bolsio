@@ -172,29 +172,58 @@ class ExchangeRateService {
 
   /// Calculate the exchange rate between two currencies.
   /// Returns `null` when either rate is unavailable.
+  /// Fetch the best available rate for a currency, trying [source] first
+  /// then falling back to any source if not found.
+  Stream<ExchangeRate?> _getRateWithFallback({
+    required String currencyCode,
+    required DateTime date,
+    String? source,
+  }) {
+    if (source == null) {
+      return getLastExchangeRateOf(currencyCode: currencyCode, date: date);
+    }
+    // Try with source first, fall back to any source
+    return getLastExchangeRateOf(
+      currencyCode: currencyCode,
+      date: date,
+      source: source,
+    ).switchMap((rate) {
+      if (rate != null) return Stream.value(rate);
+      return getLastExchangeRateOf(currencyCode: currencyCode, date: date);
+    });
+  }
+
   Stream<double?> calculateExchangeRate({
     required String fromCurrency,
     required String toCurrency,
     num amount = 1,
     DateTime? date,
+    String? source,
   }) {
     date ??= DateTime.now();
 
-    final fromExchangeRate = getLastExchangeRateOf(
+    final fromExchangeRate = _getRateWithFallback(
       currencyCode: fromCurrency,
       date: date,
+      source: source,
     );
-    final toExchangeRate = getLastExchangeRateOf(
+    final toExchangeRate = _getRateWithFallback(
       currencyCode: toCurrency,
       date: date,
+      source: source,
     );
 
     return Rx.combineLatest2(
       fromExchangeRate,
       toExchangeRate,
       (from, to) {
-        if (from == null || to == null) return null;
-        return (from.exchangeRate / to.exchangeRate) * amount;
+        // A currency with no stored rate is the base/reference currency
+        // (e.g. VES has no rate because all rates are expressed in VES).
+        // Treat its rate as 1.0.
+        final fromRate = from?.exchangeRate ?? 1.0;
+        final toRate = to?.exchangeRate ?? 1.0;
+        if (toRate == 0) return null;
+        return (fromRate / toRate) * amount;
       },
     );
   }

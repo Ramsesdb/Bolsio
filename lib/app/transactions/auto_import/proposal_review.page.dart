@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallex/app/accounts/account_selector.dart';
@@ -6,6 +7,7 @@ import 'package:wallex/app/transactions/auto_import/widgets/proposal_origin_chip
 import 'package:wallex/app/transactions/auto_import/widgets/proposal_status_chip.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
 import 'package:wallex/core/models/account/account.dart';
@@ -39,19 +41,46 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
   Account? _selectedAccount;
   Category? _selectedCategory;
   bool _isSaving = false;
+  Account? _selectedTransferAccount;
+  late TextEditingController _valueInDestinyController;
 
   @override
   void initState() {
     super.initState();
     final pi = widget.pendingImport;
 
-    _type = pi.type == 'I' ? TransactionType.income : TransactionType.expense;
+    _type = pi.type == 'T'
+        ? TransactionType.transfer
+        : pi.type == 'I'
+            ? TransactionType.income
+            : TransactionType.expense;
     _amountController =
         TextEditingController(text: pi.amount.toStringAsFixed(2));
     _counterpartyController =
         TextEditingController(text: pi.counterpartyName ?? '');
     _currencyId = pi.currencyId;
     _date = pi.date;
+
+    // Handle transfer type from pending import
+    if (pi.type == 'T') {
+      _type = TransactionType.transfer;
+      if (pi.receivingAccountId != null) {
+        _resolveTransferAccount(pi.receivingAccountId!);
+      }
+      if (pi.valueInDestiny != null) {
+        _valueInDestinyController = TextEditingController(
+          text: pi.valueInDestiny!.toStringAsFixed(2),
+        );
+      } else {
+        _valueInDestinyController = TextEditingController(
+          text: pi.amount.toStringAsFixed(2),
+        );
+      }
+    } else {
+      _valueInDestinyController = TextEditingController(
+        text: pi.amount.toStringAsFixed(2),
+      );
+    }
 
     // Build auto-populated notes
     final channelTag = pi.channel;
@@ -64,7 +93,11 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
     // Resolve the account if accountId is present
     if (pi.accountId != null) {
       _resolveAccount(pi.accountId!);
+    } else {
+      _resolveOrCreateSuggestedAccount();
     }
+
+    _resolveInitialCategorySuggestion();
   }
 
   String _bankTagFromSender(String? sender) {
@@ -82,6 +115,105 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
       setState(() {
         _selectedAccount = match.first;
       });
+
+      final sender = (widget.pendingImport.sender ?? '').toLowerCase();
+      final isBdv = sender.contains('bdv') || sender == '2661' || sender == '2662';
+      final selectedCurrency = match.first.currency.code.toUpperCase();
+      if (isBdv && selectedCurrency != _currencyId.toUpperCase()) {
+        await _resolveOrCreateSuggestedAccount();
+      }
+    }
+  }
+
+  Future<void> _resolveTransferAccount(String accountId) async {
+    final accounts = await AccountService.instance.getAccounts().first;
+    final match = accounts.where((a) => a.id == accountId).toList();
+    if (match.isNotEmpty && mounted) {
+      setState(() => _selectedTransferAccount = match.first);
+    }
+  }
+
+  Future<void> _resolveOrCreateSuggestedAccount() async {
+    final pi = widget.pendingImport;
+    final sender = (pi.sender ?? '').toLowerCase();
+    final isBdv = sender.contains('bdv') || sender == '2661' || sender == '2662';
+    if (!isBdv) return;
+
+    final currency = _currencyId.toUpperCase();
+    if (currency != 'USD' && currency != 'VES') return;
+
+    final accounts = await AccountService.instance.getAccounts().first;
+
+    Account? match = accounts.where((a) {
+      final name = a.name.toLowerCase();
+      return name.startsWith('banco de venezuela') &&
+          a.currency.code.toUpperCase() == currency;
+    }).firstOrNull;
+
+    if (match == null) {
+      final nextOrder = accounts.isEmpty
+          ? 1
+          : (accounts.map((a) => a.displayOrder).reduce((a, b) => a > b ? a : b) + 1);
+
+      final accountName = currency == 'VES'
+          ? 'Banco de Venezuela'
+          : 'Banco de Venezuela $currency';
+
+      final newAccount = AccountInDB(
+        id: generateUUID(),
+        name: accountName,
+        displayOrder: nextOrder,
+        type: AccountType.normal,
+        currencyId: currency,
+        iniValue: 0,
+        date: DateTime.now(),
+        iconId: 'account_balance',
+        color: '1A237E',
+      );
+
+      await AccountService.instance.insertAccount(newAccount);
+
+      final refreshed = await AccountService.instance.getAccounts().first;
+      match = refreshed.where((a) => a.id == newAccount.id).firstOrNull;
+    }
+
+    if (match != null && mounted) {
+      setState(() => _selectedAccount = match);
+    }
+  }
+
+  Future<void> _resolveInitialCategorySuggestion() async {
+    final pi = widget.pendingImport;
+
+    if (pi.proposedCategoryId != null) {
+      final proposed = await CategoryService.instance
+          .getCategoryById(pi.proposedCategoryId!)
+          .first;
+      if (proposed != null && mounted) {
+        setState(() => _selectedCategory = proposed);
+      }
+      return;
+    }
+
+    final raw = pi.rawText.toLowerCase();
+    final sender = (pi.sender ?? '').toLowerCase();
+    final counterparty = (pi.counterpartyName ?? '').toLowerCase();
+    final isBdv = sender.contains('bdv') || sender == '2661' || sender == '2662';
+    final looksLikeBinanceTransfer =
+        raw.contains('binance') || sender.contains('binance') || counterparty.contains('binance');
+    final looksLikeBdvUsdSavingMove = isBdv &&
+      _currencyId.toUpperCase() == 'USD' &&
+      _type == TransactionType.expense;
+
+    if (_type != TransactionType.expense ||
+      (!looksLikeBinanceTransfer && !looksLikeBdvUsdSavingMove)) {
+      return;
+    }
+
+    final ahorroCategory = await _findOrCreateSavingsCategory();
+
+    if (ahorroCategory != null && mounted) {
+      setState(() => _selectedCategory = ahorroCategory);
     }
   }
 
@@ -90,6 +222,7 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
     _amountController.dispose();
     _counterpartyController.dispose();
     _notesController.dispose();
+    _valueInDestinyController.dispose();
     super.dispose();
   }
 
@@ -201,11 +334,33 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
                   label: Text('Gasto'),
                   icon: Icon(Icons.north_east_rounded),
                 ),
+                ButtonSegment(
+                  value: TransactionType.transfer,
+                  label: Text('Transfer.'),
+                  icon: Icon(Icons.swap_horiz),
+                ),
               ],
               selected: {_type},
               onSelectionChanged: isReviewable
                   ? (selected) {
-                      setState(() => _type = selected.first);
+                      final newType = selected.first;
+                      setState(() {
+                        // When switching to transfer: if the current account
+                        // looks like the destination (e.g. Binance income),
+                        // move it to destination and clear origin so the user
+                        // picks the real source account.
+                        if (newType == TransactionType.transfer &&
+                            _type != TransactionType.transfer &&
+                            _selectedAccount != null &&
+                            _selectedTransferAccount == null) {
+                          final wasIncome = _type == TransactionType.income;
+                          if (wasIncome) {
+                            _selectedTransferAccount = _selectedAccount;
+                            _selectedAccount = null;
+                          }
+                        }
+                        _type = newType;
+                      });
                     }
                   : null,
             ),
@@ -286,37 +441,94 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
             ),
             const SizedBox(height: 16),
 
-            // Category selector
-            Text(
-              'Categoria (opcional)',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            const SizedBox(height: 8),
-            InkWell(
-              onTap: isReviewable ? _selectCategory : null,
-              borderRadius: BorderRadius.circular(8),
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                  suffixIcon:
-                      isReviewable ? const Icon(Icons.arrow_drop_down) : null,
-                ),
-                child: Text(
-                  _selectedCategory?.name ?? 'Sin categoria',
-                  style: TextStyle(
-                    color: _selectedCategory != null
-                        ? null
-                        : Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.5),
+            // Transfer destination account (only shown for transfers)
+            if (_type == TransactionType.transfer) ...[
+              Text(
+                'Cuenta destino *',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: isReviewable ? _selectTransferAccount : null,
+                borderRadius: BorderRadius.circular(8),
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    suffixIcon:
+                        isReviewable ? const Icon(Icons.arrow_drop_down) : null,
+                  ),
+                  child: Text(
+                    _selectedTransferAccount?.name ?? 'Seleccionar cuenta destino',
+                    style: TextStyle(
+                      color: _selectedTransferAccount != null
+                          ? null
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.5),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
+
+              // Amount received at destination
+              TextFormField(
+                controller: _valueInDestinyController,
+                readOnly: !isReviewable,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  labelText: 'Monto recibido (neto)',
+                  helperText: 'Monto que llega a la cuenta destino (sin comision)',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (_type != TransactionType.transfer) return null;
+                  if (value == null || value.isEmpty) return 'Requerido';
+                  final parsed = double.tryParse(value);
+                  if (parsed == null || parsed <= 0) return 'Monto invalido';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+            ],
+
+            // Category selector (hidden for transfers)
+            if (_type != TransactionType.transfer) ...[
+              Text(
+                'Categoria (opcional)',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: isReviewable ? _selectCategory : null,
+                borderRadius: BorderRadius.circular(8),
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    suffixIcon:
+                        isReviewable ? const Icon(Icons.arrow_drop_down) : null,
+                  ),
+                  child: Text(
+                    _selectedCategory?.name ?? 'Sin categoria',
+                    style: TextStyle(
+                      color: _selectedCategory != null
+                          ? null
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // Counterparty
             TextFormField(
@@ -403,13 +615,27 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
   Future<void> _selectAccount() async {
     final result = await showAccountSelectorBottomSheet(
       context,
-      const AccountSelectorModal(
+      AccountSelectorModal(
+        allowMultiSelection: false,
+        filterSavingAccounts: false,
+        currencyCode: _currencyId,
+      ),
+    );
+    if (result != null && result.isNotEmpty && mounted) {
+      setState(() => _selectedAccount = result.first);
+    }
+  }
+
+  Future<void> _selectTransferAccount() async {
+    final result = await showAccountSelectorBottomSheet(
+      context,
+      AccountSelectorModal(
         allowMultiSelection: false,
         filterSavingAccounts: false,
       ),
     );
     if (result != null && result.isNotEmpty && mounted) {
-      setState(() => _selectedAccount = result.first);
+      setState(() => _selectedTransferAccount = result.first);
     }
   }
 
@@ -465,45 +691,158 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
       return;
     }
 
+    // Binance double-count check (applies to all types)
+    final sender = (widget.pendingImport.sender ?? '').toLowerCase();
+    if (sender.startsWith('binance:') && _selectedAccount != null) {
+      final countRow = await AppDB.instance.customSelect(
+        '''
+        SELECT COUNT(1) AS txCount
+        FROM transactions
+        WHERE accountID = ? OR receivingAccountID = ?
+        ''',
+        variables: [
+          Variable.withString(_selectedAccount!.id),
+          Variable.withString(_selectedAccount!.id),
+        ],
+        readsFrom: {AppDB.instance.transactions},
+      ).getSingle();
+
+      final txCount = (countRow.data['txCount'] as int?) ?? 0;
+      final isBinanceBalanceMode =
+          _selectedAccount!.name.toLowerCase().contains('binance') &&
+          _selectedAccount!.currency.code.toUpperCase() == 'USD' &&
+          txCount == 0;
+
+      if (isBinanceBalanceMode) {
+        await PendingImportService.instance.updatePendingImportStatus(
+          widget.pendingImport.id,
+          TransactionProposalStatus.rejected,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Movimiento Binance omitido para evitar doble conteo (saldo ya sincronizado por API).',
+              ),
+            ),
+          );
+          Navigator.pop(context, true);
+        }
+        return;
+      }
+    }
+
     setState(() => _isSaving = true);
 
     try {
       final amount = double.parse(_amountController.text);
-      final value = _type == TransactionType.expense ? -amount : amount;
 
-      final newTxId = generateUUID();
-      final transaction = TransactionInDB(
-        id: newTxId,
-        date: _date,
-        accountID: _selectedAccount!.id,
-        value: value,
-        title: _counterpartyController.text.isNotEmpty
-            ? _counterpartyController.text
-            : null,
-        notes: _notesController.text.isNotEmpty
-            ? _notesController.text
-            : null,
-        type: _type,
-        categoryID: _selectedCategory?.id,
-        isHidden: false,
-        createdAt: DateTime.now(),
-      );
+      if (_type == TransactionType.transfer) {
+        // Transfer: no category, requires destination account
+        if (_selectedTransferAccount == null) {
+          if (mounted) {
+            setState(() => _isSaving = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Selecciona una cuenta destino')),
+            );
+          }
+          return;
+        }
 
-      await TransactionService.instance.insertTransaction(transaction);
-      await PendingImportService.instance.updatePendingImportStatus(
-        widget.pendingImport.id,
-        TransactionProposalStatus.confirmed,
-        createdTransactionId: newTxId,
-      );
+        final valueInDestiny = double.tryParse(_valueInDestinyController.text);
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Transaccion registrada'),
-            backgroundColor: Colors.green,
-          ),
+        final newTxId = generateUUID();
+        final transaction = TransactionInDB(
+          id: newTxId,
+          date: _date,
+          accountID: _selectedAccount!.id,
+          value: -amount, // negative = money leaving source
+          title: _counterpartyController.text.isNotEmpty
+              ? _counterpartyController.text
+              : null,
+          notes: _notesController.text.isNotEmpty
+              ? _notesController.text
+              : null,
+          type: TransactionType.transfer,
+          receivingAccountID: _selectedTransferAccount!.id,
+          valueInDestiny: valueInDestiny,
+          isHidden: false,
+          createdAt: DateTime.now(),
         );
-        Navigator.pop(context, true);
+
+        await TransactionService.instance.insertTransaction(transaction);
+        await PendingImportService.instance.updatePendingImportStatus(
+          widget.pendingImport.id,
+          TransactionProposalStatus.confirmed,
+          createdTransactionId: newTxId,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Transferencia registrada'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context, true);
+        }
+      } else {
+        // Income or expense: existing logic
+        final value = _type == TransactionType.expense ? -amount : amount;
+
+        Category? effectiveCategory = _selectedCategory;
+        if (effectiveCategory == null) {
+          effectiveCategory = await _resolveFallbackCategoryForType(_type);
+          if (effectiveCategory != null && mounted) {
+            setState(() => _selectedCategory = effectiveCategory);
+          }
+        }
+
+        if (effectiveCategory == null) {
+          if (mounted) {
+            setState(() => _isSaving = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Selecciona una categoria para guardar')),
+            );
+          }
+          return;
+        }
+
+        final newTxId = generateUUID();
+        final transaction = TransactionInDB(
+          id: newTxId,
+          date: _date,
+          accountID: _selectedAccount!.id,
+          value: value,
+          title: _counterpartyController.text.isNotEmpty
+              ? _counterpartyController.text
+              : null,
+          notes: _notesController.text.isNotEmpty
+              ? _notesController.text
+              : null,
+          type: _type,
+          categoryID: effectiveCategory.id,
+          isHidden: false,
+          createdAt: DateTime.now(),
+        );
+
+        await TransactionService.instance.insertTransaction(transaction);
+        await PendingImportService.instance.updatePendingImportStatus(
+          widget.pendingImport.id,
+          TransactionProposalStatus.confirmed,
+          createdTransactionId: newTxId,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Transaccion registrada'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context, true);
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -516,6 +855,65 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
         );
       }
     }
+  }
+
+  Future<Category?> _resolveFallbackCategoryForType(TransactionType type) async {
+    final categories = await CategoryService.instance.getCategories().first;
+
+    final normalized = categories.where((category) {
+      if (type == TransactionType.income) {
+        return category.type == null ||
+            category.type == CategoryType.I ||
+            category.type == CategoryType.B;
+      }
+
+      return category.type == null ||
+          category.type == CategoryType.E ||
+          category.type == CategoryType.B;
+    }).toList();
+
+    if (normalized.isEmpty) return null;
+
+    if (type == TransactionType.expense) {
+      final savings = await _findOrCreateSavingsCategory();
+      if (savings != null) {
+        return savings;
+      }
+    }
+
+    return normalized.first;
+  }
+
+  Future<Category?> _findOrCreateSavingsCategory() async {
+    final categories = await CategoryService.instance.getCategories().first;
+
+    for (final category in categories) {
+      final name = category.name.toLowerCase();
+      final isExpenseLike = category.type == null ||
+          category.type == CategoryType.E ||
+          category.type == CategoryType.B;
+      if (isExpenseLike && (name.contains('ahorro') || name.contains('ahorros'))) {
+        return category;
+      }
+    }
+
+    final maxOrder = categories.isEmpty
+        ? 1
+        : (categories.map((e) => e.displayOrder).reduce((a, b) => a > b ? a : b) + 1);
+
+    final toInsert = CategoryInDB(
+      id: generateUUID(),
+      name: 'Ahorros',
+      iconId: 'savings',
+      color: '0277BD',
+      type: CategoryType.E,
+      displayOrder: maxOrder,
+    );
+
+    await CategoryService.instance.insertCategory(toInsert);
+
+    final refreshed = await CategoryService.instance.getCategories().first;
+    return refreshed.where((e) => e.id == toInsert.id).firstOrNull;
   }
 
   Future<void> _reject() async {

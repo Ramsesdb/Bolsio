@@ -64,8 +64,30 @@ class PersonalVESeeder {
       ),
       AccountInDB(
         id: generateUUID(),
-        name: 'Banco Nacional de Credito #1',
+        name: 'Banco de Venezuela USD',
         displayOrder: 2,
+        type: AccountType.normal,
+        currencyId: 'USD',
+        iniValue: 0,
+        date: now,
+        iconId: 'account_balance',
+        color: '1A237E', // dark blue – BDV brand
+      ),
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Binance',
+        displayOrder: 3,
+        type: AccountType.normal,
+        currencyId: 'USD',
+        iniValue: 0,
+        date: now,
+        iconId: 'universal_currency_alt',
+        color: 'F9A825', // Binance yellow
+      ),
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Banco Nacional de Credito #1',
+        displayOrder: 4,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
@@ -76,7 +98,7 @@ class PersonalVESeeder {
       AccountInDB(
         id: generateUUID(),
         name: 'Banco Nacional de Credito #2',
-        displayOrder: 3,
+        displayOrder: 5,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
@@ -87,7 +109,7 @@ class PersonalVESeeder {
       AccountInDB(
         id: generateUUID(),
         name: 'Banplus',
-        displayOrder: 4,
+        displayOrder: 6,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
@@ -98,7 +120,7 @@ class PersonalVESeeder {
       AccountInDB(
         id: generateUUID(),
         name: 'Provincial',
-        displayOrder: 5,
+        displayOrder: 7,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
@@ -108,19 +130,8 @@ class PersonalVESeeder {
       ),
       AccountInDB(
         id: generateUUID(),
-        name: 'Binance',
-        displayOrder: 6,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'universal_currency_alt',
-        color: 'F9A825', // Binance yellow
-      ),
-      AccountInDB(
-        id: generateUUID(),
         name: 'Zinli',
-        displayOrder: 7,
+        displayOrder: 8,
         type: AccountType.normal,
         currencyId: 'USD',
         iniValue: 0,
@@ -130,19 +141,20 @@ class PersonalVESeeder {
       ),
       AccountInDB(
         id: generateUUID(),
-        name: 'Efectivo Bs',
-        displayOrder: 8,
-        type: AccountType.normal,
-        currencyId: 'VES',
+        name: 'Ahorro Efectivo USD',
+        displayOrder: 9,
+        type: AccountType.saving,
+        currencyId: 'USD',
         iniValue: 0,
         date: now,
-        iconId: 'wallet',
-        color: '795548', // brown
+        description: 'Ahorro en efectivo fisico USD. No tocar.',
+        iconId: 'savings',
+        color: '0277BD', // light blue
       ),
       AccountInDB(
         id: generateUUID(),
         name: 'Efectivo USD',
-        displayOrder: 9,
+        displayOrder: 10,
         type: AccountType.normal,
         currencyId: 'USD',
         iniValue: 0,
@@ -152,14 +164,14 @@ class PersonalVESeeder {
       ),
       AccountInDB(
         id: generateUUID(),
-        name: 'Ahorro USD',
-        displayOrder: 10,
-        type: AccountType.saving,
-        currencyId: 'USD',
+        name: 'Efectivo Bs',
+        displayOrder: 11,
+        type: AccountType.normal,
+        currencyId: 'VES',
         iniValue: 0,
         date: now,
-        iconId: 'savings',
-        color: '0277BD', // light blue
+        iconId: 'wallet',
+        color: '795548', // brown
       ),
     ];
 
@@ -443,9 +455,18 @@ class PersonalVESeeder {
         type: CategoryType.E,
         order: 100,
       ),
-      // 11. Otros Gastos
+      // 11. Ahorros
       _SeedCategory(
         id: 'pve_e11',
+        name: 'Ahorros',
+        iconId: 'savings',
+        color: '0277BD',
+        type: CategoryType.E,
+        order: 105,
+      ),
+      // 12. Otros Gastos
+      _SeedCategory(
+        id: 'pve_e12',
         name: 'Otros Gastos',
         iconId: 'question_mark',
         color: '9E9E9E',

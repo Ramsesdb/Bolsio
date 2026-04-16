@@ -23,12 +23,14 @@ class RateProviderManager {
   ///
   /// [date] - the date for which to fetch the rate.
   /// [source] - 'bcv' or 'paralelo'.
+  /// [currencyCode] - 'USD' or 'EUR'.
   ///
   /// Returns `null` immediately for non-today dates because the only active
   /// provider (DolarApiProvider) does not support historical lookups.
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
+    String currencyCode = 'USD',
   }) async {
     final isToday = DateUtils.isSameDay(date, DateTime.now());
 
@@ -41,7 +43,7 @@ class RateProviderManager {
 
     for (final p in _providers) {
       try {
-        final r = await p.fetchRate(date: date, source: source);
+        final r = await p.fetchRate(date: date, source: source, currencyCode: currencyCode);
         if (r != null) return r;
       } catch (e) {
         debugPrint('[$_tag] ${p.name} failed: $e');

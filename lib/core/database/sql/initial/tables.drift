@@ -1,8 +1,8 @@
 ---- * WHEN CONVERTING TO .sql:
----- * --- Remove the 'AS ....' after a table creation  
+---- * --- Remove the 'AS ....' after a table creation
 ---- * --- Convert DATETIME to TEXT, BOOL to INT and ENUMS to TEXT
 ---- * --- Remove the MAPPED BY to only leave the CHECK constraints
--- Force rebuild 
+-- Force rebuild v16 debts
 
 import './../../../models/transaction/transaction.dart';
 import './../../../models/transaction/transaction_status.enum.dart';
@@ -12,6 +12,7 @@ import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../../models/goal/goal.dart';
 import './../../../models/goal/goal_type.enum.dart';
+import './../../../models/debt/debt_direction.enum.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';
@@ -117,8 +118,8 @@ CREATE TABLE IF NOT EXISTS users (
     -- Display name
     displayName TEXT,
     
-    -- User role: admin (full access), treasurer (can edit), viewer (read-only)
-    role TEXT NOT NULL DEFAULT 'viewer' CHECK(role IN ('admin', 'treasurer', 'viewer')),
+    -- User role label for local metadata. No fixed role set is enforced.
+    role TEXT NOT NULL DEFAULT 'user',
     
     -- Timestamps
     createdAt DATETIME NOT NULL,
@@ -147,6 +148,10 @@ CREATE TABLE IF NOT EXISTS transactions (
   
   status TEXT CHECK(status IN ('V', 'P', 'R', 'U')) MAPPED BY `CustomEnumConverter(TransactionStatus.values)`,
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  -- If this transaction is related to a debt, the ID of the debt. This field is independent of the account and category fields, so it can be used in transactions of different accounts and categories as long as they are related to the same debt. It will be null for transactions that are not related to any debt.
+  debtId TEXT REFERENCES debts(id) ON DELETE SET NULL ON UPDATE CASCADE,
+
   valueInDestiny REAL,
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   isHidden BOOLEAN NOT NULL DEFAULT 0,
@@ -316,6 +321,30 @@ CREATE TABLE IF NOT EXISTS goals (
 ) AS GoalInDB;
 
 
+CREATE TABLE IF NOT EXISTS debts (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- Debt name (unique among user debts)
+    name TEXT UNIQUE NOT NULL,
+
+    type INTEGER NOT NULL CHECK(type IN (0, 1)) MAPPED BY `CustomEnumConverter(DebtDirection.values)`,
+
+    iconId TEXT NOT NULL,
+
+    -- ID of the currency used by this debt. The transactions related to this debt can be in different accounts and therefore in different currencies, but they will all be converted to this currency when calculating the total amount of the debt
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Initial amount of the debt, in the currency of the debt. This amount will not be used to calculate user balances
+    initialAmount REAL NOT NULL DEFAULT 0,
+
+    -- Date on which the debt was created or the money was lent/borrowed. Before this date, no transactions can exists on it.
+    startDate DATETIME NOT NULL,
+
+    -- The closing date of the debt. After this date, no transactions can exists on it.
+    endDate DATETIME
+) AS DebtInDB;
+
+
 CREATE TABLE IF NOT EXISTS userSettings (
   settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,
   settingValue TEXT
@@ -325,4 +354,59 @@ CREATE TABLE IF NOT EXISTS appData (
   appDataKey ENUMNAME(AppDataKey) NOT NULL PRIMARY KEY,
   appDataValue TEXT
 );
+
+CREATE TABLE IF NOT EXISTS pendingImports (
+  id TEXT NOT NULL PRIMARY KEY,
+
+  -- Account that this import should be associated with (resolved by the bank profile)
+  accountId TEXT REFERENCES accounts(id) ON DELETE SET NULL,
+
+  -- Monetary amount captured from the SMS/notification
+  amount REAL NOT NULL,
+
+  -- Currency code (e.g. 'VES', 'USD')
+  currencyId TEXT NOT NULL,
+
+  -- Date/time when the transaction occurred
+  date DATETIME NOT NULL,
+
+  -- Transaction type: 'E' = expense, 'I' = income
+  type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T')),
+
+  -- Name or identifier of the counterparty (phone number, merchant, etc.)
+  counterpartyName TEXT,
+
+  -- Bank reference number for deduplication across channels
+  bankRef TEXT,
+
+  -- Original raw text from the SMS or notification
+  rawText TEXT NOT NULL,
+
+  -- Capture channel: 'sms', 'notification', or 'api'
+  channel TEXT NOT NULL CHECK(channel IN ('sms', 'notification', 'api')),
+
+  -- Sender identifier (SMS number or package name)
+  sender TEXT,
+
+  -- Parser confidence score (0.0 to 1.0)
+  confidence REAL NOT NULL DEFAULT 0.0,
+
+  -- Suggested category (resolved by profile or auto-categorizer)
+  proposedCategoryId TEXT REFERENCES categories(id) ON DELETE SET NULL,
+
+  -- Proposal status: pending (awaiting review), confirmed, rejected, or duplicate
+  status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'confirmed', 'rejected', 'duplicate')),
+
+  -- ID of the transaction created when the proposal is confirmed
+  createdTransactionId TEXT REFERENCES transactions(id) ON DELETE SET NULL,
+
+  -- Timestamp when this pending import was created
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  -- (Transfer only) Destination account for transfer proposals
+  receivingAccountId TEXT REFERENCES accounts(id) ON DELETE SET NULL,
+
+  -- (Transfer only) Amount arriving at destination (net of fees)
+  valueInDestiny REAL
+) AS PendingImportInDB;
 

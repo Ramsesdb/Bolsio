@@ -48,19 +48,18 @@ class TransactionViewActionService {
                 transaction: transaction,
               ),
         ),
-      // DELETE BUTTON DISABLED FOR CHURCH USE (prevents accidental deletion)
-      // ListTileActionItem(
-      //   label: t.ui_actions.delete,
-      //   icon: Icons.delete,
-      //   role: ListTileActionRole.delete,
-      //   onClick: () => TransactionViewActionService()
-      //       .deleteTransactionWithAlertAndSnackBar(
-      //         context,
-      //         transactionId: transaction.id,
-      //         isRecurrent: isRecurrent,
-      //         navigateBack: navigateBackOnDelete,
-      //       ),
-      // ),
+      ListTileActionItem(
+        label: t.ui_actions.delete,
+        icon: Icons.delete,
+        role: ListTileActionRole.delete,
+        onClick: () => TransactionViewActionService()
+            .deleteTransactionWithAlertAndSnackBar(
+              context,
+              transactionId: transaction.id,
+              isRecurrent: isRecurrent,
+              navigateBack: navigateBackOnDelete,
+            ),
+      ),
     ];
   }
 

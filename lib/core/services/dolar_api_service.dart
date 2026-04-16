@@ -139,6 +139,53 @@ class DolarApiService {
     return _paraleloRate;
   }
 
+  /// Cached EUR rates
+  DolarApiRate? _eurOficialRate;
+  DolarApiRate? _eurParaleloRate;
+
+  DolarApiRate? get eurOficialRate => _eurOficialRate;
+  DolarApiRate? get eurParaleloRate => _eurParaleloRate;
+
+  /// Fetch all EUR rates (official and parallel)
+  Future<List<DolarApiRate>> fetchAllEurRates() async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl/euros'),
+            headers: {'Accept': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList = json.decode(response.body);
+        final rates = jsonList.map((j) => DolarApiRate.fromJson(j)).toList();
+
+        for (final rate in rates) {
+          if (rate.fuente == 'oficial') {
+            _eurOficialRate = rate;
+          } else if (rate.fuente == 'paralelo') {
+            _eurParaleloRate = rate;
+          }
+        }
+
+        Logger.printDebug(
+          'DolarApi: Fetched EUR rates - Oficial: ${_eurOficialRate?.promedio}, '
+          'Paralelo: ${_eurParaleloRate?.promedio}',
+        );
+
+        return rates;
+      }
+    } catch (e) {
+      Logger.printDebug('DolarApi: Exception fetching EUR rates: $e');
+    }
+    return [];
+  }
+
+  /// Fetch all rates (USD + EUR) in one call
+  Future<void> fetchAll() async {
+    await Future.wait([fetchAllRates(), fetchAllEurRates()]);
+  }
+
   /// When was the last successful fetch?
   DateTime? get lastFetchTime => _lastFetch;
 

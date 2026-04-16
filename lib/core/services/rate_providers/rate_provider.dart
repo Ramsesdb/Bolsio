@@ -20,9 +20,11 @@ abstract class RateProvider {
   bool get supportsHistorical;
 
   /// `source` is 'bcv' or 'paralelo'.
+  /// `currencyCode` is 'USD' or 'EUR'.
   /// Returns null if rate cannot be fetched (network error, no data, etc).
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
+    String currencyCode = 'USD',
   });
 }

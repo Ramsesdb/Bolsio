@@ -27,19 +27,21 @@ class DolarApiProvider extends RateProvider {
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
+    String currencyCode = 'USD',
   }) async {
     // This API only serves today's rate
     if (!DateUtils.isSameDay(date, DateTime.now())) {
       return null;
     }
 
+    final currencyPath = currencyCode == 'EUR' ? 'euros' : 'dolares';
     final String endpoint;
     switch (source) {
       case 'bcv':
-        endpoint = '$_baseUrl/dolares/oficial';
+        endpoint = '$_baseUrl/$currencyPath/oficial';
         break;
       case 'paralelo':
-        endpoint = '$_baseUrl/dolares/paralelo';
+        endpoint = '$_baseUrl/$currencyPath/paralelo';
         break;
       default:
         return null;

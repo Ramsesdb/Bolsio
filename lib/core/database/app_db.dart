@@ -18,6 +18,8 @@ import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
 import 'package:wallex/core/models/filters/saved_filter.dart';
 import 'package:wallex/core/models/goal/goal.dart';
 import 'package:wallex/core/models/goal/goal_type.enum.dart';
+import 'package:wallex/core/models/debt/debt.dart';
+import 'package:wallex/core/models/debt/debt_direction.enum.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
@@ -35,7 +37,19 @@ class AppDB extends _$AppDB {
     required this.dbName,
     required this.inMemory,
     required this.logStatements,
-  }) : super(openConnection(dbName, logStatements: logStatements));
+  })  : _isTestInstance = false,
+        super(openConnection(dbName, logStatements: logStatements));
+
+  /// Constructor for unit/integration tests using an in-memory database.
+  /// Bypasses file-based connection and the production migration/seeder logic.
+  /// The [_isTestInstance] flag causes [migration] to skip `beforeOpen` hooks
+  /// that depend on Flutter bindings (path_provider, asset bundle, etc.).
+  AppDB.forTesting(QueryExecutor executor)
+      : dbName = 'test.db',
+        inMemory = true,
+        logStatements = false,
+        _isTestInstance = true,
+        super(executor);
 
   static final AppDB instance = AppDB._(
     dbName: 'database.db',
@@ -46,6 +60,7 @@ class AppDB extends _$AppDB {
   final String dbName;
   final bool inMemory;
   final bool logStatements;
+  final bool _isTestInstance;
 
   /// Get the path to the DB, that is `xxxx/xxxx/.../filename.db`
   Future<String> get databasePath async =>
@@ -81,12 +96,16 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 22;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
+        // Test instances skip production hooks that require Flutter bindings
+        // (path_provider, rootBundle, singleton services, etc.).
+        if (_isTestInstance) return;
+
         Logger.printDebug(
           'DB found! Version ${details.versionNow} (previous was ${details.versionBefore}). Path to DB -> ${await databasePath}',
         );
