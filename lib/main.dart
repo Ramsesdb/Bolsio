@@ -58,19 +58,23 @@ void main() async {
   }
 
   // --- One-time migration: fix inverted exchangeRateApplied values ---
-  try {
-    await _migrateInvertedExchangeRates();
-  } catch (e) {
-    debugPrint('Error running exchange rate migration: $e');
-  }
+  // Fire-and-forget: SQL/HTTP work that is NOT required for first frame.
+  // The "migrated v1" flag gate is preserved inside the function, so running
+  // in the background changes only timing, not behavior.
+  unawaited(
+    _migrateInvertedExchangeRates().catchError((e) {
+      debugPrint('Error running exchange rate migration: $e');
+    }),
+  );
   // -----------------------------------------
 
   // --- Auto-update Currency Rate (Daily) ---
-  try {
-    await _checkAndAutoUpdateCurrencyRate();
-  } catch (e) {
-    debugPrint('Error auto-updating currency rate: $e');
-  }
+  // Fire-and-forget: 12h cooldown gate is preserved inside the function.
+  unawaited(
+    _checkAndAutoUpdateCurrencyRate().catchError((e) {
+      debugPrint('Error auto-updating currency rate: $e');
+    }),
+  );
   // -----------------------------------------
 
   // --- Local notifications bootstrap ---
@@ -141,6 +145,34 @@ void main() async {
         },
   ));
 
+  // --- Preload locale synchronously BEFORE runApp ---
+  // Doing this async after runApp pulses the translation stream and rebuilds
+  // InitialPageRouteNavigator 2–3×. The sync variants cost a few ms on the
+  // critical path but eliminate the rebuild cascade entirely.
+  try {
+    final lang = appStateSettings[SettingKey.appLanguage];
+    if (lang != null && lang.isNotEmpty) {
+      final setLocale = LocaleSettings.setLocaleRawSync(lang);
+      if (setLocale.languageTag != lang) {
+        Logger.printDebug(
+          'Warning: requested locale `$lang` unavailable. '
+          'Fallback to `${setLocale.languageTag}`.',
+        );
+        // Clear the stored value so we fall back to device locale next launch.
+        unawaited(
+          UserSettingService.instance
+              .setItem(SettingKey.appLanguage, null)
+              .then((_) {}),
+        );
+      }
+    } else {
+      LocaleSettings.useDeviceLocaleSync();
+    }
+  } catch (e) {
+    Logger.printDebug('Error preloading locale synchronously: $e');
+  }
+  // -----------------------------------------
+
   debugPaintSizeEnabled = false;
   runApp(InitializeApp(key: appStateKey));
 }
@@ -192,7 +224,9 @@ class WallexAppEntryPoint extends StatelessWidget {
   Widget build(BuildContext context) {
     Logger.printDebug('------------------ APP ENTRY POINT ------------------');
 
-    _setAppLanguage();
+    // Locale is now preloaded synchronously in main() before runApp, so we
+    // do NOT set it here — doing so pulses the translation stream and causes
+    // extra rebuilds (the old cause of pullAllData firing 2–3×).
 
     return TranslationProvider(
       child: MaterialAppContainer(
@@ -201,55 +235,6 @@ class WallexAppEntryPoint extends StatelessWidget {
         themeMode: getThemeFromString(appStateSettings[SettingKey.themeMode]!),
       ),
     );
-  }
-
-  void _setAppLanguage() {
-    final lang = appStateSettings[SettingKey.appLanguage];
-
-    if (lang != null && lang.isNotEmpty) {
-      Logger.printDebug(
-        'App language found in DB. Setting the locale to `$lang`...',
-      );
-      LocaleSettings.setLocaleRaw(lang).then((setLocale) {
-        if (setLocale.languageTag != lang) {
-          Logger.printDebug(
-            'Warning: The requested locale `$lang` is not available. Fallback to `${setLocale.languageTag}`.',
-          );
-
-          // Set auto as a language:
-          UserSettingService.instance
-              .setItem(SettingKey.appLanguage, null)
-              .then((value) {});
-        } else {
-          Logger.printDebug('App language set with success');
-        }
-      });
-
-      return;
-    }
-
-    Logger.printDebug(
-      'App language not found in DB. Using device locale...',
-    );
-
-    // Uses locale of the device, fallbacks to base locale. Returns the locale which has been set:
-    LocaleSettings.useDeviceLocale()
-        .then((setLocale) {
-          Logger.printDebug(
-            'App language set to device language: ${setLocale.languageTag}',
-          );
-        })
-        .catchError((error) {
-          Logger.printDebug(
-            'Error setting app language to device language: $error',
-          );
-        })
-        .whenComplete(() {
-          // The set locale should be accessible via LocaleSettings.currentLocale
-          Logger.printDebug(
-            'Current locale: ${LocaleSettings.currentLocale.languageTag}',
-          );
-        });
   }
 }
 
@@ -398,17 +383,38 @@ class MaterialAppContainer extends StatelessWidget {
 /// 3. Otherwise → PageSwitcher (main app)
 ///
 /// Firebase sync is triggered in the background only when enabled + logged in.
-class InitialPageRouteNavigator extends StatelessWidget {
+class InitialPageRouteNavigator extends StatefulWidget {
   const InitialPageRouteNavigator({super.key, required this.introSeen});
 
   final bool introSeen;
+
+  @override
+  State<InitialPageRouteNavigator> createState() =>
+      _InitialPageRouteNavigatorState();
+}
+
+class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Fire background Firebase sync ONCE per session, after first frame.
+    // Previously this was called from build() on a StatelessWidget, which
+    // fired 2–3× due to locale/translation stream rebuilds.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final onboarded = appStateData[AppDataKey.onboarded] == '1';
+      if (onboarded && FirebaseSyncService.instance.isFirebaseAvailable) {
+        FirebaseSyncService.instance.pullAllData();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final onboarded = appStateData[AppDataKey.onboarded] == '1';
 
     Logger.printDebug(
-      'ROUTE STATE: onboarded=$onboarded, introSeen=$introSeen, '
+      'ROUTE STATE: onboarded=$onboarded, introSeen=${widget.introSeen}, '
       'syncAvailable=${FirebaseSyncService.instance.isFirebaseAvailable}',
     );
 
@@ -424,17 +430,12 @@ class InitialPageRouteNavigator extends StatelessWidget {
       );
     }
 
-    // Trigger background sync if Firebase is available and user is logged in
-    if (FirebaseSyncService.instance.isFirebaseAvailable) {
-      FirebaseSyncService.instance.pullAllData();
-    }
-
     return HeroControllerScope(
       controller: MaterialApp.createMaterialHeroController(),
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          introSeen
+          widget.introSeen
               ? PageSwitcher(key: tabsPageKey)
               : const IntroPage(),
         ),
