@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/all_accounts_page.dart';
 import 'package:wallex/app/auth/welcome_screen.dart';
@@ -93,12 +95,12 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
                   );
 
                   if (context.mounted) {
-                    Navigator.of(context).pushAndRemoveUntil(
+                    unawaited(Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (_) => const WelcomeScreen(),
                       ),
                       (route) => false,
-                    );
+                    ));
                   }
                 }
               },

@@ -45,6 +45,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                     if (date == null) {
                       return;
                     }
+                    if (!context.mounted) return;
 
                     performUpdates(
                       context,
@@ -71,6 +72,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                   if (modalRes == null) {
                     return;
                   }
+                  if (!context.mounted) return;
 
                   performUpdates(
                     context,
@@ -94,6 +96,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                   if (modalRes == null) {
                     return;
                   }
+                  if (!context.mounted) return;
 
                   performUpdates(
                     context,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
@@ -48,7 +50,7 @@ class TransactionService {
       final toReturn = await db.into(db.transactions).insert(transaction);
 
       // Push to organization collection for multi-device sync (Fire and forget)
-      FirebaseSyncService.instance.pushTransaction(transaction);
+      unawaited(FirebaseSyncService.instance.pushTransaction(transaction));
 
       // To update the getAccountsData() function results
       db.markTablesUpdated([db.accounts, db.transactions]);
@@ -63,7 +65,7 @@ class TransactionService {
       final toReturn = await db.update(db.transactions).replace(transaction);
 
       // Push to organization collection for multi-device sync (Fire and forget)
-      FirebaseSyncService.instance.pushTransaction(transaction);
+      unawaited(FirebaseSyncService.instance.pushTransaction(transaction));
 
       // To update the getAccountsData() function results
       db.markTablesUpdated([db.accounts, db.transactions]);
@@ -95,7 +97,7 @@ class TransactionService {
   Future<int> deleteTransaction(String transactionId) async {
     return db.transaction(() async {
       // Delete from organization collection for multi-device sync (Fire and forget)
-      FirebaseSyncService.instance.deleteTransaction(transactionId);
+      unawaited(FirebaseSyncService.instance.deleteTransaction(transactionId));
 
       final result = await (db.delete(
         db.transactions,

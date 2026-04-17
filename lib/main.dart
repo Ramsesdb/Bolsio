@@ -124,7 +124,7 @@ void main() async {
   );
 
   // Set plural resolver for Turkish
-  LocaleSettings.setPluralResolver(
+  unawaited(LocaleSettings.setPluralResolver(
     language: 'tr',
     cardinalResolver:
         (
@@ -139,7 +139,7 @@ void main() async {
           if (n == 1) return 'one';
           return 'other';
         },
-  );
+  ));
 
   debugPaintSizeEnabled = false;
   runApp(InitializeApp(key: appStateKey));

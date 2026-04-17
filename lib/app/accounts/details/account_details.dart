@@ -18,7 +18,7 @@ import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/card_with_header.dart';
 import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:wallex/core/presentation/widgets/inline_info_card.dart';

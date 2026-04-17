@@ -39,32 +39,32 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	late final TranslationsUiActionsEn ui_actions = TranslationsUiActionsEn._(_root);
-	late final TranslationsGeneralEn general = TranslationsGeneralEn._(_root);
-	late final TranslationsIntroEn intro = TranslationsIntroEn._(_root);
-	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
-	late final TranslationsFinancialHealthEn financial_health = TranslationsFinancialHealthEn._(_root);
-	late final TranslationsStatsEn stats = TranslationsStatsEn._(_root);
-	late final TranslationsIconSelectorEn icon_selector = TranslationsIconSelectorEn._(_root);
-	late final TranslationsTransactionEn transaction = TranslationsTransactionEn._(_root);
-	late final TranslationsTransferEn transfer = TranslationsTransferEn._(_root);
-	late final TranslationsRecurrentTransactionsEn recurrent_transactions = TranslationsRecurrentTransactionsEn._(_root);
-	late final TranslationsAccountEn account = TranslationsAccountEn._(_root);
-	late final TranslationsCurrenciesEn currencies = TranslationsCurrenciesEn._(_root);
-	late final TranslationsTagsEn tags = TranslationsTagsEn._(_root);
-	late final TranslationsCategoriesEn categories = TranslationsCategoriesEn._(_root);
-	late final TranslationsBudgetsEn budgets = TranslationsBudgetsEn._(_root);
-	late final TranslationsGoalsEn goals = TranslationsGoalsEn._(_root);
-	late final TranslationsDebtsEn debts = TranslationsDebtsEn._(_root);
-	late final TranslationsTargetTimelineStatusesEn target_timeline_statuses = TranslationsTargetTimelineStatusesEn._(_root);
-	late final TranslationsBackupEn backup = TranslationsBackupEn._(_root);
-	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
-	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
+	late final TranslationsUiActionsEn ui_actions = TranslationsUiActionsEn.internal(_root);
+	late final TranslationsGeneralEn general = TranslationsGeneralEn.internal(_root);
+	late final TranslationsIntroEn intro = TranslationsIntroEn.internal(_root);
+	late final TranslationsHomeEn home = TranslationsHomeEn.internal(_root);
+	late final TranslationsFinancialHealthEn financial_health = TranslationsFinancialHealthEn.internal(_root);
+	late final TranslationsStatsEn stats = TranslationsStatsEn.internal(_root);
+	late final TranslationsIconSelectorEn icon_selector = TranslationsIconSelectorEn.internal(_root);
+	late final TranslationsTransactionEn transaction = TranslationsTransactionEn.internal(_root);
+	late final TranslationsTransferEn transfer = TranslationsTransferEn.internal(_root);
+	late final TranslationsRecurrentTransactionsEn recurrent_transactions = TranslationsRecurrentTransactionsEn.internal(_root);
+	late final TranslationsAccountEn account = TranslationsAccountEn.internal(_root);
+	late final TranslationsCurrenciesEn currencies = TranslationsCurrenciesEn.internal(_root);
+	late final TranslationsTagsEn tags = TranslationsTagsEn.internal(_root);
+	late final TranslationsCategoriesEn categories = TranslationsCategoriesEn.internal(_root);
+	late final TranslationsBudgetsEn budgets = TranslationsBudgetsEn.internal(_root);
+	late final TranslationsGoalsEn goals = TranslationsGoalsEn.internal(_root);
+	late final TranslationsDebtsEn debts = TranslationsDebtsEn.internal(_root);
+	late final TranslationsTargetTimelineStatusesEn target_timeline_statuses = TranslationsTargetTimelineStatusesEn.internal(_root);
+	late final TranslationsBackupEn backup = TranslationsBackupEn.internal(_root);
+	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
+	late final TranslationsMoreEn more = TranslationsMoreEn.internal(_root);
 }
 
 // Path: ui_actions
 class TranslationsUiActionsEn {
-	TranslationsUiActionsEn._(this._root);
+	TranslationsUiActionsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -178,7 +178,7 @@ class TranslationsUiActionsEn {
 
 // Path: general
 class TranslationsGeneralEn {
-	TranslationsGeneralEn._(this._root);
+	TranslationsGeneralEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -244,16 +244,16 @@ class TranslationsGeneralEn {
 	/// en: 'Item deleted successfully'
 	String get delete_success => 'Item deleted successfully';
 
-	late final TranslationsGeneralLeaveWithoutSavingEn leave_without_saving = TranslationsGeneralLeaveWithoutSavingEn._(_root);
-	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn._(_root);
-	late final TranslationsGeneralTimeEn time = TranslationsGeneralTimeEn._(_root);
-	late final TranslationsGeneralTransactionOrderEn transaction_order = TranslationsGeneralTransactionOrderEn._(_root);
-	late final TranslationsGeneralValidationsEn validations = TranslationsGeneralValidationsEn._(_root);
+	late final TranslationsGeneralLeaveWithoutSavingEn leave_without_saving = TranslationsGeneralLeaveWithoutSavingEn.internal(_root);
+	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn.internal(_root);
+	late final TranslationsGeneralTimeEn time = TranslationsGeneralTimeEn.internal(_root);
+	late final TranslationsGeneralTransactionOrderEn transaction_order = TranslationsGeneralTransactionOrderEn.internal(_root);
+	late final TranslationsGeneralValidationsEn validations = TranslationsGeneralValidationsEn.internal(_root);
 }
 
 // Path: intro
 class TranslationsIntroEn {
-	TranslationsIntroEn._(this._root);
+	TranslationsIntroEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -316,7 +316,7 @@ class TranslationsIntroEn {
 
 // Path: home
 class TranslationsHomeEn {
-	TranslationsHomeEn._(this._root);
+	TranslationsHomeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -361,7 +361,7 @@ class TranslationsHomeEn {
 
 // Path: financial_health
 class TranslationsFinancialHealthEn {
-	TranslationsFinancialHealthEn._(this._root);
+	TranslationsFinancialHealthEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -370,14 +370,14 @@ class TranslationsFinancialHealthEn {
 	/// en: 'Financial health'
 	String get display => 'Financial health';
 
-	late final TranslationsFinancialHealthReviewEn review = TranslationsFinancialHealthReviewEn._(_root);
-	late final TranslationsFinancialHealthMonthsWithoutIncomeEn months_without_income = TranslationsFinancialHealthMonthsWithoutIncomeEn._(_root);
-	late final TranslationsFinancialHealthSavingsPercentageEn savings_percentage = TranslationsFinancialHealthSavingsPercentageEn._(_root);
+	late final TranslationsFinancialHealthReviewEn review = TranslationsFinancialHealthReviewEn.internal(_root);
+	late final TranslationsFinancialHealthMonthsWithoutIncomeEn months_without_income = TranslationsFinancialHealthMonthsWithoutIncomeEn.internal(_root);
+	late final TranslationsFinancialHealthSavingsPercentageEn savings_percentage = TranslationsFinancialHealthSavingsPercentageEn.internal(_root);
 }
 
 // Path: stats
 class TranslationsStatsEn {
-	TranslationsStatsEn._(this._root);
+	TranslationsStatsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -440,7 +440,7 @@ class TranslationsStatsEn {
 
 // Path: icon_selector
 class TranslationsIconSelectorEn {
-	TranslationsIconSelectorEn._(this._root);
+	TranslationsIconSelectorEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -473,12 +473,12 @@ class TranslationsIconSelectorEn {
 	/// en: 'Identify your category'
 	String get select_category_icon => 'Identify your category';
 
-	late final TranslationsIconSelectorScopesEn scopes = TranslationsIconSelectorScopesEn._(_root);
+	late final TranslationsIconSelectorScopesEn scopes = TranslationsIconSelectorScopesEn.internal(_root);
 }
 
 // Path: transaction
 class TranslationsTransactionEn {
-	TranslationsTransactionEn._(this._root);
+	TranslationsTransactionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -550,18 +550,18 @@ class TranslationsTransactionEn {
 	/// en: 'Movement details'
 	String get details => 'Movement details';
 
-	late final TranslationsTransactionNextPaymentsEn next_payments = TranslationsTransactionNextPaymentsEn._(_root);
-	late final TranslationsTransactionListEn list = TranslationsTransactionListEn._(_root);
-	late final TranslationsTransactionFiltersEn filters = TranslationsTransactionFiltersEn._(_root);
-	late final TranslationsTransactionFormEn form = TranslationsTransactionFormEn._(_root);
-	late final TranslationsTransactionReversedEn reversed = TranslationsTransactionReversedEn._(_root);
-	late final TranslationsTransactionStatusEn status = TranslationsTransactionStatusEn._(_root);
-	late final TranslationsTransactionTypesEn types = TranslationsTransactionTypesEn._(_root);
+	late final TranslationsTransactionNextPaymentsEn next_payments = TranslationsTransactionNextPaymentsEn.internal(_root);
+	late final TranslationsTransactionListEn list = TranslationsTransactionListEn.internal(_root);
+	late final TranslationsTransactionFiltersEn filters = TranslationsTransactionFiltersEn.internal(_root);
+	late final TranslationsTransactionFormEn form = TranslationsTransactionFormEn.internal(_root);
+	late final TranslationsTransactionReversedEn reversed = TranslationsTransactionReversedEn.internal(_root);
+	late final TranslationsTransactionStatusEn status = TranslationsTransactionStatusEn.internal(_root);
+	late final TranslationsTransactionTypesEn types = TranslationsTransactionTypesEn.internal(_root);
 }
 
 // Path: transfer
 class TranslationsTransferEn {
-	TranslationsTransferEn._(this._root);
+	TranslationsTransferEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -585,12 +585,12 @@ class TranslationsTransferEn {
 	/// en: 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button'
 	String get need_two_accounts_warning_message => 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button';
 
-	late final TranslationsTransferFormEn form = TranslationsTransferFormEn._(_root);
+	late final TranslationsTransferFormEn form = TranslationsTransferFormEn.internal(_root);
 }
 
 // Path: recurrent_transactions
 class TranslationsRecurrentTransactionsEn {
-	TranslationsRecurrentTransactionsEn._(this._root);
+	TranslationsRecurrentTransactionsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -611,13 +611,13 @@ class TranslationsRecurrentTransactionsEn {
 	/// en: '* Without considering the start and end date of each recurrence'
 	String get total_expense_descr => '* Without considering the start and end date of each recurrence';
 
-	late final TranslationsRecurrentTransactionsDetailsEn details = TranslationsRecurrentTransactionsDetailsEn._(_root);
-	late final TranslationsRecurrentTransactionsStatusEn status = TranslationsRecurrentTransactionsStatusEn._(_root);
+	late final TranslationsRecurrentTransactionsDetailsEn details = TranslationsRecurrentTransactionsDetailsEn.internal(_root);
+	late final TranslationsRecurrentTransactionsStatusEn status = TranslationsRecurrentTransactionsStatusEn.internal(_root);
 }
 
 // Path: account
 class TranslationsAccountEn {
-	TranslationsAccountEn._(this._root);
+	TranslationsAccountEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -656,16 +656,16 @@ class TranslationsAccountEn {
 	/// en: 'No accounts found to display here. Add an account by clicking the '+' button at the bottom'
 	String get no_accounts => 'No accounts found to display here. Add an account by clicking the \'+\' button at the bottom';
 
-	late final TranslationsAccountTypesEn types = TranslationsAccountTypesEn._(_root);
-	late final TranslationsAccountFormEn form = TranslationsAccountFormEn._(_root);
-	late final TranslationsAccountDeleteEn delete = TranslationsAccountDeleteEn._(_root);
-	late final TranslationsAccountCloseEn close = TranslationsAccountCloseEn._(_root);
-	late final TranslationsAccountSelectEn select = TranslationsAccountSelectEn._(_root);
+	late final TranslationsAccountTypesEn types = TranslationsAccountTypesEn.internal(_root);
+	late final TranslationsAccountFormEn form = TranslationsAccountFormEn.internal(_root);
+	late final TranslationsAccountDeleteEn delete = TranslationsAccountDeleteEn.internal(_root);
+	late final TranslationsAccountCloseEn close = TranslationsAccountCloseEn.internal(_root);
+	late final TranslationsAccountSelectEn select = TranslationsAccountSelectEn.internal(_root);
 }
 
 // Path: currencies
 class TranslationsCurrenciesEn {
-	TranslationsCurrenciesEn._(this._root);
+	TranslationsCurrenciesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -698,9 +698,9 @@ class TranslationsCurrenciesEn {
 	/// en: 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?'
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
 
-	late final TranslationsCurrenciesExchangeRateFormEn exchange_rate_form = TranslationsCurrenciesExchangeRateFormEn._(_root);
-	late final TranslationsCurrenciesTypesEn types = TranslationsCurrenciesTypesEn._(_root);
-	late final TranslationsCurrenciesCurrencyFormEn currency_form = TranslationsCurrenciesCurrencyFormEn._(_root);
+	late final TranslationsCurrenciesExchangeRateFormEn exchange_rate_form = TranslationsCurrenciesExchangeRateFormEn.internal(_root);
+	late final TranslationsCurrenciesTypesEn types = TranslationsCurrenciesTypesEn.internal(_root);
+	late final TranslationsCurrenciesCurrencyFormEn currency_form = TranslationsCurrenciesCurrencyFormEn.internal(_root);
 
 	/// en: 'Deleted exchange rates successfully'
 	String get delete_all_success => 'Deleted exchange rates successfully';
@@ -735,7 +735,7 @@ class TranslationsCurrenciesEn {
 
 // Path: tags
 class TranslationsTagsEn {
-	TranslationsTagsEn._(this._root);
+	TranslationsTagsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -747,8 +747,8 @@ class TranslationsTagsEn {
 		other: 'Tags',
 	);
 
-	late final TranslationsTagsFormEn form = TranslationsTagsFormEn._(_root);
-	late final TranslationsTagsSelectEn select = TranslationsTagsSelectEn._(_root);
+	late final TranslationsTagsFormEn form = TranslationsTagsFormEn.internal(_root);
+	late final TranslationsTagsSelectEn select = TranslationsTagsSelectEn.internal(_root);
 
 	/// en: 'You haven't created any tags yet. Tags and categories are a great way to categorize your movements'
 	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
@@ -786,7 +786,7 @@ class TranslationsTagsEn {
 
 // Path: categories
 class TranslationsCategoriesEn {
-	TranslationsCategoriesEn._(this._root);
+	TranslationsCategoriesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -864,12 +864,12 @@ class TranslationsCategoriesEn {
 	/// en: 'This action will irreversibly delete all transactions <b>({{x}})</b> related to this category.'
 	String delete_warning_message({required Object x}) => 'This action will irreversibly delete all transactions <b>(${x})</b> related to this category.';
 
-	late final TranslationsCategoriesSelectEn select = TranslationsCategoriesSelectEn._(_root);
+	late final TranslationsCategoriesSelectEn select = TranslationsCategoriesSelectEn.internal(_root);
 }
 
 // Path: budgets
 class TranslationsBudgetsEn {
-	TranslationsBudgetsEn._(this._root);
+	TranslationsBudgetsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -911,15 +911,15 @@ class TranslationsBudgetsEn {
 	/// en: 'This action is irreversible. Categories and transactions referring to this quote will not be deleted'
 	String get delete_warning => 'This action is irreversible. Categories and transactions referring to this quote will not be deleted';
 
-	late final TranslationsBudgetsFormEn form = TranslationsBudgetsFormEn._(_root);
-	late final TranslationsBudgetsDetailsEn details = TranslationsBudgetsDetailsEn._(_root);
-	late final TranslationsBudgetsTargetTimelineStatusesEn target_timeline_statuses = TranslationsBudgetsTargetTimelineStatusesEn._(_root);
-	late final TranslationsBudgetsProgressEn progress = TranslationsBudgetsProgressEn._(_root);
+	late final TranslationsBudgetsFormEn form = TranslationsBudgetsFormEn.internal(_root);
+	late final TranslationsBudgetsDetailsEn details = TranslationsBudgetsDetailsEn.internal(_root);
+	late final TranslationsBudgetsTargetTimelineStatusesEn target_timeline_statuses = TranslationsBudgetsTargetTimelineStatusesEn.internal(_root);
+	late final TranslationsBudgetsProgressEn progress = TranslationsBudgetsProgressEn.internal(_root);
 }
 
 // Path: goals
 class TranslationsGoalsEn {
-	TranslationsGoalsEn._(this._root);
+	TranslationsGoalsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -931,7 +931,7 @@ class TranslationsGoalsEn {
 	/// en: 'Goal status'
 	String get status => 'Goal status';
 
-	late final TranslationsGoalsTypeEn type = TranslationsGoalsTypeEn._(_root);
+	late final TranslationsGoalsTypeEn type = TranslationsGoalsTypeEn.internal(_root);
 
 	/// en: 'No goals found'
 	String get empty_title => 'No goals found';
@@ -945,15 +945,15 @@ class TranslationsGoalsEn {
 	/// en: 'This action is irreversible. Categories and transactions referring to this goal will not be deleted'
 	String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
 
-	late final TranslationsGoalsFormEn form = TranslationsGoalsFormEn._(_root);
-	late final TranslationsGoalsDetailsEn details = TranslationsGoalsDetailsEn._(_root);
-	late final TranslationsGoalsTargetTimelineStatusesEn target_timeline_statuses = TranslationsGoalsTargetTimelineStatusesEn._(_root);
-	late final TranslationsGoalsProgressEn progress = TranslationsGoalsProgressEn._(_root);
+	late final TranslationsGoalsFormEn form = TranslationsGoalsFormEn.internal(_root);
+	late final TranslationsGoalsDetailsEn details = TranslationsGoalsDetailsEn.internal(_root);
+	late final TranslationsGoalsTargetTimelineStatusesEn target_timeline_statuses = TranslationsGoalsTargetTimelineStatusesEn.internal(_root);
+	late final TranslationsGoalsProgressEn progress = TranslationsGoalsProgressEn.internal(_root);
 }
 
 // Path: debts
 class TranslationsDebtsEn {
-	TranslationsDebtsEn._(this._root);
+	TranslationsDebtsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -965,17 +965,17 @@ class TranslationsDebtsEn {
 		other: 'Debts',
 	);
 
-	late final TranslationsDebtsFormEn form = TranslationsDebtsFormEn._(_root);
-	late final TranslationsDebtsDirectionEn direction = TranslationsDebtsDirectionEn._(_root);
-	late final TranslationsDebtsStatusEn status = TranslationsDebtsStatusEn._(_root);
-	late final TranslationsDebtsDetailsEn details = TranslationsDebtsDetailsEn._(_root);
-	late final TranslationsDebtsEmptyEn empty = TranslationsDebtsEmptyEn._(_root);
-	late final TranslationsDebtsActionsEn actions = TranslationsDebtsActionsEn._(_root);
+	late final TranslationsDebtsFormEn form = TranslationsDebtsFormEn.internal(_root);
+	late final TranslationsDebtsDirectionEn direction = TranslationsDebtsDirectionEn.internal(_root);
+	late final TranslationsDebtsStatusEn status = TranslationsDebtsStatusEn.internal(_root);
+	late final TranslationsDebtsDetailsEn details = TranslationsDebtsDetailsEn.internal(_root);
+	late final TranslationsDebtsEmptyEn empty = TranslationsDebtsEmptyEn.internal(_root);
+	late final TranslationsDebtsActionsEn actions = TranslationsDebtsActionsEn.internal(_root);
 }
 
 // Path: target_timeline_statuses
 class TranslationsTargetTimelineStatusesEn {
-	TranslationsTargetTimelineStatusesEn._(this._root);
+	TranslationsTargetTimelineStatusesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -993,7 +993,7 @@ class TranslationsTargetTimelineStatusesEn {
 
 // Path: backup
 class TranslationsBackupEn {
-	TranslationsBackupEn._(this._root);
+	TranslationsBackupEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1005,14 +1005,14 @@ class TranslationsBackupEn {
 	/// en: 'No directory selected'
 	String get no_directory_selected => 'No directory selected';
 
-	late final TranslationsBackupExportEn export = TranslationsBackupExportEn._(_root);
-	late final TranslationsBackupImportEn import = TranslationsBackupImportEn._(_root);
-	late final TranslationsBackupAboutEn about = TranslationsBackupAboutEn._(_root);
+	late final TranslationsBackupExportEn export = TranslationsBackupExportEn.internal(_root);
+	late final TranslationsBackupImportEn import = TranslationsBackupImportEn.internal(_root);
+	late final TranslationsBackupAboutEn about = TranslationsBackupAboutEn.internal(_root);
 }
 
 // Path: settings
 class TranslationsSettingsEn {
-	TranslationsSettingsEn._(this._root);
+	TranslationsSettingsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1030,15 +1030,15 @@ class TranslationsSettingsEn {
 	/// en: 'Edit profile'
 	String get edit_profile => 'Edit profile';
 
-	late final TranslationsSettingsGeneralEn general = TranslationsSettingsGeneralEn._(_root);
-	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
-	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn._(_root);
-	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn._(_root);
+	late final TranslationsSettingsGeneralEn general = TranslationsSettingsGeneralEn.internal(_root);
+	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn.internal(_root);
+	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn.internal(_root);
+	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn.internal(_root);
 }
 
 // Path: more
 class TranslationsMoreEn {
-	TranslationsMoreEn._(this._root);
+	TranslationsMoreEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1050,14 +1050,14 @@ class TranslationsMoreEn {
 	/// en: 'More actions'
 	String get title_long => 'More actions';
 
-	late final TranslationsMoreDataEn data = TranslationsMoreDataEn._(_root);
-	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn._(_root);
-	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn._(_root);
+	late final TranslationsMoreDataEn data = TranslationsMoreDataEn.internal(_root);
+	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn.internal(_root);
+	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn.internal(_root);
 }
 
 // Path: general.leave_without_saving
 class TranslationsGeneralLeaveWithoutSavingEn {
-	TranslationsGeneralLeaveWithoutSavingEn._(this._root);
+	TranslationsGeneralLeaveWithoutSavingEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1072,7 +1072,7 @@ class TranslationsGeneralLeaveWithoutSavingEn {
 
 // Path: general.clipboard
 class TranslationsGeneralClipboardEn {
-	TranslationsGeneralClipboardEn._(this._root);
+	TranslationsGeneralClipboardEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1087,7 +1087,7 @@ class TranslationsGeneralClipboardEn {
 
 // Path: general.time
 class TranslationsGeneralTimeEn {
-	TranslationsGeneralTimeEn._(this._root);
+	TranslationsGeneralTimeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1120,15 +1120,15 @@ class TranslationsGeneralTimeEn {
 	/// en: 'After'
 	String get after => 'After';
 
-	late final TranslationsGeneralTimeRangesEn ranges = TranslationsGeneralTimeRangesEn._(_root);
-	late final TranslationsGeneralTimePeriodicityEn periodicity = TranslationsGeneralTimePeriodicityEn._(_root);
-	late final TranslationsGeneralTimeCurrentEn current = TranslationsGeneralTimeCurrentEn._(_root);
-	late final TranslationsGeneralTimeAllEn all = TranslationsGeneralTimeAllEn._(_root);
+	late final TranslationsGeneralTimeRangesEn ranges = TranslationsGeneralTimeRangesEn.internal(_root);
+	late final TranslationsGeneralTimePeriodicityEn periodicity = TranslationsGeneralTimePeriodicityEn.internal(_root);
+	late final TranslationsGeneralTimeCurrentEn current = TranslationsGeneralTimeCurrentEn.internal(_root);
+	late final TranslationsGeneralTimeAllEn all = TranslationsGeneralTimeAllEn.internal(_root);
 }
 
 // Path: general.transaction_order
 class TranslationsGeneralTransactionOrderEn {
-	TranslationsGeneralTransactionOrderEn._(this._root);
+	TranslationsGeneralTransactionOrderEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1149,7 +1149,7 @@ class TranslationsGeneralTransactionOrderEn {
 
 // Path: general.validations
 class TranslationsGeneralValidationsEn {
-	TranslationsGeneralValidationsEn._(this._root);
+	TranslationsGeneralValidationsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1173,7 +1173,7 @@ class TranslationsGeneralValidationsEn {
 
 // Path: financial_health.review
 class TranslationsFinancialHealthReviewEn {
-	TranslationsFinancialHealthReviewEn._(this._root);
+	TranslationsFinancialHealthReviewEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1239,12 +1239,12 @@ class TranslationsFinancialHealthReviewEn {
 		}
 	}
 
-	late final TranslationsFinancialHealthReviewDescrEn descr = TranslationsFinancialHealthReviewDescrEn._(_root);
+	late final TranslationsFinancialHealthReviewDescrEn descr = TranslationsFinancialHealthReviewDescrEn.internal(_root);
 }
 
 // Path: financial_health.months_without_income
 class TranslationsFinancialHealthMonthsWithoutIncomeEn {
-	TranslationsFinancialHealthMonthsWithoutIncomeEn._(this._root);
+	TranslationsFinancialHealthMonthsWithoutIncomeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1277,7 +1277,7 @@ class TranslationsFinancialHealthMonthsWithoutIncomeEn {
 
 // Path: financial_health.savings_percentage
 class TranslationsFinancialHealthSavingsPercentageEn {
-	TranslationsFinancialHealthSavingsPercentageEn._(this._root);
+	TranslationsFinancialHealthSavingsPercentageEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1289,7 +1289,7 @@ class TranslationsFinancialHealthSavingsPercentageEn {
 	/// en: 'What part of your income is not spent in this period'
 	String get subtitle => 'What part of your income is not spent in this period';
 
-	late final TranslationsFinancialHealthSavingsPercentageTextEn text = TranslationsFinancialHealthSavingsPercentageTextEn._(_root);
+	late final TranslationsFinancialHealthSavingsPercentageTextEn text = TranslationsFinancialHealthSavingsPercentageTextEn.internal(_root);
 
 	/// en: 'Remember that it is advisable to save at least 15-20% of what you earn.'
 	String get suggestion => 'Remember that it is advisable to save at least 15-20% of what you earn.';
@@ -1297,7 +1297,7 @@ class TranslationsFinancialHealthSavingsPercentageEn {
 
 // Path: icon_selector.scopes
 class TranslationsIconSelectorScopesEn {
-	TranslationsIconSelectorScopesEn._(this._root);
+	TranslationsIconSelectorScopesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1330,7 +1330,7 @@ class TranslationsIconSelectorScopesEn {
 
 // Path: transaction.next_payments
 class TranslationsTransactionNextPaymentsEn {
-	TranslationsTransactionNextPaymentsEn._(this._root);
+	TranslationsTransactionNextPaymentsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1372,7 +1372,7 @@ class TranslationsTransactionNextPaymentsEn {
 
 // Path: transaction.list
 class TranslationsTransactionListEn {
-	TranslationsTransactionListEn._(this._root);
+	TranslationsTransactionListEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1405,12 +1405,12 @@ class TranslationsTransactionListEn {
 		other: '${n} transactions selected',
 	);
 
-	late final TranslationsTransactionListBulkEditEn bulk_edit = TranslationsTransactionListBulkEditEn._(_root);
+	late final TranslationsTransactionListBulkEditEn bulk_edit = TranslationsTransactionListBulkEditEn.internal(_root);
 }
 
 // Path: transaction.filters
 class TranslationsTransactionFiltersEn {
-	TranslationsTransactionFiltersEn._(this._root);
+	TranslationsTransactionFiltersEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1440,17 +1440,17 @@ class TranslationsTransactionFiltersEn {
 	/// en: 'Reset filters'
 	String get reset => 'Reset filters';
 
-	late final TranslationsTransactionFiltersSavedEn saved = TranslationsTransactionFiltersSavedEn._(_root);
+	late final TranslationsTransactionFiltersSavedEn saved = TranslationsTransactionFiltersSavedEn.internal(_root);
 }
 
 // Path: transaction.form
 class TranslationsTransactionFormEn {
-	TranslationsTransactionFormEn._(this._root);
+	TranslationsTransactionFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final TranslationsTransactionFormValidatorsEn validators = TranslationsTransactionFormValidatorsEn._(_root);
+	late final TranslationsTransactionFormValidatorsEn validators = TranslationsTransactionFormValidatorsEn.internal(_root);
 
 	/// en: 'Transaction title'
 	String get title => 'Transaction title';
@@ -1482,7 +1482,7 @@ class TranslationsTransactionFormEn {
 
 // Path: transaction.reversed
 class TranslationsTransactionReversedEn {
-	TranslationsTransactionReversedEn._(this._root);
+	TranslationsTransactionReversedEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1503,7 +1503,7 @@ class TranslationsTransactionReversedEn {
 
 // Path: transaction.status
 class TranslationsTransactionStatusEn {
-	TranslationsTransactionStatusEn._(this._root);
+	TranslationsTransactionStatusEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1554,7 +1554,7 @@ class TranslationsTransactionStatusEn {
 
 // Path: transaction.types
 class TranslationsTransactionTypesEn {
-	TranslationsTransactionTypesEn._(this._root);
+	TranslationsTransactionTypesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1587,7 +1587,7 @@ class TranslationsTransactionTypesEn {
 
 // Path: transfer.form
 class TranslationsTransferFormEn {
-	TranslationsTransferFormEn._(this._root);
+	TranslationsTransferFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1599,12 +1599,12 @@ class TranslationsTransferFormEn {
 	/// en: 'Destination account'
 	String get to => 'Destination account';
 
-	late final TranslationsTransferFormValueInDestinyEn value_in_destiny = TranslationsTransferFormValueInDestinyEn._(_root);
+	late final TranslationsTransferFormValueInDestinyEn value_in_destiny = TranslationsTransferFormValueInDestinyEn.internal(_root);
 }
 
 // Path: recurrent_transactions.details
 class TranslationsRecurrentTransactionsDetailsEn {
-	TranslationsRecurrentTransactionsDetailsEn._(this._root);
+	TranslationsRecurrentTransactionsDetailsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1628,7 +1628,7 @@ class TranslationsRecurrentTransactionsDetailsEn {
 
 // Path: recurrent_transactions.status
 class TranslationsRecurrentTransactionsStatusEn {
-	TranslationsRecurrentTransactionsStatusEn._(this._root);
+	TranslationsRecurrentTransactionsStatusEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1643,7 +1643,7 @@ class TranslationsRecurrentTransactionsStatusEn {
 
 // Path: account.types
 class TranslationsAccountTypesEn {
-	TranslationsAccountTypesEn._(this._root);
+	TranslationsAccountTypesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1670,7 +1670,7 @@ class TranslationsAccountTypesEn {
 
 // Path: account.form
 class TranslationsAccountFormEn {
-	TranslationsAccountFormEn._(this._root);
+	TranslationsAccountFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1718,7 +1718,7 @@ class TranslationsAccountFormEn {
 
 // Path: account.delete
 class TranslationsAccountDeleteEn {
-	TranslationsAccountDeleteEn._(this._root);
+	TranslationsAccountDeleteEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1736,7 +1736,7 @@ class TranslationsAccountDeleteEn {
 
 // Path: account.close
 class TranslationsAccountCloseEn {
-	TranslationsAccountCloseEn._(this._root);
+	TranslationsAccountCloseEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1766,7 +1766,7 @@ class TranslationsAccountCloseEn {
 
 // Path: account.select
 class TranslationsAccountSelectEn {
-	TranslationsAccountSelectEn._(this._root);
+	TranslationsAccountSelectEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1784,7 +1784,7 @@ class TranslationsAccountSelectEn {
 
 // Path: currencies.exchange_rate_form
 class TranslationsCurrenciesExchangeRateFormEn {
-	TranslationsCurrenciesExchangeRateFormEn._(this._root);
+	TranslationsCurrenciesExchangeRateFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1820,7 +1820,7 @@ class TranslationsCurrenciesExchangeRateFormEn {
 
 // Path: currencies.types
 class TranslationsCurrenciesTypesEn {
-	TranslationsCurrenciesTypesEn._(this._root);
+	TranslationsCurrenciesTypesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1841,7 +1841,7 @@ class TranslationsCurrenciesTypesEn {
 
 // Path: currencies.currency_form
 class TranslationsCurrenciesCurrencyFormEn {
-	TranslationsCurrenciesCurrencyFormEn._(this._root);
+	TranslationsCurrenciesCurrencyFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1883,7 +1883,7 @@ class TranslationsCurrenciesCurrencyFormEn {
 
 // Path: tags.form
 class TranslationsTagsFormEn {
-	TranslationsTagsFormEn._(this._root);
+	TranslationsTagsFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1898,7 +1898,7 @@ class TranslationsTagsFormEn {
 
 // Path: tags.select
 class TranslationsTagsSelectEn {
-	TranslationsTagsSelectEn._(this._root);
+	TranslationsTagsSelectEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1913,7 +1913,7 @@ class TranslationsTagsSelectEn {
 
 // Path: categories.select
 class TranslationsCategoriesSelectEn {
-	TranslationsCategoriesSelectEn._(this._root);
+	TranslationsCategoriesSelectEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1940,7 +1940,7 @@ class TranslationsCategoriesSelectEn {
 
 // Path: budgets.form
 class TranslationsBudgetsFormEn {
-	TranslationsBudgetsFormEn._(this._root);
+	TranslationsBudgetsFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1973,7 +1973,7 @@ class TranslationsBudgetsFormEn {
 
 // Path: budgets.details
 class TranslationsBudgetsDetailsEn {
-	TranslationsBudgetsDetailsEn._(this._root);
+	TranslationsBudgetsDetailsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1997,7 +1997,7 @@ class TranslationsBudgetsDetailsEn {
 
 // Path: budgets.target_timeline_statuses
 class TranslationsBudgetsTargetTimelineStatusesEn {
-	TranslationsBudgetsTargetTimelineStatusesEn._(this._root);
+	TranslationsBudgetsTargetTimelineStatusesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2015,18 +2015,18 @@ class TranslationsBudgetsTargetTimelineStatusesEn {
 
 // Path: budgets.progress
 class TranslationsBudgetsProgressEn {
-	TranslationsBudgetsProgressEn._(this._root);
+	TranslationsBudgetsProgressEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final TranslationsBudgetsProgressLabelsEn labels = TranslationsBudgetsProgressLabelsEn._(_root);
-	late final TranslationsBudgetsProgressDescriptionEn description = TranslationsBudgetsProgressDescriptionEn._(_root);
+	late final TranslationsBudgetsProgressLabelsEn labels = TranslationsBudgetsProgressLabelsEn.internal(_root);
+	late final TranslationsBudgetsProgressDescriptionEn description = TranslationsBudgetsProgressDescriptionEn.internal(_root);
 }
 
 // Path: goals.type
 class TranslationsGoalsTypeEn {
-	TranslationsGoalsTypeEn._(this._root);
+	TranslationsGoalsTypeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2035,13 +2035,13 @@ class TranslationsGoalsTypeEn {
 	/// en: 'Goal Type'
 	String get display => 'Goal Type';
 
-	late final TranslationsGoalsTypeIncomeEn income = TranslationsGoalsTypeIncomeEn._(_root);
-	late final TranslationsGoalsTypeExpenseEn expense = TranslationsGoalsTypeExpenseEn._(_root);
+	late final TranslationsGoalsTypeIncomeEn income = TranslationsGoalsTypeIncomeEn.internal(_root);
+	late final TranslationsGoalsTypeExpenseEn expense = TranslationsGoalsTypeExpenseEn.internal(_root);
 }
 
 // Path: goals.form
 class TranslationsGoalsFormEn {
-	TranslationsGoalsFormEn._(this._root);
+	TranslationsGoalsFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2077,7 +2077,7 @@ class TranslationsGoalsFormEn {
 
 // Path: goals.details
 class TranslationsGoalsDetailsEn {
-	TranslationsGoalsDetailsEn._(this._root);
+	TranslationsGoalsDetailsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2101,7 +2101,7 @@ class TranslationsGoalsDetailsEn {
 
 // Path: goals.target_timeline_statuses
 class TranslationsGoalsTargetTimelineStatusesEn {
-	TranslationsGoalsTargetTimelineStatusesEn._(this._root);
+	TranslationsGoalsTargetTimelineStatusesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2119,18 +2119,18 @@ class TranslationsGoalsTargetTimelineStatusesEn {
 
 // Path: goals.progress
 class TranslationsGoalsProgressEn {
-	TranslationsGoalsProgressEn._(this._root);
+	TranslationsGoalsProgressEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final TranslationsGoalsProgressLabelsEn labels = TranslationsGoalsProgressLabelsEn._(_root);
-	late final TranslationsGoalsProgressDescriptionEn description = TranslationsGoalsProgressDescriptionEn._(_root);
+	late final TranslationsGoalsProgressLabelsEn labels = TranslationsGoalsProgressLabelsEn.internal(_root);
+	late final TranslationsGoalsProgressDescriptionEn description = TranslationsGoalsProgressDescriptionEn.internal(_root);
 }
 
 // Path: debts.form
 class TranslationsDebtsFormEn {
-	TranslationsDebtsFormEn._(this._root);
+	TranslationsDebtsFormEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2151,13 +2151,13 @@ class TranslationsDebtsFormEn {
 	/// en: 'Details'
 	String get step_details => 'Details';
 
-	late final TranslationsDebtsFormFromTransactionEn from_transaction = TranslationsDebtsFormFromTransactionEn._(_root);
-	late final TranslationsDebtsFormFromAmountEn from_amount = TranslationsDebtsFormFromAmountEn._(_root);
+	late final TranslationsDebtsFormFromTransactionEn from_transaction = TranslationsDebtsFormFromTransactionEn.internal(_root);
+	late final TranslationsDebtsFormFromAmountEn from_amount = TranslationsDebtsFormFromAmountEn.internal(_root);
 }
 
 // Path: debts.direction
 class TranslationsDebtsDirectionEn {
-	TranslationsDebtsDirectionEn._(this._root);
+	TranslationsDebtsDirectionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2172,7 +2172,7 @@ class TranslationsDebtsDirectionEn {
 
 // Path: debts.status
 class TranslationsDebtsStatusEn {
-	TranslationsDebtsStatusEn._(this._root);
+	TranslationsDebtsStatusEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2187,7 +2187,7 @@ class TranslationsDebtsStatusEn {
 
 // Path: debts.details
 class TranslationsDebtsDetailsEn {
-	TranslationsDebtsDetailsEn._(this._root);
+	TranslationsDebtsDetailsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2223,7 +2223,7 @@ class TranslationsDebtsDetailsEn {
 
 // Path: debts.empty
 class TranslationsDebtsEmptyEn {
-	TranslationsDebtsEmptyEn._(this._root);
+	TranslationsDebtsEmptyEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2238,23 +2238,23 @@ class TranslationsDebtsEmptyEn {
 
 // Path: debts.actions
 class TranslationsDebtsActionsEn {
-	TranslationsDebtsActionsEn._(this._root);
+	TranslationsDebtsActionsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final TranslationsDebtsActionsEditEn edit = TranslationsDebtsActionsEditEn._(_root);
-	late final TranslationsDebtsActionsDeleteEn delete = TranslationsDebtsActionsDeleteEn._(_root);
-	late final TranslationsDebtsActionsAddRegisterEn add_register = TranslationsDebtsActionsAddRegisterEn._(_root);
-	late final TranslationsDebtsActionsLinkTransactionEn link_transaction = TranslationsDebtsActionsLinkTransactionEn._(_root);
-	late final TranslationsDebtsActionsUnlinkTransactionEn unlink_transaction = TranslationsDebtsActionsUnlinkTransactionEn._(_root);
-	late final TranslationsDebtsActionsNewTransactionEn new_transaction = TranslationsDebtsActionsNewTransactionEn._(_root);
-	late final TranslationsDebtsActionsCreateEn create = TranslationsDebtsActionsCreateEn._(_root);
+	late final TranslationsDebtsActionsEditEn edit = TranslationsDebtsActionsEditEn.internal(_root);
+	late final TranslationsDebtsActionsDeleteEn delete = TranslationsDebtsActionsDeleteEn.internal(_root);
+	late final TranslationsDebtsActionsAddRegisterEn add_register = TranslationsDebtsActionsAddRegisterEn.internal(_root);
+	late final TranslationsDebtsActionsLinkTransactionEn link_transaction = TranslationsDebtsActionsLinkTransactionEn.internal(_root);
+	late final TranslationsDebtsActionsUnlinkTransactionEn unlink_transaction = TranslationsDebtsActionsUnlinkTransactionEn.internal(_root);
+	late final TranslationsDebtsActionsNewTransactionEn new_transaction = TranslationsDebtsActionsNewTransactionEn.internal(_root);
+	late final TranslationsDebtsActionsCreateEn create = TranslationsDebtsActionsCreateEn.internal(_root);
 }
 
 // Path: backup.export
 class TranslationsBackupExportEn {
-	TranslationsBackupExportEn._(this._root);
+	TranslationsBackupExportEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2304,11 +2304,14 @@ class TranslationsBackupExportEn {
 
 	/// en: 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com'
 	String get error => 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
+
+	/// en: 'Save/Send file'
+	String get dialog_title => 'Save/Send file';
 }
 
 // Path: backup.import
 class TranslationsBackupImportEn {
-	TranslationsBackupImportEn._(this._root);
+	TranslationsBackupImportEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2338,18 +2341,21 @@ class TranslationsBackupImportEn {
 	/// en: 'Tap to select a file'
 	String get tap_to_select_file => 'Tap to select a file';
 
-	late final TranslationsBackupImportManualImportEn manual_import = TranslationsBackupImportManualImportEn._(_root);
+	late final TranslationsBackupImportManualImportEn manual_import = TranslationsBackupImportManualImportEn.internal(_root);
 
 	/// en: 'Import performed successfully'
 	String get success => 'Import performed successfully';
 
 	/// en: 'Error importing file. Please contact developer via lozin.technologies@gmail.com'
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
+
+	/// en: 'Import was cancelled by the user'
+	String get cancelled => 'Import was cancelled by the user';
 }
 
 // Path: backup.about
 class TranslationsBackupAboutEn {
-	TranslationsBackupAboutEn._(this._root);
+	TranslationsBackupAboutEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2373,7 +2379,7 @@ class TranslationsBackupAboutEn {
 
 // Path: settings.general
 class TranslationsSettingsGeneralEn {
-	TranslationsSettingsGeneralEn._(this._root);
+	TranslationsSettingsGeneralEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2391,13 +2397,13 @@ class TranslationsSettingsGeneralEn {
 	/// en: 'Whether to show all decimals places even if there are trailing zeros'
 	String get show_all_decimals_descr => 'Whether to show all decimals places even if there are trailing zeros';
 
-	late final TranslationsSettingsGeneralLanguageEn language = TranslationsSettingsGeneralLanguageEn._(_root);
-	late final TranslationsSettingsGeneralLocaleEn locale = TranslationsSettingsGeneralLocaleEn._(_root);
+	late final TranslationsSettingsGeneralLanguageEn language = TranslationsSettingsGeneralLanguageEn.internal(_root);
+	late final TranslationsSettingsGeneralLocaleEn locale = TranslationsSettingsGeneralLocaleEn.internal(_root);
 }
 
 // Path: settings.security
 class TranslationsSettingsSecurityEn {
-	TranslationsSettingsSecurityEn._(this._root);
+	TranslationsSettingsSecurityEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2427,7 +2433,7 @@ class TranslationsSettingsSecurityEn {
 
 // Path: settings.transactions
 class TranslationsSettingsTransactionsEn {
-	TranslationsSettingsTransactionsEn._(this._root);
+	TranslationsSettingsTransactionsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2442,15 +2448,15 @@ class TranslationsSettingsTransactionsEn {
 	/// en: 'Transactions Settings'
 	String get title => 'Transactions Settings';
 
-	late final TranslationsSettingsTransactionsStyleEn style = TranslationsSettingsTransactionsStyleEn._(_root);
-	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn._(_root);
-	late final TranslationsSettingsTransactionsDefaultValuesEn default_values = TranslationsSettingsTransactionsDefaultValuesEn._(_root);
-	late final TranslationsSettingsTransactionsDefaultTypeEn default_type = TranslationsSettingsTransactionsDefaultTypeEn._(_root);
+	late final TranslationsSettingsTransactionsStyleEn style = TranslationsSettingsTransactionsStyleEn.internal(_root);
+	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn.internal(_root);
+	late final TranslationsSettingsTransactionsDefaultValuesEn default_values = TranslationsSettingsTransactionsDefaultValuesEn.internal(_root);
+	late final TranslationsSettingsTransactionsDefaultTypeEn default_type = TranslationsSettingsTransactionsDefaultTypeEn.internal(_root);
 }
 
 // Path: settings.appearance
 class TranslationsSettingsAppearanceEn {
-	TranslationsSettingsAppearanceEn._(this._root);
+	TranslationsSettingsAppearanceEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2465,7 +2471,7 @@ class TranslationsSettingsAppearanceEn {
 	/// en: 'Theme and colors'
 	String get theme_and_colors => 'Theme and colors';
 
-	late final TranslationsSettingsAppearanceThemeEn theme = TranslationsSettingsAppearanceThemeEn._(_root);
+	late final TranslationsSettingsAppearanceThemeEn theme = TranslationsSettingsAppearanceThemeEn.internal(_root);
 
 	/// en: 'AMOLED mode'
 	String get amoled_mode => 'AMOLED mode';
@@ -2497,7 +2503,7 @@ class TranslationsSettingsAppearanceEn {
 
 // Path: more.data
 class TranslationsMoreDataEn {
-	TranslationsMoreDataEn._(this._root);
+	TranslationsMoreDataEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2527,7 +2533,7 @@ class TranslationsMoreDataEn {
 
 // Path: more.about_us
 class TranslationsMoreAboutUsEn {
-	TranslationsMoreAboutUsEn._(this._root);
+	TranslationsMoreAboutUsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2539,13 +2545,13 @@ class TranslationsMoreAboutUsEn {
 	/// en: 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas'
 	String get description => 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas';
 
-	late final TranslationsMoreAboutUsLegalEn legal = TranslationsMoreAboutUsLegalEn._(_root);
-	late final TranslationsMoreAboutUsProjectEn project = TranslationsMoreAboutUsProjectEn._(_root);
+	late final TranslationsMoreAboutUsLegalEn legal = TranslationsMoreAboutUsLegalEn.internal(_root);
+	late final TranslationsMoreAboutUsProjectEn project = TranslationsMoreAboutUsProjectEn.internal(_root);
 }
 
 // Path: more.help_us
 class TranslationsMoreHelpUsEn {
-	TranslationsMoreHelpUsEn._(this._root);
+	TranslationsMoreHelpUsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2596,7 +2602,7 @@ class TranslationsMoreHelpUsEn {
 
 // Path: general.time.ranges
 class TranslationsGeneralTimeRangesEn {
-	TranslationsGeneralTimeRangesEn._(this._root);
+	TranslationsGeneralTimeRangesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2614,7 +2620,7 @@ class TranslationsGeneralTimeRangesEn {
 	/// en: 'Forever'
 	String get forever => 'Forever';
 
-	late final TranslationsGeneralTimeRangesTypesEn types = TranslationsGeneralTimeRangesTypesEn._(_root);
+	late final TranslationsGeneralTimeRangesTypesEn types = TranslationsGeneralTimeRangesTypesEn.internal(_root);
 
 	/// en: '(one) {Every {{range}}} (other) {Every {{n}} {{range}}}'
 	String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -2667,7 +2673,7 @@ class TranslationsGeneralTimeRangesEn {
 
 // Path: general.time.periodicity
 class TranslationsGeneralTimePeriodicityEn {
-	TranslationsGeneralTimePeriodicityEn._(this._root);
+	TranslationsGeneralTimePeriodicityEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2709,7 +2715,7 @@ class TranslationsGeneralTimePeriodicityEn {
 
 // Path: general.time.current
 class TranslationsGeneralTimeCurrentEn {
-	TranslationsGeneralTimeCurrentEn._(this._root);
+	TranslationsGeneralTimeCurrentEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2732,11 +2738,14 @@ class TranslationsGeneralTimeCurrentEn {
 
 	/// en: 'Custom Range'
 	String get custom => 'Custom Range';
+
+	/// en: 'Today'
+	String get diary => 'Today';
 }
 
 // Path: general.time.all
 class TranslationsGeneralTimeAllEn {
-	TranslationsGeneralTimeAllEn._(this._root);
+	TranslationsGeneralTimeAllEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2760,7 +2769,7 @@ class TranslationsGeneralTimeAllEn {
 
 // Path: financial_health.review.descr
 class TranslationsFinancialHealthReviewDescrEn {
-	TranslationsFinancialHealthReviewDescrEn._(this._root);
+	TranslationsFinancialHealthReviewDescrEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2787,7 +2796,7 @@ class TranslationsFinancialHealthReviewDescrEn {
 
 // Path: financial_health.savings_percentage.text
 class TranslationsFinancialHealthSavingsPercentageTextEn {
-	TranslationsFinancialHealthSavingsPercentageTextEn._(this._root);
+	TranslationsFinancialHealthSavingsPercentageTextEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2808,7 +2817,7 @@ class TranslationsFinancialHealthSavingsPercentageTextEn {
 
 // Path: transaction.list.bulk_edit
 class TranslationsTransactionListBulkEditEn {
-	TranslationsTransactionListBulkEditEn._(this._root);
+	TranslationsTransactionListBulkEditEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2826,7 +2835,7 @@ class TranslationsTransactionListBulkEditEn {
 
 // Path: transaction.filters.saved
 class TranslationsTransactionFiltersSavedEn {
-	TranslationsTransactionFiltersSavedEn._(this._root);
+	TranslationsTransactionFiltersSavedEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2871,7 +2880,7 @@ class TranslationsTransactionFiltersSavedEn {
 
 // Path: transaction.form.validators
 class TranslationsTransactionFormValidatorsEn {
-	TranslationsTransactionFormValidatorsEn._(this._root);
+	TranslationsTransactionFormValidatorsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2895,7 +2904,7 @@ class TranslationsTransactionFormValidatorsEn {
 
 // Path: transfer.form.value_in_destiny
 class TranslationsTransferFormValueInDestinyEn {
-	TranslationsTransferFormValueInDestinyEn._(this._root);
+	TranslationsTransferFormValueInDestinyEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2910,7 +2919,7 @@ class TranslationsTransferFormValueInDestinyEn {
 
 // Path: budgets.progress.labels
 class TranslationsBudgetsProgressLabelsEn {
-	TranslationsBudgetsProgressLabelsEn._(this._root);
+	TranslationsBudgetsProgressLabelsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2934,7 +2943,7 @@ class TranslationsBudgetsProgressLabelsEn {
 
 // Path: budgets.progress.description
 class TranslationsBudgetsProgressDescriptionEn {
-	TranslationsBudgetsProgressDescriptionEn._(this._root);
+	TranslationsBudgetsProgressDescriptionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2961,7 +2970,7 @@ class TranslationsBudgetsProgressDescriptionEn {
 
 // Path: goals.type.income
 class TranslationsGoalsTypeIncomeEn {
-	TranslationsGoalsTypeIncomeEn._(this._root);
+	TranslationsGoalsTypeIncomeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2976,7 +2985,7 @@ class TranslationsGoalsTypeIncomeEn {
 
 // Path: goals.type.expense
 class TranslationsGoalsTypeExpenseEn {
-	TranslationsGoalsTypeExpenseEn._(this._root);
+	TranslationsGoalsTypeExpenseEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -2991,7 +3000,7 @@ class TranslationsGoalsTypeExpenseEn {
 
 // Path: goals.progress.labels
 class TranslationsGoalsProgressLabelsEn {
-	TranslationsGoalsProgressLabelsEn._(this._root);
+	TranslationsGoalsProgressLabelsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3015,7 +3024,7 @@ class TranslationsGoalsProgressLabelsEn {
 
 // Path: goals.progress.description
 class TranslationsGoalsProgressDescriptionEn {
-	TranslationsGoalsProgressDescriptionEn._(this._root);
+	TranslationsGoalsProgressDescriptionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3039,7 +3048,7 @@ class TranslationsGoalsProgressDescriptionEn {
 
 // Path: debts.form.from_transaction
 class TranslationsDebtsFormFromTransactionEn {
-	TranslationsDebtsFormFromTransactionEn._(this._root);
+	TranslationsDebtsFormFromTransactionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3054,7 +3063,7 @@ class TranslationsDebtsFormFromTransactionEn {
 
 // Path: debts.form.from_amount
 class TranslationsDebtsFormFromAmountEn {
-	TranslationsDebtsFormFromAmountEn._(this._root);
+	TranslationsDebtsFormFromAmountEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3069,7 +3078,7 @@ class TranslationsDebtsFormFromAmountEn {
 
 // Path: debts.actions.edit
 class TranslationsDebtsActionsEditEn {
-	TranslationsDebtsActionsEditEn._(this._root);
+	TranslationsDebtsActionsEditEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3084,7 +3093,7 @@ class TranslationsDebtsActionsEditEn {
 
 // Path: debts.actions.delete
 class TranslationsDebtsActionsDeleteEn {
-	TranslationsDebtsActionsDeleteEn._(this._root);
+	TranslationsDebtsActionsDeleteEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3099,7 +3108,7 @@ class TranslationsDebtsActionsDeleteEn {
 
 // Path: debts.actions.add_register
 class TranslationsDebtsActionsAddRegisterEn {
-	TranslationsDebtsActionsAddRegisterEn._(this._root);
+	TranslationsDebtsActionsAddRegisterEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3123,7 +3132,7 @@ class TranslationsDebtsActionsAddRegisterEn {
 
 // Path: debts.actions.link_transaction
 class TranslationsDebtsActionsLinkTransactionEn {
-	TranslationsDebtsActionsLinkTransactionEn._(this._root);
+	TranslationsDebtsActionsLinkTransactionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3144,7 +3153,7 @@ class TranslationsDebtsActionsLinkTransactionEn {
 
 // Path: debts.actions.unlink_transaction
 class TranslationsDebtsActionsUnlinkTransactionEn {
-	TranslationsDebtsActionsUnlinkTransactionEn._(this._root);
+	TranslationsDebtsActionsUnlinkTransactionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3162,7 +3171,7 @@ class TranslationsDebtsActionsUnlinkTransactionEn {
 
 // Path: debts.actions.new_transaction
 class TranslationsDebtsActionsNewTransactionEn {
-	TranslationsDebtsActionsNewTransactionEn._(this._root);
+	TranslationsDebtsActionsNewTransactionEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3177,7 +3186,7 @@ class TranslationsDebtsActionsNewTransactionEn {
 
 // Path: debts.actions.create
 class TranslationsDebtsActionsCreateEn {
-	TranslationsDebtsActionsCreateEn._(this._root);
+	TranslationsDebtsActionsCreateEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3192,7 +3201,7 @@ class TranslationsDebtsActionsCreateEn {
 
 // Path: backup.import.manual_import
 class TranslationsBackupImportManualImportEn {
-	TranslationsBackupImportManualImportEn._(this._root);
+	TranslationsBackupImportManualImportEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3239,7 +3248,7 @@ class TranslationsBackupImportManualImportEn {
 
 // Path: settings.general.language
 class TranslationsSettingsGeneralLanguageEn {
-	TranslationsSettingsGeneralLanguageEn._(this._root);
+	TranslationsSettingsGeneralLanguageEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3260,7 +3269,7 @@ class TranslationsSettingsGeneralLanguageEn {
 
 // Path: settings.general.locale
 class TranslationsSettingsGeneralLocaleEn {
-	TranslationsSettingsGeneralLocaleEn._(this._root);
+	TranslationsSettingsGeneralLocaleEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3284,7 +3293,7 @@ class TranslationsSettingsGeneralLocaleEn {
 
 // Path: settings.transactions.style
 class TranslationsSettingsTransactionsStyleEn {
-	TranslationsSettingsTransactionsStyleEn._(this._root);
+	TranslationsSettingsTransactionsStyleEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3305,7 +3314,7 @@ class TranslationsSettingsTransactionsStyleEn {
 
 // Path: settings.transactions.swipe_actions
 class TranslationsSettingsTransactionsSwipeActionsEn {
-	TranslationsSettingsTransactionsSwipeActionsEn._(this._root);
+	TranslationsSettingsTransactionsSwipeActionsEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3344,7 +3353,7 @@ class TranslationsSettingsTransactionsSwipeActionsEn {
 
 // Path: settings.transactions.default_values
 class TranslationsSettingsTransactionsDefaultValuesEn {
-	TranslationsSettingsTransactionsDefaultValuesEn._(this._root);
+	TranslationsSettingsTransactionsDefaultValuesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3386,7 +3395,7 @@ class TranslationsSettingsTransactionsDefaultValuesEn {
 
 // Path: settings.transactions.default_type
 class TranslationsSettingsTransactionsDefaultTypeEn {
-	TranslationsSettingsTransactionsDefaultTypeEn._(this._root);
+	TranslationsSettingsTransactionsDefaultTypeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3401,7 +3410,7 @@ class TranslationsSettingsTransactionsDefaultTypeEn {
 
 // Path: settings.appearance.theme
 class TranslationsSettingsAppearanceThemeEn {
-	TranslationsSettingsAppearanceThemeEn._(this._root);
+	TranslationsSettingsAppearanceThemeEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3422,7 +3431,7 @@ class TranslationsSettingsAppearanceThemeEn {
 
 // Path: more.about_us.legal
 class TranslationsMoreAboutUsLegalEn {
-	TranslationsMoreAboutUsLegalEn._(this._root);
+	TranslationsMoreAboutUsLegalEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3443,7 +3452,7 @@ class TranslationsMoreAboutUsLegalEn {
 
 // Path: more.about_us.project
 class TranslationsMoreAboutUsProjectEn {
-	TranslationsMoreAboutUsProjectEn._(this._root);
+	TranslationsMoreAboutUsProjectEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3464,7 +3473,7 @@ class TranslationsMoreAboutUsProjectEn {
 
 // Path: general.time.ranges.types
 class TranslationsGeneralTimeRangesTypesEn {
-	TranslationsGeneralTimeRangesTypesEn._(this._root);
+	TranslationsGeneralTimeRangesTypesEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -3628,6 +3637,7 @@ extension on Translations {
 		map['general.time.current.weekly'] = 'This week';
 		map['general.time.current.infinite'] = 'For ever';
 		map['general.time.current.custom'] = 'Custom Range';
+		map['general.time.current.diary'] = 'Today';
 		map['general.time.all.diary'] = 'Every day';
 		map['general.time.all.monthly'] = 'Every month';
 		map['general.time.all.annually'] = 'Every year';
@@ -4202,6 +4212,7 @@ extension on Translations {
 		map['backup.export.see_folder'] = 'See folder';
 		map['backup.export.success'] = ({required Object x}) => 'File saved successfully in ${x}';
 		map['backup.export.error'] = 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
+		map['backup.export.dialog_title'] = 'Save/Send file';
 		map['backup.import.title'] = 'Import your data';
 		map['backup.import.title_short'] = 'Import';
 		map['backup.import.restore_backup'] = 'Restore Backup';
@@ -4231,6 +4242,7 @@ extension on Translations {
 		map['backup.import.manual_import.success'] = ({required Object x}) => 'Successfully imported ${x} transactions';
 		map['backup.import.success'] = 'Import performed successfully';
 		map['backup.import.error'] = 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
+		map['backup.import.cancelled'] = 'Import was cancelled by the user';
 		map['backup.about.title'] = 'Information about your database';
 		map['backup.about.create_date'] = 'Creation date';
 		map['backup.about.modify_date'] = 'Last modified';

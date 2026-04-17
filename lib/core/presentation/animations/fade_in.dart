@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/animations/animation_controller.dart';
 
 class FadeIn extends StatefulWidget {
   const FadeIn({
@@ -14,11 +13,15 @@ class FadeIn extends StatefulWidget {
   final Duration? delay;
 
   @override
-  _FadeInState createState() => _FadeInState(duration);
+  State<FadeIn> createState() => _FadeInState();
 }
 
-class _FadeInState extends AnimationControllerState<FadeIn> {
-  _FadeInState(super.duration);
+class _FadeInState extends State<FadeIn>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController animationController = AnimationController(
+    vsync: this,
+    duration: widget.duration,
+  );
 
   late Animation<double> _opacityAnimation;
 
@@ -49,6 +52,7 @@ class _FadeInState extends AnimationControllerState<FadeIn> {
 
   @override
   void dispose() {
+    animationController.dispose();
     super.dispose();
   }
 

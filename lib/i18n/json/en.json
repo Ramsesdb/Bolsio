@@ -141,7 +141,8 @@
         "Quaterly": "This quarter",
         "Weekly": "This week",
         "Infinite": "For ever",
-        "Custom": "Custom Range"
+        "Custom": "Custom Range",
+        "diary": "Today"
       },
       "ALL": {
         "diary": "Every day",
@@ -850,7 +851,8 @@
       "send_file": "Send file",
       "see_folder": "See folder",
       "success": "File saved successfully in {{x}}",
-      "error": "Error downloading the file. Please contact the developer via lozin.technologies@gmail.com"
+      "error": "Error downloading the file. Please contact the developer via lozin.technologies@gmail.com",
+      "dialog_title": "Save/Send file"
     },
     "IMPORT": {
       "title": "Import your data",
@@ -887,7 +889,8 @@
         "success": "Successfully imported {{x}} transactions"
       },
       "success": "Import performed successfully",
-      "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
+      "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com",
+      "cancelled": "Import was cancelled by the user"
     },
     "ABOUT": {
       "title": "Information about your database",

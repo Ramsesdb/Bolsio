@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -413,9 +415,12 @@ class TransactionListTile extends StatelessWidget {
           return false;
         }
 
-        Future.delayed(const Duration(milliseconds: 200)).then((_) async {
+        unawaited(Future.delayed(const Duration(milliseconds: 200)).then((
+          _,
+        ) async {
+          if (!context.mounted) return;
           await executeTransactionSwipeAction(context, transaction, action);
-        });
+        }));
 
         return false;
       },

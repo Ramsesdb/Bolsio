@@ -334,7 +334,7 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
                     try {
                       final count = await CaptureOrchestrator.instance
                           .pollNow();
-                      if (mounted) {
+                      if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
@@ -343,7 +343,7 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
                         );
                       }
                     } catch (e) {
-                      if (mounted) {
+                      if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Error: $e')),
                         );

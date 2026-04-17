@@ -58,17 +58,9 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
   }
 
   Widget buildRadioButton(RuleUntilMode item, Widget title) {
-    return RadioListTile(
+    return RadioListTile<RuleUntilMode>(
       value: item,
-      groupValue: ruleUntilMode,
       title: title,
-      onChanged: (value) {
-        setState(() {
-          if (value != null) {
-            ruleUntilMode = value;
-          }
-        });
-      },
     );
   }
 
@@ -112,11 +104,20 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
           ),
         ),
       ],
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: RadioGroup<RuleUntilMode>(
+        groupValue: ruleUntilMode,
+        onChanged: (value) {
+          setState(() {
+            if (value != null) {
+              ruleUntilMode = value;
+            }
+          });
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 2, 0, 12),
               child: Text(
@@ -271,7 +272,8 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                 ],
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

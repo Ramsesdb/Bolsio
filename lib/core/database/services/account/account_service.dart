@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
@@ -20,13 +22,13 @@ class AccountService {
 
   Future<int> insertAccount(AccountInDB account) async {
     final toReturn = await db.into(db.accounts).insert(account);
-    FirebaseSyncService.instance.pushAccount(account);
+    unawaited(FirebaseSyncService.instance.pushAccount(account));
     return toReturn;
   }
 
   Future<bool> updateAccount(AccountInDB account) async {
     final toReturn = await db.update(db.accounts).replace(account);
-    FirebaseSyncService.instance.pushAccount(account);
+    unawaited(FirebaseSyncService.instance.pushAccount(account));
     return toReturn;
   }
 

@@ -82,6 +82,7 @@ abstract class AccountDetailsActions {
               .getAccountMoney(account: account)
               .first;
 
+          if (!context.mounted) return;
           await showCloseAccountDialog(
             context,
             account: account,

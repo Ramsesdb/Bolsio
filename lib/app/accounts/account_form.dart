@@ -179,6 +179,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _type = _accountToEdit.type;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
+      if (!mounted) return;
       _balanceController.text = value.toString();
 
       _color = _accountToEdit.getComputedColor(context);

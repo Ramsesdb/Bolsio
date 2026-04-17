@@ -59,7 +59,7 @@ class _DonateButtonState extends State<DonateButton> {
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     final t = Translations.of(context);
 
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+    for (final purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         // LOADING
       } else {
@@ -73,10 +73,12 @@ class _DonateButtonState extends State<DonateButton> {
           );
         }
         if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
+          unawaited(
+            InAppPurchase.instance.completePurchase(purchaseDetails),
+          );
         }
       }
-    });
+    }
   }
 
   @override

@@ -228,21 +228,19 @@ class _SettingRouteTile extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.onTap,
-    this.iconColor,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final Function() onTap;
-  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
       subtitle: Text(subtitle),
-      leading: Icon(icon, size: 26, color: iconColor),
+      leading: Icon(icon, size: 26),
       onTap: onTap,
     );
   }

@@ -4,7 +4,7 @@ import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
 import 'package:wallex/core/models/supported-icon/supported_icon.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/routes/route_utils.dart';
@@ -37,7 +37,6 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
   final TextEditingController _nameController = TextEditingController();
 
   late SupportedIcon _icon;
-  late Color _color;
 
   @override
   void initState() {
@@ -47,7 +46,6 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
 
     setState(() {
       _icon = widget.icon;
-      _color = widget.color;
     });
   }
 

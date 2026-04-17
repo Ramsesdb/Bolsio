@@ -25,44 +25,40 @@ class _HandleWillPopScopeState extends State<HandleWillPopScope> {
       //
       // This may be a stateless widget otherwise
       canPop: canExitApp,
-      child: WillPopScope(
-        child: widget.child,
-        onWillPop: () async {
-          // This code is fired AFTER the PopScope onPopInvokedWithResult of any page
-          // inside the navigatorKey navigator
-          bool popResult = await RouteUtils.maybePopRoute(
-            navigatorKey.currentContext,
-          );
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
 
-          if (popResult == true) {
-            if (canExitApp == true) {
-              canExitApp = false;
-              setState(() {});
-            }
+        // This code is fired AFTER the PopScope onPopInvokedWithResult of any page
+        // inside the navigatorKey navigator
+        bool popResult = await RouteUtils.maybePopRoute(
+          navigatorKey.currentContext,
+        );
 
-            return false;
+        if (popResult == true) {
+          if (canExitApp == true) {
+            canExitApp = false;
+            setState(() {});
           }
 
-          // If the nested navigator can not handle the pop usually that
-          // means that we have just start the app, so we allow the pop
-          // if we are in the dashboard.
-          //
-          // We don't allow popping if we are in other pages, but we could not
-          // reach any case where this happens right now.
+          return;
+        }
 
-          if (tabsPageKey.currentState?.selectedDestination ==
-              AppMenuDestinationsID.dashboard) {
-            if (canExitApp == false) {
-              canExitApp = true;
-              setState(() {});
-            }
+        // If the nested navigator can not handle the pop usually that
+        // means that we have just start the app, so we allow the pop
+        // if we are in the dashboard.
+        //
+        // We don't allow popping if we are in other pages, but we could not
+        // reach any case where this happens right now.
 
-            return true;
+        if (tabsPageKey.currentState?.selectedDestination ==
+            AppMenuDestinationsID.dashboard) {
+          if (canExitApp == false) {
+            canExitApp = true;
+            setState(() {});
           }
-
-          return false;
-        },
-      ),
+        }
+      },
+      child: widget.child,
     );
   }
 }

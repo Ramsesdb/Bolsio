@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -109,6 +110,7 @@ class CurrencyManagerPage extends StatelessWidget {
                                 await Future.delayed(
                                   const Duration(milliseconds: 250),
                                 );
+                                if (!context.mounted) return;
                                 changePreferredCurrency(context, newCurrency);
                               },
                             ),
@@ -205,9 +207,9 @@ class CurrencyManagerPage extends StatelessWidget {
 
                         if (currency == null) return;
 
-                        RouteUtils.pushRoute(
+                        unawaited(RouteUtils.pushRoute(
                           ExchangeRateDetailsPage(currency: currency),
-                        );
+                        ));
                       },
                     );
                   },
