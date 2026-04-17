@@ -1,9 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/styles/borders.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
-const cardWithHeaderRadius = 12.0;
+const cardWithHeaderRadius = 16.0;
 
 class CardWithHeader extends StatelessWidget {
   const CardWithHeader({
@@ -11,7 +12,7 @@ class CardWithHeader extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.body,
-    this.bodyPadding = const EdgeInsets.all(0),
+    this.bodyPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     this.footer,
     this.titleBuilder,
   });
@@ -27,59 +28,82 @@ class CardWithHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(boxShadow: boxShadowGeneral(context)),
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        margin: const EdgeInsets.all(0),
-        elevation: 0,
-        color: Theme.of(context).cardColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              padding: const EdgeInsets.fromLTRB(16, 12, 2, 4),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-                // color: AppColors.of(context).light,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final column = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          clipBehavior: Clip.hardEdge,
+          padding: const EdgeInsets.fromLTRB(16, 14, 8, 8),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DefaultTextStyle(
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium!.copyWith(fontSize: 18),
-                        child: titleBuilder != null
-                            ? titleBuilder!(title)
-                            : Text(title),
-                      ),
-                      if (subtitle != null)
-                        Text(
-                          subtitle!,
-                          style: Theme.of(context).textTheme.bodySmall!,
-                        ),
-                    ],
+                  DefaultTextStyle(
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium!.copyWith(fontSize: 18),
+                    child: titleBuilder != null
+                        ? titleBuilder!(title)
+                        : Text(title),
                   ),
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: Theme.of(context).textTheme.bodySmall!,
+                    ),
                 ],
               ),
-            ),
-            Material(
-              type: MaterialType.transparency,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Padding(padding: bodyPadding, child: body),
-            ),
-            if (footer != null) footer!,
-          ],
+            ],
+          ),
         ),
-      ),
+        Material(
+          type: MaterialType.transparency,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Padding(padding: bodyPadding, child: body),
+        ),
+        if (footer != null) footer!,
+      ],
+    );
+
+    if (isDark) {
+      // Glassmorphism card for dark mode
+      final primary = Theme.of(context).colorScheme.primary;
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: primary.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(cardWithHeaderRadius),
+              border: Border.all(
+                color: primary.withValues(alpha: 0.08),
+                width: 0.5,
+              ),
+            ),
+            child: column,
+          ),
+        ),
+      );
+    }
+
+    // Solid card for light mode (unchanged behavior)
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      margin: const EdgeInsets.all(0),
+      elevation: 0,
+      color: Theme.of(context).cardColor,
+      child: column,
     );
   }
 }
@@ -113,7 +137,7 @@ class CardFooterWithSingleButton extends StatelessWidget {
             thickness: 2,
             indent: indent,
             endIndent: indent,
-            color: Theme.of(context).dividerColor.withOpacity(0.2),
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
           ),
         ),
         TextButton.icon(

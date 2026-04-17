@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/account_form.dart';
 import 'package:wallex/app/accounts/details/account_details.dart';
@@ -92,99 +94,125 @@ class HorizontalScrollableAccountList extends StatelessWidget {
     );
   }
 
-  DecoratedBox _buildAccountCard(
+  Widget _buildAccountCard(
     BuildContext context,
     Account account, {
     required BorderRadius borderRadius,
   }) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: borderRadius,
-        boxShadow: boxShadowGeneral(context),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primary = Theme.of(context).colorScheme.primary;
+
+    final cardContent = Tappable(
+      onTap: () => RouteUtils.pushRoute(
+        AccountDetailsPage(
+          account: account,
+          accountIconHeroTag: 'dashboard-page__account-icon-${account.id}',
+        ),
       ),
-      child: Card(
-        margin: const EdgeInsets.only(right: 12),
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
-        child: Tappable(
-          onTap: () => RouteUtils.pushRoute(
-            AccountDetailsPage(
-              account: account,
-              accountIconHeroTag: 'dashboard-page__account-icon-${account.id}',
+      bgColor: isDark ? Colors.transparent : Theme.of(context).cardColor,
+      borderRadius: borderRadius,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ResponsiveRowColumn(
+          direction: _useSmallLayout(context)
+              ? Axis.vertical
+              : Axis.horizontal,
+          columnCrossAxisAlignment: CrossAxisAlignment.start,
+          columnSpacing: 8,
+          rowSpacing: 16,
+          children: [
+            ResponsiveRowColumnItem(
+              child: Hero(
+                tag: 'dashboard-page__account-icon-${account.id}',
+                child: account.displayIcon(context, size: 28),
+              ),
             ),
-          ),
-          bgColor: Theme.of(context).cardColor,
-          borderRadius: borderRadius,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ResponsiveRowColumn(
-              direction: _useSmallLayout(context)
-                  ? Axis.vertical
-                  : Axis.horizontal,
-              columnCrossAxisAlignment: CrossAxisAlignment.start,
-              columnSpacing: 8,
-              rowSpacing: 16,
-              children: [
-                ResponsiveRowColumnItem(
-                  child: Hero(
-                    tag: 'dashboard-page__account-icon-${account.id}',
-                    child: account.displayIcon(context, size: 28),
+            ResponsiveRowColumnItem(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    account.name,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
-                ),
-                ResponsiveRowColumnItem(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        account.name,
-                        style: Theme.of(context).textTheme.labelLarge,
+                      StreamBuilder(
+                        initialData: 0.0,
+                        stream: AccountService.instance.getAccountMoney(
+                          account: account,
+                        ),
+                        builder: (context, snapshot) {
+                          return CurrencyDisplayer(
+                            amountToConvert: snapshot.data!,
+                            currency: account.currency,
+                            compactView: snapshot.data! >= 10000000,
+                            integerStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.w600),
+                          );
+                        },
                       ),
-                      Row(
-                        children: [
-                          StreamBuilder(
-                            initialData: 0.0,
-                            stream: AccountService.instance.getAccountMoney(
-                              account: account,
+                      const SizedBox(width: 8),
+                      StreamBuilder(
+                        initialData: 0.0,
+                        stream: AccountService.instance
+                            .getAccountsMoneyVariation(
+                              accounts: [account],
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                              convertToPreferredCurrency: false,
                             ),
-                            builder: (context, snapshot) {
-                              return CurrencyDisplayer(
-                                amountToConvert: snapshot.data!,
-                                currency: account.currency,
-                                compactView: snapshot.data! >= 10000000,
-                                integerStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              );
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                          StreamBuilder(
-                            initialData: 0.0,
-                            stream: AccountService.instance
-                                .getAccountsMoneyVariation(
-                                  accounts: [account],
-                                  startDate: dateRangeService.startDate,
-                                  endDate: dateRangeService.endDate,
-                                  convertToPreferredCurrency: false,
-                                ),
-                            builder: (context, snapshot) {
-                              return TrendingValue(
-                                percentage: snapshot.data!,
-                                decimalDigits: 0,
-                              );
-                            },
-                          ),
-                        ],
+                        builder: (context, snapshot) {
+                          return TrendingValue(
+                            percentage: snapshot.data!,
+                            decimalDigits: 0,
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
+
+    if (isDark) {
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Container(
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: primary.withValues(alpha: 0.06),
+              borderRadius: borderRadius,
+              border: Border.all(
+                color: primary.withValues(alpha: 0.08),
+                width: 0.5,
+              ),
+            ),
+            child: cardContent,
+          ),
+        ),
+      );
+    } else {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          boxShadow: boxShadowGeneral(context),
+        ),
+        child: Card(
+          margin: const EdgeInsets.only(right: 12),
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: borderRadius),
+          child: cardContent,
+        ),
+      );
+    }
   }
 }

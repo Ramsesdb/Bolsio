@@ -3,6 +3,7 @@ import 'package:wallex/app/budgets/budget_form_page.dart';
 import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/core/database/services/budget/budget_service.dart';
+import 'package:wallex/core/presentation/animations/animated_floating_button.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
 import 'package:wallex/core/routes/route_utils.dart';
@@ -98,10 +99,17 @@ class BudgetFabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return FloatingActionButton.extended(
-      heroTag: UniqueKey(),
+    return GlassFab(
       icon: const Icon(Icons.add_rounded),
-      label: Text(t.budgets.form.create),
+      isExtended: true,
+      label: Text(
+        t.budgets.form.create,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
+        ),
+      ),
       onPressed: () =>
           RouteUtils.pushRoute(const BudgetFormPage(prevPage: BudgetsPage())),
     );

@@ -7,7 +7,6 @@ import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
-import '../../../core/presentation/app_colors.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {
   const IncomeOrExpenseCard({
@@ -76,8 +75,9 @@ class IncomeOrExpenseCard extends StatelessWidget {
                           compactView: true,
                           showDecimals: false,
                           integerStyle: TextStyle(
-                            fontSize: 18,
-                            color: AppColors.of(context).onConsistentPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -106,9 +106,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
                                 '≈ $formatted Bs',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: AppColors.of(context)
-                                      .onConsistentPrimary
-                                      .withOpacity(0.7),
+                                  color: Colors.white.withValues(alpha: 0.4),
                                 ),
                               ),
                             );

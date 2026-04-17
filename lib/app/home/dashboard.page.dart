@@ -17,9 +17,7 @@ import 'package:wallex/core/database/services/exchange-rate/exchange_rate_servic
 import 'package:wallex/core/services/dolar_api_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/presentation/animations/animated_expanded.dart';
 import 'package:wallex/core/presentation/debug_page.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
@@ -36,7 +34,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
-import '../../core/presentation/app_colors.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -206,10 +203,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return PageFramework(
       title: t.home.title,
       enableAppBar: false,
-      appBarBackgroundColor:
-          BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
-          ? Colors.transparent
-          : AppColors.of(context).consistentPrimary,
+      appBarBackgroundColor: Colors.transparent,
       floatingActionButton: ifIsInTabs(context)
           ? null
           : NewTransactionButton(
@@ -264,93 +258,112 @@ class _DashboardPageState extends State<DashboardPage> {
     final shouldHavePadding =
         !AppUtils.isDesktop && !AppUtils.isMobileLayout(context);
 
+    final headerBorderRadius = BorderRadius.vertical(
+      bottom: Radius.circular(getCardBorderRadius()),
+      top: Radius.circular(shouldHavePadding ? getCardBorderRadius() : 0),
+    );
+
     return SkeletonizerConfig(
       data: _getSkeletonizerConfig(context),
-      child: Card(
-        color: AppColors.of(context).consistentPrimary,
-        margin: EdgeInsets.only(
+      child: Padding(
+        padding: EdgeInsets.only(
           bottom: 0,
           top: shouldHavePadding ? 8 : 0,
           left: shouldHavePadding ? 12 : 0,
           right: shouldHavePadding ? 12 : 0,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(getCardBorderRadius()),
-            top: Radius.circular(shouldHavePadding ? getCardBorderRadius() : 0),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(child: buildWelcomeMsgAndAvatar(context)),
-                  buildDatePeriodSelector(context),
-                ],
-              ),
-              Divider(
-                height: 16,
-                color: AppColors.of(
-                  context,
-                ).onConsistentPrimary.withOpacity(0.5),
-              ),
-              const SizedBox(height: 8),
-              Builder(
-                builder: (context) {
-                  final labelStyle = Theme.of(context).textTheme.labelMedium!
-                      .copyWith(color: onHeaderSmallTextColor(context));
-
-                  final incomeAndExpenseCards = [
-                    IncomeOrExpenseCard(
-                      type: TransactionType.expense,
-                      periodState: dateRangeService,
-                      labelStyle: labelStyle,
-                      rateSource: _rateSource,
+        child: ClipRRect(
+          borderRadius: headerBorderRadius,
+          child: Builder(
+            builder: (context) {
+              final glassTint = Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
+              final glassBorder = Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: glassTint,
+                    borderRadius: headerBorderRadius,
+                    border: Border.all(
+                      color: glassBorder,
+                      width: 1,
                     ),
-                    IncomeOrExpenseCard(
-                      type: TransactionType.income,
-                      periodState: dateRangeService,
-                      labelStyle: labelStyle,
-                      rateSource: _rateSource,
-                    ),
-                  ];
-
-                  if (_isIncomeExpenseAtSameLevel(context)) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      spacing: 16,
-                      children: [
-                        totalBalanceIndicator(context),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: incomeAndExpenseCards,
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Column(
-                    spacing: 24,
+                  ),
+                  padding: EdgeInsets.fromLTRB(
+                    _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+                    16,
+                    _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+                    _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      totalBalanceIndicator(context),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: incomeAndExpenseCards,
+                        children: [
+                          Flexible(child: buildWelcomeMsgAndAvatar(context)),
+                          buildDatePeriodSelector(context),
+                        ],
+                      ),
+                      Divider(
+                        height: 16,
+                        color: Colors.white.withValues(alpha: 0.15),
+                      ),
+                      const SizedBox(height: 8),
+                      Builder(
+                        builder: (context) {
+                          final labelStyle = Theme.of(context)
+                              .textTheme
+                              .labelMedium!
+                              .copyWith(
+                                  color: Colors.white.withValues(alpha: 0.7));
+
+                          final incomeAndExpenseCards = [
+                            IncomeOrExpenseCard(
+                              type: TransactionType.expense,
+                              periodState: dateRangeService,
+                              labelStyle: labelStyle,
+                              rateSource: _rateSource,
+                            ),
+                            IncomeOrExpenseCard(
+                              type: TransactionType.income,
+                              periodState: dateRangeService,
+                              labelStyle: labelStyle,
+                              rateSource: _rateSource,
+                            ),
+                          ];
+
+                          if (_isIncomeExpenseAtSameLevel(context)) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              spacing: 16,
+                              children: [
+                                totalBalanceIndicator(context),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: incomeAndExpenseCards,
+                                ),
+                              ],
+                            );
+                          }
+
+                          return Column(
+                            spacing: 24,
+                            children: [
+                              totalBalanceIndicator(context),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: incomeAndExpenseCards,
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
-                  );
-                },
-              ),
-            ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -364,14 +377,13 @@ class _DashboardPageState extends State<DashboardPage> {
           context,
           showLongMonth: MediaQuery.of(context).size.width > 360,
         ),
-        style: TextStyle(color: AppColors.of(context).onConsistentPrimary),
+        style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
       ),
-      backgroundColor: AppColors.of(context).consistentPrimary,
+      backgroundColor: Colors.white.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(
-          //   style: BorderStyle.none,
-          color: AppColors.of(context).onConsistentPrimary,
+          color: Colors.white.withValues(alpha: 0.2),
         ),
       ),
       onPressed: () {
@@ -416,12 +428,10 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             UserAvatar(
               avatar: appStateSettings[SettingKey.avatar],
-              backgroundColor: AppColors.of(
-                context,
-              ).onConsistentPrimary.darken(0.25),
+              backgroundColor: Colors.white.withValues(alpha: 0.15),
               border: Border.all(
                 width: 2,
-                color: AppColors.of(context).onConsistentPrimary,
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ),
             Flexible(
@@ -434,7 +444,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       overflow: TextOverflow.fade,
-                      color: onHeaderSmallTextColor(context),
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
                   Text(
@@ -443,7 +453,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontSize: 18,
                       overflow: TextOverflow.fade,
-                      color: AppColors.of(context).onConsistentPrimary,
+                      color: Colors.white,
                     ),
                   ),
 
@@ -458,65 +468,86 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget buildSmallHeader(BuildContext context) {
+    const smallHeaderRadius = BorderRadius.only(
+      bottomLeft: Radius.circular(16),
+      bottomRight: Radius.circular(16),
+    );
+
     return SkeletonizerConfig(
       data: _getSkeletonizerConfig(context),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(16),
-          ),
-          color: AppColors.of(context).consistentPrimary,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.home.total_balance,
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: onHeaderSmallTextColor(context),
+      child: ClipRRect(
+        borderRadius: smallHeaderRadius,
+        child: Builder(
+          builder: (context) {
+            final glassTint = Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
+            final glassBorder = Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                decoration: BoxDecoration(
+                  borderRadius: smallHeaderRadius,
+                  color: glassTint,
+                  border: Border.all(
+                    color: glassBorder,
+                    width: 1,
                   ),
                 ),
-                StreamBuilder(
-                  stream: _totalBalanceStream,
-                  builder: (context, snapshot) {
-                    return Skeletonizer(
-                      enabled: !snapshot.hasData,
-                      child: Builder(
-                        builder: (context) {
-                          if (!snapshot.hasData) {
-                            return Text('9999', style: TextStyle(fontSize: 22));
-                          }
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.home.total_balance,
+                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: Colors.white.withValues(alpha: 0.7),
+                          ),
+                        ),
+                        StreamBuilder(
+                          stream: _totalBalanceStream,
+                          builder: (context, snapshot) {
+                            return Skeletonizer(
+                              enabled: !snapshot.hasData,
+                              child: Builder(
+                                builder: (context) {
+                                  if (!snapshot.hasData) {
+                                    return Text('9999',
+                                        style: TextStyle(fontSize: 22));
+                                  }
 
-                          return CurrencyDisplayer(
-                            amountToConvert: snapshot.data!,
-                            integerStyle: TextStyle(
-                              fontSize:
-                                  snapshot.data! >= 10000000 &&
-                                      BreakPoint.of(
-                                        context,
-                                      ).isSmallerOrEqualTo(BreakpointID.xs)
-                                  ? 22
-                                  : 26,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.of(context).onConsistentPrimary,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+                                  return CurrencyDisplayer(
+                                    amountToConvert: snapshot.data!,
+                                    integerStyle: TextStyle(
+                                      fontSize:
+                                          snapshot.data! >= 10000000 &&
+                                                  BreakPoint.of(
+                                                    context,
+                                                  ).isSmallerOrEqualTo(
+                                                      BreakpointID.xs)
+                                              ? 22
+                                              : 28,
+                                      fontWeight: FontWeight.w200,
+                                      letterSpacing: -0.5,
+                                      color: Colors.white,
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 12),
+                    Flexible(child: buildDatePeriodSelector(context)),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(width: 12),
-            Flexible(child: buildDatePeriodSelector(context)),
-          ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -563,7 +594,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Text(
                 t.home.total_balance,
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  color: onHeaderSmallTextColor(context),
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
               Tappable(
@@ -581,7 +612,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ? Icons.visibility_off_rounded
                             : Icons.visibility_rounded,
                         size: 16,
-                        color: onHeaderSmallTextColor(context),
+                        color: Colors.white.withValues(alpha: 0.7),
                       );
                     },
                   ),
@@ -590,7 +621,21 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
 
-          // ----- CURRENT BALANCE AMOUNT HEADER -----
+          // ----- RATE SOURCE SELECTOR (BCV / Paralelo) -----
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
+            children: [
+              _buildRateChip(context, 'bcv', 'BCV'),
+              const SizedBox(width: 4),
+              _buildRateChip(context, 'paralelo', 'Par'),
+            ],
+          ),
+
+          // ----- PRIMARY BALANCE (USD) -----
+          const SizedBox(height: 2),
           StreamBuilder(
             stream: _totalBalanceStream,
             builder: (context, snapshot) {
@@ -600,53 +645,41 @@ class _DashboardPageState extends State<DashboardPage> {
                     ? Bone(width: 90, height: 40)
                     : CurrencyDisplayer(
                         amountToConvert: snapshot.data!,
-                        integerStyle: Theme.of(context).textTheme.headlineLarge!
-                            .copyWith(
-                              fontSize:
-                                  snapshot.data! >= 100000000 &&
-                                      BreakPoint.of(
-                                        context,
-                                      ).isSmallerOrEqualTo(BreakpointID.xs)
-                                  ? 26
-                                  : 32,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.of(context).onConsistentPrimary,
-                            ),
+                        integerStyle: TextStyle(
+                          fontSize:
+                              snapshot.data! >= 100000000 &&
+                                  BreakPoint.of(
+                                    context,
+                                  ).isSmallerOrEqualTo(BreakpointID.xs)
+                              ? 32
+                              : 42,
+                          fontWeight: FontWeight.w200,
+                          letterSpacing: -0.5,
+                          color: Colors.white,
+                        ),
                       ),
               );
             },
           ),
 
-          // ----- RATE SOURCE TOGGLE -----
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.center,
-            children: [
-              _buildRateChip(context, 'bcv', 'BCV'),
-              const SizedBox(width: 8),
-              _buildRateChip(context, 'paralelo', 'Paralelo'),
-            ],
-          ),
-
-          // ----- VES EQUIVALENT -----
+          // ----- SECONDARY EQUIVALENT (VES) -----
           const SizedBox(height: 2),
           StreamBuilder(
             stream: _totalBalanceInVesStream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const SizedBox.shrink();
-              final vesTotal = snapshot.data!;
-              final formatted = vesTotal.toStringAsFixed(2).replaceAllMapped(
-                RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-                (m) => '${m[1]}.',
-              );
+              final formatted =
+                  snapshot.data!.toStringAsFixed(2).replaceAllMapped(
+                        RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                        (m) => '${m[1]}.',
+                      );
               return BlurBasedOnPrivateMode(
                 child: Text(
                   '= $formatted Bs',
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: onHeaderSmallTextColor(context),
-                    fontSize: 13,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.4),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
               );
@@ -691,12 +724,12 @@ class _DashboardPageState extends State<DashboardPage> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.of(context).onConsistentPrimary.withOpacity(0.2)
+              ? Colors.white.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppColors.of(context).onConsistentPrimary.withOpacity(
-              isSelected ? 0.6 : 0.3,
+            color: Colors.white.withValues(
+              alpha: isSelected ? 0.4 : 0.15,
             ),
           ),
         ),
@@ -705,8 +738,8 @@ class _DashboardPageState extends State<DashboardPage> {
           style: TextStyle(
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: AppColors.of(context).onConsistentPrimary.withOpacity(
-              isSelected ? 1.0 : 0.6,
+            color: Colors.white.withValues(
+              alpha: isSelected ? 0.9 : 0.5,
             ),
           ),
         ),
@@ -717,68 +750,91 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Fetches rates from DolarApiService (API call with cache)
   /// and displays them in a table. Falls back to DB rates if API fails.
   Widget _buildRatesCard(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.currency_exchange, size: 18,
-                    color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8),
-                Text(
-                  'Tasas de cambio',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            FutureBuilder(
-              future: _fetchRatesForDisplay(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  );
-                }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primary = Theme.of(context).colorScheme.primary;
 
-                final data = snapshot.data;
-                final usdBcv = data?['usdBcv'];
-                final usdPar = data?['usdPar'];
-                final eurBcv = data?['eurBcv'];
-                final eurPar = data?['eurPar'];
-
-                final usdAvg = (usdBcv != null && usdPar != null)
-                    ? (usdBcv + usdPar) / 2
-                    : null;
-                final eurAvg = (eurBcv != null && eurPar != null)
-                    ? (eurBcv + eurPar) / 2
-                    : null;
-
-                return Table(
-                  columnWidths: const {
-                    0: FlexColumnWidth(1.2),
-                    1: FlexColumnWidth(1),
-                    2: FlexColumnWidth(1),
-                    3: FlexColumnWidth(1),
-                  },
-                  children: [
-                    _rateTableHeader(context),
-                    _rateTableRow(context, '\$ USD', usdBcv, usdPar, usdAvg),
-                    _rateTableRow(context, '€ EUR', eurBcv, eurPar, eurAvg),
-                  ],
+    final cardContent = Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.currency_exchange, size: 18,
+                  color: primary),
+              const SizedBox(width: 8),
+              Text(
+                'Tasas de cambio',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          FutureBuilder(
+            future: _fetchRatesForDisplay(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
                 );
-              },
-            ),
-          ],
-        ),
+              }
+
+              final data = snapshot.data;
+              final usdBcv = data?['usdBcv'];
+              final usdPar = data?['usdPar'];
+              final eurBcv = data?['eurBcv'];
+              final eurPar = data?['eurPar'];
+
+              final usdAvg = (usdBcv != null && usdPar != null)
+                  ? (usdBcv + usdPar) / 2
+                  : null;
+              final eurAvg = (eurBcv != null && eurPar != null)
+                  ? (eurBcv + eurPar) / 2
+                  : null;
+
+              return Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(1.2),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                  3: FlexColumnWidth(1),
+                },
+                children: [
+                  _rateTableHeader(context),
+                  _rateTableRow(context, '\$ USD', usdBcv, usdPar, usdAvg),
+                  _rateTableRow(context, '€ EUR', eurBcv, eurPar, eurAvg),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
+
+    if (isDark) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: primary.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: primary.withValues(alpha: 0.08),
+                width: 0.5,
+              ),
+            ),
+            child: cardContent,
+          ),
+        ),
+      );
+    } else {
+      return Card(child: cardContent);
+    }
   }
 
   Future<Map<String, double?>> _fetchRatesForDisplay() async {
@@ -867,10 +923,8 @@ class _DashboardPageState extends State<DashboardPage> {
   SkeletonizerConfigData _getSkeletonizerConfig(BuildContext context) {
     return SkeletonizerConfigData(
       effect: ShimmerEffect(
-        baseColor: AppColors.of(context).onConsistentPrimary.withOpacity(0.1),
-        highlightColor: AppColors.of(
-          context,
-        ).onConsistentPrimary.withOpacity(0.25),
+        baseColor: Colors.white.withValues(alpha: 0.08),
+        highlightColor: Colors.white.withValues(alpha: 0.2),
         duration: const Duration(seconds: 1),
       ),
     );
@@ -878,5 +932,4 @@ class _DashboardPageState extends State<DashboardPage> {
 }
 
 Color onHeaderSmallTextColor(BuildContext context) =>
-    // ignore: deprecated_member_use
-    AppColors.of(context).onConsistentPrimary.withOpacity(0.9);
+    Colors.white.withValues(alpha: 0.7);

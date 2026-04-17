@@ -354,19 +354,16 @@ class _WallexChatPageState extends State<WallexChatPage> {
     );
   }
 
-  static const _amberGold = Color(0xFFE8B931);
-  static const _accentGreen = Color(0xFF7EC8A0);
-
   MarkdownStyleSheet _aiMarkdownStyle(ColorScheme cs) {
     return MarkdownStyleSheet(
       p: TextStyle(color: cs.onSurface, fontSize: 15, height: 1.5),
-      strong: const TextStyle(
-        color: _amberGold,
+      strong: TextStyle(
+        color: cs.primary,
         fontWeight: FontWeight.w700,
         fontSize: 15,
       ),
-      em: const TextStyle(
-        color: _accentGreen,
+      em: TextStyle(
+        color: cs.tertiary,
         fontStyle: FontStyle.normal,
         fontWeight: FontWeight.w600,
         fontSize: 15,
@@ -401,8 +398,8 @@ class _WallexChatPageState extends State<WallexChatPage> {
         fontWeight: FontWeight.w600,
       ),
       code: TextStyle(
-        color: _amberGold,
-        backgroundColor: _amberGold.withValues(alpha: 0.1),
+        color: cs.primary,
+        backgroundColor: cs.primary.withValues(alpha: 0.1),
         fontSize: 13,
       ),
       blockSpacing: 10,
