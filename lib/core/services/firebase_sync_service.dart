@@ -423,6 +423,7 @@ class FirebaseSyncService {
           'FirebaseSyncService: Error pulling account ${doc.id}: $e\n$stackTrace',
         );
       }
+      await Future.delayed(Duration.zero); // yield to UI
     }
 
     Logger.printDebug(
@@ -496,6 +497,7 @@ class FirebaseSyncService {
           'FirebaseSyncService: Error pulling category ${doc.id}: $e',
         );
       }
+      await Future.delayed(Duration.zero); // yield to UI
     }
 
     Logger.printDebug('FirebaseSyncService: Pulled $successCount categories');
@@ -575,6 +577,7 @@ class FirebaseSyncService {
           'FirebaseSyncService: Error pulling exchange rate ${doc.id}: $e',
         );
       }
+      await Future.delayed(Duration.zero); // yield to UI
     }
 
     Logger.printDebug(
@@ -690,6 +693,7 @@ class FirebaseSyncService {
           'FirebaseSyncService: Error pulling transaction ${doc.id}: $e',
         );
       }
+      await Future.delayed(Duration.zero); // yield to UI
     }
 
     Logger.printDebug(

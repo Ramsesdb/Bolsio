@@ -145,14 +145,15 @@ void main() async {
         },
   ));
 
-  // --- Preload locale synchronously BEFORE runApp ---
-  // Doing this async after runApp pulses the translation stream and rebuilds
-  // InitialPageRouteNavigator 2–3×. The sync variants cost a few ms on the
-  // critical path but eliminate the rebuild cascade entirely.
+  // --- Preload locale asynchronously BEFORE runApp ---
+  // slang uses deferred imports for locale libs, so the *Sync variants fail
+  // at runtime with "Deferred library l_xx was not loaded". Awaiting the
+  // async version here still guarantees the locale is ready before the first
+  // frame, avoiding the translation-stream pulse that caused extra rebuilds.
   try {
     final lang = appStateSettings[SettingKey.appLanguage];
     if (lang != null && lang.isNotEmpty) {
-      final setLocale = LocaleSettings.setLocaleRawSync(lang);
+      final setLocale = await LocaleSettings.setLocaleRaw(lang);
       if (setLocale.languageTag != lang) {
         Logger.printDebug(
           'Warning: requested locale `$lang` unavailable. '
@@ -166,10 +167,10 @@ void main() async {
         );
       }
     } else {
-      LocaleSettings.useDeviceLocaleSync();
+      await LocaleSettings.useDeviceLocale();
     }
   } catch (e) {
-    Logger.printDebug('Error preloading locale synchronously: $e');
+    debugPrint('Error preloading locale: $e');
   }
   // -----------------------------------------
 
@@ -224,8 +225,8 @@ class WallexAppEntryPoint extends StatelessWidget {
   Widget build(BuildContext context) {
     Logger.printDebug('------------------ APP ENTRY POINT ------------------');
 
-    // Locale is now preloaded synchronously in main() before runApp, so we
-    // do NOT set it here — doing so pulses the translation stream and causes
+    // Locale is preloaded asynchronously in main() before runApp, so we do
+    // NOT set it here — doing so pulses the translation stream and causes
     // extra rebuilds (the old cause of pullAllData firing 2–3×).
 
     return TranslationProvider(
@@ -562,7 +563,10 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
   }
 
   final sources = ['bcv', 'paralelo'];
-  bool anyInserted = false;
+  // Track per-rate success. Gate is only set when ALL primary (USD) fetches
+  // succeed AND are persisted. If any provider throws or returns null, the
+  // gate is skipped so the next cold start retries.
+  final Map<String, bool> usdRateSuccess = {for (final s in sources) s: false};
 
   // Task 4: Delete bad currencyCode='USD' rows when preferred currency is USD.
   // USD accounts don't need a conversion rate to themselves.
@@ -615,13 +619,17 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
         }
 
         debugPrint(
-          'Currency rate auto-updated ($source): $storeRate '
-          '(stored as $storeCurrencyCode) via ${result.providerName}',
+          '[init] RateProvider ${source.toUpperCase()}: $storeRate '
+          '$storeCurrencyCode via ${result.providerName}',
         );
-        anyInserted = true;
+        usdRateSuccess[source] = true;
+      } else {
+        debugPrint(
+          '[init] RateProvider ${source.toUpperCase()}: FAILED (null result)',
+        );
       }
     } catch (e) {
-      debugPrint('Error fetching $source rate: $e');
+      debugPrint('[init] RateProvider ${source.toUpperCase()}: ERROR $e');
     }
   }
 
@@ -664,13 +672,16 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
         );
 
         debugPrint(
-          'EUR rate auto-updated ($source): $storeRate '
-          '(stored as $storeCurrencyCode) via ${result.providerName}',
+          '[init] RateProvider EUR ${source.toUpperCase()}: $storeRate '
+          '$storeCurrencyCode via ${result.providerName}',
         );
-        anyInserted = true;
+      } else {
+        debugPrint(
+          '[init] RateProvider EUR ${source.toUpperCase()}: FAILED (null result)',
+        );
       }
     } catch (e) {
-      debugPrint('Error fetching EUR $source rate: $e');
+      debugPrint('[init] RateProvider EUR ${source.toUpperCase()}: ERROR $e');
     }
   }
 
@@ -679,10 +690,21 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
     await DolarApiService.instance.fetchAllRates();
   } catch (_) {}
 
-  if (anyInserted) {
+  // Only set the gate if ALL primary (USD) rate fetches succeeded and were
+  // persisted. If any failed, skip the gate so the next cold start retries.
+  final allUsdSucceeded = usdRateSuccess.values.every((ok) => ok);
+  if (allUsdSucceeded) {
     await prefs.setString(
       'last_currency_auto_update_v4',
       now.toIso8601String(),
+    );
+    debugPrint(
+      '[init] Rate gate updated (all USD rates persisted: $usdRateSuccess)',
+    );
+  } else {
+    debugPrint(
+      '[init] Rate gate NOT updated (partial failures: $usdRateSuccess); '
+      'next cold start will retry',
     );
   }
 }
