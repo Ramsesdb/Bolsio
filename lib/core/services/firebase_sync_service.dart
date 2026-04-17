@@ -209,7 +209,13 @@ class FirebaseSyncService {
     }
   }
 
-  /// Push a category to Firestore
+  /// Push a category to Firestore.
+  ///
+  /// Defensive normalization: the DB CHECK constraint enforces XOR between
+  /// `parentCategoryID` and (`color`, `type`). Subcategories MUST have
+  /// null color/type. We normalize here so no buggy caller (e.g. a caller
+  /// that accidentally passed a [Category] whose getters fall back to the
+  /// parent's values) can poison Firestore with bad data.
   Future<void> pushCategory(CategoryInDB category) async {
     if (!_initialized || _firestore == null) return;
     try {
@@ -219,13 +225,18 @@ class FirebaseSyncService {
           .collection('$_userBasePath/categories')
           .doc(category.id);
 
+      final isSubcategory = category.parentCategoryID != null;
+      // Force subcategory color/type to null no matter what was passed in.
+      final effectiveColor = isSubcategory ? null : category.color;
+      final effectiveType = isSubcategory ? null : category.type?.name;
+
       await docRef.set({
         'id': category.id,
         'name': category.name,
         'iconId': category.iconId,
-        'color': category.color,
+        'color': effectiveColor,
         'displayOrder': category.displayOrder,
-        'type': category.type?.name,
+        'type': effectiveType,
         'parentCategoryID': category.parentCategoryID,
         'updatedAt': FieldValue.serverTimestamp(),
         'updatedBy': currentUserEmail,
@@ -450,7 +461,35 @@ class FirebaseSyncService {
           parentCategoryID: data['parentCategoryID'] as String?,
         );
 
-        await db.into(db.categories).insertOnConflictUpdate(category);
+        // Defensive normalization: the DB CHECK constraint requires XOR
+        // between `parentCategoryID` and (`color`, `type`). Firebase may
+        // contain bad data pushed by an older buggy code path (e.g. a
+        // Category whose color/type getters fell back to the parent's
+        // values). If this is a subcategory, force color/type to null
+        // so the insert does not fail the CHECK.
+        final CategoryInDB normalized;
+        if (category.parentCategoryID != null) {
+          normalized = category.copyWith(
+            color: const Value<String?>(null),
+            type: const Value<CategoryType?>(null),
+          );
+        } else {
+          normalized = category;
+          // Inverse check: a main category MUST have non-null color AND type.
+          // If we see one without them, the insert will throw due to the
+          // CHECK constraint — log a clear warning first so we can fix
+          // the source doc in Firebase.
+          if (category.color == null || category.type == null) {
+            Logger.printDebug(
+              'FirebaseSyncService: WARNING main category ${doc.id} has '
+              'null color or type (color=${category.color}, '
+              'type=${category.type}). Insert will likely fail the XOR '
+              'CHECK constraint. Fix this doc in Firestore.',
+            );
+          }
+        }
+
+        await db.into(db.categories).insertOnConflictUpdate(normalized);
         successCount++;
       } catch (e) {
         Logger.printDebug(
@@ -704,20 +743,32 @@ class FirebaseSyncService {
       }
 
       // Push categories
+      // NOTE: `Category.color` and `Category.type` are GETTERS that fall
+      // back to the parent category's values when the subcategory's own
+      // fields are null. Reading them here would push bogus non-null
+      // color/type on subcategories, violating the XOR CHECK constraint
+      // on pull. `pushCategory` also normalizes defensively, but we pass
+      // nulls explicitly for subcategories to avoid ever depending on
+      // the getter fallback.
       final categories = await CategoryService.instance.getCategories().first;
       for (final category in categories) {
+        final isSub = category.parentCategory != null;
         await pushCategory(
           CategoryInDB(
             id: category.id,
             name: category.name,
             iconId: category.iconId,
-            color: category.color,
+            color: isSub ? null : category.color,
             displayOrder: category.displayOrder,
-            type: category.type,
+            type: isSub ? null : category.type,
             parentCategoryID: category.parentCategory?.id,
           ),
         );
       }
+      // TODO(firebase-cleanup): Existing Firestore docs from prior buggy
+      // pushes may still contain non-null color/type on subcategories.
+      // A one-time cleanup script should iterate users/{uid}/categories
+      // and unset `color` + `type` wherever `parentCategoryID` is non-null.
 
       // Push transactions
       final transactions = await TransactionService.instance
