@@ -141,7 +141,6 @@ class _OutlinedContainer extends StatelessWidget {
     this.borderRadius = 15,
     this.borderColor,
     this.enabled = true,
-    super.key,
   });
 
   final Widget child;
@@ -160,10 +159,10 @@ class _OutlinedContainer extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       decoration: BoxDecoration(
         border: Border.all(
-          color: buttonColor.withOpacity(filled ? 0.6 : 0.5),
+          color: buttonColor.withValues(alpha: filled ? 0.6 : 0.5),
           width: 2,
         ),
-        color: filled ? buttonColor.withOpacity(0.2) : Colors.transparent,
+        color: filled ? buttonColor.withValues(alpha: 0.2) : Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: child,

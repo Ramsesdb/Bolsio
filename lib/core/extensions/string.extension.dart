@@ -23,6 +23,6 @@ extension NullableStringExtensions<E> on String? {
 
   /// Returns the string if it is not `null` and not empty, otherwise returns `null`.
   String? get notEmptyString {
-    return this.isNotNullNorEmpty ? this : null;
+    return isNotNullNorEmpty ? this : null;
   }
 }

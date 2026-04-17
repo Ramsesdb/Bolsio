@@ -54,7 +54,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
   DateTime startDate = DateTime.now();
   DateTime? endDate;
 
-  submitForm() {
+  void submitForm() {
     final t = Translations.of(context);
 
     if (valueToNumber! < 0) {
@@ -120,7 +120,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     }
   }
 
-  fillForm(Budget budget) async {
+  Future<void> fillForm(Budget budget) async {
     nameController.text = budget.name;
     valueController.text = budget.limitAmount.abs().toString();
 
@@ -232,7 +232,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                 },
               ),
               DropdownButtonFormField(
-                value: intervalPeriod,
+                initialValue: intervalPeriod,
                 decoration: InputDecoration(
                   labelText: '${t.general.time.periodicity.display} *',
                 ),

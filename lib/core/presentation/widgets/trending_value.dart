@@ -91,7 +91,7 @@ class TrendingValue extends StatelessWidget {
       context,
     ).lighten(filled && !outlined ? 0.85 : 0);
     final backgroundColor = filled && outlined
-        ? trendColor.lighten(0.85).withOpacity(0.95)
+        ? trendColor.lighten(0.85).withValues(alpha: 0.95)
         : filled
         ? trendColor
         : null;

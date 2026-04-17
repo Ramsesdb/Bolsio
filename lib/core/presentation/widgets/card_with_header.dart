@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
@@ -78,22 +76,16 @@ class CardWithHeader extends StatelessWidget {
     if (isDark) {
       // Glassmorphism card for dark mode
       final primary = Theme.of(context).colorScheme.primary;
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Container(
-            decoration: BoxDecoration(
-              color: primary.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(cardWithHeaderRadius),
-              border: Border.all(
-                color: primary.withValues(alpha: 0.08),
-                width: 0.5,
-              ),
-            ),
-            child: column,
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(cardWithHeaderRadius),
+          border: Border.all(
+            color: primary.withValues(alpha: 0.1),
+            width: 0.5,
           ),
         ),
+        child: column,
       );
     }
 

@@ -239,7 +239,7 @@ class CurrencyManagerPage extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.primary.withOpacity(0.125),
+                            ).colorScheme.primary.withValues(alpha: 0.125),
                             borderRadius: BorderRadius.circular(100),
                           ),
                           alignment: Alignment.center,
@@ -260,7 +260,7 @@ class CurrencyManagerPage extends StatelessWidget {
                           width: 42,
                           height: 42,
                           decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.125),
+                            color: Colors.green.withValues(alpha: 0.125),
                             borderRadius: BorderRadius.circular(100),
                           ),
                           alignment: Alignment.center,

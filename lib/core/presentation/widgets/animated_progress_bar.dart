@@ -60,7 +60,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
           child: Container(
             height: isHorizontal ? widget.width : double.infinity,
             width: isHorizontal ? double.infinity : widget.width,
-            decoration: BoxDecoration(color: barColor.withOpacity(0.12)),
+            decoration: BoxDecoration(color: barColor.withValues(alpha: 0.12)),
             child: FractionallySizedBox(
               widthFactor: isHorizontal ? value : 1,
               heightFactor: isHorizontal ? 1 : value,
@@ -245,7 +245,7 @@ class AnimatedProgressBarWithIndicatorLabel extends StatelessWidget {
                         child: Container(
                           width: 2.5,
                           height: barWidth + indicatorLabelOffset * 2,
-                          color: labelColor.withOpacity(0.75),
+                          color: labelColor.withValues(alpha: 0.75),
                         ),
                       ),
                     ),

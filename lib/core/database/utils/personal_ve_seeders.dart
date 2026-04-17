@@ -59,7 +59,7 @@ class PersonalVESeeder {
     final db = AppDB.instance;
     for (final entry in _ramseBalances.entries) {
       await db.customStatement(
-        "UPDATE accounts SET iniValue = ${entry.value} "
+        'UPDATE accounts SET iniValue = ${entry.value} '
         "WHERE name = '${entry.key}'",
       );
     }

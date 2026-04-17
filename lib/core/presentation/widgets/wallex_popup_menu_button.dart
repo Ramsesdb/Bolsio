@@ -65,7 +65,7 @@ class WallexPopupMenuButton extends StatelessWidget {
                       color: actionItem.role != null
                           ? actionItem
                                 .getColorBasedOnRole(context)
-                                .withOpacity(
+                                .withValues(alpha: 
                                   actionItem.onClick != null ? 1 : 0.6,
                                 )
                           : null,

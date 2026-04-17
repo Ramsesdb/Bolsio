@@ -99,11 +99,11 @@ class ColorPickerModal extends StatelessWidget {
           border: GradientBoxBorder(
             gradient: LinearGradient(
               colors: [
-                Colors.red.withOpacity(0.8),
-                Colors.yellow.withOpacity(0.8),
-                Colors.green.withOpacity(0.8),
-                Colors.blue.withOpacity(0.8),
-                Colors.purple.withOpacity(0.8),
+                Colors.red.withValues(alpha: 0.8),
+                Colors.yellow.withValues(alpha: 0.8),
+                Colors.green.withValues(alpha: 0.8),
+                Colors.blue.withValues(alpha: 0.8),
+                Colors.purple.withValues(alpha: 0.8),
               ],
             ),
             width: 3,

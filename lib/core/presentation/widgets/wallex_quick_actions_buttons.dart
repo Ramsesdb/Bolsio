@@ -29,7 +29,7 @@ class WallexQuickActionsButton extends StatelessWidget {
                           CircleAvatar(
                             backgroundColor: item
                                 .getColorBasedOnRole(context)
-                                .withOpacity(0.15),
+                                .withValues(alpha: 0.15),
                             radius: 24,
                             child: IconButton(
                               onPressed: item.onClick,

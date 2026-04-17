@@ -295,14 +295,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
           child: ListTile(
             tileColor: Theme.of(
               context,
-            ).colorScheme.onSurface.withOpacity(0.04),
+            ).colorScheme.onSurface.withValues(alpha: 0.04),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios_rounded,
               size: 14,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
             ),
             leading: Container(
               clipBehavior: Clip.hardEdge,

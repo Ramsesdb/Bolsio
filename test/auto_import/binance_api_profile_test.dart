@@ -13,7 +13,7 @@ void main() {
     profile = BinanceApiProfile();
   });
 
-  RawCaptureEvent _makeEvent(Map<String, dynamic> json, String sender) {
+  RawCaptureEvent makeEvent(Map<String, dynamic> json, String sender) {
     return RawCaptureEvent(
       rawText: jsonEncode(json),
       sender: sender,
@@ -65,7 +65,7 @@ void main() {
         'orderStatus': 'COMPLETED',
       };
 
-      final event = _makeEvent(json, 'binance:c2c_p2p');
+      final event = makeEvent(json, 'binance:c2c_p2p');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -93,7 +93,7 @@ void main() {
         'orderStatus': 'COMPLETED',
       };
 
-      final event = _makeEvent(json, 'binance:c2c_p2p');
+      final event = makeEvent(json, 'binance:c2c_p2p');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -119,7 +119,7 @@ void main() {
         'orderStatus': 'PENDING',
       };
 
-      final event = _makeEvent(json, 'binance:c2c_p2p');
+      final event = makeEvent(json, 'binance:c2c_p2p');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -139,7 +139,7 @@ void main() {
         'orderStatus': 'CANCELLED',
       };
 
-      final event = _makeEvent(json, 'binance:c2c_p2p');
+      final event = makeEvent(json, 'binance:c2c_p2p');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -160,7 +160,7 @@ void main() {
         'updateTime': 1712005200000,
       };
 
-      final event = _makeEvent(json, 'binance:fiat_order_deposit');
+      final event = makeEvent(json, 'binance:fiat_order_deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -185,7 +185,7 @@ void main() {
         'updateTime': 1712005200000,
       };
 
-      final event = _makeEvent(json, 'binance:fiat_order_withdraw');
+      final event = makeEvent(json, 'binance:fiat_order_withdraw');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -205,7 +205,7 @@ void main() {
         'updateTime': 1712012400000,
       };
 
-      final event = _makeEvent(json, 'binance:fiat_order_deposit');
+      final event = makeEvent(json, 'binance:fiat_order_deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -225,7 +225,7 @@ void main() {
         'createTime': 1712088000000,
       };
 
-      final event = _makeEvent(json, 'binance:fiat_payment');
+      final event = makeEvent(json, 'binance:fiat_payment');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -249,7 +249,7 @@ void main() {
         'createTime': 1712088000000,
       };
 
-      final event = _makeEvent(json, 'binance:fiat_payment');
+      final event = makeEvent(json, 'binance:fiat_payment');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -274,7 +274,7 @@ void main() {
         'createTime': 1712174400000,
       };
 
-      final event = _makeEvent(json, 'binance:pay');
+      final event = makeEvent(json, 'binance:pay');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -302,7 +302,7 @@ void main() {
         'createTime': 1712178000000,
       };
 
-      final event = _makeEvent(json, 'binance:pay');
+      final event = makeEvent(json, 'binance:pay');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -322,7 +322,7 @@ void main() {
         'createTime': 1712181600000,
       };
 
-      final event = _makeEvent(json, 'binance:pay');
+      final event = makeEvent(json, 'binance:pay');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -342,7 +342,7 @@ void main() {
         'insertTime': 1712260800000,
       };
 
-      final event = _makeEvent(json, 'binance:deposit');
+      final event = makeEvent(json, 'binance:deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -367,7 +367,7 @@ void main() {
         'insertTime': 1712264400000,
       };
 
-      final event = _makeEvent(json, 'binance:deposit');
+      final event = makeEvent(json, 'binance:deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -389,7 +389,7 @@ void main() {
         'insertTime': 1712268000000,
       };
 
-      final event = _makeEvent(json, 'binance:deposit');
+      final event = makeEvent(json, 'binance:deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -409,7 +409,7 @@ void main() {
         'applyTime': '2025-04-05 12:00:00',
       };
 
-      final event = _makeEvent(json, 'binance:withdraw');
+      final event = makeEvent(json, 'binance:withdraw');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -434,7 +434,7 @@ void main() {
         'applyTime': '2025-04-05 13:00:00',
       };
 
-      final event = _makeEvent(json, 'binance:withdraw');
+      final event = makeEvent(json, 'binance:withdraw');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -444,7 +444,7 @@ void main() {
   group('Edge cases', () {
     test('unknown sender → null', () {
       final json = {'some': 'data'};
-      final event = _makeEvent(json, 'binance:unknown_endpoint');
+      final event = makeEvent(json, 'binance:unknown_endpoint');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
@@ -474,7 +474,7 @@ void main() {
         'insertTime': 1712260800000,
       };
 
-      final event = _makeEvent(json, 'binance:deposit');
+      final event = makeEvent(json, 'binance:deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
@@ -493,7 +493,7 @@ void main() {
         'insertTime': 1712260800000,
       };
 
-      final event = _makeEvent(json, 'binance:deposit');
+      final event = makeEvent(json, 'binance:deposit');
       final proposal = profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);

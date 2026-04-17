@@ -81,7 +81,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
                       subtitle: Text(
                         lastUsedFields
                             .map((e) => e.displayName(context))
-                            .join(", "),
+                            .join(', '),
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios_rounded),
                       onTap: () =>
@@ -108,7 +108,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     );
   }
 
-  void _selectLastUsedFields(
+  Future<void> _selectLastUsedFields(
     BuildContext context,
     List<TransactionFormField> currentSelection,
   ) async {
@@ -256,7 +256,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
           subtitle: Text(
             tags.isEmpty
                 ? t.settings.transactions.default_values.no_tags_selected
-                : tags.map((e) => e.name).join(", "),
+                : tags.map((e) => e.name).join(', '),
           ),
           leading: ScaledAnimatedSwitcher(
             keyToWatch: tags.isEmpty.toString(),

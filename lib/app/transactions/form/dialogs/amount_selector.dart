@@ -169,7 +169,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     return exprSplit.last.contains('.');
   }
 
-  toggleSign() {
+  void toggleSign() {
     if (amountString.startsWith('-')) {
       amountString = amountString.substring(1, amountString.length);
     } else {
@@ -250,7 +250,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     }
   }
 
-  submitAmount() {
+  void submitAmount() {
     HapticFeedback.lightImpact();
 
     if (widget.onSubmit != null) {
@@ -277,7 +277,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     });
   }
 
-  toggleCalculatorMode() {
+  void toggleCalculatorMode() {
     calculatorMode = !calculatorMode;
 
     if (calculatorMode == false) {
@@ -346,7 +346,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                                     fontWeight: FontWeight.w300,
                                     fontSize: 22,
                                     color: AppColors.of(context).textBody
-                                        .withOpacity(
+                                        .withValues(alpha: 
                                           amountString.contains('.')
                                               ? 1.0
                                               : 0.3,
@@ -600,7 +600,7 @@ class CalculatorButton extends StatelessWidget {
     } else if (style == CalculatorButtonStyle.secondary) {
       effectiveTextColor = Theme.of(
         context,
-      ).colorScheme.onSurface.withOpacity(0.9);
+      ).colorScheme.onSurface.withValues(alpha: 0.9);
       effectiveBgColor = Theme.of(context).colorScheme.surfaceContainerHigh;
     }
 
@@ -611,16 +611,16 @@ class CalculatorButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? effectiveBgColor.withOpacity(0.975)
-            : effectiveBgColor.withOpacity(0.85),
+            ? effectiveBgColor.withValues(alpha: 0.975)
+            : effectiveBgColor.withValues(alpha: 0.85),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         iconColor: effectiveTextColor,
-        shadowColor: effectiveBgColor.withOpacity(0.85),
-        surfaceTintColor: effectiveBgColor.withOpacity(0.85),
+        shadowColor: effectiveBgColor.withValues(alpha: 0.85),
+        surfaceTintColor: effectiveBgColor.withValues(alpha: 0.85),
         foregroundColor: effectiveTextColor,
-        disabledForegroundColor: effectiveTextColor.withOpacity(0.3),
-        disabledIconColor: effectiveTextColor.withOpacity(0.3),
-        disabledBackgroundColor: effectiveBgColor.withOpacity(0.3),
+        disabledForegroundColor: effectiveTextColor.withValues(alpha: 0.3),
+        disabledIconColor: effectiveTextColor.withValues(alpha: 0.3),
+        disabledBackgroundColor: effectiveBgColor.withValues(alpha: 0.3),
         elevation: 0,
         padding: const EdgeInsets.all(0),
       ),

@@ -692,14 +692,14 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             : transactionType == TransactionType.expense
             ? t.transaction.new_expense
             : t.transaction.new_income,
-        appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
+        appBarBackgroundColor: transactionType.color(context).withValues(alpha: 0.85),
         appBarForegroundColor: foregroundColor,
         tabBar: TabBar(
           indicatorColor: foregroundColor,
           labelColor: foregroundColor,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-          unselectedLabelColor: foregroundColor.withOpacity(0.8),
+          unselectedLabelColor: foregroundColor.withValues(alpha: 0.8),
           tabAlignment: TabAlignment.fill,
           dividerColor: transactionType.color(context).darken(0.3),
           controller: _tabController,

@@ -141,7 +141,7 @@ abstract class AccountDetailsActions {
     );
   }
 
-  static deleteAccountWithAlertAndSnackBar(
+  static void deleteAccountWithAlertAndSnackBar(
     BuildContext context, {
     required String accountId,
     required bool navigateBack,

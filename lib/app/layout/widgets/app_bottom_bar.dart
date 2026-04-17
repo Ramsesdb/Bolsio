@@ -47,7 +47,7 @@ class AppBottomBar extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             // Nav bar
-            Container(
+            DecoratedBox(
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHigh,
                 border: Border(

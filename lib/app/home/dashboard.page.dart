@@ -45,6 +45,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   DatePeriodState dateRangeService = const DatePeriodState();
   final ScrollController _scrollController = ScrollController();
+  bool _glassReady = false;
 
   late Stream<double> _balanceVariationStream;
   late Stream<double> _totalBalanceStream;
@@ -55,6 +56,9 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _glassReady = true);
+    });
 
     _balanceVariationStream = _getBalanceVariationStream();
 
@@ -251,6 +255,45 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  /// Wraps [child] in a glass container. On the first frame, renders a solid
+  /// fallback (no BackdropFilter) to avoid the expensive blur during cold
+  /// start. After the first frame, [_glassReady] flips to true and the real
+  /// BackdropFilter is used.
+  Widget _headerContainer({
+    required BorderRadius borderRadius,
+    required Widget child,
+  }) {
+    return Builder(
+      builder: (context) {
+        final glassTint =
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
+        final glassBorder =
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
+
+        final container = DecoratedBox(
+          decoration: BoxDecoration(
+            color: glassTint,
+            borderRadius: borderRadius,
+            border: Border.all(color: glassBorder, width: 1),
+          ),
+          child: child,
+        );
+
+        if (_glassReady) {
+          return ClipRRect(
+            borderRadius: borderRadius,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: container,
+            ),
+          );
+        }
+
+        return container;
+      },
+    );
+  }
+
   Widget buildDashboadHeader(
     BuildContext context,
     AccountService accountService,
@@ -272,98 +315,81 @@ class _DashboardPageState extends State<DashboardPage> {
           left: shouldHavePadding ? 12 : 0,
           right: shouldHavePadding ? 12 : 0,
         ),
-        child: ClipRRect(
+        child: _headerContainer(
           borderRadius: headerBorderRadius,
-          child: Builder(
-            builder: (context) {
-              final glassTint = Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
-              final glassBorder = Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
-              return BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: glassTint,
-                    borderRadius: headerBorderRadius,
-                    border: Border.all(
-                      color: glassBorder,
-                      width: 1,
-                    ),
-                  ),
-                  padding: EdgeInsets.fromLTRB(
-                    _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-                    16,
-                    _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-                    _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(child: buildWelcomeMsgAndAvatar(context)),
-                          buildDatePeriodSelector(context),
-                        ],
-                      ),
-                      Divider(
-                        height: 16,
-                        color: Colors.white.withValues(alpha: 0.15),
-                      ),
-                      const SizedBox(height: 8),
-                      Builder(
-                        builder: (context) {
-                          final labelStyle = Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                  color: Colors.white.withValues(alpha: 0.7));
-
-                          final incomeAndExpenseCards = [
-                            IncomeOrExpenseCard(
-                              type: TransactionType.expense,
-                              periodState: dateRangeService,
-                              labelStyle: labelStyle,
-                              rateSource: _rateSource,
-                            ),
-                            IncomeOrExpenseCard(
-                              type: TransactionType.income,
-                              periodState: dateRangeService,
-                              labelStyle: labelStyle,
-                              rateSource: _rateSource,
-                            ),
-                          ];
-
-                          if (_isIncomeExpenseAtSameLevel(context)) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              spacing: 16,
-                              children: [
-                                totalBalanceIndicator(context),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: incomeAndExpenseCards,
-                                ),
-                              ],
-                            );
-                          }
-
-                          return Column(
-                            spacing: 24,
-                            children: [
-                              totalBalanceIndicator(context),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: incomeAndExpenseCards,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+              16,
+              _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+              _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(child: buildWelcomeMsgAndAvatar(context)),
+                    buildDatePeriodSelector(context),
+                  ],
                 ),
-              );
-            },
+                Divider(
+                  height: 16,
+                  color: Colors.white.withValues(alpha: 0.15),
+                ),
+                const SizedBox(height: 8),
+                Builder(
+                  builder: (context) {
+                    final labelStyle = Theme.of(context)
+                        .textTheme
+                        .labelMedium!
+                        .copyWith(
+                            color: Colors.white.withValues(alpha: 0.7));
+
+                    final incomeAndExpenseCards = [
+                      IncomeOrExpenseCard(
+                        type: TransactionType.expense,
+                        periodState: dateRangeService,
+                        labelStyle: labelStyle,
+                        rateSource: _rateSource,
+                      ),
+                      IncomeOrExpenseCard(
+                        type: TransactionType.income,
+                        periodState: dateRangeService,
+                        labelStyle: labelStyle,
+                        rateSource: _rateSource,
+                      ),
+                    ];
+
+                    if (_isIncomeExpenseAtSameLevel(context)) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        spacing: 16,
+                        children: [
+                          totalBalanceIndicator(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: incomeAndExpenseCards,
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Column(
+                      spacing: 24,
+                      children: [
+                        totalBalanceIndicator(context),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: incomeAndExpenseCards,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -440,7 +466,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Welcome again!",
+                    'Welcome again!',
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       overflow: TextOverflow.fade,
@@ -475,79 +501,62 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return SkeletonizerConfig(
       data: _getSkeletonizerConfig(context),
-      child: ClipRRect(
+      child: _headerContainer(
         borderRadius: smallHeaderRadius,
-        child: Builder(
-          builder: (context) {
-            final glassTint = Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
-            final glassBorder = Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
-            return BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                decoration: BoxDecoration(
-                  borderRadius: smallHeaderRadius,
-                  color: glassTint,
-                  border: Border.all(
-                    color: glassBorder,
-                    width: 1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.home.total_balance,
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.home.total_balance,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                            color: Colors.white.withValues(alpha: 0.7),
-                          ),
-                        ),
-                        StreamBuilder(
-                          stream: _totalBalanceStream,
-                          builder: (context, snapshot) {
-                            return Skeletonizer(
-                              enabled: !snapshot.hasData,
-                              child: Builder(
-                                builder: (context) {
-                                  if (!snapshot.hasData) {
-                                    return Text('9999',
-                                        style: TextStyle(fontSize: 22));
-                                  }
+                  StreamBuilder(
+                    stream: _totalBalanceStream,
+                    builder: (context, snapshot) {
+                      return Skeletonizer(
+                        enabled: !snapshot.hasData,
+                        child: Builder(
+                          builder: (context) {
+                            if (!snapshot.hasData) {
+                              return Text('9999',
+                                  style: TextStyle(fontSize: 22));
+                            }
 
-                                  return CurrencyDisplayer(
-                                    amountToConvert: snapshot.data!,
-                                    integerStyle: TextStyle(
-                                      fontSize:
-                                          snapshot.data! >= 10000000 &&
-                                                  BreakPoint.of(
-                                                    context,
-                                                  ).isSmallerOrEqualTo(
-                                                      BreakpointID.xs)
-                                              ? 22
-                                              : 28,
-                                      fontWeight: FontWeight.w200,
-                                      letterSpacing: -0.5,
-                                      color: Colors.white,
-                                    ),
-                                  );
-                                },
+                            return CurrencyDisplayer(
+                              amountToConvert: snapshot.data!,
+                              integerStyle: TextStyle(
+                                fontSize:
+                                    snapshot.data! >= 10000000 &&
+                                            BreakPoint.of(
+                                              context,
+                                            ).isSmallerOrEqualTo(
+                                                BreakpointID.xs)
+                                        ? 22
+                                        : 28,
+                                fontWeight: FontWeight.w200,
+                                letterSpacing: -0.5,
+                                color: Colors.white,
                               ),
                             );
                           },
                         ),
-                      ],
-                    ),
-                    const SizedBox(width: 12),
-                    Flexible(child: buildDatePeriodSelector(context)),
-                  ],
-                ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            );
-          },
+              const SizedBox(width: 12),
+              Flexible(child: buildDatePeriodSelector(context)),
+            ],
+          ),
         ),
       ),
     );
@@ -815,22 +824,16 @@ class _DashboardPageState extends State<DashboardPage> {
     );
 
     if (isDark) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: primary.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: primary.withValues(alpha: 0.08),
-                width: 0.5,
-              ),
-            ),
-            child: cardContent,
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: primary.withValues(alpha: 0.1),
+            width: 0.5,
           ),
         ),
+        child: cardContent,
       );
     } else {
       return Card(child: cardContent);
@@ -861,7 +864,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   TableRow _rateTableHeader(BuildContext context) {
     final style = Theme.of(context).textTheme.labelSmall!.copyWith(
-      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
     );
     return TableRow(
       children: [

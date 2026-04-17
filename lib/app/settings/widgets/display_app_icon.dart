@@ -22,7 +22,7 @@ class DisplayAppIcon extends StatelessWidget {
       padding: padding,
       height: height,
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.white.withOpacity(0.5)),
+        border: Border.all(width: 1, color: Colors.white.withValues(alpha: 0.5)),
         borderRadius: borderRadius,
         color: ColorHex.get('0D0D1A'),
       ),

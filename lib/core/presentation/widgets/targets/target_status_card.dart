@@ -69,7 +69,7 @@ class FinancialTargetTimelineCard extends StatelessWidget {
             ? '${(daysToTheEnd ?? 0).abs()} ${t.budgets.since_expiration}'
             : target.isFuture
             ? '$daysToTheStart ${t.budgets.days_to_start}'
-            : ""),
+            : ''),
       ),
     );
   }
@@ -216,7 +216,7 @@ class FinancialTargetStatusCard extends StatelessWidget {
                               : snapshot.data!.progressStatus!
                                     .color(target.isTargetLimit)
                                     .lighten(0.2)
-                                    .withOpacity(0.2),
+                                    .withValues(alpha: 0.2),
                         ),
                         child: Icon(
                           snapshot.data?.progressStatus?.icon(

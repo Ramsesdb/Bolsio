@@ -253,7 +253,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                               child: Text(t.categories.both_types),
                             ),
                           ],
-                          value: _type,
+                          initialValue: _type,
                           onChanged: widget.categoryUUID != null
                               ? null
                               : (value) {

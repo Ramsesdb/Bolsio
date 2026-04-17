@@ -440,7 +440,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
                   thumbVisibility: true,
                   controller: scrollController,
                   thumbColor: Theme.of(context).colorScheme.onSecondaryContainer
-                      .withOpacity(0.3)
+                      .withValues(alpha: 0.3)
                       .darkenPastel(amount: 0.3),
                   radius: Radius.circular(20),
                   thickness: 10,

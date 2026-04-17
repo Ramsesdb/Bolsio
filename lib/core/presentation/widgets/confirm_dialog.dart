@@ -21,7 +21,7 @@ Future<bool?> confirmDialog(
   return showGeneralDialog<bool>(
     context: context,
     barrierDismissible: canPop,
-    barrierColor: Colors.black.withOpacity(0.4),
+    barrierColor: Colors.black.withValues(alpha: 0.4),
     barrierLabel: '',
     transitionBuilder: (_, anim, __, child) {
       Tween<double> tween;

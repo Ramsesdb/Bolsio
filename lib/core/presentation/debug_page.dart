@@ -240,7 +240,7 @@ class DebugPage extends StatelessWidget {
                       WallexSnackbar.error(SnackbarParams.fromError(error));
                     });
               },
-              child: Text("DEMO DATA"),
+              child: Text('DEMO DATA'),
             ),
           ],
         ),
@@ -317,7 +317,7 @@ class _ColorPreviewTile extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(4),
           border: foregroundColor != null
-              ? Border.all(color: foregroundColor!.withOpacity(0.2))
+              ? Border.all(color: foregroundColor!.withValues(alpha: 0.2))
               : null,
         ),
         alignment: Alignment.center,

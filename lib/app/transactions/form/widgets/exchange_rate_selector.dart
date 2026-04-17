@@ -212,7 +212,7 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
                 Text(
                   '${widget.fromCurrency} -> ${widget.toCurrency}',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurface.withOpacity(0.6),
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
                 const Spacer(),
@@ -220,7 +220,7 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
                   Text(
                     'Actualizado ${_formatTimeSince(_lastFetch)}', // TODO: i18n
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withOpacity(0.5),
+                      color: colorScheme.onSurface.withValues(alpha: 0.5),
                       fontSize: 11,
                     ),
                   ),
@@ -291,7 +291,7 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer.withOpacity(0.3),
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

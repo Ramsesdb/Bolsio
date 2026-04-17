@@ -232,10 +232,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primary.withOpacity(0.12),
+                color: colorScheme.primary.withValues(alpha: 0.12),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.12),
+                    color: colorScheme.primary.withValues(alpha: 0.12),
                     blurRadius: 100,
                     spreadRadius: 20,
                   ),
@@ -251,10 +251,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               height: 220,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.secondary.withOpacity(0.12),
+                color: colorScheme.secondary.withValues(alpha: 0.12),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.secondary.withOpacity(0.12),
+                    color: colorScheme.secondary.withValues(alpha: 0.12),
                     blurRadius: 80,
                     spreadRadius: 20,
                   ),
@@ -298,10 +298,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: colorScheme.errorContainer.withOpacity(0.8),
+                        color: colorScheme.errorContainer.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: colorScheme.error.withOpacity(0.5),
+                          color: colorScheme.error.withValues(alpha: 0.5),
                         ),
                       ),
                       child: Row(
@@ -374,7 +374,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         side: BorderSide(
-                          color: colorScheme.outline.withOpacity(0.3),
+                          color: colorScheme.outline.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(

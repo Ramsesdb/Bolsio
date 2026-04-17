@@ -83,7 +83,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                                     if (account == null) {
                                       return Center(
                                         child: Text(
-                                          "Create an account first to see the transaction tile preview here",
+                                          'Create an account first to see the transaction tile preview here',
                                         ),
                                       );
                                     }
@@ -94,9 +94,9 @@ class TransactionsSettingsPage extends StatelessWidget {
                                     return TransactionListTile(
                                       preventDefaultOnTap: true,
                                       transaction: MoneyTransaction(
-                                        id: "t1",
+                                        id: 't1',
                                         title: "McDonald's",
-                                        notes: "Burger and fries",
+                                        notes: 'Burger and fries',
                                         category: category,
                                         date: DateTime.now(),
                                         value: -100,

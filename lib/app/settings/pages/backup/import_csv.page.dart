@@ -151,7 +151,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     labelText ??= t.backup.import.manual_import.select_a_column;
 
     return DropdownButtonFormField(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(labelText: labelText),
       items: [
         if (isNullable)
@@ -623,7 +623,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
         headingRowColor: WidgetStateProperty.resolveWith<Color?>(
-          (states) => Theme.of(context).colorScheme.primary.withOpacity(0.18),
+          (states) => Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
         ),
         clipBehavior: Clip.hardEdge,
         headingTextStyle: Theme.of(context).textTheme.labelLarge,
@@ -654,7 +654,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       onTap: () => readFile(),
       child: DottedBorder(
         options: RoundedRectDottedBorderOptions(
-          color: Colors.grey.withOpacity(0.5),
+          color: Colors.grey.withValues(alpha: 0.5),
           strokeWidth: 3,
           strokeCap: StrokeCap.round,
           dashPattern: const [6, 8],
@@ -672,7 +672,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                   Icons.add,
                   size: 48,
                   weight: 10,
-                  color: Colors.grey.withOpacity(0.95),
+                  color: Colors.grey.withValues(alpha: 0.95),
                 ),
                 const SizedBox(height: 4),
                 Text(

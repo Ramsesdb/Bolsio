@@ -139,7 +139,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       child: ListTile(
         enabled: isNext,
         contentPadding: const EdgeInsets.only(left: 16, right: 6),
-        tileColor: transaction.nextPayStatus!.color(context).withOpacity(0.1),
+        tileColor: transaction.nextPayStatus!.color(context).withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
@@ -160,7 +160,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           children: [
             IconButton(
               color: AppColors.of(context).danger,
-              disabledColor: AppColors.of(context).danger.withOpacity(0.7),
+              disabledColor: AppColors.of(context).danger.withValues(alpha: 0.7),
               icon: const Icon(Icons.cancel_rounded),
               tooltip: t.transaction.next_payments.skip,
               onPressed: !isNext
@@ -173,7 +173,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   : () => showPayModal(context, transaction),
               color: AppColors.of(context).success,
               tooltip: !isNext ? null : t.transaction.next_payments.accept,
-              disabledColor: AppColors.of(context).success.withOpacity(0.7),
+              disabledColor: AppColors.of(context).success.withValues(alpha: 0.7),
               icon: const Icon(Icons.price_check_rounded),
             ),
           ],
@@ -771,7 +771,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.85),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.85),
         ),
       ),
     );

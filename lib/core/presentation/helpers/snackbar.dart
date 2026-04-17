@@ -82,7 +82,7 @@ abstract class WallexSnackbar {
     return scaffoldMessenger!;
   }
 
-  static openSnackbar({
+  static dynamic openSnackbar({
     required SnackbarParams options,
     required Color bgColor,
     required Color textColor,
@@ -123,7 +123,7 @@ abstract class WallexSnackbar {
     );
   }
 
-  static success(SnackbarParams options) {
+  static dynamic success(SnackbarParams options) {
     return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.green[50]!,
@@ -132,7 +132,7 @@ abstract class WallexSnackbar {
     );
   }
 
-  static error(SnackbarParams options) {
+  static dynamic error(SnackbarParams options) {
     return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
@@ -145,7 +145,7 @@ abstract class WallexSnackbar {
     );
   }
 
-  static warning(SnackbarParams options) {
+  static dynamic warning(SnackbarParams options) {
     return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.amber[50]!,
@@ -154,7 +154,7 @@ abstract class WallexSnackbar {
     );
   }
 
-  static info(SnackbarParams options) {
+  static dynamic info(SnackbarParams options) {
     return WallexSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.blue[50]!,
@@ -232,7 +232,7 @@ class WallexSnackbarContent extends StatelessWidget {
                       message!,
                       softWrap: true,
                       style: textTheme.bodyMedium!.copyWith(
-                        color: textColor.withOpacity(0.9),
+                        color: textColor.withValues(alpha: 0.9),
                       ),
                     ),
                 ],

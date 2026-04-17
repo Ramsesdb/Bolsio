@@ -43,7 +43,7 @@ class HTMLText extends StatelessWidget {
       String matchKey = '$matchSpaces(${tag.key})$matchSpaces';
 
       final RegExp tagRegExp = RegExp(
-        '<(\/)?$matchKey(${matchAttributes()})*$matchSpaces>',
+        '<(/)?$matchKey(${matchAttributes()})*$matchSpaces>',
       );
 
       final parts = htmlString.split(tagRegExp);

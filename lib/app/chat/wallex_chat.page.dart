@@ -285,7 +285,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                     },
                   ),
           ),
-          Container(
+          DecoratedBox(
             decoration: BoxDecoration(
               color: cs.surfaceContainer,
               border: Border(top: BorderSide(color: cs.outlineVariant, width: 0.5)),

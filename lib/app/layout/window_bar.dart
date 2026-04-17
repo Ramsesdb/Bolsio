@@ -70,7 +70,7 @@ class WindowBarState extends State<WindowBar> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Wallex",
+                          'Wallex',
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ),
@@ -102,8 +102,8 @@ class WindowButtons extends StatelessWidget {
     final buttonColors = WindowButtonColors(
       normal: Theme.of(context).colorScheme.surfaceContainerLow,
       iconNormal: iconNormalColor,
-      mouseOver: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-      mouseDown: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+      mouseOver: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+      mouseDown: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
       iconMouseOver: Theme.of(context).colorScheme.primary,
       iconMouseDown: Theme.of(context).colorScheme.primary,
     );

@@ -82,7 +82,7 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
         onPressed: disabled ? null : onPressed,
         icon: Icon(icon),
         iconSize: widget.buttonHeight - padding * 2.25,
-        disabledColor: color.withOpacity(0.3),
+        disabledColor: color.withValues(alpha: 0.3),
         color: color,
         style: IconButton.styleFrom(
           backgroundColor: bgColor,
@@ -197,7 +197,7 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                       if (widget.canChangePeriodType)
                         Icon(
                           Icons.arrow_drop_down_rounded,
-                          color: buttonColor.withOpacity(0.925),
+                          color: buttonColor.withValues(alpha: 0.925),
                         ),
                     ],
                   ),

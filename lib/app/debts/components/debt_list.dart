@@ -70,7 +70,7 @@ class DebtList extends StatelessWidget {
                   size: 12,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 Text(
                   DateFormat.yMMMd().format(debt.endDate!),
@@ -99,7 +99,7 @@ class DebtList extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(
-                  "${snapshot.data!.toStringAsFixed(debt.currency.decimalPlaces)} ${debt.currency.symbol}",
+                  '${snapshot.data!.toStringAsFixed(debt.currency.decimalPlaces)} ${debt.currency.symbol}',
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
               }

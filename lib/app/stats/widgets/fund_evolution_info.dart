@@ -440,7 +440,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
                           curveSmoothness: snapshot.hasData ? 0.025 : 0.2,
                           color: snapshot.hasData
                               ? lineColor
-                              : Colors.grey.withOpacity(0.2),
+                              : Colors.grey.withValues(alpha: 0.2),
                           barWidth: 3,
                           isStrokeCapRound: true,
                           dotData: const FlDotData(show: false),
@@ -457,7 +457,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
                                       lineColor.withAlpha(1),
                                     ]
                                   : [Colors.grey, Colors.grey.lighten(0.3)]
-                                        .map((color) => color.withOpacity(0.15))
+                                        .map((color) => color.withValues(alpha: 0.15))
                                         .toList(),
                             ),
                           ),

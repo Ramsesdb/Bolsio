@@ -34,7 +34,7 @@ class _DonateButtonState extends State<DonateButton> {
     super.dispose();
   }
 
-  setUpPurchaseListeners() async {
+  Future<void> setUpPurchaseListeners() async {
     if (!(await IAPConnection.isAvailable())) return;
 
     final Stream purchaseUpdated = IAPConnection.instance.purchaseStream;
@@ -131,7 +131,7 @@ class _DonateButtonState extends State<DonateButton> {
           margin: const EdgeInsets.all(0),
           color: isAppInLightBrightness(context)
               ? AppColors.of(context).danger.lighten(0.8)
-              : AppColors.of(context).danger.withOpacity(0.2),
+              : AppColors.of(context).danger.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(
             side: BorderSide(
               color: Theme.of(context).colorScheme.tertiary,

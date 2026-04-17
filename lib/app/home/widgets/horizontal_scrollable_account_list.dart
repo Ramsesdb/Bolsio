@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/account_form.dart';
 import 'package:wallex/app/accounts/details/account_details.dart';
@@ -182,23 +180,17 @@ class HorizontalScrollableAccountList extends StatelessWidget {
     );
 
     if (isDark) {
-      return ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Container(
-            margin: const EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              color: primary.withValues(alpha: 0.06),
-              borderRadius: borderRadius,
-              border: Border.all(
-                color: primary.withValues(alpha: 0.08),
-                width: 0.5,
-              ),
-            ),
-            child: cardContent,
+      return Container(
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          color: primary.withValues(alpha: 0.08),
+          borderRadius: borderRadius,
+          border: Border.all(
+            color: primary.withValues(alpha: 0.1),
+            width: 0.5,
           ),
         ),
+        child: cardContent,
       );
     } else {
       return DecoratedBox(

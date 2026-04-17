@@ -38,7 +38,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: transactionType.color(context).withOpacity(0.35),
+        color: transactionType.color(context).withValues(alpha: 0.35),
         borderRadius: BorderRadius.only(
           bottomLeft: borderRadius,
           bottomRight: borderRadius,
@@ -66,7 +66,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                 ),
               ),
               VerticalDivider(
-                color: transactionType.color(context).withOpacity(0.85),
+                color: transactionType.color(context).withValues(alpha: 0.85),
                 thickness: 2,
               ),
             ],

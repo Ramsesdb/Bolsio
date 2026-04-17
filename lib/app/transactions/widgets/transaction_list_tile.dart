@@ -362,7 +362,7 @@ class TransactionListTile extends StatelessWidget {
       selected: isSelected,
       selectedTileColor: Theme.of(
         context,
-      ).colorScheme.primary.withOpacity(0.15),
+      ).colorScheme.primary.withValues(alpha: 0.15),
       onTap:
           onTap ??
           (preventDefaultOnTap
@@ -428,7 +428,7 @@ class TransactionListTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       margin: const EdgeInsets.only(left: 2),
       decoration: BoxDecoration(
-        color: transaction.nextPayStatus!.color(context).withOpacity(0.15),
+        color: transaction.nextPayStatus!.color(context).withValues(alpha: 0.15),
         border: Border.all(
           color: transaction.nextPayStatus!.color(context),
           width: 1,

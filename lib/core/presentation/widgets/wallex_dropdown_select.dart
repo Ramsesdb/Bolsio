@@ -128,7 +128,7 @@ class WallexDropdownSelectState<T> extends State<WallexDropdownSelect<T>> {
                         : value.toString(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface
-                          .withOpacity(
+                          .withValues(alpha: 
                             _isItemDisabled(value) || !widget.enabled ? 0.3 : 1,
                           ),
                     ),
@@ -157,7 +157,7 @@ class WallexDropdownSelectState<T> extends State<WallexDropdownSelect<T>> {
                             : value.toString(),
                         style: TextStyle(
                           color: (Theme.of(context).colorScheme.onSurface)
-                              .withOpacity(
+                              .withValues(alpha: 
                                 _isItemDisabled(value) || !widget.enabled
                                     ? 0.3
                                     : 1,
@@ -206,7 +206,7 @@ class SelectorContainer extends StatelessWidget {
             backgroundColor ??
             Theme.of(
               context,
-            ).colorScheme.surfaceContainerHigh.withOpacity(enabled ? 1 : 0.75),
+            ).colorScheme.surfaceContainerHigh.withValues(alpha: enabled ? 1 : 0.75),
         borderRadius: BorderRadiusDirectional.circular(10),
       ),
       child: child,

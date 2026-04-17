@@ -28,7 +28,7 @@ import 'package:rxdart/rxdart.dart';
 Color _labelColorInHeader(BuildContext context) => Theme.of(context)
     .colorScheme
     .onSurface
-    .withOpacity(isAppInDarkBrightness(context) ? 0.6 : 0.85);
+    .withValues(alpha: isAppInDarkBrightness(context) ? 0.6 : 0.85);
 
 class DebtDetailsPage extends StatelessWidget {
   const DebtDetailsPage({super.key, required this.debtInitialData});
@@ -315,7 +315,7 @@ class DebtDetailsPage extends StatelessWidget {
                                   style: TextStyle(
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.onSurface.withOpacity(0.45),
+                                    ).colorScheme.onSurface.withValues(alpha: 0.45),
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
@@ -428,8 +428,8 @@ class _DebtDirectionBadge extends StatelessWidget {
     return Chip(
       avatar: Icon(debt.type.icon(), size: 14, color: color),
       label: Text(label),
-      backgroundColor: color.withOpacity(0.1),
-      side: BorderSide(color: color.withOpacity(0.35)),
+      backgroundColor: color.withValues(alpha: 0.1),
+      side: BorderSide(color: color.withValues(alpha: 0.35)),
       labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
         color: color,
         fontWeight: FontWeight.w600,

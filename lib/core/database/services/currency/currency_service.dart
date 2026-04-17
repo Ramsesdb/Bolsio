@@ -118,7 +118,7 @@ class CurrencyService {
         }
       }
     } catch (e) {
-      Logger.printDebug('Error getting default currency: ' + e.toString());
+      Logger.printDebug('Error getting default currency: $e');
     }
 
     return defaultCurrencyCode;

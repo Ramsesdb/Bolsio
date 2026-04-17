@@ -26,7 +26,7 @@ class DebtLinkBanner extends StatelessWidget {
       child: InlineInfoCard(
         text: t.debts.actions.link_transaction.creating(name: debt.name),
         mode: InlineInfoCardMode.custom(
-          bgColor: color.withOpacity(0.2),
+          bgColor: color.withValues(alpha: 0.2),
           iconColor: color,
           icon: Debt.icon,
         ),

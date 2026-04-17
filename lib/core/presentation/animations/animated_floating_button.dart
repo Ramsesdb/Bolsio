@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:wallex/core/presentation/animations/animated_expanded.dart';
@@ -102,48 +100,42 @@ class GlassFab extends StatelessWidget {
             : const CircleBorder(),
         splashColor: primary.withValues(alpha: 0.15),
         highlightColor: primary.withValues(alpha: 0.08),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-              height: 56,
-              padding: isExtended
-                  ? const EdgeInsets.symmetric(horizontal: 20)
-                  : const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(28),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    primary.withValues(alpha: 0.4),
-                    primary.withValues(alpha: 0.2),
-                  ],
-                ),
-                border: Border.all(
-                  color: primary.withValues(alpha: 0.15),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: primary.withValues(alpha: 0.2),
-                    blurRadius: 16,
-                    spreadRadius: 2,
-                  ),
-                  BoxShadow(
-                    color: primary.withValues(alpha: 0.1),
-                    blurRadius: 24,
-                    spreadRadius: -2,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: content,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          height: 56,
+          padding: isExtended
+              ? const EdgeInsets.symmetric(horizontal: 20)
+              : const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                primary.withValues(alpha: 0.65),
+                primary.withValues(alpha: 0.4),
+              ],
             ),
+            border: Border.all(
+              color: primary.withValues(alpha: 0.25),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: primary.withValues(alpha: 0.3),
+                blurRadius: 16,
+                spreadRadius: 2,
+              ),
+              BoxShadow(
+                color: primary.withValues(alpha: 0.1),
+                blurRadius: 24,
+                spreadRadius: -2,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
+          child: content,
         ),
       ),
     );

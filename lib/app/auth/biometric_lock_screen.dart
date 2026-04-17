@@ -140,7 +140,7 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: colorScheme.errorContainer.withOpacity(0.8),
+                      color: colorScheme.errorContainer.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(

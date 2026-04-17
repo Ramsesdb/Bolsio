@@ -20,7 +20,7 @@ List<BoxShadow> boxShadowGeneral(BuildContext context) {
 
   return [
     BoxShadow(
-      color: AppColors.of(context).shadowColorLight.withOpacity(0.12),
+      color: AppColors.of(context).shadowColorLight.withValues(alpha: 0.12),
       blurRadius: 10,
       offset: Offset(0, 0),
       spreadRadius: 4,

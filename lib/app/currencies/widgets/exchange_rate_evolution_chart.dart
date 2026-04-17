@@ -168,10 +168,10 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
                     ? [
                         Theme.of(
                           context,
-                        ).colorScheme.outlineVariant.withOpacity(0.5),
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.5),
                         Theme.of(
                           context,
-                        ).colorScheme.outlineVariant.withOpacity(0.01),
+                        ).colorScheme.outlineVariant.withValues(alpha: 0.01),
                       ]
                     : [lineColor.withAlpha(100), lineColor.withAlpha(1)],
               ),
@@ -202,7 +202,7 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              "Not enough data to display chart",
+              'Not enough data to display chart',
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ),

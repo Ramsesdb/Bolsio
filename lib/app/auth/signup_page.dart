@@ -263,10 +263,10 @@ class _SignupPageState extends State<SignupPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.secondary.withOpacity(0.15),
+                color: colorScheme.secondary.withValues(alpha: 0.15),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.secondary.withOpacity(0.15),
+                    color: colorScheme.secondary.withValues(alpha: 0.15),
                     blurRadius: 100,
                     spreadRadius: 20,
                   ),
@@ -282,10 +282,10 @@ class _SignupPageState extends State<SignupPage> {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primary.withOpacity(0.15),
+                color: colorScheme.primary.withValues(alpha: 0.15),
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.15),
+                    color: colorScheme.primary.withValues(alpha: 0.15),
                     blurRadius: 80,
                     spreadRadius: 20,
                   ),
@@ -331,12 +331,12 @@ class _SignupPageState extends State<SignupPage> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: colorScheme.errorContainer.withOpacity(
+                              color: colorScheme.errorContainer.withValues(alpha: 
                                 0.8,
                               ),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: colorScheme.error.withOpacity(0.5),
+                                color: colorScheme.error.withValues(alpha: 0.5),
                               ),
                             ),
                             child: Row(
@@ -373,7 +373,7 @@ class _SignupPageState extends State<SignupPage> {
                             filled: true,
                             fillColor: isDark
                                 ? colorScheme.surfaceContainerHighest
-                                      .withOpacity(0.5)
+                                      .withValues(alpha: 0.5)
                                 : colorScheme.surfaceContainerLow,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -382,7 +382,7 @@ class _SignupPageState extends State<SignupPage> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: colorScheme.outline.withOpacity(0.2),
+                                color: colorScheme.outline.withValues(alpha: 0.2),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -415,7 +415,7 @@ class _SignupPageState extends State<SignupPage> {
                             filled: true,
                             fillColor: isDark
                                 ? colorScheme.surfaceContainerHighest
-                                      .withOpacity(0.5)
+                                      .withValues(alpha: 0.5)
                                 : colorScheme.surfaceContainerLow,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -424,7 +424,7 @@ class _SignupPageState extends State<SignupPage> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: colorScheme.outline.withOpacity(0.2),
+                                color: colorScheme.outline.withValues(alpha: 0.2),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -471,7 +471,7 @@ class _SignupPageState extends State<SignupPage> {
                             filled: true,
                             fillColor: isDark
                                 ? colorScheme.surfaceContainerHighest
-                                      .withOpacity(0.5)
+                                      .withValues(alpha: 0.5)
                                 : colorScheme.surfaceContainerLow,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -480,7 +480,7 @@ class _SignupPageState extends State<SignupPage> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: colorScheme.outline.withOpacity(0.2),
+                                color: colorScheme.outline.withValues(alpha: 0.2),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -531,7 +531,7 @@ class _SignupPageState extends State<SignupPage> {
                             filled: true,
                             fillColor: isDark
                                 ? colorScheme.surfaceContainerHighest
-                                      .withOpacity(0.5)
+                                      .withValues(alpha: 0.5)
                                 : colorScheme.surfaceContainerLow,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -540,7 +540,7 @@ class _SignupPageState extends State<SignupPage> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: colorScheme.outline.withOpacity(0.2),
+                                color: colorScheme.outline.withValues(alpha: 0.2),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
@@ -569,7 +569,7 @@ class _SignupPageState extends State<SignupPage> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             elevation: 2,
-                            shadowColor: colorScheme.primary.withOpacity(0.4),
+                            shadowColor: colorScheme.primary.withValues(alpha: 0.4),
                           ),
                           child: _isLoading
                               ? SizedBox(
@@ -596,7 +596,7 @@ class _SignupPageState extends State<SignupPage> {
                           children: [
                             Expanded(
                               child: Divider(
-                                color: colorScheme.outline.withOpacity(0.3),
+                                color: colorScheme.outline.withValues(alpha: 0.3),
                               ),
                             ),
                             Padding(
@@ -612,7 +612,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             Expanded(
                               child: Divider(
-                                color: colorScheme.outline.withOpacity(0.3),
+                                color: colorScheme.outline.withValues(alpha: 0.3),
                               ),
                             ),
                           ],
@@ -628,7 +628,7 @@ class _SignupPageState extends State<SignupPage> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             side: BorderSide(
-                              color: colorScheme.outline.withOpacity(0.3),
+                              color: colorScheme.outline.withValues(alpha: 0.3),
                             ),
                           ),
                           icon: Image.network(

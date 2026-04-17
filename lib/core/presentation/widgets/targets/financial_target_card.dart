@@ -135,7 +135,7 @@ class FinancialTargetCard extends StatelessWidget {
                                 color: progressStatus
                                     .color(target.isTargetLimit)
                                     .lighten(0.2)
-                                    .withOpacity(0.2),
+                                    .withValues(alpha: 0.2),
                               ),
                               child: Icon(
                                 progressStatus.icon(target.isTargetLimit),

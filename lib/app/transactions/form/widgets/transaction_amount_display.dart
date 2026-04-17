@@ -30,7 +30,7 @@ class TransactionAmountDisplay extends StatelessWidget {
     final fgColor = transactionType.color(context).getContrastColor();
 
     return Tappable(
-      bgColor: transactionType.color(context).withOpacity(0.85),
+      bgColor: transactionType.color(context).withValues(alpha: 0.85),
       onTap: onTap,
       borderRadius: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
           ? BorderRadius.only(

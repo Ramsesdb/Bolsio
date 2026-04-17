@@ -107,7 +107,7 @@ class _IncomePieChartState extends State<IncomePieChart> {
     if (data.isEmpty) {
       return [
         PieChartSectionData(
-          color: Colors.grey.withOpacity(0.175),
+          color: Colors.grey.withValues(alpha: 0.175),
           value: 100,
           radius: 50,
           showTitle: false,
@@ -239,7 +239,7 @@ class _IncomePieChartState extends State<IncomePieChart> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color:
-                      Theme.of(context).colorScheme.surface.withOpacity(0.1),
+                      Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                 ),
               ),
             ),

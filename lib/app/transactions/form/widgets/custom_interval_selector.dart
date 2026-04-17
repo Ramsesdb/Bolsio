@@ -166,7 +166,7 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                     Flexible(
                       flex: 2,
                       child: DropdownButtonFormField(
-                        value: intervalPeriod,
+                        initialValue: intervalPeriod,
                         decoration: InputDecoration(
                           labelText: '${t.general.time.periodicity.display} *',
                           helperText: '',

@@ -19,6 +19,7 @@ class FakeTodayOnlyProvider extends RateProvider {
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
+    String currencyCode = 'USD',
   }) async {
     if (!DateUtils.isSameDay(date, DateTime.now())) {
       return null;
@@ -44,6 +45,7 @@ class FakeDeadProvider extends RateProvider {
   Future<RateResult?> fetchRate({
     required DateTime date,
     required String source,
+    String currencyCode = 'USD',
   }) async {
     return null;
   }
@@ -139,10 +141,10 @@ void main() {
       'calculateExchangeRate returns null when either rate is missing',
       () {
         // Simulating: from has rate, to is null
-        final double? fromRate = 478.0;
+        final double fromRate = 478.0;
         final double? toRate = null;
 
-        final result = (fromRate != null && toRate != null)
+        final result = (toRate != null)
             ? (fromRate / toRate) * 1
             : null;
 

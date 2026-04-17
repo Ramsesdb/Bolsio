@@ -28,8 +28,8 @@ class TranslucentTransactionStatusCard extends StatelessWidget {
         collapsedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        backgroundColor: color.withOpacity(0.125),
-        collapsedBackgroundColor: color.withOpacity(0.125),
+        backgroundColor: color.withValues(alpha: 0.125),
+        collapsedBackgroundColor: color.withValues(alpha: 0.125),
         iconColor: color,
         collapsedIconColor: color,
         initiallyExpanded: initiallyExpanded,

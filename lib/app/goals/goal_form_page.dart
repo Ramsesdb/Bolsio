@@ -63,11 +63,11 @@ class _GoalFormPageState extends State<GoalFormPage> {
     if (isEditMode) {
       fillForm(widget.goalToEdit!);
     } else {
-      initialAmountController.text = "0";
+      initialAmountController.text = '0';
     }
   }
 
-  fillForm(Goal goal) async {
+  Future<void> fillForm(Goal goal) async {
     nameController.text = goal.name;
     amountController.text = goal.amount.toString();
     initialAmountController.text = goal.initialAmount.toString();
