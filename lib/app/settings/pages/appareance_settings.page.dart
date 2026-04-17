@@ -109,30 +109,27 @@ class AppareanceSettingsPage extends StatelessWidget {
                   }
 
                   return ListTile(
-                    onTap: snapshot.data! == 'auto'
-                        ? null
-                        : () => showColorPickerModal(
-                            context,
-                            ColorPickerModal(
-                              colorOptions: [
-                                brandBlue.toHex(),
-                                ...defaultColorPickerOptions,
-                              ],
-                              selectedColor: color.toHex(),
-                              onColorSelected: (value) {
-                                RouteUtils.popRoute();
+                    onTap: () => showColorPickerModal(
+                      context,
+                      ColorPickerModal(
+                        colorOptions: [
+                          brandBlue.toHex(),
+                          ...defaultColorPickerOptions,
+                        ],
+                        selectedColor: color.toHex(),
+                        onColorSelected: (value) {
+                          RouteUtils.popRoute();
 
-                                UserSettingService.instance.setItem(
-                                  SettingKey.accentColor,
-                                  value.toHex(),
-                                  updateGlobalState: true,
-                                );
-                              },
-                            ),
-                          ),
+                          UserSettingService.instance.setItem(
+                            SettingKey.accentColor,
+                            value.toHex(),
+                            updateGlobalState: true,
+                          );
+                        },
+                      ),
+                    ),
                     title: Text(t.settings.appearance.accent_color),
                     subtitle: Text(t.settings.appearance.accent_color_descr),
-                    enabled: snapshot.data! != 'auto',
                     trailing: SizedBox(
                       height: 46,
                       child: AnimatedContainer(
@@ -141,9 +138,7 @@ class AppareanceSettingsPage extends StatelessWidget {
                         width: 46,
                         height: 46,
                         decoration: BoxDecoration(
-                          color: color.withOpacity(
-                            snapshot.data! != 'auto' ? 1 : 0.4,
-                          ),
+                          color: color,
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),

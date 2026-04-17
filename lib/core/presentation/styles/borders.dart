@@ -14,6 +14,10 @@ UnderlineInputBorder get appInputBorder => UnderlineInputBorder(
 );
 
 List<BoxShadow> boxShadowGeneral(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
+  if (isDark) return [];
+
   return [
     BoxShadow(
       color: AppColors.of(context).shadowColorLight.withOpacity(0.12),

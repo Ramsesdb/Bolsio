@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:wallex/core/database/services/user-setting/enum/app-fonts.enum.dart';
@@ -17,7 +15,7 @@ bool isAppInLightBrightness(BuildContext context) =>
     !isAppInDarkBrightness(context);
 
 double getCardBorderRadius() {
-  return Platform.isIOS || Platform.isMacOS ? 16.0 : 12.0;
+  return 16.0;
 }
 
 extension TextThemeExtension on TextTheme {
@@ -69,9 +67,9 @@ ThemeData getThemeData(
     darkColorScheme = ColorScheme.fromSeed(
       seedColor: darkDynamic.primary,
       brightness: Brightness.dark,
-      surface: amoledMode
-          ? Colors.black
-          : darkDynamic.primary.darkenPastel(amount: 0.92),
+      surface: amoledMode ? Colors.black : const Color(0xFF1A1A2E),
+      surfaceContainerHighest:
+          amoledMode ? const Color(0xFF0A0A0F) : const Color(0xFF222238),
     );
 
     // TODO: We can directly use the dynamic palette here, in the following way
@@ -95,19 +93,21 @@ ThemeData getThemeData(
         ? brandBlue
         : ColorHex.get(accentColor);
 
-    /// Fallback scheme for a not-dynamic mode in dark or light mode:
-    ColorScheme fallbackScheme = ColorScheme.fromSeed(
+    /// Fallback scheme for light mode:
+    lightColorScheme = ColorScheme.fromSeed(
       seedColor: accentColorValue,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      surface: isDark
-          ? (amoledMode
-                ? Colors.black
-                : accentColorValue.darkenPastel(amount: 0.92))
-          : accentColorValue.lightenPastel(amount: 0.91),
+      brightness: Brightness.light,
+      surface: accentColorValue.lightenPastel(amount: 0.91),
     );
 
-    lightColorScheme = fallbackScheme;
-    darkColorScheme = fallbackScheme;
+    /// Fallback scheme for dark mode (premium minimalist palette):
+    darkColorScheme = ColorScheme.fromSeed(
+      seedColor: accentColorValue,
+      brightness: Brightness.dark,
+      surface: amoledMode ? Colors.black : const Color(0xFF1A1A2E),
+      surfaceContainerHighest:
+          amoledMode ? const Color(0xFF0A0A0F) : const Color(0xFF222238),
+    );
   }
 
   AppColors customAppColors = AppColors.fromColorScheme(
@@ -132,12 +132,14 @@ ThemeData getThemeData(
   );
 
   final cardColor = isDark
-      ? theme.colorScheme.primary.darkenPastel(amount: .85)
+      ? (amoledMode ? const Color(0xFF0A0A0F) : const Color(0xFF1A1A2E))
       : theme.colorScheme.primary.lightenPastel(amount: .96);
 
   return theme.copyWith(
     textTheme: textTheme,
-    scaffoldBackgroundColor: theme.colorScheme.surface,
+    scaffoldBackgroundColor: isDark
+        ? (amoledMode ? Colors.black : const Color(0xFF121220))
+        : theme.colorScheme.surface,
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: cardColor,
     cardTheme: CardThemeData(

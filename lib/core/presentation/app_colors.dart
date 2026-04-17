@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Wallex brand color.
-const brandBlue = Color(0xFF0D0D1A);
+/// Wallex brand color (very dark muted purple — used for glass surfaces).
+const brandBlue = Color(0xFF1E1B2E);
+
+/// Muted gray-purple accent for active text/icons.
+const accentMuted = Color(0xFF8B85A8);
 
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({required this.colors});
@@ -22,6 +25,7 @@ class AppColors extends ThemeExtension<AppColors> {
   Color get onConsistentPrimary => colors['onConsistentPrimary']!;
   Color get white => colors['white']!;
   Color get black => colors['black']!;
+  Color get accentMuted => colors['accentMuted']!;
 
   static AppColors fromColorScheme(ColorScheme colorScheme) {
     final isDark = colorScheme.brightness == Brightness.dark;
@@ -47,6 +51,9 @@ class AppColors extends ThemeExtension<AppColors> {
             ? const Color.fromARGB(255, 153, 153, 153)
             : const Color.fromARGB(255, 123, 123, 123),
         'modalBackground': colorScheme.surfaceContainer,
+        'accentMuted': isDark
+            ? colorScheme.primary.withValues(alpha: 0.7)
+            : colorScheme.primary,
         'consistentPrimary': isDark
             ? colorScheme.primaryContainer
             : colorScheme.primary,
