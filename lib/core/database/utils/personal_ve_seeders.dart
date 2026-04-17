@@ -38,6 +38,37 @@ class PersonalVESeeder {
     Logger.printDebug('[PersonalVESeeder] Seed completed successfully.');
   }
 
+  /// Balances for ramsesdavidba@gmail.com — applied only for this account.
+  static const _ramseBalances = <String, double>{
+    'Banco de Venezuela': 359484.35,
+    'Banco de Venezuela USD': 46.21,
+    'Binance': 571.29,
+    'Banco Nacional de Credito #1': 0.61,
+    'Banco Nacional de Credito #2': 17600.71,
+    'Banplus': 3668.73,
+    'Zinli': 0.04,
+    'Efectivo USD': 55.0,
+    'Ahorro Efectivo USD': 5915.0,
+  };
+
+  /// Seed accounts + categories + tags, then apply Ramses's real balances.
+  /// Used after Google sign-in when email matches.
+  static Future<void> seedAllWithBalances() async {
+    await seedAll();
+
+    final db = AppDB.instance;
+    for (final entry in _ramseBalances.entries) {
+      await db.customStatement(
+        "UPDATE accounts SET iniValue = ${entry.value} "
+        "WHERE name = '${entry.key}'",
+      );
+    }
+
+    Logger.printDebug(
+      '[PersonalVESeeder] Applied Ramses balances to ${_ramseBalances.length} accounts.',
+    );
+  }
+
   // ====================================================================
   // Accounts
   // ====================================================================

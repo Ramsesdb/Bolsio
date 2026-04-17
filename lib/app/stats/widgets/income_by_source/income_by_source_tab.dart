@@ -124,7 +124,7 @@ class _TotalIncomeKPI extends StatelessWidget {
         }
 
         final total = snapshot.data!
-            .map((tx) => tx.currentValueInPreferredCurrency)
+            .map((tx) => tx.currentValueInPreferredCurrency ?? 0.0)
             .sum;
 
         return Padding(

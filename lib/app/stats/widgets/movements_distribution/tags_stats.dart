@@ -25,7 +25,7 @@ class TagStats extends StatelessWidget {
     return TrDistributionChartItem<Tag>(
       category: tag,
       transactions: transactions,
-      value: transactions.map((e) => e.currentValueInPreferredCurrency).sum,
+      value: transactions.map((e) => e.currentValueInPreferredCurrency ?? 0.0).sum,
     );
   }
 

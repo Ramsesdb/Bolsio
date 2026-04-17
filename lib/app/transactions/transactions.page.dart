@@ -202,7 +202,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                                     amountToConvert: selectedTransactions
                                         .map(
                                           (e) => e
-                                              .getCurrentBalanceInPreferredCurrency(),
+                                              .getCurrentBalanceInPreferredCurrency() ?? 0.0,
                                         )
                                         .sum,
                                     showDecimals: false,

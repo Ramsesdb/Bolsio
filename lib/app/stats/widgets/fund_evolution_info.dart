@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:wallex/app/stats/utils/common_axis_titles.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/currency/currency_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/extensions/date.extensions.dart';
 import 'package:wallex/core/extensions/lists.extensions.dart';
@@ -78,18 +79,61 @@ class FundEvolutionInfo extends StatelessWidget {
                               ),
                             if (accounts != null)
                               StreamBuilder(
-                                stream: accountService.getAccountsMoney(
-                                  accountIds: accounts.map((e) => e.id),
-                                  trFilters: filters,
-                                  date: dateRange.endDate,
+                                stream: Rx.combineLatest2<
+                                  double,
+                                  double,
+                                  ({double converted, double native})
+                                >(
+                                  accountService.getAccountsMoney(
+                                    accountIds: accounts.map((e) => e.id),
+                                    trFilters: filters,
+                                    date: dateRange.endDate,
+                                  ),
+                                  accountService.getAccountsMoney(
+                                    accountIds: accounts.map((e) => e.id),
+                                    trFilters: filters,
+                                    date: dateRange.endDate,
+                                    convertToPreferredCurrency: false,
+                                  ),
+                                  (converted, native) => (
+                                    converted: converted,
+                                    native: native,
+                                  ),
                                 ),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return const Bone(width: 70, height: 40);
                                   }
 
+                                  final preferredCurrency =
+                                      appStateSettings[SettingKey.preferredCurrency] ??
+                                      'USD';
+                                  final selectedCurrencies =
+                                      accounts
+                                          .map((e) => e.currencyId)
+                                          .toSet();
+
+                                  final singleNativeCurrencyCode =
+                                      selectedCurrencies.length == 1
+                                      ? selectedCurrencies.first
+                                      : null;
+
+                                  final showNativeFallback =
+                                      singleNativeCurrencyCode != null &&
+                                      singleNativeCurrencyCode !=
+                                          preferredCurrency &&
+                                      snapshot.data!.converted == 0 &&
+                                      snapshot.data!.native != 0;
+
+                                  final fallbackCurrency = showNativeFallback
+                                      ? accounts.first.currency
+                                      : null;
+
                                   return CurrencyDisplayer(
-                                    amountToConvert: snapshot.data!,
+                                    amountToConvert: showNativeFallback
+                                        ? snapshot.data!.native
+                                        : snapshot.data!.converted,
+                                    currency: fallbackCurrency,
                                     integerStyle: Theme.of(
                                       context,
                                     ).textTheme.headlineSmall!,

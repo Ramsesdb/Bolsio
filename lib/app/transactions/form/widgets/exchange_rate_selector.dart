@@ -71,8 +71,10 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
       _selected = _RateSource.bcv;
     }
 
-    if (widget.initialRate != null) {
-      _manualController.text = widget.initialRate!.toStringAsFixed(4);
+    if (widget.initialRate != null && widget.initialRate! > 0) {
+      // initialRate is stored in "1 fromCurrency = X toCurrency" direction
+      // (inverted). Convert back to human-friendly for the text field.
+      _manualController.text = (1.0 / widget.initialRate!).toStringAsFixed(4);
     }
 
     // Fire initial callback after build
@@ -88,9 +90,26 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
     super.dispose();
   }
 
-  double? get _bcvRate => DolarApiService.instance.oficialRate?.promedio;
-  double? get _paraleloRate => DolarApiService.instance.paraleloRate?.promedio;
+  /// Raw API rate in "VES per 1 foreign unit" direction (e.g. 479.78).
+  /// Used for display only.
+  double? get _bcvDisplayRate => _displayRateFor(widget.toCurrency, 'oficial');
+  double? get _paraleloDisplayRate => _displayRateFor(widget.toCurrency, 'paralelo');
   DateTime? get _lastFetch => DolarApiService.instance.lastFetchTime;
+
+  /// Returns the raw DolarAPI rate for display purposes.
+  /// The rate is in "VES per 1 foreign unit" direction.
+  double? _displayRateFor(String currencyCode, String source) {
+    final api = DolarApiService.instance;
+    if (currencyCode == 'EUR') {
+      return source == 'oficial'
+          ? api.eurOficialRate?.promedio
+          : api.eurParaleloRate?.promedio;
+    }
+    // Default to USD rates
+    return source == 'oficial'
+        ? api.oficialRate?.promedio
+        : api.paraleloRate?.promedio;
+  }
 
   String _formatTimeSince(DateTime? time) {
     if (time == null) return '';
@@ -107,15 +126,29 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
 
     switch (_selected) {
       case _RateSource.bcv:
-        rate = _bcvRate;
+        // DolarAPI rate is "VES per 1 foreign unit" (e.g. 479.78).
+        // We need "1 fromCurrency = X toCurrency", i.e. the inverse
+        // when fromCurrency is VES and toCurrency is USD/EUR.
+        final displayRate = _bcvDisplayRate;
+        rate = (displayRate != null && displayRate > 0)
+            ? 1.0 / displayRate
+            : null;
         source = 'bcv';
         break;
       case _RateSource.paralelo:
-        rate = _paraleloRate;
+        final displayRate = _paraleloDisplayRate;
+        rate = (displayRate != null && displayRate > 0)
+            ? 1.0 / displayRate
+            : null;
         source = 'paralelo';
         break;
       case _RateSource.manual:
-        rate = double.tryParse(_manualController.text);
+        // Manual input is in human-friendly direction (VES per 1 foreign unit),
+        // same as BCV/paralelo display. Invert for the callback.
+        final manualRate = double.tryParse(_manualController.text);
+        rate = (manualRate != null && manualRate > 0)
+            ? 1.0 / manualRate
+            : null;
         source = 'manual';
         break;
     }
@@ -202,13 +235,13 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
               children: [
                 _buildRateChip(
                   label: 'BCV',
-                  rate: _bcvRate,
+                  displayRate: _bcvDisplayRate,
                   source: _RateSource.bcv,
                   isFetching: _isFetchingBcv,
                 ),
                 _buildRateChip(
                   label: 'Paralelo',
-                  rate: _paraleloRate,
+                  displayRate: _paraleloDisplayRate,
                   source: _RateSource.paralelo,
                   isFetching: _isFetchingParalelo,
                 ),
@@ -238,8 +271,8 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
                 ],
                 decoration: InputDecoration(
                   labelText:
-                      'Tasa (${widget.toCurrency}/${widget.fromCurrency})', // TODO: i18n
-                  hintText: 'Ej: 145.3000',
+                      'Tasa (${widget.fromCurrency}/${widget.toCurrency})', // TODO: i18n
+                  hintText: 'Ej: 479.7800',
                   border: const OutlineInputBorder(),
                   isDense: true,
                   prefixIcon: const Icon(Icons.edit, size: 18),
@@ -248,9 +281,9 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
               ),
             ],
 
-            // Summary of selected rate
+            // Summary of selected rate (show human-friendly direction)
             if (_selected != _RateSource.manual &&
-                _getSelectedRate() != null) ...[
+                _getSelectedDisplayRate() != null) ...[
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -271,7 +304,7 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      '1 ${widget.fromCurrency} = ${_getSelectedRate()!.toStringAsFixed(2)} ${widget.toCurrency}',
+                      '1 ${widget.toCurrency} = ${_getSelectedDisplayRate()!.toStringAsFixed(2)} ${widget.fromCurrency}',
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: colorScheme.primary,
@@ -287,12 +320,15 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
     );
   }
 
-  double? _getSelectedRate() {
+  /// Returns the raw display rate (VES per 1 foreign unit) for the
+  /// currently selected source. Used for UI labels only, NOT for the
+  /// callback (which receives the inverted rate).
+  double? _getSelectedDisplayRate() {
     switch (_selected) {
       case _RateSource.bcv:
-        return _bcvRate;
+        return _bcvDisplayRate;
       case _RateSource.paralelo:
-        return _paraleloRate;
+        return _paraleloDisplayRate;
       case _RateSource.manual:
         return double.tryParse(_manualController.text);
     }
@@ -300,11 +336,11 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
 
   Widget _buildRateChip({
     required String label,
-    required double? rate,
+    required double? displayRate,
     required _RateSource source,
     required bool isFetching,
   }) {
-    final isAvailable = rate != null;
+    final isAvailable = displayRate != null;
     final isSelected = _selected == source;
 
     if (isFetching) {
@@ -336,9 +372,11 @@ class _ExchangeRateSelectorState extends State<ExchangeRateSelector> {
       );
     }
 
-    final rateStr = rate.toStringAsFixed(2);
+    // Display in human-friendly direction: "VES per 1 foreign unit"
+    // e.g. "BCV (479.78 VES/USD)"
+    final rateStr = displayRate.toStringAsFixed(2);
     final currPair =
-        '${widget.toCurrency}/${widget.fromCurrency}';
+        '${widget.fromCurrency}/${widget.toCurrency}';
 
     return ChoiceChip(
       label: Text('$label ($rateStr $currPair)'),

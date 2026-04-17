@@ -93,6 +93,8 @@ class NotificationCaptureSource implements CaptureSource {
     try {
       final packageName = event.packageName;
 
+      debugPrint('NotificationCaptureSource: raw event pkg=$packageName title="${event.title}"');
+
       if (packageName == null) return;
 
       // Only allow notifications from known banking apps

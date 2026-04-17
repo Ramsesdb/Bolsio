@@ -289,7 +289,7 @@ class _IncomeStackedBarChartState extends State<IncomeStackedBarChart> {
       final tagTxs =
           transactions.where((tx) => tx.tags.any((t) => t.id == tag.id));
       final amount =
-          tagTxs.map((e) => e.currentValueInPreferredCurrency).sum;
+          tagTxs.map((e) => e.currentValueInPreferredCurrency ?? 0.0).sum;
 
       if (amount > 0) {
         slices.add(_SourceSlice(
@@ -304,7 +304,7 @@ class _IncomeStackedBarChartState extends State<IncomeStackedBarChart> {
     final noTagTxs =
         transactions.where((tx) => tx.tags.isEmpty);
     final noTagAmount =
-        noTagTxs.map((e) => e.currentValueInPreferredCurrency).sum;
+        noTagTxs.map((e) => e.currentValueInPreferredCurrency ?? 0.0).sum;
     if (noTagAmount > 0) {
       slices.add(_SourceSlice(
         name: 'Sin tag', // TODO: i18n
@@ -323,7 +323,7 @@ class _IncomeStackedBarChartState extends State<IncomeStackedBarChart> {
     final catMap = <String, _SourceSlice>{};
 
     for (final tx in transactions) {
-      final trValue = tx.currentValueInPreferredCurrency;
+      final trValue = tx.currentValueInPreferredCurrency ?? 0.0;
       if (trValue <= 0) continue;
 
       String catId;

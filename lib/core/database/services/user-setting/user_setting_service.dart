@@ -94,6 +94,27 @@ enum SettingKey {
 
   /// Last poll timestamp (ms since epoch) for Binance API capture. '0' or null = never polled.
   autoImportLastPollBinance,
+
+  // ──── AI settings ────
+
+  /// Master toggle for Nexus AI features. '1' = enabled, '0' or null = disabled.
+  nexusAiEnabled,
+
+  /// Whether AI category suggestions are enabled in auto-import review.
+  aiCategorizationEnabled,
+
+  /// Whether AI chat is enabled in dashboard.
+  aiChatEnabled,
+
+  /// Whether AI spending insights are enabled in dashboard.
+  aiInsightsEnabled,
+
+  /// Whether AI budget predictions are enabled in budget cards.
+  aiBudgetPredictionEnabled,
+
+  /// Preferred exchange rate source for currency conversions.
+  /// Values: 'bcv', 'paralelo'. Defaults to 'bcv' when null.
+  preferredRateSource,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

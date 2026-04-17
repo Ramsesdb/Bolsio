@@ -47,18 +47,9 @@ class FirebaseSyncService {
 
   /// Initialize the sync service.
   /// Call this after Firebase.initializeApp() in main.dart.
-  /// Checks [SettingKey.firebaseSyncEnabled] — if '0' or absent, returns early.
+  /// Always initializes if Firebase core is ready (no opt-in flag).
   Future<void> initialize() async {
     if (_initialized) return;
-
-    // Check the opt-in flag
-    final syncFlag = appStateSettings[SettingKey.firebaseSyncEnabled];
-    if (syncFlag != '1') {
-      Logger.printDebug(
-        'FirebaseSyncService: sync disabled (flag=$syncFlag), skipping init',
-      );
-      return;
-    }
 
     // Check that Firebase core is actually available
     if (!_isFirebaseCoreReady) {
@@ -477,17 +468,63 @@ class FirebaseSyncService {
         .get();
 
     final db = AppDB.instance;
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
     int successCount = 0;
+    int skippedCount = 0;
 
     for (final doc in snapshot.docs) {
       try {
         final data = doc.data();
 
+        String currencyCode = data['currencyCode'] as String;
+        double exchangeRate = (data['exchangeRate'] as num).toDouble();
+
+        // --- Fix bad rates from Firebase cloud data ---
+        // When preferred currency is USD:
+        //   - Skip currencyCode='USD' rows (USD doesn't need a rate to itself)
+        //   - Convert currencyCode='USD' with rate ~479 to currencyCode='VES'
+        //     with rate ~0.00208
+        if (preferredCurrency == 'USD' && currencyCode == 'USD') {
+          // These are wrong-direction rates from old bad data.
+          // Convert: the cloud has "1 USD = 479.78 VES" stored as
+          // currencyCode='USD', rate=479.78. Fix it to currencyCode='VES',
+          // rate=1/479.78 (~0.00208).
+          if (exchangeRate > 1.0) {
+            currencyCode = 'VES';
+            exchangeRate = 1.0 / exchangeRate;
+            Logger.printDebug(
+              'FirebaseSyncService: Fixed bad cloud rate ${doc.id}: '
+              'USD@$exchangeRate -> VES@$exchangeRate',
+            );
+          } else {
+            // currencyCode='USD' with a small rate — just skip it entirely
+            skippedCount++;
+            Logger.printDebug(
+              'FirebaseSyncService: Skipping currencyCode=USD rate ${doc.id} '
+              '(preferred currency is already USD)',
+            );
+            continue;
+          }
+        }
+
+        // When preferred currency is USD: if we get a VES rate > 1.0 from the
+        // cloud, it's in the wrong direction (should be < 1.0). Invert it.
+        if (preferredCurrency == 'USD' &&
+            currencyCode == 'VES' &&
+            exchangeRate > 1.0) {
+          exchangeRate = 1.0 / exchangeRate;
+          Logger.printDebug(
+            'FirebaseSyncService: Inverted bad VES rate ${doc.id}: '
+            'now $exchangeRate',
+          );
+        }
+
         final rate = ExchangeRateInDB(
           id: data['id'] as String,
           date: DateTime.parse(data['date'] as String),
-          currencyCode: data['currencyCode'] as String,
-          exchangeRate: (data['exchangeRate'] as num).toDouble(),
+          currencyCode: currencyCode,
+          exchangeRate: exchangeRate,
           source: data['source'] as String?,
         );
 
@@ -501,7 +538,8 @@ class FirebaseSyncService {
     }
 
     Logger.printDebug(
-      'FirebaseSyncService: Pulled $successCount exchange rates',
+      'FirebaseSyncService: Pulled $successCount exchange rates '
+      '(skipped $skippedCount)',
     );
     return successCount;
   }
@@ -512,6 +550,8 @@ class FirebaseSyncService {
         .get();
 
     final db = AppDB.instance;
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
     int successCount = 0;
     int errorCount = 0;
     String firstError = '';
@@ -547,6 +587,22 @@ class FirebaseSyncService {
           await db.into(db.accounts).insertOnConflictUpdate(placeholderAccount);
         }
 
+        // Fix bad exchangeRateApplied values from cloud data.
+        // When preferred currency is USD, rates should be < 1.0 (e.g. 0.00208).
+        // Cloud may have old bad values like 479.78 — invert them.
+        double? exchangeRateApplied = data['exchangeRateApplied'] != null
+            ? (data['exchangeRateApplied'] as num).toDouble()
+            : null;
+        if (exchangeRateApplied != null &&
+            preferredCurrency != 'VES' &&
+            exchangeRateApplied > 1.0) {
+          Logger.printDebug(
+            'FirebaseSyncService: Inverting bad exchangeRateApplied '
+            '${doc.id}: $exchangeRateApplied -> ${1.0 / exchangeRateApplied}',
+          );
+          exchangeRateApplied = 1.0 / exchangeRateApplied;
+        }
+
         final transaction = TransactionInDB(
           id: data['id'] as String,
           date: DateTime.parse(data['date'] as String),
@@ -570,9 +626,7 @@ class FirebaseSyncService {
               : TransactionStatus.reconciled,
           categoryID: data['categoryID'] as String?,
           isHidden: data['isHidden'] as bool? ?? false,
-          exchangeRateApplied: data['exchangeRateApplied'] != null
-              ? (data['exchangeRateApplied'] as num).toDouble()
-              : null,
+          exchangeRateApplied: exchangeRateApplied,
           exchangeRateSource: data['exchangeRateSource'] as String?,
           createdAt: data['createdAt'] != null
               ? DateTime.parse(data['createdAt'] as String)

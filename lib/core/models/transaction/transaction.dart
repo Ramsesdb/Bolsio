@@ -20,7 +20,7 @@ class MoneyTransaction extends TransactionInDB {
   Account? receivingAccount;
   RecurrencyData recurrentInfo;
 
-  double currentValueInPreferredCurrency;
+  double? currentValueInPreferredCurrency;
   double? currentValueInDestinyInPreferredCurrency;
 
   List<Tag> tags;
@@ -48,7 +48,7 @@ class MoneyTransaction extends TransactionInDB {
     CategoryInDB? category,
     CategoryInDB? parentCategory,
     this.currentValueInDestinyInPreferredCurrency,
-    required this.currentValueInPreferredCurrency,
+    this.currentValueInPreferredCurrency,
     required List<TagInDB> tags,
     super.endDate,
     super.intervalEach,
@@ -98,12 +98,14 @@ class MoneyTransaction extends TransactionInDB {
       ? ColorHex.get(category!.color)
       : TransactionType.transfer.color(context);
 
-  /// Get the balance (positive or negative) that this transaction cause to the user accounts
-  double getCurrentBalanceInPreferredCurrency() {
+  /// Get the balance (positive or negative) that this transaction cause to the user accounts.
+  /// Returns null when the transaction cannot be converted to the preferred currency.
+  double? getCurrentBalanceInPreferredCurrency() {
+    if (currentValueInPreferredCurrency == null) return null;
     if (type == TransactionType.transfer) {
-      return (currentValueInDestinyInPreferredCurrency ??
-              currentValueInPreferredCurrency) -
-          currentValueInPreferredCurrency;
+      final destiny = currentValueInDestinyInPreferredCurrency ??
+          currentValueInPreferredCurrency!;
+      return destiny - currentValueInPreferredCurrency!;
     }
 
     return currentValueInPreferredCurrency;
@@ -163,13 +165,14 @@ class MoneyTransaction extends TransactionInDB {
     return date.difference(DateTime.now()).inDays;
   }
 
-  /// Get the money that this transaction would generate for a given periodicity, without taken into account the start and end dates of a recurrency
+  /// Get the money that this transaction would generate for a given periodicity, without taken into account the start and end dates of a recurrency.
+  /// Returns the native value when preferred currency conversion is unavailable.
   double getUnifiedMoneyForAPeriod({
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
     double baseValue = convertToPreferredCurrency
-        ? currentValueInPreferredCurrency
+        ? (currentValueInPreferredCurrency ?? value)
         : value;
 
     if (recurrentInfo.isNoRecurrent) {

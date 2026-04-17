@@ -32,7 +32,7 @@ getDebtsWithFullData($predicate = TRUE) WITH Debt:
     ORDER BY $orderBy
     LIMIT $limit;
 
-getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
+getTransactionsWithFullData($predicate = TRUE, :preferredCurrency AS TEXT, :rateSource AS TEXT) WITH MoneyTransaction:
     SELECT
         t.*, a.** as account,
         accountCurrency.**,
@@ -46,8 +46,14 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
             ON transactionTags.tagID = tags.id
             WHERE transactionTags.transactionID = t.id
         ) AS tags,
-        t.value * COALESCE(excRate.exchangeRate,1) as currentValueInPreferredCurrency,
-        t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate,1) as currentValueInDestinyInPreferredCurrency,
+        t.value * CASE
+          WHEN a.currencyId = :preferredCurrency THEN 1.0
+          ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied)
+        END as currentValueInPreferredCurrency,
+        t.valueInDestiny * CASE
+          WHEN ra.currencyId = :preferredCurrency THEN 1.0
+          ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied)
+        END as currentValueInDestinyInPreferredCurrency,
         t.exchangeRateApplied as exchangeRateApplied,
         t.exchangeRateSource as exchangeRateSource
     FROM transactions t 
@@ -65,42 +71,56 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         ON c.parentCategoryID = pc.id 
         LEFT JOIN
         (
-            SELECT currencyCode,
-                    exchangeRate
-                FROM exchangeRates er
-                WHERE date = (
-                                SELECT MAX(date) 
-                                FROM exchangeRates
-                                WHERE currencyCode = er.currencyCode 
-                                AND DATE <= DATE('now')
-                            )
-                ORDER BY currencyCode
+            SELECT e1.currencyCode,
+                    e1.exchangeRate
+                FROM exchangeRates e1
+                WHERE e1.id = (
+                    SELECT e2.id FROM exchangeRates e2
+                    WHERE e2.currencyCode = e1.currencyCode
+                    AND e2.date = (
+                        SELECT MAX(e3.date) FROM exchangeRates e3
+                        WHERE e3.currencyCode = e1.currencyCode
+                        AND e3.date <= DATE('now')
+                    )
+                    ORDER BY CASE WHEN e2.source = :rateSource THEN 0 ELSE 1 END
+                    LIMIT 1
+                )
         )
         excRate ON a.currencyId = excRate.currencyCode
         LEFT JOIN
         (
-            SELECT currencyCode,
-                    exchangeRate
-                FROM exchangeRates er
-                WHERE date = (
-                                SELECT MAX(date) 
-                                FROM exchangeRates
-                                WHERE currencyCode = er.currencyCode 
-                                AND DATE <= DATE('now')
-                            )
-                ORDER BY currencyCode
+            SELECT e1.currencyCode,
+                    e1.exchangeRate
+                FROM exchangeRates e1
+                WHERE e1.id = (
+                    SELECT e2.id FROM exchangeRates e2
+                    WHERE e2.currencyCode = e1.currencyCode
+                    AND e2.date = (
+                        SELECT MAX(e3.date) FROM exchangeRates e3
+                        WHERE e3.currencyCode = e1.currencyCode
+                        AND e3.date <= DATE('now')
+                    )
+                    ORDER BY CASE WHEN e2.source = :rateSource THEN 0 ELSE 1 END
+                    LIMIT 1
+                )
         )
         excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode
-    WHERE $predicate 
+    WHERE $predicate
     ORDER BY $orderBy
     LIMIT $limit;
 
-countTransactions($predicate = TRUE, :date AS DATETIME): 
+countTransactions($predicate = TRUE, :date AS DATETIME, :preferredCurrency AS TEXT, :rateSource AS TEXT):
     SELECT COUNT(*) AS transactionsNumber, 
     COALESCE(SUM(t.value), 0) AS sum, 
     COALESCE(SUM(COALESCE(t.valueInDestiny,t.value)), 0) AS sumInDestiny,
-    COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate,1)), 0) AS sumInPrefCurrency, 
-    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value) * COALESCE(excRateOfDestiny.exchangeRate,1)), 0) AS sumInDestinyInPrefCurrency
+    COALESCE(SUM(t.value * CASE
+      WHEN a.currencyId = :preferredCurrency THEN 1.0
+      ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied)
+    END), 0) AS sumInPrefCurrency,
+    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value) * CASE
+      WHEN COALESCE(ra.currencyId, a.currencyId) = :preferredCurrency THEN 1.0
+      ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied)
+    END), 0) AS sumInDestinyInPrefCurrency
     FROM transactions t 
         INNER JOIN accounts a 
         ON t.accountID = a.id
@@ -116,32 +136,40 @@ countTransactions($predicate = TRUE, :date AS DATETIME):
         ON c.parentCategoryID = pc.id
         LEFT JOIN
         (
-            SELECT currencyCode,
-                    exchangeRate
-                FROM exchangeRates er
-                WHERE date = (
-                                SELECT MAX(date) 
-                                FROM exchangeRates
-                                WHERE currencyCode = er.currencyCode 
-                                AND unixepoch(DATE) <= unixepoch(:date)
-                            )
-                ORDER BY currencyCode
+            SELECT e1.currencyCode,
+                    e1.exchangeRate
+                FROM exchangeRates e1
+                WHERE e1.id = (
+                    SELECT e2.id FROM exchangeRates e2
+                    WHERE e2.currencyCode = e1.currencyCode
+                    AND e2.date = (
+                        SELECT MAX(e3.date) FROM exchangeRates e3
+                        WHERE e3.currencyCode = e1.currencyCode
+                        AND unixepoch(e3.date) <= unixepoch(:date)
+                    )
+                    ORDER BY CASE WHEN e2.source = :rateSource THEN 0 ELSE 1 END
+                    LIMIT 1
+                )
         )
-        excRate ON a.currencyId = excRate.currencyCode 
+        excRate ON a.currencyId = excRate.currencyCode
         LEFT JOIN
         (
-            SELECT currencyCode,
-                    exchangeRate
-                FROM exchangeRates er
-                WHERE date = (
-                                SELECT MAX(date) 
-                                FROM exchangeRates
-                                WHERE currencyCode = er.currencyCode 
-                                AND unixepoch(DATE) <= unixepoch(:date)
-                            )
-                ORDER BY currencyCode
+            SELECT e1.currencyCode,
+                    e1.exchangeRate
+                FROM exchangeRates e1
+                WHERE e1.id = (
+                    SELECT e2.id FROM exchangeRates e2
+                    WHERE e2.currencyCode = e1.currencyCode
+                    AND e2.date = (
+                        SELECT MAX(e3.date) FROM exchangeRates e3
+                        WHERE e3.currencyCode = e1.currencyCode
+                        AND unixepoch(e3.date) <= unixepoch(:date)
+                    )
+                    ORDER BY CASE WHEN e2.source = :rateSource THEN 0 ELSE 1 END
+                    LIMIT 1
+                )
         )
-        excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode 
+        excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode
     WHERE $predicate;
 
 getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category: 

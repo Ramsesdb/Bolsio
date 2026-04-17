@@ -7,6 +7,7 @@ import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
 
 enum AccountDataFilter { income, expense, balance }
@@ -59,22 +60,26 @@ class AccountService {
     ).map((res) => res.firstOrNull);
   }
 
-  String _joinAccountAndRate(DateTime? date, {String columnName = 'excRate'}) =>
+  String _joinAccountAndRate(DateTime? date, {String columnName = 'excRate', String? rateSource}) =>
       '''
     LEFT JOIN
       (
-          SELECT currencyCode,
-                  exchangeRate
-            FROM exchangeRates er
-            WHERE date = (
-                            SELECT MAX(date) 
-                              FROM exchangeRates
-                              WHERE currencyCode = er.currencyCode 
-                              ${date != null ? 'AND  date <= ?' : ''}
-                        )
-            ORDER BY currencyCode
+          SELECT e1.currencyCode,
+                 e1.exchangeRate
+            FROM exchangeRates e1
+            WHERE e1.id = (
+              SELECT e2.id FROM exchangeRates e2
+              WHERE e2.currencyCode = e1.currencyCode
+                AND e2.date = (
+                  SELECT MAX(e3.date) FROM exchangeRates e3
+                  WHERE e3.currencyCode = e1.currencyCode
+                  ${date != null ? 'AND e3.date <= ?' : ''}
+                )
+              ORDER BY CASE WHEN e2.source = ? THEN 0 ELSE 1 END
+              LIMIT 1
+            )
       )
-      AS $columnName ON accounts.currencyId = excRate.currencyCode
+      AS $columnName ON accounts.currencyId = $columnName.currencyCode
     ''';
 
   /// Get the amount of money that an account has in a certain period of time,
@@ -132,6 +137,10 @@ class AccountService {
     bool convertToPreferredCurrency = true,
   }) {
     final useDate = date ?? DateTime.now();
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+    final rateSource =
+        appStateSettings[SettingKey.preferredRateSource] ?? 'bcv';
 
     // Get the accounts initial balance (converted to the preferred currency if necessary)
     final initialBalanceQuery = db
@@ -140,15 +149,15 @@ class AccountService {
           SELECT COALESCE(
             SUM(
               CASE WHEN accounts.date > ? THEN 0
-              ELSE accounts.iniValue 
-                ${convertToPreferredCurrency ? ' * COALESCE(excRate.exchangeRate, 1)' : ''} 
+              ELSE accounts.iniValue
+                ${convertToPreferredCurrency ? ' * CASE WHEN accounts.currencyId = ? THEN 1.0 ELSE excRate.exchangeRate END' : ''}
               END
             )
-          , 0) 
+          , 0)
           AS balance
           FROM accounts
-              ${convertToPreferredCurrency ? _joinAccountAndRate(date) : ''}
-              ${accountIds != null ? 'WHERE accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''} 
+              ${convertToPreferredCurrency ? _joinAccountAndRate(date, rateSource: rateSource) : ''}
+              ${accountIds != null ? 'WHERE accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''}
           """,
           readsFrom: {
             db.accounts,
@@ -157,8 +166,12 @@ class AccountService {
           },
           variables: [
             Variable.withDateTime(useDate),
+            if (convertToPreferredCurrency)
+              Variable.withString(preferredCurrency),
             if (convertToPreferredCurrency && date != null)
               Variable.withDateTime(useDate),
+            if (convertToPreferredCurrency)
+              Variable.withString(rateSource),
             if (accountIds != null)
               for (final id in accountIds) Variable.withString(id),
           ],

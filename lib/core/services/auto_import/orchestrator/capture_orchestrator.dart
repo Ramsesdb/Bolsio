@@ -19,6 +19,7 @@ import 'package:wallex/core/services/auto_import/capture/sms_capture_source.dart
 import 'package:wallex/core/services/auto_import/dedupe/dedupe_checker.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profiles_registry.dart';
+import 'package:wallex/core/services/ai/auto_categorization_service.dart';
 
 /// Central orchestrator that manages capture sources and dispatches events
 /// through bank profiles to produce transaction proposals.
@@ -157,6 +158,12 @@ class CaptureOrchestrator {
   /// and real sources are instantiated.
   Future<void> applySettings({
     Future<CaptureSource> Function(CaptureChannel)? sourceFactory,
+    /// If non-null, only configure sources for the specified channels.
+    /// Pass `{CaptureChannel.notification}` in the main isolate and
+    /// `{CaptureChannel.sms, CaptureChannel.api}` in the background isolate
+    /// so that the notification EventChannel (which only works in the main
+    /// FlutterEngine) is never subscribed from the background service.
+    Set<CaptureChannel>? channels,
   }) async {
     final autoEnabled =
         appStateSettings[SettingKey.autoImportEnabled] == '1';
@@ -175,7 +182,8 @@ class CaptureOrchestrator {
     // SMS source (Android only, or any platform when using sourceFactory for tests)
     final smsEnabled =
         appStateSettings[SettingKey.smsImportEnabled] == '1';
-    if (smsEnabled && (sourceFactory != null || Platform.isAndroid)) {
+    final includeSms = channels == null || channels.contains(CaptureChannel.sms);
+    if (includeSms && smsEnabled && (sourceFactory != null || Platform.isAndroid)) {
       try {
         final CaptureSource smsSource;
         if (sourceFactory != null) {
@@ -205,7 +213,8 @@ class CaptureOrchestrator {
     // Notification source (Android only, or any platform when using sourceFactory for tests)
     final notifEnabled =
         appStateSettings[SettingKey.notifListenerEnabled] == '1';
-    if (notifEnabled && (sourceFactory != null || Platform.isAndroid)) {
+    final includeNotif = channels == null || channels.contains(CaptureChannel.notification);
+    if (includeNotif && notifEnabled && (sourceFactory != null || Platform.isAndroid)) {
       try {
         final CaptureSource notifSource;
         if (sourceFactory != null) {
@@ -236,7 +245,8 @@ class CaptureOrchestrator {
     // Binance API source (all platforms)
     final binanceEnabled =
         appStateSettings[SettingKey.binanceApiEnabled] == '1';
-    if (binanceEnabled) {
+    final includeBinance = channels == null || channels.contains(CaptureChannel.api);
+    if (includeBinance && binanceEnabled) {
       try {
         if (sourceFactory != null) {
           // In test mode, delegate permission check to the source itself
@@ -308,21 +318,36 @@ class CaptureOrchestrator {
 
         final proposal = parsedProposal.copyWith(accountId: resolvedAccountId);
 
+        // AI auto-categorization (Feature 1)
+        var enhancedProposal = proposal;
+        if (proposal.proposedCategoryId == null) {
+          final aiResult = await AutoCategorizationService.instance
+              .suggest(proposal: proposal)
+              .timeout(const Duration(seconds: 2), onTimeout: () => null)
+              .catchError((_) => null);
+
+          if (aiResult != null) {
+            enhancedProposal = proposal.copyWith(
+              proposedCategoryId: aiResult.categoryId,
+            );
+          }
+        }
+
         // Run deduplication check
-        final isDuplicate = await dedupeChecker.check(proposal);
+        final isDuplicate = await dedupeChecker.check(enhancedProposal);
 
         if (isDuplicate) {
           debugPrint(
             'CaptureOrchestrator: Skipping duplicate proposal: '
-            '${proposal.bankRef ?? 'no-ref'} (${proposal.amount} ${proposal.currencyId})',
+            '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
           );
           continue;
         }
 
-        if (await _shouldSkipBinanceProposalToAvoidDoubleCount(proposal)) {
+        if (await _shouldSkipBinanceProposalToAvoidDoubleCount(enhancedProposal)) {
           debugPrint(
             'CaptureOrchestrator: Skipping Binance proposal to avoid double count: '
-            '${proposal.bankRef ?? 'no-ref'} (${proposal.amount} ${proposal.currencyId})',
+            '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
           );
           continue;
         }
@@ -331,11 +356,11 @@ class CaptureOrchestrator {
         final status = TransactionProposalStatus.pending;
 
         await pendingImportService
-            .insertPendingImport(proposal.toCompanion(status: status));
+            .insertPendingImport(enhancedProposal.toCompanion(status: status));
 
         debugPrint(
-          'CaptureOrchestrator: Persisted proposal: ${proposal.bankRef ?? 'no-ref'} '
-          'as $status (${proposal.amount} ${proposal.currencyId})',
+          'CaptureOrchestrator: Persisted proposal: ${enhancedProposal.bankRef ?? 'no-ref'} '
+          'as $status (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
         );
 
         // Notify background service about new pending imports

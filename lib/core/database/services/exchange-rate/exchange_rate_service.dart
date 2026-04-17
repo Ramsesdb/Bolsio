@@ -241,12 +241,31 @@ class ExchangeRateService {
   /// historical provider becomes available again.
   ///
   /// Returns the count of rates successfully inserted.
+  /// Backfill missing exchange rates for a date range using [RateProviderManager].
+  ///
+  /// [preferredCurrency] is the user's preferred currency (e.g. 'USD' or 'VES').
+  /// Rates are stored with the correct direction:
+  ///   "1 unit of storeCurrencyCode = X preferred currency units"
+  ///
+  /// Returns the count of rates successfully inserted.
   Future<int> backfillMissingRates({
     required DateTime fromDate,
     required DateTime toDate,
+    required String preferredCurrency,
     String currencyCode = 'USD',
     String source = 'bcv',
   }) async {
+    // Determine what currencyCode to store based on preferred currency
+    // DolarAPI gives: 1 USD = X VES
+    // If preferred=USD: store VES with rate 1/X
+    // If preferred=VES: store USD with rate X
+    final String storeCurrencyCode;
+    if (preferredCurrency == 'VES') {
+      storeCurrencyCode = currencyCode; // e.g. 'USD'
+    } else {
+      storeCurrencyCode = 'VES';
+    }
+
     int inserted = 0;
     DateTime current = DateTime(fromDate.year, fromDate.month, fromDate.day);
     final end = DateTime(toDate.year, toDate.month, toDate.day);
@@ -256,7 +275,7 @@ class ExchangeRateService {
       final existing = await (db.select(db.exchangeRates)
             ..where(
               (e) =>
-                  e.currencyCode.equals(currencyCode) &
+                  e.currencyCode.equals(storeCurrencyCode) &
                   e.date.date
                       .equals(DateFormat('yyyy-MM-dd').format(current)) &
                   e.source.equals(source),
@@ -269,12 +288,19 @@ class ExchangeRateService {
           final result = await RateProviderManager.instance.fetchRate(
             date: current,
             source: source,
+            currencyCode: currencyCode,
           );
           if (result != null) {
+            final double storeRate;
+            if (preferredCurrency == 'VES') {
+              storeRate = result.rate; // 1 USD = X VES, as-is
+            } else {
+              storeRate = 1.0 / result.rate; // 1 VES = 1/X USD
+            }
             await insertOrUpdateExchangeRateWithSource(
-              currencyCode: currencyCode,
+              currencyCode: storeCurrencyCode,
               date: current,
-              rate: result.rate,
+              rate: storeRate,
               source: source,
             );
             inserted++;
@@ -282,7 +308,7 @@ class ExchangeRateService {
         } catch (e) {
           debugPrint(
             '[ExchangeRateService] backfill failed for '
-            '$currencyCode@$source on $current: $e',
+            '$storeCurrencyCode@$source on $current: $e',
           );
         }
       }

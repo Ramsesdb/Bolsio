@@ -7,6 +7,7 @@ import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -134,6 +135,10 @@ class TransactionService {
     return db
         .getTransactionsWithFullData(
           predicate: predicate,
+          preferredCurrency:
+              appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+          rateSource:
+              appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
           orderBy: orderBy,
           limit: (t, a, accountCurrency, ra, receivingAccountCurrency, c, pc) =>
               Limit(limit ?? -1, offset),
@@ -233,6 +238,10 @@ class TransactionService {
                     )
                     .toTransactionExpression(),
                 date: exchangeDate,
+                preferredCurrency:
+                    appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+                rateSource:
+                    appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
               )
               .watchSingle(),
 
@@ -246,6 +255,10 @@ class TransactionService {
                     )
                     .toTransactionExpression(),
                 date: exchangeDate,
+                preferredCurrency:
+                    appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+                rateSource:
+                    appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
               )
               .watchSingle(),
 
@@ -275,6 +288,10 @@ class TransactionService {
                           ],
                     ),
                 date: exchangeDate,
+                preferredCurrency:
+                    appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+                rateSource:
+                    appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
               )
               .watchSingle(),
         ],
@@ -296,6 +313,10 @@ class TransactionService {
         .countTransactions(
           predicate: predicate.toTransactionExpression(),
           date: exchangeDate,
+          preferredCurrency:
+              appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+          rateSource:
+              appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
         )
         .watchSingle()
         .map(
@@ -321,6 +342,10 @@ class TransactionService {
                 c,
                 p6,
               ) => transaction.id.equals(id),
+          preferredCurrency:
+              appStateSettings[SettingKey.preferredCurrency] ?? 'USD',
+          rateSource:
+              appStateSettings[SettingKey.preferredRateSource] ?? 'bcv',
           limit: (t, a, accountCurrency, ra, receivingAccountCurrency, c, pc) =>
               Limit(1, 0),
         )

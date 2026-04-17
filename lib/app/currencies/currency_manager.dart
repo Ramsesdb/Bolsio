@@ -328,19 +328,34 @@ class CurrencyManagerPage extends StatelessWidget {
                           if (rate == null) return;
 
                           try {
+                            final preferredCurrency =
+                                appStateSettings[SettingKey.preferredCurrency] ??
+                                    'USD';
+                            // DolarAPI returns: 1 USD = rate.promedio VES
+                            // DB convention: 1 unit of currencyCode = X preferred currency units
+                            final String storeCurrencyCode;
+                            final double storeRate;
+                            if (preferredCurrency == 'VES') {
+                              storeCurrencyCode = 'USD';
+                              storeRate = rate.promedio;
+                            } else {
+                              storeCurrencyCode = 'VES';
+                              storeRate = 1.0 / rate.promedio;
+                            }
                             await ExchangeRateService.instance
                                 .insertOrUpdateExchangeRate(
                                   ExchangeRateInDB(
                                     id: generateUUID(),
                                     date: DateTime.now(),
-                                    currencyCode: 'USD',
-                                    exchangeRate: rate.promedio,
+                                    currencyCode: storeCurrencyCode,
+                                    exchangeRate: storeRate,
                                   ),
                                 );
                             if (context.mounted) {
                               WallexSnackbar.success(
                                 SnackbarParams(
-                                  'Tasa actualizada: ${rate.promedio}',
+                                  'Tasa actualizada: ${rate.promedio} '
+                                  '(almacenado: $storeCurrencyCode = $storeRate)',
                                 ),
                               );
                             }

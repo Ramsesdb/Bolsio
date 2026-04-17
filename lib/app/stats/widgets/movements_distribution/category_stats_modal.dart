@@ -57,7 +57,7 @@ class CategoryStatsModal extends StatelessWidget {
       );
 
       final trValue =
-          transaction.currentValueInPreferredCurrency *
+          (transaction.currentValueInPreferredCurrency ?? 0.0) *
           (transaction.type == TransactionType.expense ? -1 : 1);
 
       if (categoryToEdit != null) {

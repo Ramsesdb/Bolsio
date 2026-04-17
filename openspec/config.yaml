@@ -1,0 +1,56 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Tech stack: Flutter 3.35.6 / Dart >=3.8.0 <4.0.0 (app name: wallex)
+  Database: Drift (SQLite) with json1 & fts5 modules, date stored as text
+  State/Reactive: RxDart
+  Backend: Firebase (Auth, Firestore), Google Sign-In
+  Code generation: build_runner, freezed, json_serializable, copy_with_extension, slang (i18n)
+  Architecture: Feature-first (lib/app/{feature}/) + shared core (lib/core/)
+    - core/database/ — Drift DB, connections, backup, SQL migrations
+    - core/models/ — domain models (account, budget, category, currency, debt, goal, transaction, tags, exchange-rate, filters)
+    - core/presentation/ — shared widgets, animations, responsive helpers, styles
+    - core/services/ — auto-import, rate providers, supported icons, view-actions
+    - core/routes/ — app routing
+    - core/extensions/ — Dart extension methods
+    - core/utils/ — utilities
+    - app/{feature}/ — feature modules (accounts, auth, budgets, categories, currencies, debts, goals, home, layout, onboarding, reports, settings, stats, tags, transactions)
+    - i18n/ — translations via slang (base: en, JSON source, generated Dart)
+  Testing: flutter_test + integration_test (existing tests: auto_import, exchange_rate_service, i18n, evaluate_expression)
+  Style: flutter_lints with strict rules (prefer_single_quotes, unawaited_futures, avoid_void_async, cancel_subscriptions)
+  Charts: fl_chart
+  Platforms: Android, Windows (icons generated via flutter_launcher_icons)
+  Notable packages: in_app_purchase, flutter_local_notifications, notification_listener_service, flutter_background_service, flutter_secure_storage, local_auth, biometric
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Identify affected modules/packages
+    - Flag any Drift schema migrations needed
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Cover multi-currency edge cases (USD/VES) where applicable
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+    - Follow feature-first structure (lib/app/{feature}/)
+    - Shared logic goes in core/
+  tasks:
+    - Group tasks by phase (infrastructure, implementation, testing)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session
+    - Include build_runner regeneration step when models change
+  apply:
+    - Follow existing code patterns and conventions
+    - Use prefer_single_quotes, avoid_void_async per analysis_options
+    - Run `dart run build_runner build` after modifying generated code
+    - Run `dart run slang` after modifying i18n JSON files
+    - Load relevant coding skills for the project stack
+  verify:
+    - Run tests if test infrastructure exists (`flutter test`)
+    - Compare implementation against every spec scenario
+    - Verify Drift migrations apply cleanly
+  archive:
+    - Warn before merging destructive deltas (large removals)

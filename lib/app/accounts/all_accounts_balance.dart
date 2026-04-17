@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/account_form.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:wallex/core/presentation/widgets/card_with_header.dart';
@@ -18,17 +19,33 @@ import '../../core/database/services/currency/currency_service.dart';
 import '../../core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 
 class AccountWithMoney {
-  final double money;
+  final double moneyConverted;
+  final double moneyNative;
   final Account account;
 
-  AccountWithMoney({required this.money, required this.account});
+  AccountWithMoney({
+    required this.moneyConverted,
+    required this.moneyNative,
+    required this.account,
+  });
+
+  bool get isConverted {
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+    if (account.currencyId == preferredCurrency) return true;
+
+    return !(moneyConverted == 0 && moneyNative != 0);
+  }
+
+  double get effectiveMoney => isConverted ? moneyConverted : moneyNative;
 }
 
 class CurrencyWithMoney {
   double money;
-  final CurrencyInDB currency;
+  final String currencyCode;
 
-  CurrencyWithMoney({required this.money, required this.currency});
+  CurrencyWithMoney({required this.money, required this.currencyCode});
 }
 
 class AllAccountBalancePage extends StatefulWidget {
@@ -57,21 +74,35 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
     );
 
     final balances = accounts.map(
-      (account) async => AccountWithMoney(
-        money: await AccountService.instance
+      (account) async {
+        final converted = await AccountService.instance
             .getAccountMoney(
               account: account,
               trFilters: filters,
               convertToPreferredCurrency: true,
               date: date,
             )
-            .first,
-        account: account,
-      ),
+            .first;
+
+        final native = await AccountService.instance
+            .getAccountMoney(
+              account: account,
+              trFilters: filters,
+              convertToPreferredCurrency: false,
+              date: date,
+            )
+            .first;
+
+        return AccountWithMoney(
+          moneyConverted: converted,
+          moneyNative: native,
+          account: account,
+        );
+      },
     );
 
     final toReturn = await Future.wait(balances);
-    toReturn.sort((a, b) => b.money.compareTo(a.money));
+    toReturn.sort((a, b) => b.effectiveMoney.compareTo(a.effectiveMoney));
 
     return toReturn;
   }
@@ -80,19 +111,25 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
     List<AccountWithMoney> accountsWithMoney,
   ) {
     final toReturn = <CurrencyWithMoney>[];
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
 
     for (final account in accountsWithMoney) {
+      final displayCurrencyCode = account.isConverted
+          ? preferredCurrency
+          : account.account.currency.code;
+
       final currencyToPush = toReturn.firstWhereOrNull(
-        (e) => e.currency.code == account.account.currency.code,
+        (e) => e.currencyCode == displayCurrencyCode,
       );
 
       if (currencyToPush != null) {
-        currencyToPush.money += account.money;
+        currencyToPush.money += account.effectiveMoney;
       } else {
         toReturn.add(
           CurrencyWithMoney(
-            money: account.money,
-            currency: account.account.currency,
+            money: account.effectiveMoney,
+            currencyCode: displayCurrencyCode,
           ),
         );
       }
@@ -122,7 +159,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
         }
         final accounts = snapshot.data!;
 
-        final totalMoney = accounts.map((e) => e.money).sum;
+        final totalMoney = accounts.map((e) => e.effectiveMoney).sum;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,13 +200,21 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                   ),
                                   const SizedBox(width: 6),
                                   CurrencyDisplayer(
-                                    amountToConvert: accountWithMoney.money,
+                                    amountToConvert:
+                                        accountWithMoney.effectiveMoney,
+                                    currency: accountWithMoney.isConverted
+                                        ? null
+                                        : accountWithMoney.account.currency,
                                   ),
                                 ],
                               ),
                               AnimatedProgressBar(
                                 value: min(
-                                  max(accountWithMoney.money / totalMoney, 0),
+                                  max(
+                                    accountWithMoney.effectiveMoney /
+                                        (totalMoney == 0 ? 1 : totalMoney),
+                                    0,
+                                  ),
                                   1,
                                 ),
                               ),
@@ -207,7 +252,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                         minTileHeight: 56,
                         leading: StreamBuilder(
                           stream: CurrencyService.instance.getCurrencyByCode(
-                            currencyWithMoney.currency.code,
+                            currencyWithMoney.currencyCode,
                           ),
                           builder: (context, snapshot) {
                             final currency = snapshot.data;
@@ -227,18 +272,19 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                StreamBuilder(
-                                  stream: CurrencyService.instance
-                                      .getCurrencyByCode(
-                                        currencyWithMoney.currency.code,
-                                      ),
-                                  builder: (context, snapshot) {
-                                    final currency = snapshot.data;
+                            StreamBuilder(
+                              stream: CurrencyService.instance
+                                  .getCurrencyByCode(
+                                    currencyWithMoney.currencyCode,
+                                  ),
+                              builder: (context, currencySnapshot) {
+                                final currency = currencySnapshot.data;
 
-                                    return Flexible(
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
                                       child: Skeletonizer(
                                         enabled: currency == null,
                                         child: Text(
@@ -247,18 +293,23 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                           overflow: TextOverflow.fade,
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(width: 6),
-                                CurrencyDisplayer(
-                                  amountToConvert: currencyWithMoney.money,
-                                ),
-                              ],
+                                    ),
+                                    const SizedBox(width: 6),
+                                    CurrencyDisplayer(
+                                      amountToConvert: currencyWithMoney.money,
+                                      currency: currency,
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                             AnimatedProgressBar(
                               value: min(
-                                max(currencyWithMoney.money / totalMoney, 0),
+                                max(
+                                  currencyWithMoney.money /
+                                      (totalMoney == 0 ? 1 : totalMoney),
+                                  0,
+                                ),
                                 1,
                               ),
                             ),

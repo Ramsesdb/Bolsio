@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:ui';
 
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -197,7 +198,12 @@ Future<void> _onStart(ServiceInstance service) async {
     }
   };
 
-  // Apply settings and start capturing
+  // Apply settings and start capturing.
+  // The plugin uses a BroadcastReceiver: each engine that calls onListen
+  // registers its own receiver, so the background isolate receives the same
+  // notification broadcasts as the main isolate.  The DedupeChecker prevents
+  // double-processing on the rare case both isolates capture the same event.
+  // When the app is closed, only this isolate runs — so it handles ALL sources.
   try {
     await orchestrator.applySettings();
     debugPrint(

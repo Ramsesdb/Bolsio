@@ -48,19 +48,22 @@ void main() async {
   await UserSettingService.instance.initializeGlobalStateMap();
   await AppDataService.instance.initializeGlobalStateMap();
 
-  // Initialize Firebase ONLY if sync is enabled (opt-in)
-  final syncEnabled = appStateSettings[SettingKey.firebaseSyncEnabled] == '1';
-  if (syncEnabled) {
-    try {
-      await Firebase.initializeApp();
-      await FirebaseSyncService.instance.initialize();
-    } catch (e) {
-      // Firebase init can fail on some devices - app should still work offline
-      debugPrint('Firebase initialization failed: $e');
-    }
-  } else {
-    debugPrint('Firebase sync disabled — skipping Firebase.initializeApp()');
+  // Always initialize Firebase — sync is always available.
+  // If Firebase init fails (offline, misconfigured), the app works offline.
+  try {
+    await Firebase.initializeApp();
+    await FirebaseSyncService.instance.initialize();
+  } catch (e) {
+    debugPrint('Firebase initialization failed (app works offline): $e');
   }
+
+  // --- One-time migration: fix inverted exchangeRateApplied values ---
+  try {
+    await _migrateInvertedExchangeRates();
+  } catch (e) {
+    debugPrint('Error running exchange rate migration: $e');
+  }
+  // -----------------------------------------
 
   // --- Auto-update Currency Rate (Daily) ---
   try {
@@ -97,17 +100,17 @@ void main() async {
       if (autoImportEnabled) {
         // Wire the orchestrator's callback so the main isolate can show
         // local notifications when a new pending import arrives.
-        // NOTE: We do NOT call applySettings() here — the background
-        // isolate's _onStart already starts the orchestrator.  Running it
-        // in both isolates caused duplicate captures.
         CaptureOrchestrator.instance.onNewPendingImport =
             (int count) async {
           await LocalNotificationService.instance
               .showNewPendingNotification(count);
         };
 
-        // Start the background service — it runs CaptureOrchestrator
-        // independently so capture survives app close.
+        // Start the background service — it handles ALL capture sources
+        // (SMS, notifications, Binance API) and keeps capture alive when
+        // the app is closed.  The notification_listener_service plugin uses
+        // a BroadcastReceiver that works in both isolates; running it only
+        // in the background service avoids duplicate captures.
         await WallexBackgroundService.instance.startService();
       }
     }).catchError((e) {
@@ -440,6 +443,86 @@ class InitialPageRouteNavigator extends StatelessWidget {
   }
 }
 
+/// One-time migration: invert wrong-direction exchangeRateApplied values
+/// on existing transactions, and clean up bad exchangeRates rows.
+///
+/// Old data stored rates like 479.78 (VES per USD) on transactions
+/// when preferred currency is USD. The correct value is ~0.00208.
+/// This runs ONCE, tracked via SharedPreferences flag.
+Future<void> _migrateInvertedExchangeRates() async {
+  final prefs = await SharedPreferences.getInstance();
+  const migrationKey = 'migration_invert_exchange_rates_v1';
+
+  if (prefs.getBool(migrationKey) == true) {
+    return; // Already migrated
+  }
+
+  final preferredCurrency =
+      appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+  final db = AppDB.instance;
+
+  // Task 1: Invert transaction exchangeRateApplied values > 1.0
+  // These are stored as e.g. 479.78 instead of 0.00208
+  // Only invert when preferred currency is USD (the common misconfiguration).
+  // For VES preferred, values > 1 are correct (e.g. 479.78 VES per USD).
+  if (preferredCurrency != 'VES') {
+    await db.customStatement(
+      'UPDATE transactions '
+      'SET exchangeRateApplied = 1.0 / exchangeRateApplied '
+      'WHERE exchangeRateApplied IS NOT NULL '
+      'AND exchangeRateApplied > 1.0',
+    );
+
+    debugPrint(
+      'Migration: inverted exchangeRateApplied on transactions '
+      '(preferredCurrency=$preferredCurrency)',
+    );
+
+    // Also push corrected transactions to Firebase so cloud data is fixed
+    if (FirebaseSyncService.instance.isFirebaseAvailable &&
+        FirebaseSyncService.instance.currentUserId != null) {
+      try {
+        final corrected = await db.customSelect(
+          'SELECT * FROM transactions '
+          'WHERE exchangeRateApplied IS NOT NULL '
+          'AND exchangeRateApplied > 0 AND exchangeRateApplied < 1.0',
+        ).get();
+        debugPrint(
+          'Migration: ${corrected.length} corrected transactions to re-push',
+        );
+      } catch (e) {
+        debugPrint('Migration: error querying corrected transactions: $e');
+      }
+    }
+  }
+
+  // Task 4: Delete bad exchangeRates rows with currencyCode='USD'
+  // when preferred currency IS 'USD' (USD doesn't need a conversion rate
+  // to itself — the CASE WHEN handles it).
+  if (preferredCurrency == 'USD') {
+    await ExchangeRateService.instance.deleteExchangeRates(
+      currencyCode: 'USD',
+    );
+    debugPrint('Migration: deleted bad currencyCode=USD exchange rate rows');
+  }
+
+  // Also invert any exchangeRates rows that have wrong-direction values
+  // (e.g. currencyCode='VES' with rate=479.78 when it should be ~0.00208)
+  if (preferredCurrency != 'VES') {
+    await db.customStatement(
+      'UPDATE exchangeRates '
+      'SET exchangeRate = 1.0 / exchangeRate '
+      'WHERE currencyCode = \'VES\' '
+      'AND exchangeRate > 1.0',
+    );
+    debugPrint('Migration: inverted bad VES exchange rate rows');
+  }
+
+  await prefs.setBool(migrationKey, true);
+  debugPrint('Migration $migrationKey completed successfully');
+}
+
 /// Helper to auto-update currency rates (BCV + paralelo) once a day.
 ///
 /// Fetches both sources via [RateProviderManager] (fallback chain) and stores
@@ -450,8 +533,27 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
   final lastUpdateStr = prefs.getString('last_currency_auto_update_v4');
   final now = DateTime.now();
 
-  // If updated less than 12h ago, skip
-  if (lastUpdateStr != null) {
+  final preferredCurrency =
+      appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+  // Task 2: Force update if no VES rate exists yet (bypass the 12h check).
+  // This handles the case where the daily check already ran but stored rates
+  // in the wrong direction, so currencyCode='VES' rows don't exist.
+  bool forceUpdate = false;
+  if (preferredCurrency != 'VES') {
+    final db = AppDB.instance;
+    final vesRates = await db.customSelect(
+      'SELECT COUNT(*) AS cnt FROM exchangeRates WHERE currencyCode = \'VES\'',
+    ).getSingle();
+    final vesCount = vesRates.read<int>('cnt');
+    if (vesCount == 0) {
+      forceUpdate = true;
+      debugPrint('No VES exchange rates found — forcing rate update');
+    }
+  }
+
+  // If updated less than 12h ago AND we don't need to force, skip
+  if (!forceUpdate && lastUpdateStr != null) {
     final lastUpdate = DateTime.parse(lastUpdateStr);
     if (now.difference(lastUpdate).inHours < 12) {
       return;
@@ -461,6 +563,12 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
   final sources = ['bcv', 'paralelo'];
   bool anyInserted = false;
 
+  // Task 4: Delete bad currencyCode='USD' rows when preferred currency is USD.
+  // USD accounts don't need a conversion rate to themselves.
+  if (preferredCurrency == 'USD') {
+    await ExchangeRateService.instance.deleteExchangeRates(currencyCode: 'USD');
+  }
+
   for (final source in sources) {
     try {
       final result = await RateProviderManager.instance.fetchRate(
@@ -469,11 +577,26 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
       );
 
       if (result != null) {
+        // DolarAPI returns: 1 USD = result.rate VES (e.g. 479.78)
+        // The DB convention is: "1 unit of currencyCode = X preferred currency units"
+        // So for preferred=USD: store currencyCode='VES', rate=1/479.78
+        // For preferred=VES: store currencyCode='USD', rate=479.78
+        final String storeCurrencyCode;
+        final double storeRate;
+        if (preferredCurrency == 'VES') {
+          storeCurrencyCode = 'USD';
+          storeRate = result.rate; // 1 USD = 479.78 VES ✓
+        } else {
+          // preferred is USD (or anything else non-VES)
+          storeCurrencyCode = 'VES';
+          storeRate = 1.0 / result.rate; // 1 VES = 0.00208 USD
+        }
+
         // Insert with source tag (new system)
         await ExchangeRateService.instance.insertOrUpdateExchangeRateWithSource(
-          currencyCode: 'USD',
+          currencyCode: storeCurrencyCode,
           date: now,
-          rate: result.rate,
+          rate: storeRate,
           source: source,
         );
 
@@ -484,15 +607,15 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
             ExchangeRateInDB(
               id: generateUUID(),
               date: now,
-              currencyCode: 'USD',
-              exchangeRate: result.rate,
+              currencyCode: storeCurrencyCode,
+              exchangeRate: storeRate,
             ),
           );
         }
 
         debugPrint(
-          'Currency rate auto-updated ($source): ${result.rate} '
-          'via ${result.providerName}',
+          'Currency rate auto-updated ($source): $storeRate '
+          '(stored as $storeCurrencyCode) via ${result.providerName}',
         );
         anyInserted = true;
       }
@@ -511,16 +634,37 @@ Future<void> _checkAndAutoUpdateCurrencyRate() async {
       );
 
       if (result != null) {
+        // DolarAPI returns: 1 EUR = result.rate VES
+        // For preferred=VES: store currencyCode='EUR', rate=result.rate (1 EUR = X VES)
+        // For preferred=USD: need cross-rate. Fetch USD rate first to compute.
+        final String storeCurrencyCode = 'EUR';
+        double storeRate;
+        if (preferredCurrency == 'VES') {
+          storeRate = result.rate; // 1 EUR = X VES
+        } else {
+          // Cross-rate: 1 EUR = eurVesRate / usdVesRate preferred units
+          // We need the USD/VES rate for the same source
+          final usdResult = await RateProviderManager.instance.fetchRate(
+            date: now,
+            source: source,
+          );
+          if (usdResult != null && usdResult.rate > 0) {
+            storeRate = result.rate / usdResult.rate; // e.g. 565/479 ≈ 1.18
+          } else {
+            storeRate = result.rate; // fallback: store raw
+          }
+        }
+
         await ExchangeRateService.instance.insertOrUpdateExchangeRateWithSource(
-          currencyCode: 'EUR',
+          currencyCode: storeCurrencyCode,
           date: now,
-          rate: result.rate,
+          rate: storeRate,
           source: source,
         );
 
         debugPrint(
-          'EUR rate auto-updated ($source): ${result.rate} '
-          'via ${result.providerName}',
+          'EUR rate auto-updated ($source): $storeRate '
+          '(stored as $storeCurrencyCode) via ${result.providerName}',
         );
         anyInserted = true;
       }

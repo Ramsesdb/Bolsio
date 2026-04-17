@@ -40,6 +40,7 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
   late DateTime _date;
   Account? _selectedAccount;
   Category? _selectedCategory;
+  bool _categoryIsAiSuggested = false;
   bool _isSaving = false;
   Account? _selectedTransferAccount;
   late TextEditingController _valueInDestinyController;
@@ -190,7 +191,10 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
           .getCategoryById(pi.proposedCategoryId!)
           .first;
       if (proposed != null && mounted) {
-        setState(() => _selectedCategory = proposed);
+        setState(() {
+          _selectedCategory = proposed;
+          _categoryIsAiSuggested = true;
+        });
       }
       return;
     }
@@ -213,7 +217,10 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
     final ahorroCategory = await _findOrCreateSavingsCategory();
 
     if (ahorroCategory != null && mounted) {
-      setState(() => _selectedCategory = ahorroCategory);
+      setState(() {
+        _selectedCategory = ahorroCategory;
+        _categoryIsAiSuggested = false;
+      });
     }
   }
 
@@ -498,9 +505,21 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
 
             // Category selector (hidden for transfers)
             if (_type != TransactionType.transfer) ...[
-              Text(
-                'Categoria (opcional)',
-                style: Theme.of(context).textTheme.labelLarge,
+              Row(
+                children: [
+                  Text(
+                    'Categoria (opcional)',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  if (_categoryIsAiSuggested) ...[
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.auto_awesome,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ],
+                ],
               ),
               const SizedBox(height: 8),
               InkWell(
@@ -527,6 +546,30 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
                   ),
                 ),
               ),
+              if (_categoryIsAiSuggested && isReviewable) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        setState(() => _categoryIsAiSuggested = false);
+                      },
+                      icon: const Icon(Icons.check, size: 18),
+                      label: const Text('Aceptar sugerencia'),
+                    ),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: () async {
+                        await _selectCategory();
+                        if (!mounted) return;
+                        setState(() => _categoryIsAiSuggested = false);
+                      },
+                      icon: const Icon(Icons.edit, size: 18),
+                      label: const Text('Cambiar'),
+                    ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 16),
             ],
 
@@ -652,7 +695,10 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
       ),
     );
     if (result != null && mounted) {
-      setState(() => _selectedCategory = result);
+      setState(() {
+        _selectedCategory = result;
+        _categoryIsAiSuggested = false;
+      });
     }
   }
 
@@ -757,7 +803,7 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
           id: newTxId,
           date: _date,
           accountID: _selectedAccount!.id,
-          value: -amount, // negative = money leaving source
+          value: amount,
           title: _counterpartyController.text.isNotEmpty
               ? _counterpartyController.text
               : null,

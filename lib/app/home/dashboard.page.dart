@@ -8,6 +8,7 @@ import 'package:wallex/app/home/widgets/dashboard_cards.dart';
 import 'package:wallex/app/home/widgets/horizontal_scrollable_account_list.dart';
 import 'package:wallex/app/home/widgets/income_or_expense_card.dart';
 import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
+
 import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
@@ -313,11 +314,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       type: TransactionType.expense,
                       periodState: dateRangeService,
                       labelStyle: labelStyle,
+                      rateSource: _rateSource,
                     ),
                     IncomeOrExpenseCard(
                       type: TransactionType.income,
                       periodState: dateRangeService,
                       labelStyle: labelStyle,
+                      rateSource: _rateSource,
                     ),
                   ];
 
@@ -638,11 +641,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
                 (m) => '${m[1]}.',
               );
-              return Text(
-                '= $formatted Bs',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: onHeaderSmallTextColor(context),
-                  fontSize: 13,
+              return BlurBasedOnPrivateMode(
+                child: Text(
+                  '= $formatted Bs',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: onHeaderSmallTextColor(context),
+                    fontSize: 13,
+                  ),
                 ),
               );
             },
@@ -782,6 +787,12 @@ class _DashboardPageState extends State<DashboardPage> {
     // Use cached values if fresh, otherwise fetch
     if (api.isStale) {
       await api.fetchAll();
+    }
+
+    // EUR rates may fail due to API rate-limiting after multiple calls.
+    // Retry EUR specifically if missing.
+    if (api.eurOficialRate == null || api.eurParaleloRate == null) {
+      await api.fetchAllEurRates();
     }
 
     return {

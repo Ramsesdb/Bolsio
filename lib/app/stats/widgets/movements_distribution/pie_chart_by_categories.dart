@@ -68,7 +68,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
     for (final transaction in transactions) {
       final trValue =
-          transaction.currentValueInPreferredCurrency *
+          (transaction.currentValueInPreferredCurrency ?? 0.0) *
           (transactionsType == TransactionType.expense ? -1 : 1);
 
       final categoryToEdit = data.firstWhereOrNull(

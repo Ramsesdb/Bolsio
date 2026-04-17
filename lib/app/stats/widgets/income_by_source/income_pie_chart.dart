@@ -49,7 +49,7 @@ class _IncomePieChartState extends State<IncomePieChart> {
         items.add(TrDistributionChartItem<Tag>(
           category: tag,
           transactions: tagTxs,
-          value: tagTxs.map((e) => e.currentValueInPreferredCurrency).sum,
+          value: tagTxs.map((e) => e.currentValueInPreferredCurrency ?? 0.0).sum,
         ));
       }
     }
@@ -63,7 +63,7 @@ class _IncomePieChartState extends State<IncomePieChart> {
     final items = <TrDistributionChartItem<Category>>[];
 
     for (final tx in transactions) {
-      final trValue = tx.currentValueInPreferredCurrency;
+      final trValue = tx.currentValueInPreferredCurrency ?? 0.0;
 
       final existingItem = items.firstWhereOrNull(
         (item) =>

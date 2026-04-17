@@ -490,7 +490,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         const SizedBox(width: 4),
                                         Flexible(
                                           child: Text(
-                                            '${transaction.exchangeRateApplied!.toStringAsFixed(2)} Bs/USD (${_exchangeRateSourceLabel(transaction.exchangeRateSource)})', // TODO: i18n
+                                            // exchangeRateApplied is stored as "1 accountCurrency = X preferredCurrency"
+                                            // (e.g. 0.00208 for VES->USD). Invert for human-friendly display.
+                                            '${(transaction.exchangeRateApplied! != 0 ? (1.0 / transaction.exchangeRateApplied!).toStringAsFixed(2) : "N/A")} Bs/USD (${_exchangeRateSourceLabel(transaction.exchangeRateSource)})', // TODO: i18n
                                             softWrap: false,
                                             overflow: TextOverflow.fade,
                                           ),
@@ -692,6 +694,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             );
                                           }
 
+                                          // rate is in "1 accountCurrency = X preferredCurrency" direction.
+                                          // For display, show the human-friendly inverted form
+                                          // (e.g. "1 USD = 479.78 VES" instead of "1 VES = 0.002 USD").
+                                          final displayRate = rate != 0 ? (1.0 / rate) : 0.0;
+
                                           return buildInfoListTile(
                                             title: t
                                                 .transaction
@@ -706,7 +713,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  '1 ${transaction.account.currency.code} = ${rate.toStringAsFixed(2)} ${userCurrency.code}',
+                                                  '1 ${userCurrency.code} = ${displayRate.toStringAsFixed(2)} ${transaction.account.currency.code}',
                                                 ),
                                               ],
                                             ),

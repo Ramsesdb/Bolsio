@@ -13,8 +13,8 @@ import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// First-run welcome screen. Offers two paths:
-/// 1. "Continuar sin cuenta" — fully local, no auth required.
-/// 2. "Conectar con Google" — only enabled when Firebase is configured.
+/// 1. "Iniciar con Google" (primary) — signs in, pulls Firebase data, seeds if empty.
+/// 2. "Continuar sin cuenta" (secondary) — fully local, no auth required.
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -25,10 +25,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   bool _isLoading = false;
   String? _errorMessage;
-
-  bool _isFirebaseConfigured() {
-    return FirebaseSyncService.instance.isFirebaseAvailable;
-  }
 
   Future<void> _continueWithoutAccount() async {
     // Ask whether to preload personal VE accounts & categories
@@ -122,7 +118,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        // User cancelled
         setState(() => _isLoading = false);
         return;
       }
@@ -153,25 +148,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ''');
       }
 
-      // Mark onboarding as completed + enable sync
-      await AppDataService.instance.setItem(
-        AppDataKey.onboarded,
-        '1',
-        updateGlobalState: true,
-      );
-      await AppDataService.instance.setItem(
-        AppDataKey.introSeen,
-        '1',
-        updateGlobalState: true,
-      );
+      // Enable sync + mark onboarded
       await FirebaseSyncService.instance.setSyncEnabled(true);
+      await AppDataService.instance.setItem(
+        AppDataKey.onboarded, '1', updateGlobalState: true,
+      );
+      await AppDataService.instance.setItem(
+        AppDataKey.introSeen, '1', updateGlobalState: true,
+      );
 
       if (user?.displayName != null) {
         await UserSettingService.instance.setItem(
-          SettingKey.userName,
-          user!.displayName,
-          updateGlobalState: true,
+          SettingKey.userName, user!.displayName, updateGlobalState: true,
         );
+      }
+
+      // --- Pull Firebase data → conditional seed → push ---
+      Logger.printDebug('WelcomeScreen: pulling Firebase data...');
+      final pullResult = await FirebaseSyncService.instance.pullAllData();
+      final pulledAccounts = (pullResult['accounts'] as int?) ?? 0;
+
+      if (pulledAccounts > 0) {
+        Logger.printDebug(
+          'WelcomeScreen: $pulledAccounts accounts restored from Firebase',
+        );
+      } else {
+        // Firebase was empty — seed locally then push to Firebase
+        final email = user?.email ?? '';
+        Logger.printDebug(
+          'WelcomeScreen: Firebase empty, seeding (email=$email)',
+        );
+
+        if (email == 'ramsesdavidba@gmail.com') {
+          await PersonalVESeeder.seedAllWithBalances();
+        } else {
+          await PersonalVESeeder.seedAll();
+        }
+
+        Logger.printDebug('WelcomeScreen: pushing seeded data to Firebase...');
+        await FirebaseSyncService.instance.pushAllData();
       }
 
       if (mounted) {
@@ -205,8 +220,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final firebaseReady = _isFirebaseConfigured();
-
     return Scaffold(
       body: Stack(
         children: [
@@ -311,11 +324,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     const SizedBox(height: 16),
                   ],
 
-                  // Primary CTA: Continue without account
+                  // Primary CTA: Sign in with Google
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: _isLoading ? null : _continueWithoutAccount,
+                      onPressed: _isLoading ? null : _signInWithGoogle,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -331,24 +344,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 strokeWidth: 2.5,
                               ),
                             )
-                          : const Text(
-                              'Continuar sin cuenta',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.login, size: 20),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Iniciar con Google',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                     ),
                   ),
                   const SizedBox(height: 12),
 
-                  // Secondary CTA: Connect with Google
+                  // Secondary CTA: Continue without account
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: firebaseReady && !_isLoading
-                          ? _signInWithGoogle
-                          : null,
+                      onPressed: _isLoading ? null : _continueWithoutAccount,
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
@@ -358,43 +377,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           color: colorScheme.outline.withOpacity(0.3),
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.cloud_sync, size: 20,
-                            color: firebaseReady
-                                ? colorScheme.onSurface
-                                : colorScheme.onSurface.withOpacity(0.38)),
-                          const SizedBox(width: 8),
-                          Text(
-                            firebaseReady
-                                ? 'Conectar con Google'
-                                : 'Sync no configurado',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: firebaseReady
-                                  ? colorScheme.onSurface
-                                  : colorScheme.onSurface.withOpacity(0.38),
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        'Continuar sin cuenta',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
                       ),
                     ),
                   ),
-
-                  if (!firebaseReady)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        'Configura Firebase en Ajustes para habilitar sync',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
 
                   const SizedBox(height: 24),
                 ],

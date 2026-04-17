@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallex/app/budgets/widgets/budget_prediction_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:wallex/app/budgets/budget_details_page.dart';
 import 'package:wallex/app/goals/goal_details_page.dart';
@@ -89,6 +90,9 @@ class FinancialTargetCard extends StatelessWidget {
                 ),
 
                 SizedBox(height: todayLabelEnabled ? 20 : 8),
+
+                if (target is Budget)
+                  BudgetPredictionWidget(budget: target as Budget),
 
                 // Footer (Status & Icons)
                 const Divider(height: 20),

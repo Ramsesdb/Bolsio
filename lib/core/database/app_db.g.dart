@@ -8907,11 +8907,13 @@ abstract class _$AppDB extends GeneratedDatabase {
   }
 
   Selectable<MoneyTransaction> getTransactionsWithFullData({
+    required String preferredCurrency,
+    required String rateSource,
     GetTransactionsWithFullData$predicate? predicate,
     GetTransactionsWithFullData$orderBy? orderBy,
     required GetTransactionsWithFullData$limit limit,
   }) {
-    var $arrayStartIndex = 1;
+    var $arrayStartIndex = 3;
     final generatedpredicate = $write(
       predicate?.call(
             alias(this.transactions, 't'),
@@ -8957,8 +8959,10 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.exchangeRateApplied AS exchangeRateApplied, t.exchangeRateSource AS exchangeRateSource, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * CASE WHEN a.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END AS currentValueInPreferredCurrency, t.valueInDestiny * CASE WHEN ra.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied) END AS currentValueInDestinyInPreferredCurrency, t.exchangeRateApplied AS exchangeRateApplied, t.exchangeRateSource AS exchangeRateSource, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
+        Variable<String>(preferredCurrency),
+        Variable<String>(rateSource),
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
         ...generatedlimit.introducedVariables,
@@ -9019,7 +9023,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         currentValueInDestinyInPreferredCurrency: row.readNullable<double>(
           'currentValueInDestinyInPreferredCurrency',
         ),
-        currentValueInPreferredCurrency: row.read<double>(
+        currentValueInPreferredCurrency: row.readNullable<double>(
           'currentValueInPreferredCurrency',
         ),
         tags: await customSelect(
@@ -9039,10 +9043,12 @@ abstract class _$AppDB extends GeneratedDatabase {
   }
 
   Selectable<CountTransactionsResult> countTransactions({
+    required String preferredCurrency,
     required DateTime date,
+    required String rateSource,
     CountTransactions$predicate? predicate,
   }) {
-    var $arrayStartIndex = 2;
+    var $arrayStartIndex = 4;
     final generatedpredicate = $write(
       predicate?.call(
             alias(this.transactions, 't'),
@@ -9059,9 +9065,11 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-      'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND unixepoch(DATE) <= unixepoch(?1)) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND unixepoch(DATE) <= unixepoch(?1)) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
+      'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * CASE WHEN a.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * CASE WHEN COALESCE(ra.currencyId, a.currencyId) = ?1 THEN 1.0 ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied) END), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND unixepoch(e3.date) <= unixepoch(?2)) ORDER BY CASE WHEN e2.source = ?3 THEN 0 ELSE 1 END LIMIT 1)) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND unixepoch(e3.date) <= unixepoch(?2)) ORDER BY CASE WHEN e2.source = ?3 THEN 0 ELSE 1 END LIMIT 1)) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
       variables: [
+        Variable<String>(preferredCurrency),
         Variable<DateTime>(date),
+        Variable<String>(rateSource),
         ...generatedpredicate.introducedVariables,
       ],
       readsFrom: {
@@ -9626,6 +9634,13 @@ abstract class _$AppDB extends GeneratedDatabase {
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'transactions',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
@@ -10201,27 +10216,6 @@ final class $AccountsReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
-
-  static MultiTypedResultKey<PendingImports, List<PendingImportInDB>>
-  _pendingImportsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
-    db.pendingImports,
-    aliasName: $_aliasNameGenerator(
-      db.accounts.id,
-      db.pendingImports.accountId,
-    ),
-  );
-
-  $PendingImportsProcessedTableManager get pendingImportsRefs {
-    final manager = $PendingImportsTableManager(
-      $_db,
-      $_db.pendingImports,
-    ).filter((f) => f.accountId.id.sqlEquals($_itemColumn<String>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_pendingImportsRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
 }
 
 class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
@@ -10314,31 +10308,6 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
           ),
     );
     return composer;
-  }
-
-  Expression<bool> pendingImportsRefs(
-    Expression<bool> Function($PendingImportsFilterComposer f) f,
-  ) {
-    final $PendingImportsFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.pendingImports,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $PendingImportsFilterComposer(
-            $db: $db,
-            $table: $db.pendingImports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
   }
 }
 
@@ -10506,31 +10475,6 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     );
     return composer;
   }
-
-  Expression<T> pendingImportsRefs<T extends Object>(
-    Expression<T> Function($PendingImportsAnnotationComposer a) f,
-  ) {
-    final $PendingImportsAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.pendingImports,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $PendingImportsAnnotationComposer(
-            $db: $db,
-            $table: $db.pendingImports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $AccountsTableManager
@@ -10546,7 +10490,7 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({bool currencyId, bool pendingImportsRefs})
+          PrefetchHooks Function({bool currencyId})
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -10628,71 +10572,47 @@ class $AccountsTableManager
                 (e) => (e.readTable(table), $AccountsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({currencyId = false, pendingImportsRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (pendingImportsRefs) db.pendingImports,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (currencyId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.currencyId,
-                                    referencedTable: $AccountsReferences
-                                        ._currencyIdTable(db),
-                                    referencedColumn: $AccountsReferences
-                                        ._currencyIdTable(db)
-                                        .code,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({currencyId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (currencyId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.currencyId,
+                                referencedTable: $AccountsReferences
+                                    ._currencyIdTable(db),
+                                referencedColumn: $AccountsReferences
+                                    ._currencyIdTable(db)
+                                    .code,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (pendingImportsRefs)
-                        await $_getPrefetchedData<
-                          AccountInDB,
-                          Accounts,
-                          PendingImportInDB
-                        >(
-                          currentTable: table,
-                          referencedTable: $AccountsReferences
-                              ._pendingImportsRefsTable(db),
-                          managerFromTypedResult: (p0) => $AccountsReferences(
-                            db,
-                            table,
-                            p0,
-                          ).pendingImportsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.accountId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [];
               },
+            );
+          },
         ),
       );
 }
@@ -10709,7 +10629,7 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({bool currencyId, bool pendingImportsRefs})
+      PrefetchHooks Function({bool currencyId})
     >;
 typedef $DebtsCreateCompanionBuilder =
     DebtsCompanion Function({
@@ -16162,6 +16082,8 @@ typedef $PendingImportsCreateCompanionBuilder =
       Value<String> status,
       Value<String?> createdTransactionId,
       Value<DateTime> createdAt,
+      Value<String?> receivingAccountId,
+      Value<double?> valueInDestiny,
       Value<int> rowid,
     });
 typedef $PendingImportsUpdateCompanionBuilder =
@@ -16182,6 +16104,8 @@ typedef $PendingImportsUpdateCompanionBuilder =
       Value<String> status,
       Value<String?> createdTransactionId,
       Value<DateTime> createdAt,
+      Value<String?> receivingAccountId,
+      Value<double?> valueInDestiny,
       Value<int> rowid,
     });
 
@@ -16247,6 +16171,28 @@ final class $PendingImportsReferences
     final item = $_typedResult.readTableOrNull(
       _createdTransactionIdTable($_db),
     );
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Accounts _receivingAccountIdTable(_$AppDB db) =>
+      db.accounts.createAlias(
+        $_aliasNameGenerator(
+          db.pendingImports.receivingAccountId,
+          db.accounts.id,
+        ),
+      );
+
+  $AccountsProcessedTableManager? get receivingAccountId {
+    final $_column = $_itemColumn<String>('receivingAccountId');
+    if ($_column == null) return null;
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_receivingAccountIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -16327,6 +16273,11 @@ class $PendingImportsFilterComposer extends Composer<_$AppDB, PendingImports> {
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<double> get valueInDestiny => $composableBuilder(
+    column: $table.valueInDestiny,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $AccountsFilterComposer get accountId {
     final $AccountsFilterComposer composer = $composerBuilder(
       composer: this,
@@ -16387,6 +16338,29 @@ class $PendingImportsFilterComposer extends Composer<_$AppDB, PendingImports> {
           }) => $TransactionsFilterComposer(
             $db: $db,
             $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $AccountsFilterComposer get receivingAccountId {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.receivingAccountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -16471,6 +16445,11 @@ class $PendingImportsOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get valueInDestiny => $composableBuilder(
+    column: $table.valueInDestiny,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $AccountsOrderingComposer get accountId {
     final $AccountsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -16539,6 +16518,29 @@ class $PendingImportsOrderingComposer
     );
     return composer;
   }
+
+  $AccountsOrderingComposer get receivingAccountId {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.receivingAccountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $PendingImportsAnnotationComposer
@@ -16594,6 +16596,11 @@ class $PendingImportsAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<double> get valueInDestiny => $composableBuilder(
+    column: $table.valueInDestiny,
+    builder: (column) => column,
+  );
 
   $AccountsAnnotationComposer get accountId {
     final $AccountsAnnotationComposer composer = $composerBuilder(
@@ -16663,6 +16670,29 @@ class $PendingImportsAnnotationComposer
     );
     return composer;
   }
+
+  $AccountsAnnotationComposer get receivingAccountId {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.receivingAccountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $PendingImportsTableManager
@@ -16682,6 +16712,7 @@ class $PendingImportsTableManager
             bool accountId,
             bool proposedCategoryId,
             bool createdTransactionId,
+            bool receivingAccountId,
           })
         > {
   $PendingImportsTableManager(_$AppDB db, PendingImports table)
@@ -16713,6 +16744,8 @@ class $PendingImportsTableManager
                 Value<String> status = const Value.absent(),
                 Value<String?> createdTransactionId = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> receivingAccountId = const Value.absent(),
+                Value<double?> valueInDestiny = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PendingImportsCompanion(
                 id: id,
@@ -16731,6 +16764,8 @@ class $PendingImportsTableManager
                 status: status,
                 createdTransactionId: createdTransactionId,
                 createdAt: createdAt,
+                receivingAccountId: receivingAccountId,
+                valueInDestiny: valueInDestiny,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -16751,6 +16786,8 @@ class $PendingImportsTableManager
                 Value<String> status = const Value.absent(),
                 Value<String?> createdTransactionId = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> receivingAccountId = const Value.absent(),
+                Value<double?> valueInDestiny = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PendingImportsCompanion.insert(
                 id: id,
@@ -16769,6 +16806,8 @@ class $PendingImportsTableManager
                 status: status,
                 createdTransactionId: createdTransactionId,
                 createdAt: createdAt,
+                receivingAccountId: receivingAccountId,
+                valueInDestiny: valueInDestiny,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -16784,6 +16823,7 @@ class $PendingImportsTableManager
                 accountId = false,
                 proposedCategoryId = false,
                 createdTransactionId = false,
+                receivingAccountId = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -16843,6 +16883,19 @@ class $PendingImportsTableManager
                                   )
                                   as T;
                         }
+                        if (receivingAccountId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.receivingAccountId,
+                                    referencedTable: $PendingImportsReferences
+                                        ._receivingAccountIdTable(db),
+                                    referencedColumn: $PendingImportsReferences
+                                        ._receivingAccountIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
 
                         return state;
                       },
@@ -16871,6 +16924,7 @@ typedef $PendingImportsProcessedTableManager =
         bool accountId,
         bool proposedCategoryId,
         bool createdTransactionId,
+        bool receivingAccountId,
       })
     >;
 

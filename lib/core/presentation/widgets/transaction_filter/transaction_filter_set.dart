@@ -8,6 +8,8 @@ import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/utils/uuid.dart';
 
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+
 import '../../../models/transaction/transaction_type.enum.dart';
 
 part 'transaction_filter_set.g.dart';
@@ -150,7 +152,11 @@ class TransactionFilterSet {
       receivingAccountCurrency,
       c,
       p6,
-    ) => buildDriftExpr([
+    ) {
+      final preferredCurrency =
+          appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+      return buildDriftExpr([
       if (tagsIDs != null)
         CustomExpression(
           "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}",
@@ -158,12 +164,12 @@ class TransactionFilterSet {
 
       if (maxValue != null)
         CustomExpression(
-          '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) <= $maxValue)',
+          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END) <= $maxValue)',
         ),
 
       if (minValue != null)
         CustomExpression(
-          '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) >= $minValue)',
+          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END) >= $minValue)',
         ),
 
       // Transaction types:
@@ -209,6 +215,7 @@ class TransactionFilterSet {
           ).toList(),
         ),
     ]);
+    };
   }
 
   @override
