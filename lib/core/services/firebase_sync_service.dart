@@ -442,10 +442,11 @@ class FirebaseSyncService {
           iconId: data['iconId'] as String,
           color: data['color'] as String?,
           displayOrder: data['displayOrder'] as int? ?? 0,
-          type: CategoryType.values.firstWhere(
-            (e) => e.name == data['type'],
-            orElse: () => CategoryType.E,
-          ),
+          type: data['type'] != null
+              ? CategoryType.values
+                    .where((e) => e.name == data['type'])
+                    .firstOrNull
+              : null,
           parentCategoryID: data['parentCategoryID'] as String?,
         );
 
