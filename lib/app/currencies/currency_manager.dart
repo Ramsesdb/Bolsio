@@ -21,12 +21,43 @@ import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
 import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/utils/uuid.dart';
 
 class CurrencyManagerPage extends StatelessWidget {
   const CurrencyManagerPage({super.key});
+
+  Future<void> forceRefreshRates(BuildContext context) async {
+    WallexSnackbar.success(
+      SnackbarParams('Actualizando tasas...'),
+    );
+    try {
+      final result = await RateRefreshService.instance.refreshNow();
+      if (!context.mounted) return;
+      final total = result.totalSuccess + result.totalFailure;
+      if (result.totalFailure == 0 && result.totalSuccess > 0) {
+        WallexSnackbar.success(
+          SnackbarParams(
+            'Tasas actualizadas: ${result.totalSuccess}/$total '
+            '(USD ok=${result.usdSuccessCount}, EUR ok=${result.eurSuccessCount})',
+          ),
+        );
+      } else {
+        WallexSnackbar.error(
+          SnackbarParams(
+            'Actualización parcial: ok=${result.totalSuccess} fallos=${result.totalFailure} '
+            '(USD ok=${result.usdSuccessCount}/${result.usdSuccessCount + result.usdFailureCount}, '
+            'EUR ok=${result.eurSuccessCount}/${result.eurSuccessCount + result.eurFailureCount})',
+          ),
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      WallexSnackbar.error(SnackbarParams('Error al actualizar tasas: $e'));
+    }
+  }
 
   void changePreferredCurrency(BuildContext context, Currency newCurrency) {
     final t = Translations.of(context);
@@ -63,6 +94,13 @@ class CurrencyManagerPage extends StatelessWidget {
 
     return PageFramework(
       title: Translations.of(context).currencies.currency_manager,
+      appBarActions: [
+        IconButton(
+          icon: const Icon(Icons.refresh_rounded),
+          tooltip: 'Refrescar tasas',
+          onPressed: () => forceRefreshRates(context),
+        ),
+      ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 12).withSafeBottom(context),
         child: Column(
