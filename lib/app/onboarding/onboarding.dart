@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
-import 'package:wallex/app/onboarding/classes/OnboardingItem.dart';
+import 'package:wallex/app/onboarding/classes/onboarding_item.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/currency/currency_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';

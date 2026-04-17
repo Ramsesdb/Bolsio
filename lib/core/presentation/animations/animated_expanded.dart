@@ -32,7 +32,7 @@ class AnimatedExpanded extends StatefulWidget {
   });
 
   @override
-  _AnimatedExpandedState createState() => _AnimatedExpandedState();
+  State<AnimatedExpanded> createState() => _AnimatedExpandedState();
 }
 
 class _AnimatedExpandedState extends State<AnimatedExpanded>

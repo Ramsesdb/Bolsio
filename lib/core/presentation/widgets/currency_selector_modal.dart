@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wallex/core/database/services/currency/currency_service.dart';
 import 'package:wallex/core/models/currency/currency.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:wallex/core/routes/route_utils.dart';

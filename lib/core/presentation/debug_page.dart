@@ -222,6 +222,7 @@ class DebugPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 final loadingOverlay = LoadingOverlay.of(context);
+                final navigator = Navigator.of(context);
                 loadingOverlay.show();
 
                 fillWithDemoData()
@@ -232,7 +233,7 @@ class DebugPage extends StatelessWidget {
                         SnackbarParams('Demo data inserted successfully!'),
                       );
 
-                      Navigator.of(context).pop();
+                      navigator.pop();
                     })
                     .catchError((error) {
                       loadingOverlay.hide();

@@ -135,9 +135,8 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
         );
 
     if (selected != null && selected.result != null) {
-      DefaultTransactionValuesService.instance.updateFieldsToUseLastUsedValue(
-        selected.result!,
-      );
+      await DefaultTransactionValuesService.instance
+          .updateFieldsToUseLastUsedValue(selected.result!);
     }
   }
 
@@ -188,7 +187,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     );
 
     if (selected != null) {
-      DefaultTransactionValuesService.instance.updateValues(
+      await DefaultTransactionValuesService.instance.updateValues(
         values.copyWith(categoryId: selected.id),
       );
     }
@@ -231,7 +230,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
         );
 
     if (selected != null) {
-      DefaultTransactionValuesService.instance.updateValues(
+      await DefaultTransactionValuesService.instance.updateValues(
         values.copyWith(rawStatus: selected.result?.name),
       );
     }
@@ -295,7 +294,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     );
 
     if (selected != null) {
-      DefaultTransactionValuesService.instance.updateValues(
+      await DefaultTransactionValuesService.instance.updateValues(
         values.copyWith(
           tagIds: selected.whereType<Tag>().map((e) => e.id).toList(),
         ),

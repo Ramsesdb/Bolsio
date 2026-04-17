@@ -6,7 +6,7 @@ import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/models/currency/currency.dart';
 import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
 import 'package:wallex/core/presentation/animations/animated_expanded.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';

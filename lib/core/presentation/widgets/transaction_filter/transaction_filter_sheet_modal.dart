@@ -4,7 +4,7 @@ import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/filters/saved_filters_service.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/saved_filters_selector.dart';

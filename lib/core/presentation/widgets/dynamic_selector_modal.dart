@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
@@ -107,10 +107,6 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
             : Icon(icon, color: Colors.grey.shade600),
         value: value,
         title: titleWidget,
-        groupValue: selectedValue,
-        onChanged: (V? newValue) {
-          RouteUtils.popRoute(ModalResult(newValue));
-        },
       ),
     );
   }
@@ -122,14 +118,20 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
       subtitle: subtitle,
       responseToKeyboard: false,
       showTitleDivider: true,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (headerWidget != null) headerWidget!,
-            ...items.map((item) => _radioTile(context, item)),
-          ],
+      body: RadioGroup<V>(
+        groupValue: selectedValue,
+        onChanged: (V? newValue) {
+          RouteUtils.popRoute(ModalResult(newValue));
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (headerWidget != null) headerWidget!,
+              ...items.map((item) => _radioTile(context, item)),
+            ],
+          ),
         ),
       ),
     );

@@ -414,6 +414,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
       type: widget.debt?.type ?? widget.type!,
     );
 
+    final t = Translations.of(context);
     try {
       if (widget.isEditing) {
         await DebtService.instance.updateDebt(debtToUpload);
@@ -427,7 +428,6 @@ class _DebtFormPageState extends State<DebtFormPage> {
         }
       }
 
-      final t = Translations.of(context);
       WallexSnackbar.success(
         SnackbarParams(
           widget.isEditing

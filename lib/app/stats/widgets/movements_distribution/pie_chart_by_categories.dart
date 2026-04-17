@@ -61,7 +61,6 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
   }
 
   Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
-    BuildContext context,
     List<MoneyTransaction> transactions,
   ) async {
     final data = <TrDistributionChartItem<Category>>[];
@@ -219,7 +218,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
     return StreamBuilder(
       stream: TransactionService.instance
           .getTransactions(filters: _getTransactionFilters())
-          .asyncMap((data) => getEvolutionData(context, data)),
+          .asyncMap((data) => getEvolutionData(data)),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const LinearProgressIndicator();

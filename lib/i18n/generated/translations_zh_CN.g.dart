@@ -10,7 +10,7 @@ import 'package:slang/generated.dart';
 import 'translations.g.dart';
 
 // Path: <root>
-class TranslationsZhCn implements Translations {
+class TranslationsZhCn extends Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsZhCn({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -20,7 +20,9 @@ class TranslationsZhCn implements Translations {
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
-		  ) {
+		  ),
+		  super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver) {
+		super.$meta.setFlatMapFunction($meta.getTranslation); // copy base translations to super.$meta
 		$meta.setFlatMapFunction(_flatMapFunction);
 	}
 
@@ -28,7 +30,7 @@ class TranslationsZhCn implements Translations {
 	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
-	@override dynamic operator[](String key) => $meta.getTranslation(key);
+	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
 
 	late final TranslationsZhCn _root = this; // ignore: unused_field
 
@@ -60,8 +62,8 @@ class TranslationsZhCn implements Translations {
 }
 
 // Path: ui_actions
-class _TranslationsUiActionsZhCn implements TranslationsUiActionsEn {
-	_TranslationsUiActionsZhCn._(this._root);
+class _TranslationsUiActionsZhCn extends TranslationsUiActionsEn {
+	_TranslationsUiActionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -104,8 +106,8 @@ class _TranslationsUiActionsZhCn implements TranslationsUiActionsEn {
 }
 
 // Path: general
-class _TranslationsGeneralZhCn implements TranslationsGeneralEn {
-	_TranslationsGeneralZhCn._(this._root);
+class _TranslationsGeneralZhCn extends TranslationsGeneralEn {
+	_TranslationsGeneralZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -138,8 +140,8 @@ class _TranslationsGeneralZhCn implements TranslationsGeneralEn {
 }
 
 // Path: intro
-class _TranslationsIntroZhCn implements TranslationsIntroEn {
-	_TranslationsIntroZhCn._(this._root);
+class _TranslationsIntroZhCn extends TranslationsIntroEn {
+	_TranslationsIntroZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -165,8 +167,8 @@ class _TranslationsIntroZhCn implements TranslationsIntroEn {
 }
 
 // Path: home
-class _TranslationsHomeZhCn implements TranslationsHomeEn {
-	_TranslationsHomeZhCn._(this._root);
+class _TranslationsHomeZhCn extends TranslationsHomeEn {
+	_TranslationsHomeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -186,8 +188,8 @@ class _TranslationsHomeZhCn implements TranslationsHomeEn {
 }
 
 // Path: financial_health
-class _TranslationsFinancialHealthZhCn implements TranslationsFinancialHealthEn {
-	_TranslationsFinancialHealthZhCn._(this._root);
+class _TranslationsFinancialHealthZhCn extends TranslationsFinancialHealthEn {
+	_TranslationsFinancialHealthZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -199,8 +201,8 @@ class _TranslationsFinancialHealthZhCn implements TranslationsFinancialHealthEn 
 }
 
 // Path: stats
-class _TranslationsStatsZhCn implements TranslationsStatsEn {
-	_TranslationsStatsZhCn._(this._root);
+class _TranslationsStatsZhCn extends TranslationsStatsEn {
+	_TranslationsStatsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -226,8 +228,8 @@ class _TranslationsStatsZhCn implements TranslationsStatsEn {
 }
 
 // Path: icon_selector
-class _TranslationsIconSelectorZhCn implements TranslationsIconSelectorEn {
-	_TranslationsIconSelectorZhCn._(this._root);
+class _TranslationsIconSelectorZhCn extends TranslationsIconSelectorEn {
+	_TranslationsIconSelectorZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -245,8 +247,8 @@ class _TranslationsIconSelectorZhCn implements TranslationsIconSelectorEn {
 }
 
 // Path: transaction
-class _TranslationsTransactionZhCn implements TranslationsTransactionEn {
-	_TranslationsTransactionZhCn._(this._root);
+class _TranslationsTransactionZhCn extends TranslationsTransactionEn {
+	_TranslationsTransactionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -285,8 +287,8 @@ class _TranslationsTransactionZhCn implements TranslationsTransactionEn {
 }
 
 // Path: transfer
-class _TranslationsTransferZhCn implements TranslationsTransferEn {
-	_TranslationsTransferZhCn._(this._root);
+class _TranslationsTransferZhCn extends TranslationsTransferEn {
+	_TranslationsTransferZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -301,8 +303,8 @@ class _TranslationsTransferZhCn implements TranslationsTransferEn {
 }
 
 // Path: recurrent_transactions
-class _TranslationsRecurrentTransactionsZhCn implements TranslationsRecurrentTransactionsEn {
-	_TranslationsRecurrentTransactionsZhCn._(this._root);
+class _TranslationsRecurrentTransactionsZhCn extends TranslationsRecurrentTransactionsEn {
+	_TranslationsRecurrentTransactionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -317,8 +319,8 @@ class _TranslationsRecurrentTransactionsZhCn implements TranslationsRecurrentTra
 }
 
 // Path: account
-class _TranslationsAccountZhCn implements TranslationsAccountEn {
-	_TranslationsAccountZhCn._(this._root);
+class _TranslationsAccountZhCn extends TranslationsAccountEn {
+	_TranslationsAccountZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -342,8 +344,8 @@ class _TranslationsAccountZhCn implements TranslationsAccountEn {
 }
 
 // Path: currencies
-class _TranslationsCurrenciesZhCn implements TranslationsCurrenciesEn {
-	_TranslationsCurrenciesZhCn._(this._root);
+class _TranslationsCurrenciesZhCn extends TranslationsCurrenciesEn {
+	_TranslationsCurrenciesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -373,8 +375,8 @@ class _TranslationsCurrenciesZhCn implements TranslationsCurrenciesEn {
 }
 
 // Path: tags
-class _TranslationsTagsZhCn implements TranslationsTagsEn {
-	_TranslationsTagsZhCn._(this._root);
+class _TranslationsTagsZhCn extends TranslationsTagsEn {
+	_TranslationsTagsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -399,8 +401,8 @@ class _TranslationsTagsZhCn implements TranslationsTagsEn {
 }
 
 // Path: categories
-class _TranslationsCategoriesZhCn implements TranslationsCategoriesEn {
-	_TranslationsCategoriesZhCn._(this._root);
+class _TranslationsCategoriesZhCn extends TranslationsCategoriesEn {
+	_TranslationsCategoriesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -433,8 +435,8 @@ class _TranslationsCategoriesZhCn implements TranslationsCategoriesEn {
 }
 
 // Path: budgets
-class _TranslationsBudgetsZhCn implements TranslationsBudgetsEn {
-	_TranslationsBudgetsZhCn._(this._root);
+class _TranslationsBudgetsZhCn extends TranslationsBudgetsEn {
+	_TranslationsBudgetsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -458,8 +460,8 @@ class _TranslationsBudgetsZhCn implements TranslationsBudgetsEn {
 }
 
 // Path: goals
-class _TranslationsGoalsZhCn implements TranslationsGoalsEn {
-	_TranslationsGoalsZhCn._(this._root);
+class _TranslationsGoalsZhCn extends TranslationsGoalsEn {
+	_TranslationsGoalsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -478,8 +480,8 @@ class _TranslationsGoalsZhCn implements TranslationsGoalsEn {
 }
 
 // Path: debts
-class _TranslationsDebtsZhCn implements TranslationsDebtsEn {
-	_TranslationsDebtsZhCn._(this._root);
+class _TranslationsDebtsZhCn extends TranslationsDebtsEn {
+	_TranslationsDebtsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -497,8 +499,8 @@ class _TranslationsDebtsZhCn implements TranslationsDebtsEn {
 }
 
 // Path: target_timeline_statuses
-class _TranslationsTargetTimelineStatusesZhCn implements TranslationsTargetTimelineStatusesEn {
-	_TranslationsTargetTimelineStatusesZhCn._(this._root);
+class _TranslationsTargetTimelineStatusesZhCn extends TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -509,8 +511,8 @@ class _TranslationsTargetTimelineStatusesZhCn implements TranslationsTargetTimel
 }
 
 // Path: backup
-class _TranslationsBackupZhCn implements TranslationsBackupEn {
-	_TranslationsBackupZhCn._(this._root);
+class _TranslationsBackupZhCn extends TranslationsBackupEn {
+	_TranslationsBackupZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -523,8 +525,8 @@ class _TranslationsBackupZhCn implements TranslationsBackupEn {
 }
 
 // Path: settings
-class _TranslationsSettingsZhCn implements TranslationsSettingsEn {
-	_TranslationsSettingsZhCn._(this._root);
+class _TranslationsSettingsZhCn extends TranslationsSettingsEn {
+	_TranslationsSettingsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -540,8 +542,8 @@ class _TranslationsSettingsZhCn implements TranslationsSettingsEn {
 }
 
 // Path: more
-class _TranslationsMoreZhCn implements TranslationsMoreEn {
-	_TranslationsMoreZhCn._(this._root);
+class _TranslationsMoreZhCn extends TranslationsMoreEn {
+	_TranslationsMoreZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -554,8 +556,8 @@ class _TranslationsMoreZhCn implements TranslationsMoreEn {
 }
 
 // Path: general.leave_without_saving
-class _TranslationsGeneralLeaveWithoutSavingZhCn implements TranslationsGeneralLeaveWithoutSavingEn {
-	_TranslationsGeneralLeaveWithoutSavingZhCn._(this._root);
+class _TranslationsGeneralLeaveWithoutSavingZhCn extends TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -565,8 +567,8 @@ class _TranslationsGeneralLeaveWithoutSavingZhCn implements TranslationsGeneralL
 }
 
 // Path: general.clipboard
-class _TranslationsGeneralClipboardZhCn implements TranslationsGeneralClipboardEn {
-	_TranslationsGeneralClipboardZhCn._(this._root);
+class _TranslationsGeneralClipboardZhCn extends TranslationsGeneralClipboardEn {
+	_TranslationsGeneralClipboardZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -576,8 +578,8 @@ class _TranslationsGeneralClipboardZhCn implements TranslationsGeneralClipboardE
 }
 
 // Path: general.time
-class _TranslationsGeneralTimeZhCn implements TranslationsGeneralTimeEn {
-	_TranslationsGeneralTimeZhCn._(this._root);
+class _TranslationsGeneralTimeZhCn extends TranslationsGeneralTimeEn {
+	_TranslationsGeneralTimeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -598,8 +600,8 @@ class _TranslationsGeneralTimeZhCn implements TranslationsGeneralTimeEn {
 }
 
 // Path: general.transaction_order
-class _TranslationsGeneralTransactionOrderZhCn implements TranslationsGeneralTransactionOrderEn {
-	_TranslationsGeneralTransactionOrderZhCn._(this._root);
+class _TranslationsGeneralTransactionOrderZhCn extends TranslationsGeneralTransactionOrderEn {
+	_TranslationsGeneralTransactionOrderZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -611,8 +613,8 @@ class _TranslationsGeneralTransactionOrderZhCn implements TranslationsGeneralTra
 }
 
 // Path: general.validations
-class _TranslationsGeneralValidationsZhCn implements TranslationsGeneralValidationsEn {
-	_TranslationsGeneralValidationsZhCn._(this._root);
+class _TranslationsGeneralValidationsZhCn extends TranslationsGeneralValidationsEn {
+	_TranslationsGeneralValidationsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -625,8 +627,8 @@ class _TranslationsGeneralValidationsZhCn implements TranslationsGeneralValidati
 }
 
 // Path: financial_health.review
-class _TranslationsFinancialHealthReviewZhCn implements TranslationsFinancialHealthReviewEn {
-	_TranslationsFinancialHealthReviewZhCn._(this._root);
+class _TranslationsFinancialHealthReviewZhCn extends TranslationsFinancialHealthReviewEn {
+	_TranslationsFinancialHealthReviewZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -683,8 +685,8 @@ class _TranslationsFinancialHealthReviewZhCn implements TranslationsFinancialHea
 }
 
 // Path: financial_health.months_without_income
-class _TranslationsFinancialHealthMonthsWithoutIncomeZhCn implements TranslationsFinancialHealthMonthsWithoutIncomeEn {
-	_TranslationsFinancialHealthMonthsWithoutIncomeZhCn._(this._root);
+class _TranslationsFinancialHealthMonthsWithoutIncomeZhCn extends TranslationsFinancialHealthMonthsWithoutIncomeEn {
+	_TranslationsFinancialHealthMonthsWithoutIncomeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -700,8 +702,8 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeZhCn implements Translation
 }
 
 // Path: financial_health.savings_percentage
-class _TranslationsFinancialHealthSavingsPercentageZhCn implements TranslationsFinancialHealthSavingsPercentageEn {
-	_TranslationsFinancialHealthSavingsPercentageZhCn._(this._root);
+class _TranslationsFinancialHealthSavingsPercentageZhCn extends TranslationsFinancialHealthSavingsPercentageEn {
+	_TranslationsFinancialHealthSavingsPercentageZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -713,8 +715,8 @@ class _TranslationsFinancialHealthSavingsPercentageZhCn implements TranslationsF
 }
 
 // Path: icon_selector.scopes
-class _TranslationsIconSelectorScopesZhCn implements TranslationsIconSelectorScopesEn {
-	_TranslationsIconSelectorScopesZhCn._(this._root);
+class _TranslationsIconSelectorScopesZhCn extends TranslationsIconSelectorScopesEn {
+	_TranslationsIconSelectorScopesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -730,8 +732,8 @@ class _TranslationsIconSelectorScopesZhCn implements TranslationsIconSelectorSco
 }
 
 // Path: transaction.next_payments
-class _TranslationsTransactionNextPaymentsZhCn implements TranslationsTransactionNextPaymentsEn {
-	_TranslationsTransactionNextPaymentsZhCn._(this._root);
+class _TranslationsTransactionNextPaymentsZhCn extends TranslationsTransactionNextPaymentsEn {
+	_TranslationsTransactionNextPaymentsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -750,8 +752,8 @@ class _TranslationsTransactionNextPaymentsZhCn implements TranslationsTransactio
 }
 
 // Path: transaction.list
-class _TranslationsTransactionListZhCn implements TranslationsTransactionListEn {
-	_TranslationsTransactionListZhCn._(this._root);
+class _TranslationsTransactionListZhCn extends TranslationsTransactionListEn {
+	_TranslationsTransactionListZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -773,8 +775,8 @@ class _TranslationsTransactionListZhCn implements TranslationsTransactionListEn 
 }
 
 // Path: transaction.filters
-class _TranslationsTransactionFiltersZhCn implements TranslationsTransactionFiltersEn {
-	_TranslationsTransactionFiltersZhCn._(this._root);
+class _TranslationsTransactionFiltersZhCn extends TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -791,8 +793,8 @@ class _TranslationsTransactionFiltersZhCn implements TranslationsTransactionFilt
 }
 
 // Path: transaction.form
-class _TranslationsTransactionFormZhCn implements TranslationsTransactionFormEn {
-	_TranslationsTransactionFormZhCn._(this._root);
+class _TranslationsTransactionFormZhCn extends TranslationsTransactionFormEn {
+	_TranslationsTransactionFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -810,8 +812,8 @@ class _TranslationsTransactionFormZhCn implements TranslationsTransactionFormEn 
 }
 
 // Path: transaction.reversed
-class _TranslationsTransactionReversedZhCn implements TranslationsTransactionReversedEn {
-	_TranslationsTransactionReversedZhCn._(this._root);
+class _TranslationsTransactionReversedZhCn extends TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -823,8 +825,8 @@ class _TranslationsTransactionReversedZhCn implements TranslationsTransactionRev
 }
 
 // Path: transaction.status
-class _TranslationsTransactionStatusZhCn implements TranslationsTransactionStatusEn {
-	_TranslationsTransactionStatusZhCn._(this._root);
+class _TranslationsTransactionStatusZhCn extends TranslationsTransactionStatusEn {
+	_TranslationsTransactionStatusZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -848,8 +850,8 @@ class _TranslationsTransactionStatusZhCn implements TranslationsTransactionStatu
 }
 
 // Path: transaction.types
-class _TranslationsTransactionTypesZhCn implements TranslationsTransactionTypesEn {
-	_TranslationsTransactionTypesZhCn._(this._root);
+class _TranslationsTransactionTypesZhCn extends TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -873,8 +875,8 @@ class _TranslationsTransactionTypesZhCn implements TranslationsTransactionTypesE
 }
 
 // Path: transfer.form
-class _TranslationsTransferFormZhCn implements TranslationsTransferFormEn {
-	_TranslationsTransferFormZhCn._(this._root);
+class _TranslationsTransferFormZhCn extends TranslationsTransferFormEn {
+	_TranslationsTransferFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -885,8 +887,8 @@ class _TranslationsTransferFormZhCn implements TranslationsTransferFormEn {
 }
 
 // Path: recurrent_transactions.details
-class _TranslationsRecurrentTransactionsDetailsZhCn implements TranslationsRecurrentTransactionsDetailsEn {
-	_TranslationsRecurrentTransactionsDetailsZhCn._(this._root);
+class _TranslationsRecurrentTransactionsDetailsZhCn extends TranslationsRecurrentTransactionsDetailsEn {
+	_TranslationsRecurrentTransactionsDetailsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -899,8 +901,8 @@ class _TranslationsRecurrentTransactionsDetailsZhCn implements TranslationsRecur
 }
 
 // Path: recurrent_transactions.status
-class _TranslationsRecurrentTransactionsStatusZhCn implements TranslationsRecurrentTransactionsStatusEn {
-	_TranslationsRecurrentTransactionsStatusZhCn._(this._root);
+class _TranslationsRecurrentTransactionsStatusZhCn extends TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -910,8 +912,8 @@ class _TranslationsRecurrentTransactionsStatusZhCn implements TranslationsRecurr
 }
 
 // Path: account.types
-class _TranslationsAccountTypesZhCn implements TranslationsAccountTypesEn {
-	_TranslationsAccountTypesZhCn._(this._root);
+class _TranslationsAccountTypesZhCn extends TranslationsAccountTypesEn {
+	_TranslationsAccountTypesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -925,8 +927,8 @@ class _TranslationsAccountTypesZhCn implements TranslationsAccountTypesEn {
 }
 
 // Path: account.form
-class _TranslationsAccountFormZhCn implements TranslationsAccountFormEn {
-	_TranslationsAccountFormZhCn._(this._root);
+class _TranslationsAccountFormZhCn extends TranslationsAccountFormEn {
+	_TranslationsAccountFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -947,8 +949,8 @@ class _TranslationsAccountFormZhCn implements TranslationsAccountFormEn {
 }
 
 // Path: account.delete
-class _TranslationsAccountDeleteZhCn implements TranslationsAccountDeleteEn {
-	_TranslationsAccountDeleteZhCn._(this._root);
+class _TranslationsAccountDeleteZhCn extends TranslationsAccountDeleteEn {
+	_TranslationsAccountDeleteZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -959,8 +961,8 @@ class _TranslationsAccountDeleteZhCn implements TranslationsAccountDeleteEn {
 }
 
 // Path: account.close
-class _TranslationsAccountCloseZhCn implements TranslationsAccountCloseEn {
-	_TranslationsAccountCloseZhCn._(this._root);
+class _TranslationsAccountCloseZhCn extends TranslationsAccountCloseEn {
+	_TranslationsAccountCloseZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -975,8 +977,8 @@ class _TranslationsAccountCloseZhCn implements TranslationsAccountCloseEn {
 }
 
 // Path: account.select
-class _TranslationsAccountSelectZhCn implements TranslationsAccountSelectEn {
-	_TranslationsAccountSelectZhCn._(this._root);
+class _TranslationsAccountSelectZhCn extends TranslationsAccountSelectEn {
+	_TranslationsAccountSelectZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -987,8 +989,8 @@ class _TranslationsAccountSelectZhCn implements TranslationsAccountSelectEn {
 }
 
 // Path: currencies.exchange_rate_form
-class _TranslationsCurrenciesExchangeRateFormZhCn implements TranslationsCurrenciesExchangeRateFormEn {
-	_TranslationsCurrenciesExchangeRateFormZhCn._(this._root);
+class _TranslationsCurrenciesExchangeRateFormZhCn extends TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1005,8 +1007,8 @@ class _TranslationsCurrenciesExchangeRateFormZhCn implements TranslationsCurrenc
 }
 
 // Path: currencies.types
-class _TranslationsCurrenciesTypesZhCn implements TranslationsCurrenciesTypesEn {
-	_TranslationsCurrenciesTypesZhCn._(this._root);
+class _TranslationsCurrenciesTypesZhCn extends TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1018,8 +1020,8 @@ class _TranslationsCurrenciesTypesZhCn implements TranslationsCurrenciesTypesEn 
 }
 
 // Path: currencies.currency_form
-class _TranslationsCurrenciesCurrencyFormZhCn implements TranslationsCurrenciesCurrencyFormEn {
-	_TranslationsCurrenciesCurrencyFormZhCn._(this._root);
+class _TranslationsCurrenciesCurrencyFormZhCn extends TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1038,8 +1040,8 @@ class _TranslationsCurrenciesCurrencyFormZhCn implements TranslationsCurrenciesC
 }
 
 // Path: tags.form
-class _TranslationsTagsFormZhCn implements TranslationsTagsFormEn {
-	_TranslationsTagsFormZhCn._(this._root);
+class _TranslationsTagsFormZhCn extends TranslationsTagsFormEn {
+	_TranslationsTagsFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1049,8 +1051,8 @@ class _TranslationsTagsFormZhCn implements TranslationsTagsFormEn {
 }
 
 // Path: tags.select
-class _TranslationsTagsSelectZhCn implements TranslationsTagsSelectEn {
-	_TranslationsTagsSelectZhCn._(this._root);
+class _TranslationsTagsSelectZhCn extends TranslationsTagsSelectEn {
+	_TranslationsTagsSelectZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1060,8 +1062,8 @@ class _TranslationsTagsSelectZhCn implements TranslationsTagsSelectEn {
 }
 
 // Path: categories.select
-class _TranslationsCategoriesSelectZhCn implements TranslationsCategoriesSelectEn {
-	_TranslationsCategoriesSelectZhCn._(this._root);
+class _TranslationsCategoriesSelectZhCn extends TranslationsCategoriesSelectEn {
+	_TranslationsCategoriesSelectZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1075,8 +1077,8 @@ class _TranslationsCategoriesSelectZhCn implements TranslationsCategoriesSelectE
 }
 
 // Path: budgets.form
-class _TranslationsBudgetsFormZhCn implements TranslationsBudgetsFormEn {
-	_TranslationsBudgetsFormZhCn._(this._root);
+class _TranslationsBudgetsFormZhCn extends TranslationsBudgetsFormEn {
+	_TranslationsBudgetsFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1092,8 +1094,8 @@ class _TranslationsBudgetsFormZhCn implements TranslationsBudgetsFormEn {
 }
 
 // Path: budgets.details
-class _TranslationsBudgetsDetailsZhCn implements TranslationsBudgetsDetailsEn {
-	_TranslationsBudgetsDetailsZhCn._(this._root);
+class _TranslationsBudgetsDetailsZhCn extends TranslationsBudgetsDetailsEn {
+	_TranslationsBudgetsDetailsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1106,8 +1108,8 @@ class _TranslationsBudgetsDetailsZhCn implements TranslationsBudgetsDetailsEn {
 }
 
 // Path: budgets.target_timeline_statuses
-class _TranslationsBudgetsTargetTimelineStatusesZhCn implements TranslationsBudgetsTargetTimelineStatusesEn {
-	_TranslationsBudgetsTargetTimelineStatusesZhCn._(this._root);
+class _TranslationsBudgetsTargetTimelineStatusesZhCn extends TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1118,8 +1120,8 @@ class _TranslationsBudgetsTargetTimelineStatusesZhCn implements TranslationsBudg
 }
 
 // Path: budgets.progress
-class _TranslationsBudgetsProgressZhCn implements TranslationsBudgetsProgressEn {
-	_TranslationsBudgetsProgressZhCn._(this._root);
+class _TranslationsBudgetsProgressZhCn extends TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1129,8 +1131,8 @@ class _TranslationsBudgetsProgressZhCn implements TranslationsBudgetsProgressEn 
 }
 
 // Path: goals.type
-class _TranslationsGoalsTypeZhCn implements TranslationsGoalsTypeEn {
-	_TranslationsGoalsTypeZhCn._(this._root);
+class _TranslationsGoalsTypeZhCn extends TranslationsGoalsTypeEn {
+	_TranslationsGoalsTypeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1141,8 +1143,8 @@ class _TranslationsGoalsTypeZhCn implements TranslationsGoalsTypeEn {
 }
 
 // Path: goals.form
-class _TranslationsGoalsFormZhCn implements TranslationsGoalsFormEn {
-	_TranslationsGoalsFormZhCn._(this._root);
+class _TranslationsGoalsFormZhCn extends TranslationsGoalsFormEn {
+	_TranslationsGoalsFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1159,8 +1161,8 @@ class _TranslationsGoalsFormZhCn implements TranslationsGoalsFormEn {
 }
 
 // Path: goals.details
-class _TranslationsGoalsDetailsZhCn implements TranslationsGoalsDetailsEn {
-	_TranslationsGoalsDetailsZhCn._(this._root);
+class _TranslationsGoalsDetailsZhCn extends TranslationsGoalsDetailsEn {
+	_TranslationsGoalsDetailsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1173,8 +1175,8 @@ class _TranslationsGoalsDetailsZhCn implements TranslationsGoalsDetailsEn {
 }
 
 // Path: goals.target_timeline_statuses
-class _TranslationsGoalsTargetTimelineStatusesZhCn implements TranslationsGoalsTargetTimelineStatusesEn {
-	_TranslationsGoalsTargetTimelineStatusesZhCn._(this._root);
+class _TranslationsGoalsTargetTimelineStatusesZhCn extends TranslationsGoalsTargetTimelineStatusesEn {
+	_TranslationsGoalsTargetTimelineStatusesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1185,8 +1187,8 @@ class _TranslationsGoalsTargetTimelineStatusesZhCn implements TranslationsGoalsT
 }
 
 // Path: goals.progress
-class _TranslationsGoalsProgressZhCn implements TranslationsGoalsProgressEn {
-	_TranslationsGoalsProgressZhCn._(this._root);
+class _TranslationsGoalsProgressZhCn extends TranslationsGoalsProgressEn {
+	_TranslationsGoalsProgressZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1196,8 +1198,8 @@ class _TranslationsGoalsProgressZhCn implements TranslationsGoalsProgressEn {
 }
 
 // Path: debts.form
-class _TranslationsDebtsFormZhCn implements TranslationsDebtsFormEn {
-	_TranslationsDebtsFormZhCn._(this._root);
+class _TranslationsDebtsFormZhCn extends TranslationsDebtsFormEn {
+	_TranslationsDebtsFormZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1212,8 +1214,8 @@ class _TranslationsDebtsFormZhCn implements TranslationsDebtsFormEn {
 }
 
 // Path: debts.direction
-class _TranslationsDebtsDirectionZhCn implements TranslationsDebtsDirectionEn {
-	_TranslationsDebtsDirectionZhCn._(this._root);
+class _TranslationsDebtsDirectionZhCn extends TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1223,8 +1225,8 @@ class _TranslationsDebtsDirectionZhCn implements TranslationsDebtsDirectionEn {
 }
 
 // Path: debts.status
-class _TranslationsDebtsStatusZhCn implements TranslationsDebtsStatusEn {
-	_TranslationsDebtsStatusZhCn._(this._root);
+class _TranslationsDebtsStatusZhCn extends TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1234,8 +1236,8 @@ class _TranslationsDebtsStatusZhCn implements TranslationsDebtsStatusEn {
 }
 
 // Path: debts.details
-class _TranslationsDebtsDetailsZhCn implements TranslationsDebtsDetailsEn {
-	_TranslationsDebtsDetailsZhCn._(this._root);
+class _TranslationsDebtsDetailsZhCn extends TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1252,8 +1254,8 @@ class _TranslationsDebtsDetailsZhCn implements TranslationsDebtsDetailsEn {
 }
 
 // Path: debts.empty
-class _TranslationsDebtsEmptyZhCn implements TranslationsDebtsEmptyEn {
-	_TranslationsDebtsEmptyZhCn._(this._root);
+class _TranslationsDebtsEmptyZhCn extends TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1263,8 +1265,8 @@ class _TranslationsDebtsEmptyZhCn implements TranslationsDebtsEmptyEn {
 }
 
 // Path: debts.actions
-class _TranslationsDebtsActionsZhCn implements TranslationsDebtsActionsEn {
-	_TranslationsDebtsActionsZhCn._(this._root);
+class _TranslationsDebtsActionsZhCn extends TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1279,8 +1281,8 @@ class _TranslationsDebtsActionsZhCn implements TranslationsDebtsActionsEn {
 }
 
 // Path: backup.export
-class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
-	_TranslationsBackupExportZhCn._(this._root);
+class _TranslationsBackupExportZhCn extends TranslationsBackupExportEn {
+	_TranslationsBackupExportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1306,8 +1308,8 @@ class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 }
 
 // Path: backup.import
-class _TranslationsBackupImportZhCn implements TranslationsBackupImportEn {
-	_TranslationsBackupImportZhCn._(this._root);
+class _TranslationsBackupImportZhCn extends TranslationsBackupImportEn {
+	_TranslationsBackupImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1327,8 +1329,8 @@ class _TranslationsBackupImportZhCn implements TranslationsBackupImportEn {
 }
 
 // Path: backup.about
-class _TranslationsBackupAboutZhCn implements TranslationsBackupAboutEn {
-	_TranslationsBackupAboutZhCn._(this._root);
+class _TranslationsBackupAboutZhCn extends TranslationsBackupAboutEn {
+	_TranslationsBackupAboutZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1341,8 +1343,8 @@ class _TranslationsBackupAboutZhCn implements TranslationsBackupAboutEn {
 }
 
 // Path: settings.general
-class _TranslationsSettingsGeneralZhCn implements TranslationsSettingsGeneralEn {
-	_TranslationsSettingsGeneralZhCn._(this._root);
+class _TranslationsSettingsGeneralZhCn extends TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1356,8 +1358,8 @@ class _TranslationsSettingsGeneralZhCn implements TranslationsSettingsGeneralEn 
 }
 
 // Path: settings.security
-class _TranslationsSettingsSecurityZhCn implements TranslationsSettingsSecurityEn {
-	_TranslationsSettingsSecurityZhCn._(this._root);
+class _TranslationsSettingsSecurityZhCn extends TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1372,8 +1374,8 @@ class _TranslationsSettingsSecurityZhCn implements TranslationsSettingsSecurityE
 }
 
 // Path: settings.transactions
-class _TranslationsSettingsTransactionsZhCn implements TranslationsSettingsTransactionsEn {
-	_TranslationsSettingsTransactionsZhCn._(this._root);
+class _TranslationsSettingsTransactionsZhCn extends TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1388,8 +1390,8 @@ class _TranslationsSettingsTransactionsZhCn implements TranslationsSettingsTrans
 }
 
 // Path: settings.appearance
-class _TranslationsSettingsAppearanceZhCn implements TranslationsSettingsAppearanceEn {
-	_TranslationsSettingsAppearanceZhCn._(this._root);
+class _TranslationsSettingsAppearanceZhCn extends TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1410,8 +1412,8 @@ class _TranslationsSettingsAppearanceZhCn implements TranslationsSettingsAppeara
 }
 
 // Path: more.data
-class _TranslationsMoreDataZhCn implements TranslationsMoreDataEn {
-	_TranslationsMoreDataZhCn._(this._root);
+class _TranslationsMoreDataZhCn extends TranslationsMoreDataEn {
+	_TranslationsMoreDataZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1426,8 +1428,8 @@ class _TranslationsMoreDataZhCn implements TranslationsMoreDataEn {
 }
 
 // Path: more.about_us
-class _TranslationsMoreAboutUsZhCn implements TranslationsMoreAboutUsEn {
-	_TranslationsMoreAboutUsZhCn._(this._root);
+class _TranslationsMoreAboutUsZhCn extends TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1439,8 +1441,8 @@ class _TranslationsMoreAboutUsZhCn implements TranslationsMoreAboutUsEn {
 }
 
 // Path: more.help_us
-class _TranslationsMoreHelpUsZhCn implements TranslationsMoreHelpUsEn {
-	_TranslationsMoreHelpUsZhCn._(this._root);
+class _TranslationsMoreHelpUsZhCn extends TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1462,8 +1464,8 @@ class _TranslationsMoreHelpUsZhCn implements TranslationsMoreHelpUsEn {
 }
 
 // Path: general.time.ranges
-class _TranslationsGeneralTimeRangesZhCn implements TranslationsGeneralTimeRangesEn {
-	_TranslationsGeneralTimeRangesZhCn._(this._root);
+class _TranslationsGeneralTimeRangesZhCn extends TranslationsGeneralTimeRangesEn {
+	_TranslationsGeneralTimeRangesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1508,8 +1510,8 @@ class _TranslationsGeneralTimeRangesZhCn implements TranslationsGeneralTimeRange
 }
 
 // Path: general.time.periodicity
-class _TranslationsGeneralTimePeriodicityZhCn implements TranslationsGeneralTimePeriodicityEn {
-	_TranslationsGeneralTimePeriodicityZhCn._(this._root);
+class _TranslationsGeneralTimePeriodicityZhCn extends TranslationsGeneralTimePeriodicityEn {
+	_TranslationsGeneralTimePeriodicityZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1530,8 +1532,8 @@ class _TranslationsGeneralTimePeriodicityZhCn implements TranslationsGeneralTime
 }
 
 // Path: general.time.current
-class _TranslationsGeneralTimeCurrentZhCn implements TranslationsGeneralTimeCurrentEn {
-	_TranslationsGeneralTimeCurrentZhCn._(this._root);
+class _TranslationsGeneralTimeCurrentZhCn extends TranslationsGeneralTimeCurrentEn {
+	_TranslationsGeneralTimeCurrentZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1545,8 +1547,8 @@ class _TranslationsGeneralTimeCurrentZhCn implements TranslationsGeneralTimeCurr
 }
 
 // Path: general.time.all
-class _TranslationsGeneralTimeAllZhCn implements TranslationsGeneralTimeAllEn {
-	_TranslationsGeneralTimeAllZhCn._(this._root);
+class _TranslationsGeneralTimeAllZhCn extends TranslationsGeneralTimeAllEn {
+	_TranslationsGeneralTimeAllZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1559,8 +1561,8 @@ class _TranslationsGeneralTimeAllZhCn implements TranslationsGeneralTimeAllEn {
 }
 
 // Path: financial_health.review.descr
-class _TranslationsFinancialHealthReviewDescrZhCn implements TranslationsFinancialHealthReviewDescrEn {
-	_TranslationsFinancialHealthReviewDescrZhCn._(this._root);
+class _TranslationsFinancialHealthReviewDescrZhCn extends TranslationsFinancialHealthReviewDescrEn {
+	_TranslationsFinancialHealthReviewDescrZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1574,8 +1576,8 @@ class _TranslationsFinancialHealthReviewDescrZhCn implements TranslationsFinanci
 }
 
 // Path: financial_health.savings_percentage.text
-class _TranslationsFinancialHealthSavingsPercentageTextZhCn implements TranslationsFinancialHealthSavingsPercentageTextEn {
-	_TranslationsFinancialHealthSavingsPercentageTextZhCn._(this._root);
+class _TranslationsFinancialHealthSavingsPercentageTextZhCn extends TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1587,8 +1589,8 @@ class _TranslationsFinancialHealthSavingsPercentageTextZhCn implements Translati
 }
 
 // Path: transaction.list.bulk_edit
-class _TranslationsTransactionListBulkEditZhCn implements TranslationsTransactionListBulkEditEn {
-	_TranslationsTransactionListBulkEditZhCn._(this._root);
+class _TranslationsTransactionListBulkEditZhCn extends TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1599,8 +1601,8 @@ class _TranslationsTransactionListBulkEditZhCn implements TranslationsTransactio
 }
 
 // Path: transaction.filters.saved
-class _TranslationsTransactionFiltersSavedZhCn implements TranslationsTransactionFiltersSavedEn {
-	_TranslationsTransactionFiltersSavedZhCn._(this._root);
+class _TranslationsTransactionFiltersSavedZhCn extends TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1620,8 +1622,8 @@ class _TranslationsTransactionFiltersSavedZhCn implements TranslationsTransactio
 }
 
 // Path: transaction.form.validators
-class _TranslationsTransactionFormValidatorsZhCn implements TranslationsTransactionFormValidatorsEn {
-	_TranslationsTransactionFormValidatorsZhCn._(this._root);
+class _TranslationsTransactionFormValidatorsZhCn extends TranslationsTransactionFormValidatorsEn {
+	_TranslationsTransactionFormValidatorsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1634,8 +1636,8 @@ class _TranslationsTransactionFormValidatorsZhCn implements TranslationsTransact
 }
 
 // Path: transfer.form.value_in_destiny
-class _TranslationsTransferFormValueInDestinyZhCn implements TranslationsTransferFormValueInDestinyEn {
-	_TranslationsTransferFormValueInDestinyZhCn._(this._root);
+class _TranslationsTransferFormValueInDestinyZhCn extends TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1645,8 +1647,8 @@ class _TranslationsTransferFormValueInDestinyZhCn implements TranslationsTransfe
 }
 
 // Path: budgets.progress.labels
-class _TranslationsBudgetsProgressLabelsZhCn implements TranslationsBudgetsProgressLabelsEn {
-	_TranslationsBudgetsProgressLabelsZhCn._(this._root);
+class _TranslationsBudgetsProgressLabelsZhCn extends TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1659,8 +1661,8 @@ class _TranslationsBudgetsProgressLabelsZhCn implements TranslationsBudgetsProgr
 }
 
 // Path: budgets.progress.description
-class _TranslationsBudgetsProgressDescriptionZhCn implements TranslationsBudgetsProgressDescriptionEn {
-	_TranslationsBudgetsProgressDescriptionZhCn._(this._root);
+class _TranslationsBudgetsProgressDescriptionZhCn extends TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1674,8 +1676,8 @@ class _TranslationsBudgetsProgressDescriptionZhCn implements TranslationsBudgets
 }
 
 // Path: goals.type.income
-class _TranslationsGoalsTypeIncomeZhCn implements TranslationsGoalsTypeIncomeEn {
-	_TranslationsGoalsTypeIncomeZhCn._(this._root);
+class _TranslationsGoalsTypeIncomeZhCn extends TranslationsGoalsTypeIncomeEn {
+	_TranslationsGoalsTypeIncomeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1685,8 +1687,8 @@ class _TranslationsGoalsTypeIncomeZhCn implements TranslationsGoalsTypeIncomeEn 
 }
 
 // Path: goals.type.expense
-class _TranslationsGoalsTypeExpenseZhCn implements TranslationsGoalsTypeExpenseEn {
-	_TranslationsGoalsTypeExpenseZhCn._(this._root);
+class _TranslationsGoalsTypeExpenseZhCn extends TranslationsGoalsTypeExpenseEn {
+	_TranslationsGoalsTypeExpenseZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1696,8 +1698,8 @@ class _TranslationsGoalsTypeExpenseZhCn implements TranslationsGoalsTypeExpenseE
 }
 
 // Path: goals.progress.labels
-class _TranslationsGoalsProgressLabelsZhCn implements TranslationsGoalsProgressLabelsEn {
-	_TranslationsGoalsProgressLabelsZhCn._(this._root);
+class _TranslationsGoalsProgressLabelsZhCn extends TranslationsGoalsProgressLabelsEn {
+	_TranslationsGoalsProgressLabelsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1710,8 +1712,8 @@ class _TranslationsGoalsProgressLabelsZhCn implements TranslationsGoalsProgressL
 }
 
 // Path: goals.progress.description
-class _TranslationsGoalsProgressDescriptionZhCn implements TranslationsGoalsProgressDescriptionEn {
-	_TranslationsGoalsProgressDescriptionZhCn._(this._root);
+class _TranslationsGoalsProgressDescriptionZhCn extends TranslationsGoalsProgressDescriptionEn {
+	_TranslationsGoalsProgressDescriptionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1724,8 +1726,8 @@ class _TranslationsGoalsProgressDescriptionZhCn implements TranslationsGoalsProg
 }
 
 // Path: debts.form.from_transaction
-class _TranslationsDebtsFormFromTransactionZhCn implements TranslationsDebtsFormFromTransactionEn {
-	_TranslationsDebtsFormFromTransactionZhCn._(this._root);
+class _TranslationsDebtsFormFromTransactionZhCn extends TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1735,8 +1737,8 @@ class _TranslationsDebtsFormFromTransactionZhCn implements TranslationsDebtsForm
 }
 
 // Path: debts.form.from_amount
-class _TranslationsDebtsFormFromAmountZhCn implements TranslationsDebtsFormFromAmountEn {
-	_TranslationsDebtsFormFromAmountZhCn._(this._root);
+class _TranslationsDebtsFormFromAmountZhCn extends TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1746,8 +1748,8 @@ class _TranslationsDebtsFormFromAmountZhCn implements TranslationsDebtsFormFromA
 }
 
 // Path: debts.actions.edit
-class _TranslationsDebtsActionsEditZhCn implements TranslationsDebtsActionsEditEn {
-	_TranslationsDebtsActionsEditZhCn._(this._root);
+class _TranslationsDebtsActionsEditZhCn extends TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1757,8 +1759,8 @@ class _TranslationsDebtsActionsEditZhCn implements TranslationsDebtsActionsEditE
 }
 
 // Path: debts.actions.delete
-class _TranslationsDebtsActionsDeleteZhCn implements TranslationsDebtsActionsDeleteEn {
-	_TranslationsDebtsActionsDeleteZhCn._(this._root);
+class _TranslationsDebtsActionsDeleteZhCn extends TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1768,8 +1770,8 @@ class _TranslationsDebtsActionsDeleteZhCn implements TranslationsDebtsActionsDel
 }
 
 // Path: debts.actions.add_register
-class _TranslationsDebtsActionsAddRegisterZhCn implements TranslationsDebtsActionsAddRegisterEn {
-	_TranslationsDebtsActionsAddRegisterZhCn._(this._root);
+class _TranslationsDebtsActionsAddRegisterZhCn extends TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1782,8 +1784,8 @@ class _TranslationsDebtsActionsAddRegisterZhCn implements TranslationsDebtsActio
 }
 
 // Path: debts.actions.link_transaction
-class _TranslationsDebtsActionsLinkTransactionZhCn implements TranslationsDebtsActionsLinkTransactionEn {
-	_TranslationsDebtsActionsLinkTransactionZhCn._(this._root);
+class _TranslationsDebtsActionsLinkTransactionZhCn extends TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1795,8 +1797,8 @@ class _TranslationsDebtsActionsLinkTransactionZhCn implements TranslationsDebtsA
 }
 
 // Path: debts.actions.unlink_transaction
-class _TranslationsDebtsActionsUnlinkTransactionZhCn implements TranslationsDebtsActionsUnlinkTransactionEn {
-	_TranslationsDebtsActionsUnlinkTransactionZhCn._(this._root);
+class _TranslationsDebtsActionsUnlinkTransactionZhCn extends TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1807,8 +1809,8 @@ class _TranslationsDebtsActionsUnlinkTransactionZhCn implements TranslationsDebt
 }
 
 // Path: debts.actions.new_transaction
-class _TranslationsDebtsActionsNewTransactionZhCn implements TranslationsDebtsActionsNewTransactionEn {
-	_TranslationsDebtsActionsNewTransactionZhCn._(this._root);
+class _TranslationsDebtsActionsNewTransactionZhCn extends TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1818,8 +1820,8 @@ class _TranslationsDebtsActionsNewTransactionZhCn implements TranslationsDebtsAc
 }
 
 // Path: debts.actions.create
-class _TranslationsDebtsActionsCreateZhCn implements TranslationsDebtsActionsCreateEn {
-	_TranslationsDebtsActionsCreateZhCn._(this._root);
+class _TranslationsDebtsActionsCreateZhCn extends TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1829,8 +1831,8 @@ class _TranslationsDebtsActionsCreateZhCn implements TranslationsDebtsActionsCre
 }
 
 // Path: backup.import.manual_import
-class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImportManualImportEn {
-	_TranslationsBackupImportManualImportZhCn._(this._root);
+class _TranslationsBackupImportManualImportZhCn extends TranslationsBackupImportManualImportEn {
+	_TranslationsBackupImportManualImportZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1861,8 +1863,8 @@ class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImp
 }
 
 // Path: settings.general.language
-class _TranslationsSettingsGeneralLanguageZhCn implements TranslationsSettingsGeneralLanguageEn {
-	_TranslationsSettingsGeneralLanguageZhCn._(this._root);
+class _TranslationsSettingsGeneralLanguageZhCn extends TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1874,8 +1876,8 @@ class _TranslationsSettingsGeneralLanguageZhCn implements TranslationsSettingsGe
 }
 
 // Path: settings.general.locale
-class _TranslationsSettingsGeneralLocaleZhCn implements TranslationsSettingsGeneralLocaleEn {
-	_TranslationsSettingsGeneralLocaleZhCn._(this._root);
+class _TranslationsSettingsGeneralLocaleZhCn extends TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1888,8 +1890,8 @@ class _TranslationsSettingsGeneralLocaleZhCn implements TranslationsSettingsGene
 }
 
 // Path: settings.transactions.style
-class _TranslationsSettingsTransactionsStyleZhCn implements TranslationsSettingsTransactionsStyleEn {
-	_TranslationsSettingsTransactionsStyleZhCn._(this._root);
+class _TranslationsSettingsTransactionsStyleZhCn extends TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1901,8 +1903,8 @@ class _TranslationsSettingsTransactionsStyleZhCn implements TranslationsSettings
 }
 
 // Path: settings.transactions.swipe_actions
-class _TranslationsSettingsTransactionsSwipeActionsZhCn implements TranslationsSettingsTransactionsSwipeActionsEn {
-	_TranslationsSettingsTransactionsSwipeActionsZhCn._(this._root);
+class _TranslationsSettingsTransactionsSwipeActionsZhCn extends TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1920,8 +1922,8 @@ class _TranslationsSettingsTransactionsSwipeActionsZhCn implements TranslationsS
 }
 
 // Path: settings.transactions.default_values
-class _TranslationsSettingsTransactionsDefaultValuesZhCn implements TranslationsSettingsTransactionsDefaultValuesEn {
-	_TranslationsSettingsTransactionsDefaultValuesZhCn._(this._root);
+class _TranslationsSettingsTransactionsDefaultValuesZhCn extends TranslationsSettingsTransactionsDefaultValuesEn {
+	_TranslationsSettingsTransactionsDefaultValuesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1940,8 +1942,8 @@ class _TranslationsSettingsTransactionsDefaultValuesZhCn implements Translations
 }
 
 // Path: settings.transactions.default_type
-class _TranslationsSettingsTransactionsDefaultTypeZhCn implements TranslationsSettingsTransactionsDefaultTypeEn {
-	_TranslationsSettingsTransactionsDefaultTypeZhCn._(this._root);
+class _TranslationsSettingsTransactionsDefaultTypeZhCn extends TranslationsSettingsTransactionsDefaultTypeEn {
+	_TranslationsSettingsTransactionsDefaultTypeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1951,8 +1953,8 @@ class _TranslationsSettingsTransactionsDefaultTypeZhCn implements TranslationsSe
 }
 
 // Path: settings.appearance.theme
-class _TranslationsSettingsAppearanceThemeZhCn implements TranslationsSettingsAppearanceThemeEn {
-	_TranslationsSettingsAppearanceThemeZhCn._(this._root);
+class _TranslationsSettingsAppearanceThemeZhCn extends TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1964,8 +1966,8 @@ class _TranslationsSettingsAppearanceThemeZhCn implements TranslationsSettingsAp
 }
 
 // Path: more.about_us.legal
-class _TranslationsMoreAboutUsLegalZhCn implements TranslationsMoreAboutUsLegalEn {
-	_TranslationsMoreAboutUsLegalZhCn._(this._root);
+class _TranslationsMoreAboutUsLegalZhCn extends TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1977,8 +1979,8 @@ class _TranslationsMoreAboutUsLegalZhCn implements TranslationsMoreAboutUsLegalE
 }
 
 // Path: more.about_us.project
-class _TranslationsMoreAboutUsProjectZhCn implements TranslationsMoreAboutUsProjectEn {
-	_TranslationsMoreAboutUsProjectZhCn._(this._root);
+class _TranslationsMoreAboutUsProjectZhCn extends TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 
@@ -1990,8 +1992,8 @@ class _TranslationsMoreAboutUsProjectZhCn implements TranslationsMoreAboutUsProj
 }
 
 // Path: general.time.ranges.types
-class _TranslationsGeneralTimeRangesTypesZhCn implements TranslationsGeneralTimeRangesTypesEn {
-	_TranslationsGeneralTimeRangesTypesZhCn._(this._root);
+class _TranslationsGeneralTimeRangesTypesZhCn extends TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesZhCn._(TranslationsZhCn root) : this._root = root, super.internal(root);
 
 	final TranslationsZhCn _root; // ignore: unused_field
 

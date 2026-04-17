@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -124,7 +126,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     );
 
     if (confirmed == true) {
-      CurrencyService.instance
+      unawaited(CurrencyService.instance
           .deleteCurrency(_currency.code)
           .then((value) {
             WallexSnackbar.success(
@@ -135,7 +137,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
           })
           .catchError((err) {
             WallexSnackbar.error(SnackbarParams.fromError(err));
-          });
+          }));
     }
   }
 
@@ -281,8 +283,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +307,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
     return Column(
       children: [
         const SizedBox(height: 8),

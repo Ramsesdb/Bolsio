@@ -6,7 +6,7 @@ import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/utils/drift_utils.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/count_indicator.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -195,50 +195,55 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
     return Expanded(
       child: Stack(
         children: [
-          ListView.separated(
-            controller: scrollController,
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            itemCount: allAccounts.length,
-            padding: const EdgeInsets.only(bottom: 16, top: 4),
-            separatorBuilder: (context, i) {
-              return const Divider(height: 0);
+          RadioGroup<String>(
+            groupValue: selectedAccounts.firstOrNull?.id,
+            onChanged: (value) {
+              if (value == null) return;
+              final account = allAccounts.firstWhere((a) => a.id == value);
+              setState(() {
+                selectedAccounts = [account];
+                RouteUtils.popRoute(selectedAccounts);
+              });
             },
-            itemBuilder: (context, index) {
-              final account = allAccounts[index];
+            child: ListView.separated(
+              controller: scrollController,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              itemCount: allAccounts.length,
+              padding: const EdgeInsets.only(bottom: 16, top: 4),
+              separatorBuilder: (context, i) {
+                return const Divider(height: 0);
+              },
+              itemBuilder: (context, index) {
+                final account = allAccounts[index];
 
-              if (!widget.allowMultiSelection) {
-                return RadioListTile(
-                  value: account.id,
-                  title: Text(account.name),
-                  secondary: account.displayIcon(context),
-                  groupValue: selectedAccounts.firstOrNull?.id,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedAccounts = [account];
+                if (!widget.allowMultiSelection) {
+                  return RadioListTile<String>(
+                    value: account.id,
+                    title: Text(account.name),
+                    secondary: account.displayIcon(context),
+                  );
+                } else {
+                  return CheckboxListTile(
+                    value: selectedAccounts
+                        .map((e) => e.id)
+                        .contains(account.id),
+                    title: Text(account.name),
+                    secondary: account.displayIcon(context),
+                    onChanged: (value) {
+                      if (value == true) {
+                        selectedAccounts.add(account);
+                      } else {
+                        selectedAccounts.removeWhere(
+                          (element) => element.id == account.id,
+                        );
+                      }
 
-                      RouteUtils.popRoute(selectedAccounts);
-                    });
-                  },
-                );
-              } else {
-                return CheckboxListTile(
-                  value: selectedAccounts.map((e) => e.id).contains(account.id),
-                  title: Text(account.name),
-                  secondary: account.displayIcon(context),
-                  onChanged: (value) {
-                    if (value == true) {
-                      selectedAccounts.add(account);
-                    } else {
-                      selectedAccounts.removeWhere(
-                        (element) => element.id == account.id,
-                      );
-                    }
-
-                    rebuild();
-                  },
-                );
-              }
-            },
+                      rebuild();
+                    },
+                  );
+                }
+              },
+            ),
           ),
           if (widget.allowMultiSelection)
             ScrollableWithBottomGradient.buildPositionedGradient(

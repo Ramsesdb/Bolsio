@@ -6,7 +6,7 @@ import 'package:wallex/core/database/services/tags/tags_service.dart';
 import 'package:wallex/core/extensions/string.extension.dart';
 import 'package:wallex/core/models/tags/tag.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/count_indicator.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';

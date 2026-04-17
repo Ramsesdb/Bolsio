@@ -85,6 +85,7 @@ class CategoryFormFunctions {
       if (selCategory == null) {
         return;
       }
+      if (!context.mounted) return;
 
       confirmDialog(
         context,
@@ -173,6 +174,7 @@ class CategoryFormFunctions {
       if (selCategory == null) {
         return;
       }
+      if (!context.mounted) return;
 
       confirmDialog(
         context,

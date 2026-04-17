@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
@@ -18,13 +19,13 @@ class CategoryService {
 
   Future<int> insertCategory(CategoryInDB category) async {
     final toReturn = await db.into(db.categories).insert(category);
-    FirebaseSyncService.instance.pushCategory(category);
+    unawaited(FirebaseSyncService.instance.pushCategory(category));
     return toReturn;
   }
 
   Future<bool> updateCategory(CategoryInDB category) async {
     final toReturn = await db.update(db.categories).replace(category);
-    FirebaseSyncService.instance.pushCategory(category);
+    unawaited(FirebaseSyncService.instance.pushCategory(category));
     return toReturn;
   }
 

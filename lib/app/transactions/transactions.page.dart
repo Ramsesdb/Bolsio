@@ -61,7 +61,7 @@ class TransactionsPageState extends State<TransactionsPage> {
 
     filters = widget.filters ?? const TransactionFilterSet();
 
-    print("INITIAL FILTERS: $filters");
+    debugPrint("INITIAL FILTERS: $filters");
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
