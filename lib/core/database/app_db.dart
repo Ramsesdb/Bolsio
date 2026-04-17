@@ -44,12 +44,11 @@ class AppDB extends _$AppDB {
   /// Bypasses file-based connection and the production migration/seeder logic.
   /// The [_isTestInstance] flag causes [migration] to skip `beforeOpen` hooks
   /// that depend on Flutter bindings (path_provider, asset bundle, etc.).
-  AppDB.forTesting(QueryExecutor executor)
+  AppDB.forTesting(super.executor)
       : dbName = 'test.db',
         inMemory = true,
         logStatements = false,
-        _isTestInstance = true,
-        super(executor);
+        _isTestInstance = true;
 
   static final AppDB instance = AppDB._(
     dbName: 'database.db',
@@ -134,6 +133,8 @@ class AppDB extends _$AppDB {
         }
 
         await customStatement('PRAGMA foreign_keys = ON');
+        await customStatement('PRAGMA journal_mode = WAL;');
+        await customStatement('PRAGMA busy_timeout = 5000;');
 
         final dbVersion = int.parse(
           (await AppDataService.instance

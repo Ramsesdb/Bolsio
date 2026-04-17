@@ -817,12 +817,14 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
           createdAt: DateTime.now(),
         );
 
-        await TransactionService.instance.insertTransaction(transaction);
-        await PendingImportService.instance.updatePendingImportStatus(
-          widget.pendingImport.id,
-          TransactionProposalStatus.confirmed,
-          createdTransactionId: newTxId,
-        );
+        await AppDB.instance.transaction(() async {
+          await TransactionService.instance.insertTransaction(transaction);
+          await PendingImportService.instance.updatePendingImportStatus(
+            widget.pendingImport.id,
+            TransactionProposalStatus.confirmed,
+            createdTransactionId: newTxId,
+          );
+        });
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -873,12 +875,14 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
           createdAt: DateTime.now(),
         );
 
-        await TransactionService.instance.insertTransaction(transaction);
-        await PendingImportService.instance.updatePendingImportStatus(
-          widget.pendingImport.id,
-          TransactionProposalStatus.confirmed,
-          createdTransactionId: newTxId,
-        );
+        await AppDB.instance.transaction(() async {
+          await TransactionService.instance.insertTransaction(transaction);
+          await PendingImportService.instance.updatePendingImportStatus(
+            widget.pendingImport.id,
+            TransactionProposalStatus.confirmed,
+            createdTransactionId: newTxId,
+          );
+        });
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -908,13 +912,11 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
 
     final normalized = categories.where((category) {
       if (type == TransactionType.income) {
-        return category.type == null ||
-            category.type == CategoryType.I ||
+        return category.type == CategoryType.I ||
             category.type == CategoryType.B;
       }
 
-      return category.type == null ||
-          category.type == CategoryType.E ||
+      return category.type == CategoryType.E ||
           category.type == CategoryType.B;
     }).toList();
 
@@ -935,8 +937,7 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
 
     for (final category in categories) {
       final name = category.name.toLowerCase();
-      final isExpenseLike = category.type == null ||
-          category.type == CategoryType.E ||
+      final isExpenseLike = category.type == CategoryType.E ||
           category.type == CategoryType.B;
       if (isExpenseLike && (name.contains('ahorro') || name.contains('ahorros'))) {
         return category;
