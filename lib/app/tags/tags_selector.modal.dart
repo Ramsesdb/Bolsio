@@ -132,7 +132,7 @@ class _TagSelectorState extends State<TagSelector>
     if (allTags.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16),
-        child: Text(t.account.no_accounts, textAlign: TextAlign.center),
+        child: Text(t.tags.empty_list, textAlign: TextAlign.center),
       );
     }
 
