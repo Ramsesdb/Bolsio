@@ -146,6 +146,19 @@ class HiddenModeService with WidgetsBindingObserver {
         salt.isNotEmpty;
   }
 
+  // for Firebase sync only
+  Future<String?> readPinHash() => _storage.read(key: _kPinHashKey);
+
+  // for Firebase sync only
+  Future<String?> readPinSalt() => _storage.read(key: _kPinSaltKey);
+
+  // for Firebase sync only — writes both atomically and resets lock state so
+  // the service behaves as if the PIN had been provisioned locally.
+  Future<void> writePinHashAndSalt(String hash, String salt) async {
+    await _storage.write(key: _kPinSaltKey, value: salt);
+    await _storage.write(key: _kPinHashKey, value: hash);
+  }
+
   /// Generate a fresh 16-byte salt, hash with SHA-256 and persist both.
   /// After a successful setPin the feature is toggled on and the service is
   /// left in the locked state.

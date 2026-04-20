@@ -19,6 +19,12 @@ enum SettingKey {
   /// Key to storage if the user will enter in the "private mode" when the app launches.
   privateModeAtLaunch,
 
+  /// Last persisted state of the "private mode" toggle. '1' = on, '0' or null
+  /// = off. This survives app restarts so the runtime toggle state persists
+  /// session to session (independent of [privateModeAtLaunch], which is the
+  /// user preference for forcing ON at every launch).
+  privateMode,
+
   /// Key to storage the app theme. Could be 'system', 'light' or 'dark'
   themeMode,
 

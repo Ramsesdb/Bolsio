@@ -18,8 +18,13 @@ class PrivateModeService {
     _privateModeController.close();
   }
 
-  void setPrivateMode(bool value) {
+  Future<void> setPrivateMode(bool value) async {
     _privateModeController.add(value);
+    await userSettingsService.setItem(
+      SettingKey.privateMode,
+      value ? '1' : '0',
+      updateGlobalState: false,
+    );
   }
 
   /// Set if the app should start in private mode

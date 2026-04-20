@@ -440,3 +440,17 @@ CREATE TABLE IF NOT EXISTS attachments (
 CREATE INDEX IF NOT EXISTS idx_attachments_owner
   ON attachments(ownerType, ownerId);
 
+CREATE TABLE IF NOT EXISTS statementImportBatches (
+  id           TEXT NOT NULL PRIMARY KEY,
+  accountId    TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  createdAt    DATETIME NOT NULL,
+  mode         TEXT NOT NULL,
+  transactionIds TEXT NOT NULL
+) AS StatementImportBatchInDB;
+
+CREATE INDEX IF NOT EXISTS idx_sib_account
+  ON statementImportBatches(accountId);
+
+CREATE INDEX IF NOT EXISTS idx_sib_created
+  ON statementImportBatches(createdAt);
+

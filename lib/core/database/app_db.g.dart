@@ -9339,6 +9339,382 @@ class AttachmentsCompanion extends UpdateCompanion<AttachmentInDB> {
   }
 }
 
+class StatementImportBatches extends Table
+    with TableInfo<StatementImportBatches, StatementImportBatchInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  StatementImportBatches(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _accountIdMeta = const VerificationMeta(
+    'accountId',
+  );
+  late final GeneratedColumn<String> accountId = GeneratedColumn<String>(
+    'accountId',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES accounts(id)ON DELETE CASCADE',
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'createdAt',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _transactionIdsMeta = const VerificationMeta(
+    'transactionIds',
+  );
+  late final GeneratedColumn<String> transactionIds = GeneratedColumn<String>(
+    'transactionIds',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    accountId,
+    createdAt,
+    mode,
+    transactionIds,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'statementImportBatches';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<StatementImportBatchInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('accountId')) {
+      context.handle(
+        _accountIdMeta,
+        accountId.isAcceptableOrUnknown(data['accountId']!, _accountIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accountIdMeta);
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(
+        _modeMeta,
+        mode.isAcceptableOrUnknown(data['mode']!, _modeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('transactionIds')) {
+      context.handle(
+        _transactionIdsMeta,
+        transactionIds.isAcceptableOrUnknown(
+          data['transactionIds']!,
+          _transactionIdsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_transactionIdsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  StatementImportBatchInDB map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StatementImportBatchInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      accountId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}accountId'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}createdAt'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mode'],
+      )!,
+      transactionIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transactionIds'],
+      )!,
+    );
+  }
+
+  @override
+  StatementImportBatches createAlias(String alias) {
+    return StatementImportBatches(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class StatementImportBatchInDB extends DataClass
+    implements Insertable<StatementImportBatchInDB> {
+  final String id;
+  final String accountId;
+  final DateTime createdAt;
+  final String mode;
+  final String transactionIds;
+  const StatementImportBatchInDB({
+    required this.id,
+    required this.accountId,
+    required this.createdAt,
+    required this.mode,
+    required this.transactionIds,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['accountId'] = Variable<String>(accountId);
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    map['mode'] = Variable<String>(mode);
+    map['transactionIds'] = Variable<String>(transactionIds);
+    return map;
+  }
+
+  StatementImportBatchesCompanion toCompanion(bool nullToAbsent) {
+    return StatementImportBatchesCompanion(
+      id: Value(id),
+      accountId: Value(accountId),
+      createdAt: Value(createdAt),
+      mode: Value(mode),
+      transactionIds: Value(transactionIds),
+    );
+  }
+
+  factory StatementImportBatchInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StatementImportBatchInDB(
+      id: serializer.fromJson<String>(json['id']),
+      accountId: serializer.fromJson<String>(json['accountId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      mode: serializer.fromJson<String>(json['mode']),
+      transactionIds: serializer.fromJson<String>(json['transactionIds']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'accountId': serializer.toJson<String>(accountId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'mode': serializer.toJson<String>(mode),
+      'transactionIds': serializer.toJson<String>(transactionIds),
+    };
+  }
+
+  StatementImportBatchInDB copyWith({
+    String? id,
+    String? accountId,
+    DateTime? createdAt,
+    String? mode,
+    String? transactionIds,
+  }) => StatementImportBatchInDB(
+    id: id ?? this.id,
+    accountId: accountId ?? this.accountId,
+    createdAt: createdAt ?? this.createdAt,
+    mode: mode ?? this.mode,
+    transactionIds: transactionIds ?? this.transactionIds,
+  );
+  StatementImportBatchInDB copyWithCompanion(
+    StatementImportBatchesCompanion data,
+  ) {
+    return StatementImportBatchInDB(
+      id: data.id.present ? data.id.value : this.id,
+      accountId: data.accountId.present ? data.accountId.value : this.accountId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      transactionIds: data.transactionIds.present
+          ? data.transactionIds.value
+          : this.transactionIds,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StatementImportBatchInDB(')
+          ..write('id: $id, ')
+          ..write('accountId: $accountId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('mode: $mode, ')
+          ..write('transactionIds: $transactionIds')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, accountId, createdAt, mode, transactionIds);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StatementImportBatchInDB &&
+          other.id == this.id &&
+          other.accountId == this.accountId &&
+          other.createdAt == this.createdAt &&
+          other.mode == this.mode &&
+          other.transactionIds == this.transactionIds);
+}
+
+class StatementImportBatchesCompanion
+    extends UpdateCompanion<StatementImportBatchInDB> {
+  final Value<String> id;
+  final Value<String> accountId;
+  final Value<DateTime> createdAt;
+  final Value<String> mode;
+  final Value<String> transactionIds;
+  final Value<int> rowid;
+  const StatementImportBatchesCompanion({
+    this.id = const Value.absent(),
+    this.accountId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.transactionIds = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StatementImportBatchesCompanion.insert({
+    required String id,
+    required String accountId,
+    required DateTime createdAt,
+    required String mode,
+    required String transactionIds,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       accountId = Value(accountId),
+       createdAt = Value(createdAt),
+       mode = Value(mode),
+       transactionIds = Value(transactionIds);
+  static Insertable<StatementImportBatchInDB> custom({
+    Expression<String>? id,
+    Expression<String>? accountId,
+    Expression<DateTime>? createdAt,
+    Expression<String>? mode,
+    Expression<String>? transactionIds,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (accountId != null) 'accountId': accountId,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (mode != null) 'mode': mode,
+      if (transactionIds != null) 'transactionIds': transactionIds,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StatementImportBatchesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? accountId,
+    Value<DateTime>? createdAt,
+    Value<String>? mode,
+    Value<String>? transactionIds,
+    Value<int>? rowid,
+  }) {
+    return StatementImportBatchesCompanion(
+      id: id ?? this.id,
+      accountId: accountId ?? this.accountId,
+      createdAt: createdAt ?? this.createdAt,
+      mode: mode ?? this.mode,
+      transactionIds: transactionIds ?? this.transactionIds,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (accountId.present) {
+      map['accountId'] = Variable<String>(accountId.value);
+    }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (transactionIds.present) {
+      map['transactionIds'] = Variable<String>(transactionIds.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StatementImportBatchesCompanion(')
+          ..write('id: $id, ')
+          ..write('accountId: $accountId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('mode: $mode, ')
+          ..write('transactionIds: $transactionIds, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDB extends GeneratedDatabase {
   _$AppDB(QueryExecutor e) : super(e);
   $AppDBManager get managers => $AppDBManager(this);
@@ -9363,6 +9739,16 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final Index idxAttachmentsOwner = Index(
     'idx_attachments_owner',
     'CREATE INDEX IF NOT EXISTS idx_attachments_owner ON attachments (ownerType, ownerId)',
+  );
+  late final StatementImportBatches statementImportBatches =
+      StatementImportBatches(this);
+  late final Index idxSibAccount = Index(
+    'idx_sib_account',
+    'CREATE INDEX IF NOT EXISTS idx_sib_account ON statementImportBatches (accountId)',
+  );
+  late final Index idxSibCreated = Index(
+    'idx_sib_created',
+    'CREATE INDEX IF NOT EXISTS idx_sib_created ON statementImportBatches (createdAt)',
   );
   Selectable<Account> getAccountsWithFullData({
     GetAccountsWithFullData$predicate? predicate,
@@ -10004,6 +10390,9 @@ abstract class _$AppDB extends GeneratedDatabase {
     pendingImports,
     attachments,
     idxAttachmentsOwner,
+    statementImportBatches,
+    idxSibAccount,
+    idxSibCreated,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -10230,6 +10619,13 @@ abstract class _$AppDB extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('pendingImports', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('statementImportBatches', kind: UpdateKind.delete)],
     ),
   ]);
   @override
@@ -10804,6 +11200,32 @@ final class $AccountsReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<
+    StatementImportBatches,
+    List<StatementImportBatchInDB>
+  >
+  _statementImportBatchesRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.statementImportBatches,
+    aliasName: $_aliasNameGenerator(
+      db.accounts.id,
+      db.statementImportBatches.accountId,
+    ),
+  );
+
+  $StatementImportBatchesProcessedTableManager get statementImportBatchesRefs {
+    final manager = $StatementImportBatchesTableManager(
+      $_db,
+      $_db.statementImportBatches,
+    ).filter((f) => f.accountId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _statementImportBatchesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
@@ -10901,6 +11323,31 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
           ),
     );
     return composer;
+  }
+
+  Expression<bool> statementImportBatchesRefs(
+    Expression<bool> Function($StatementImportBatchesFilterComposer f) f,
+  ) {
+    final $StatementImportBatchesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.statementImportBatches,
+      getReferencedColumn: (t) => t.accountId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $StatementImportBatchesFilterComposer(
+            $db: $db,
+            $table: $db.statementImportBatches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -11078,6 +11525,31 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     );
     return composer;
   }
+
+  Expression<T> statementImportBatchesRefs<T extends Object>(
+    Expression<T> Function($StatementImportBatchesAnnotationComposer a) f,
+  ) {
+    final $StatementImportBatchesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.statementImportBatches,
+      getReferencedColumn: (t) => t.accountId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $StatementImportBatchesAnnotationComposer(
+            $db: $db,
+            $table: $db.statementImportBatches,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $AccountsTableManager
@@ -11093,7 +11565,10 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({bool currencyId})
+          PrefetchHooks Function({
+            bool currencyId,
+            bool statementImportBatchesRefs,
+          })
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -11179,47 +11654,71 @@ class $AccountsTableManager
                 (e) => (e.readTable(table), $AccountsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({currencyId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (currencyId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.currencyId,
-                                referencedTable: $AccountsReferences
-                                    ._currencyIdTable(db),
-                                referencedColumn: $AccountsReferences
-                                    ._currencyIdTable(db)
-                                    .code,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({currencyId = false, statementImportBatchesRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (statementImportBatchesRefs) db.statementImportBatches,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (currencyId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.currencyId,
+                                    referencedTable: $AccountsReferences
+                                        ._currencyIdTable(db),
+                                    referencedColumn: $AccountsReferences
+                                        ._currencyIdTable(db)
+                                        .code,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (statementImportBatchesRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          StatementImportBatchInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences
+                              ._statementImportBatchesRefsTable(db),
+                          managerFromTypedResult: (p0) => $AccountsReferences(
+                            db,
+                            table,
+                            p0,
+                          ).statementImportBatchesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -11236,7 +11735,7 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({bool currencyId})
+      PrefetchHooks Function({bool currencyId, bool statementImportBatchesRefs})
     >;
 typedef $DebtsCreateCompanionBuilder =
     DebtsCompanion Function({
@@ -17785,6 +18284,337 @@ typedef $AttachmentsProcessedTableManager =
       AttachmentInDB,
       PrefetchHooks Function()
     >;
+typedef $StatementImportBatchesCreateCompanionBuilder =
+    StatementImportBatchesCompanion Function({
+      required String id,
+      required String accountId,
+      required DateTime createdAt,
+      required String mode,
+      required String transactionIds,
+      Value<int> rowid,
+    });
+typedef $StatementImportBatchesUpdateCompanionBuilder =
+    StatementImportBatchesCompanion Function({
+      Value<String> id,
+      Value<String> accountId,
+      Value<DateTime> createdAt,
+      Value<String> mode,
+      Value<String> transactionIds,
+      Value<int> rowid,
+    });
+
+final class $StatementImportBatchesReferences
+    extends
+        BaseReferences<
+          _$AppDB,
+          StatementImportBatches,
+          StatementImportBatchInDB
+        > {
+  $StatementImportBatchesReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static Accounts _accountIdTable(_$AppDB db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.statementImportBatches.accountId, db.accounts.id),
+  );
+
+  $AccountsProcessedTableManager get accountId {
+    final $_column = $_itemColumn<String>('accountId')!;
+
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_accountIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $StatementImportBatchesFilterComposer
+    extends Composer<_$AppDB, StatementImportBatches> {
+  $StatementImportBatchesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transactionIds => $composableBuilder(
+    column: $table.transactionIds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $AccountsFilterComposer get accountId {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $StatementImportBatchesOrderingComposer
+    extends Composer<_$AppDB, StatementImportBatches> {
+  $StatementImportBatchesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transactionIds => $composableBuilder(
+    column: $table.transactionIds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $AccountsOrderingComposer get accountId {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $StatementImportBatchesAnnotationComposer
+    extends Composer<_$AppDB, StatementImportBatches> {
+  $StatementImportBatchesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<String> get transactionIds => $composableBuilder(
+    column: $table.transactionIds,
+    builder: (column) => column,
+  );
+
+  $AccountsAnnotationComposer get accountId {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $StatementImportBatchesTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          StatementImportBatches,
+          StatementImportBatchInDB,
+          $StatementImportBatchesFilterComposer,
+          $StatementImportBatchesOrderingComposer,
+          $StatementImportBatchesAnnotationComposer,
+          $StatementImportBatchesCreateCompanionBuilder,
+          $StatementImportBatchesUpdateCompanionBuilder,
+          (StatementImportBatchInDB, $StatementImportBatchesReferences),
+          StatementImportBatchInDB,
+          PrefetchHooks Function({bool accountId})
+        > {
+  $StatementImportBatchesTableManager(_$AppDB db, StatementImportBatches table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $StatementImportBatchesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $StatementImportBatchesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $StatementImportBatchesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> accountId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<String> transactionIds = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => StatementImportBatchesCompanion(
+                id: id,
+                accountId: accountId,
+                createdAt: createdAt,
+                mode: mode,
+                transactionIds: transactionIds,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String accountId,
+                required DateTime createdAt,
+                required String mode,
+                required String transactionIds,
+                Value<int> rowid = const Value.absent(),
+              }) => StatementImportBatchesCompanion.insert(
+                id: id,
+                accountId: accountId,
+                createdAt: createdAt,
+                mode: mode,
+                transactionIds: transactionIds,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $StatementImportBatchesReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({accountId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountId,
+                                referencedTable:
+                                    $StatementImportBatchesReferences
+                                        ._accountIdTable(db),
+                                referencedColumn:
+                                    $StatementImportBatchesReferences
+                                        ._accountIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $StatementImportBatchesProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      StatementImportBatches,
+      StatementImportBatchInDB,
+      $StatementImportBatchesFilterComposer,
+      $StatementImportBatchesOrderingComposer,
+      $StatementImportBatchesAnnotationComposer,
+      $StatementImportBatchesCreateCompanionBuilder,
+      $StatementImportBatchesUpdateCompanionBuilder,
+      (StatementImportBatchInDB, $StatementImportBatchesReferences),
+      StatementImportBatchInDB,
+      PrefetchHooks Function({bool accountId})
+    >;
 
 class $AppDBManager {
   final _$AppDB _db;
@@ -17817,6 +18647,8 @@ class $AppDBManager {
       $PendingImportsTableManager(_db, _db.pendingImports);
   $AttachmentsTableManager get attachments =>
       $AttachmentsTableManager(_db, _db.attachments);
+  $StatementImportBatchesTableManager get statementImportBatches =>
+      $StatementImportBatchesTableManager(_db, _db.statementImportBatches);
 }
 
 typedef GetAccountsWithFullData$predicate =
