@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drift/drift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
@@ -12,7 +17,13 @@ import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
+import 'package:wallex/core/services/attachments/attachment_model.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
+import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:wallex/core/services/firebase_credentials_cipher.dart';
 import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/uuid.dart';
 
 /// Service that syncs local data to Firestore for multi-device sharing.
 ///
@@ -248,6 +259,491 @@ class FirebaseSyncService {
     }
   }
 
+  // ============================================================
+  // USER SETTINGS - whole-table sync (last-write-wins)
+  // ============================================================
+
+  /// Keys excluded from sync. `firebaseSyncEnabled` is device-specific
+  /// (otherwise disabling sync on one device would disable it on all).
+  /// Any key name containing secret-ish substrings is also filtered
+  /// defensively, though real credentials live in FlutterSecureStorage.
+  static const Set<SettingKey> _userSettingsSyncExclusions = {
+    SettingKey.firebaseSyncEnabled,
+  };
+
+  bool _isSensitiveSettingKey(String keyName) {
+    final lower = keyName.toLowerCase();
+    return lower.contains('apikey') ||
+        lower.contains('secret') ||
+        lower.contains('token') ||
+        lower.contains('password');
+  }
+
+  /// Push the whole `userSettings` table to Firestore as a single doc.
+  /// Path: `users/{uid}/userSettings/all`, shape: `{ values: {key: value} }`.
+  Future<void> pushUserSettings() async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      final db = AppDB.instance;
+      final rows = await db.select(db.userSettings).get();
+
+      final values = <String, String?>{};
+      for (final row in rows) {
+        if (_userSettingsSyncExclusions.contains(row.settingKey)) continue;
+        if (_isSensitiveSettingKey(row.settingKey.name)) continue;
+        values[row.settingKey.name] = row.settingValue;
+      }
+
+      await _firestore!
+          .collection('$_userBasePath/userSettings')
+          .doc('all')
+          .set({
+            'values': values,
+            'updatedAt': FieldValue.serverTimestamp(),
+            'updatedBy': currentUserEmail,
+          });
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pushed ${values.length} user settings',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing user settings: $e');
+    }
+  }
+
+  /// Pull the whole `userSettings` doc from Firestore and merge into local DB.
+  /// Keys that exist only locally (not in Firestore) are preserved — useful
+  /// for first-time pulls where Firestore has nothing yet.
+  /// Returns the number of keys written locally.
+  Future<int> _pullUserSettings() async {
+    final doc = await _firestore!
+        .collection('$_userBasePath/userSettings')
+        .doc('all')
+        .get();
+
+    if (!doc.exists) {
+      Logger.printDebug(
+        'FirebaseSyncService: No user settings doc in Firebase, skipping',
+      );
+      return 0;
+    }
+
+    final data = doc.data();
+    if (data == null) return 0;
+
+    final raw = data['values'];
+    if (raw is! Map) {
+      Logger.printDebug(
+        'FirebaseSyncService: user settings doc has no `values` map',
+      );
+      return 0;
+    }
+
+    int writeCount = 0;
+    for (final entry in raw.entries) {
+      try {
+        final keyName = entry.key.toString();
+        if (_isSensitiveSettingKey(keyName)) continue;
+
+        final key = SettingKey.values
+            .where((e) => e.name == keyName)
+            .firstOrNull;
+        if (key == null) continue; // unknown key (older/newer app version)
+        if (_userSettingsSyncExclusions.contains(key)) continue;
+
+        final value = entry.value?.toString();
+
+        await UserSettingService.instance.setItem(key, value);
+        writeCount++;
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error pulling user setting ${entry.key}: $e',
+        );
+      }
+      await Future.delayed(Duration.zero); // yield to UI
+    }
+
+    Logger.printDebug(
+      'FirebaseSyncService: Pulled $writeCount user settings',
+    );
+    return writeCount;
+  }
+
+  // ============================================================
+  // USER AVATAR - sync profile image through Firebase Storage
+  // ============================================================
+
+  /// Owner ID used for the user's avatar attachment. Keep in sync with the
+  /// value used in `edit_profile_modal.dart` / `user_avatar_display.dart`.
+  static const String _avatarOwnerId = 'current';
+  static const String _avatarRole = 'avatar';
+
+  Future<Attachment?> _getLocalAvatarAttachment() {
+    return AttachmentsService.instance.firstByOwner(
+      ownerType: AttachmentOwnerType.userProfile,
+      ownerId: _avatarOwnerId,
+      role: _avatarRole,
+    );
+  }
+
+  /// Push the current user's avatar image to Firebase Storage, and store the
+  /// resulting download URL + metadata in Firestore at
+  /// `users/{uid}/profile/avatar`.
+  ///
+  /// Conservative: if there is no local avatar, we do NOTHING (we don't
+  /// delete the remote one). A failure here does not propagate — the caller
+  /// can ignore the exception so sync can continue with other data.
+  Future<void> pushUserAvatar() async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      final uid = currentUserId;
+      if (uid == null) return;
+
+      final attachment = await _getLocalAvatarAttachment();
+      if (attachment == null) {
+        Logger.printDebug(
+          'FirebaseSyncService: No local avatar, skipping push',
+        );
+        return;
+      }
+
+      final file = await AttachmentsService.instance.resolveFile(attachment);
+      if (!await file.exists()) {
+        Logger.printDebug(
+          'FirebaseSyncService: Local avatar row exists but file missing, skipping push',
+        );
+        return;
+      }
+
+      final ext = p.extension(attachment.localPath).isNotEmpty
+          ? p.extension(attachment.localPath)
+          : '.jpg';
+      final storagePath = 'users/$uid/avatar$ext';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(
+        file,
+        SettableMetadata(contentType: attachment.mimeType),
+      );
+      final downloadUrl = await ref.getDownloadURL();
+
+      await _firestore!
+          .collection('$_userBasePath/profile')
+          .doc('avatar')
+          .set({
+            'downloadUrl': downloadUrl,
+            'storagePath': storagePath,
+            'fileSize': attachment.sizeBytes,
+            'mimeType': attachment.mimeType,
+            'updatedAt': FieldValue.serverTimestamp(),
+            'updatedBy': currentUserEmail,
+          });
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pushed user avatar (${attachment.sizeBytes} bytes)',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing avatar: $e');
+    }
+  }
+
+  /// Pull the user's avatar from Firebase Storage via the Firestore
+  /// pointer doc and materialize it locally so the UI can show it.
+  ///
+  /// Steps:
+  /// 1. Read `users/{uid}/profile/avatar` for the downloadUrl + size.
+  /// 2. If local DB already has an avatar with the same size, assume it's
+  ///    current and skip (cheap dedupe — avoids re-downloading every sync).
+  /// 3. Otherwise download the file into
+  ///    `{docsDir}/attachments/userProfile/{uuid}{ext}` and upsert an
+  ///    `attachments` row pointing at it. Any previous local avatar row
+  ///    (and its file) is removed first so only one avatar exists.
+  Future<void> _pullUserAvatar() async {
+    try {
+      final uid = currentUserId;
+      if (uid == null) return;
+
+      final doc = await _firestore!
+          .collection('$_userBasePath/profile')
+          .doc('avatar')
+          .get();
+      if (!doc.exists) {
+        Logger.printDebug(
+          'FirebaseSyncService: No remote avatar doc, skipping pull',
+        );
+        return;
+      }
+      final data = doc.data();
+      if (data == null) return;
+
+      final downloadUrl = data['downloadUrl'] as String?;
+      if (downloadUrl == null || downloadUrl.isEmpty) return;
+
+      final remoteSize = (data['fileSize'] as num?)?.toInt();
+      final remoteMime = (data['mimeType'] as String?) ?? 'image/jpeg';
+
+      final existing = await _getLocalAvatarAttachment();
+      if (existing != null &&
+          remoteSize != null &&
+          existing.sizeBytes == remoteSize) {
+        final existingFile = await AttachmentsService.instance.resolveFile(
+          existing,
+        );
+        if (await existingFile.exists()) {
+          Logger.printDebug(
+            'FirebaseSyncService: Avatar already in sync (size $remoteSize), skipping download',
+          );
+          return;
+        }
+      }
+
+      final docsDir = await getApplicationDocumentsDirectory();
+      final ownerFolder = Directory(
+        p.join(docsDir.path, 'attachments', AttachmentOwnerType.userProfile.dbValue),
+      );
+      await ownerFolder.create(recursive: true);
+
+      final ext = _extensionFromMime(remoteMime);
+      final newId = generateUUID();
+      final targetPath = p.join(ownerFolder.path, '$newId$ext');
+      final targetFile = File(targetPath);
+
+      final ref = FirebaseStorage.instance.refFromURL(downloadUrl);
+      final bytes = await ref.getData(10 * 1024 * 1024); // cap 10 MB
+      if (bytes == null) {
+        Logger.printDebug(
+          'FirebaseSyncService: Avatar download returned null bytes',
+        );
+        return;
+      }
+      await targetFile.writeAsBytes(bytes, flush: true);
+
+      // Remove the previous local avatar (row + file) so only one remains.
+      if (existing != null) {
+        try {
+          await AttachmentsService.instance.deleteById(existing.id);
+        } catch (e) {
+          Logger.printDebug(
+            'FirebaseSyncService: Could not delete previous avatar row ${existing.id}: $e',
+          );
+        }
+      }
+
+      final db = AppDB.instance;
+      final localPath = p.relative(targetFile.path, from: docsDir.path);
+      await db.into(db.attachments).insert(
+            AttachmentsCompanion.insert(
+              id: newId,
+              ownerType: AttachmentOwnerType.userProfile.dbValue,
+              ownerId: _avatarOwnerId,
+              localPath: localPath,
+              mimeType: remoteMime,
+              sizeBytes: bytes.length,
+              role: const Value(_avatarRole),
+              createdAt: Value(DateTime.now()),
+            ),
+          );
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pulled user avatar (${bytes.length} bytes)',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pulling avatar: $e');
+    }
+  }
+
+  String _extensionFromMime(String mime) {
+    switch (mime.toLowerCase()) {
+      case 'image/jpeg':
+        return '.jpg';
+      case 'image/png':
+        return '.png';
+      case 'image/webp':
+        return '.webp';
+      case 'image/gif':
+        return '.gif';
+      default:
+        return '.jpg';
+    }
+  }
+
+  // ============================================================
+  // TAGS - master table sync (pattern similar to categories)
+  // ============================================================
+
+  /// Push all local tags to Firestore at `users/{uid}/tags/{tagId}`.
+  Future<void> pushTags() async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      final db = AppDB.instance;
+      final rows = await db.select(db.tags).get();
+
+      for (final tag in rows) {
+        try {
+          await _firestore!
+              .collection('$_userBasePath/tags')
+              .doc(tag.id)
+              .set({
+                'id': tag.id,
+                'name': tag.name,
+                'color': tag.color,
+                'displayOrder': tag.displayOrder,
+                'description': tag.description,
+                'updatedAt': FieldValue.serverTimestamp(),
+                'updatedBy': currentUserEmail,
+              });
+        } catch (e) {
+          Logger.printDebug(
+            'FirebaseSyncService: Error pushing tag ${tag.id}: $e',
+          );
+        }
+      }
+
+      Logger.printDebug('FirebaseSyncService: Pushed ${rows.length} tags');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing tags: $e');
+    }
+  }
+
+  Future<int> _pullTags() async {
+    final snapshot =
+        await _firestore!.collection('$_userBasePath/tags').get();
+
+    final db = AppDB.instance;
+    int successCount = 0;
+
+    for (final doc in snapshot.docs) {
+      try {
+        final data = doc.data();
+
+        final tag = TagInDB(
+          id: data['id'] as String,
+          name: data['name'] as String,
+          color: data['color'] as String,
+          displayOrder: (data['displayOrder'] as num?)?.toInt() ?? 0,
+          description: data['description'] as String?,
+        );
+
+        await db.into(db.tags).insertOnConflictUpdate(tag);
+        successCount++;
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error pulling tag ${doc.id}: $e',
+        );
+      }
+      await Future.delayed(Duration.zero); // yield to UI
+    }
+
+    Logger.printDebug('FirebaseSyncService: Pulled $successCount tags');
+    return successCount;
+  }
+
+  /// Push all `transactionTags` rows. Doc id is deterministic
+  /// `${transactionID}_${tagID}` so upserts are idempotent and the
+  /// server-side set is a simple mirror of the local set.
+  Future<void> pushTransactionTags() async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      final db = AppDB.instance;
+      final rows = await db.select(db.transactionTags).get();
+
+      for (final link in rows) {
+        try {
+          final docId = '${link.transactionID}_${link.tagID}';
+          await _firestore!
+              .collection('$_userBasePath/transactionTags')
+              .doc(docId)
+              .set({
+                'transactionID': link.transactionID,
+                'tagID': link.tagID,
+                'updatedAt': FieldValue.serverTimestamp(),
+                'updatedBy': currentUserEmail,
+              });
+        } catch (e) {
+          Logger.printDebug(
+            'FirebaseSyncService: Error pushing transactionTag '
+            '${link.transactionID}/${link.tagID}: $e',
+          );
+        }
+      }
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pushed ${rows.length} transactionTag links',
+      );
+    } catch (e) {
+      Logger.printDebug(
+        'FirebaseSyncService: Error pushing transactionTags: $e',
+      );
+    }
+  }
+
+  Future<int> _pullTransactionTags() async {
+    final snapshot = await _firestore!
+        .collection('$_userBasePath/transactionTags')
+        .get();
+
+    final db = AppDB.instance;
+    int successCount = 0;
+    int skippedCount = 0;
+
+    for (final doc in snapshot.docs) {
+      try {
+        final data = doc.data();
+        final transactionID = data['transactionID'] as String;
+        final tagID = data['tagID'] as String;
+
+        // FK guard: CASCADE FKs require both parent rows to exist locally.
+        final txExists = await (db.select(
+          db.transactions,
+        )..where((t) => t.id.equals(transactionID))).getSingleOrNull();
+        if (txExists == null) {
+          skippedCount++;
+          Logger.printDebug(
+            'FirebaseSyncService: Skipping transactionTag ${doc.id}: '
+            'transaction $transactionID missing locally',
+          );
+          continue;
+        }
+        final tagExists = await (db.select(
+          db.tags,
+        )..where((t) => t.id.equals(tagID))).getSingleOrNull();
+        if (tagExists == null) {
+          skippedCount++;
+          Logger.printDebug(
+            'FirebaseSyncService: Skipping transactionTag ${doc.id}: '
+            'tag $tagID missing locally',
+          );
+          continue;
+        }
+
+        await db
+            .into(db.transactionTags)
+            .insert(
+              TransactionTag(transactionID: transactionID, tagID: tagID),
+              mode: InsertMode.insertOrIgnore,
+            );
+        successCount++;
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error pulling transactionTag ${doc.id}: $e',
+        );
+      }
+      await Future.delayed(Duration.zero); // yield to UI
+    }
+
+    Logger.printDebug(
+      'FirebaseSyncService: Pulled $successCount transactionTags '
+      '(skipped $skippedCount orphans)',
+    );
+    return successCount;
+  }
+
   /// Push an exchange rate to Firestore
   Future<void> pushExchangeRate(ExchangeRateInDB rate) async {
     if (!_initialized || _firestore == null) return;
@@ -287,6 +783,9 @@ class FirebaseSyncService {
       'categories': 0,
       'exchangeRates': 0,
       'transactions': 0,
+      'tags': 0,
+      'transactionTags': 0,
+      'userSettings': 0,
       'errors': 0,
       'firstError': '',
     };
@@ -312,6 +811,15 @@ class FirebaseSyncService {
       // Pull categories (transactions depend on them)
       result['categories'] = await _pullCategories();
 
+      // Pull tags BEFORE transactionTags (FK dependency). transactionTags
+      // also needs the transactions table populated, so the link pull
+      // is scheduled right after _pullTransactions below.
+      try {
+        result['tags'] = await _pullTags();
+      } catch (e) {
+        Logger.printDebug('FirebaseSyncService: Error in _pullTags: $e');
+      }
+
       // Pull exchange rates
       result['exchangeRates'] = await _pullExchangeRates();
 
@@ -322,6 +830,25 @@ class FirebaseSyncService {
       if (firstError.isEmpty) {
         firstError = 'Tx: ${txResult['firstError'] ?? ''}';
       }
+
+      // Pull transactionTags AFTER both tags and transactions are in place.
+      try {
+        result['transactionTags'] = await _pullTransactionTags();
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error in _pullTransactionTags: $e',
+        );
+      }
+
+      // Pull user settings (theme, SMS prefs, language, etc.)
+      result['userSettings'] = await _pullUserSettings();
+
+      // Pull user avatar (optional, failures are swallowed inside)
+      await _pullUserAvatar();
+
+      // Pull encrypted third-party credentials (optional, failures swallowed)
+      await _pullCredentials();
+
       result['errors'] = totalErrors;
       result['firstError'] = firstError;
 
@@ -329,7 +856,10 @@ class FirebaseSyncService {
         'FirebaseSyncService: Data pull completed! '
         'Accounts: ${result['accounts']}, '
         'Categories: ${result['categories']}, '
+        'Tags: ${result['tags']}, '
         'Transactions: ${result['transactions']}, '
+        'TransactionTags: ${result['transactionTags']}, '
+        'UserSettings: ${result['userSettings']}, '
         'Errors: ${result['errors']}',
       );
     } catch (e) {
@@ -708,6 +1238,133 @@ class FirebaseSyncService {
   }
 
   // ============================================================
+  // CREDENTIALS - encrypted sync of FlutterSecureStorage secrets
+  // ============================================================
+
+  /// Push the user's third-party API credentials (Nexus AI, Binance) to
+  /// Firestore, AES-GCM encrypted with a key derived from the user's UID
+  /// + a hardcoded pepper. See [FirebaseCredentialsCipher] for the threat
+  /// model. Only fields that actually exist locally are pushed.
+  Future<void> pushCredentials() async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      final uid = currentUserId;
+      if (uid == null) return;
+
+      final cipher = FirebaseCredentialsCipher.instance;
+      final payload = <String, dynamic>{};
+
+      final nexusKey = await NexusCredentialsStore.instance.loadApiKey();
+      if (nexusKey != null && nexusKey.isNotEmpty) {
+        payload['nexusApiKey'] = await cipher.encryptForUser(nexusKey, uid);
+      }
+
+      // Model is not really a secret, but living in the same store is
+      // cheap to sync and keeps Nexus configuration in one place.
+      final nexusModel = await NexusCredentialsStore.instance.loadModel();
+      if (nexusModel.isNotEmpty) {
+        payload['nexusModel'] = await cipher.encryptForUser(nexusModel, uid);
+      }
+
+      final binance = await BinanceCredentialsStore.instance.load();
+      if (binance != null) {
+        payload['binanceApiKey'] =
+            await cipher.encryptForUser(binance.apiKey, uid);
+        payload['binanceSecret'] =
+            await cipher.encryptForUser(binance.apiSecret, uid);
+      }
+
+      if (payload.isEmpty) {
+        Logger.printDebug(
+          'FirebaseSyncService: No local credentials to push, skipping',
+        );
+        return;
+      }
+
+      payload['updatedAt'] = FieldValue.serverTimestamp();
+      payload['updatedBy'] = currentUserEmail;
+
+      await _firestore!
+          .collection('$_userBasePath/credentials')
+          .doc('encrypted')
+          .set(payload, SetOptions(merge: true));
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pushed ${payload.length - 2} encrypted credential(s)',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing credentials: $e');
+    }
+  }
+
+  /// Pull encrypted credentials from Firestore, decrypt, and write into the
+  /// local secure stores. Missing or undecryptable fields are silently
+  /// skipped so one bad field cannot block the whole pull.
+  Future<void> _pullCredentials() async {
+    try {
+      final uid = currentUserId;
+      if (uid == null) return;
+
+      final doc = await _firestore!
+          .collection('$_userBasePath/credentials')
+          .doc('encrypted')
+          .get();
+      if (!doc.exists) {
+        Logger.printDebug(
+          'FirebaseSyncService: No remote credentials doc, skipping pull',
+        );
+        return;
+      }
+      final data = doc.data();
+      if (data == null) return;
+
+      final cipher = FirebaseCredentialsCipher.instance;
+
+      Future<String?> decryptField(String key) async {
+        final raw = data[key];
+        if (raw is! String || raw.isEmpty) return null;
+        try {
+          return await cipher.decryptForUser(raw, uid);
+        } catch (e) {
+          Logger.printDebug(
+            'FirebaseSyncService: Failed to decrypt credential $key: $e',
+          );
+          return null;
+        }
+      }
+
+      int written = 0;
+
+      final nexusApiKey = await decryptField('nexusApiKey');
+      if (nexusApiKey != null) {
+        await NexusCredentialsStore.instance.saveApiKey(nexusApiKey);
+        written++;
+      }
+      final nexusModel = await decryptField('nexusModel');
+      if (nexusModel != null) {
+        await NexusCredentialsStore.instance.saveModel(nexusModel);
+        written++;
+      }
+
+      final binanceApiKey = await decryptField('binanceApiKey');
+      final binanceSecret = await decryptField('binanceSecret');
+      if (binanceApiKey != null && binanceSecret != null) {
+        await BinanceCredentialsStore.instance.save(
+          apiKey: binanceApiKey,
+          apiSecret: binanceSecret,
+        );
+        written += 2;
+      }
+
+      Logger.printDebug(
+        'FirebaseSyncService: Pulled $written encrypted credential(s)',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pulling credentials: $e');
+    }
+  }
+
+  // ============================================================
   // PUSH ALL - Upload all local data to Firestore
   // ============================================================
 
@@ -774,6 +1431,15 @@ class FirebaseSyncService {
       // A one-time cleanup script should iterate users/{uid}/categories
       // and unset `color` + `type` wherever `parentCategoryID` is non-null.
 
+      // Push tags BEFORE transactions/transactionTags. Failures here must
+      // not tumble the rest of the sync — mirror the avatar/credentials
+      // isolation pattern.
+      try {
+        await pushTags();
+      } catch (e) {
+        Logger.printDebug('FirebaseSyncService: Error in pushTags: $e');
+      }
+
       // Push transactions
       final transactions = await TransactionService.instance
           .getTransactions()
@@ -805,11 +1471,30 @@ class FirebaseSyncService {
         );
       }
 
+      // Push transactionTags AFTER both tags and transactions.
+      try {
+        await pushTransactionTags();
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error in pushTransactionTags: $e',
+        );
+      }
+
       // Push exchange rates
       final rates = await ExchangeRateService.instance.getExchangeRates().first;
       for (final rate in rates) {
         await pushExchangeRate(rate);
       }
+
+      // Push user settings (theme, SMS prefs, language, etc.)
+      await pushUserSettings();
+
+      // Push user avatar (optional, failures are swallowed inside)
+      await pushUserAvatar();
+
+      // Push encrypted third-party credentials (Nexus AI, Binance).
+      // Failures are swallowed inside.
+      await pushCredentials();
 
       Logger.printDebug('FirebaseSyncService: Full data push completed!');
     } catch (e) {
