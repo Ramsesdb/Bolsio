@@ -4,12 +4,15 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wallex/app/settings/pages/auto_import/binance_api_config.page.dart';
+import 'package:wallex/app/settings/pages/auto_import/capture_diagnostics.page.dart';
+import 'package:wallex/app/settings/pages/auto_import/capture_permissions.page.dart';
 import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
 import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
 import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// Settings page for the auto-import feature.
@@ -176,6 +179,12 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
 
           // Channels section — only visible when master toggle is ON
           if (_autoImportEnabled) ...[
+            // Listener health banner (Android + notifications channel ON).
+            if (isAndroid && _notifEnabled)
+              _CaptureHealthBanner(
+                onRequestPermission: _requestNotifPermission,
+              ),
+
             _sectionLabel(context, 'Canales de captura'),
 
             // SMS (Android only)
@@ -351,65 +360,32 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
                     }
                   },
                 ),
-                const ListTile(
-                  title: Text('Ver historial de capturas fallidas'),
-                  leading: Icon(Icons.history),
-                  enabled: false,
-                  subtitle: Text('Proximamente'),
+                ListTile(
+                  title: const Text('Ver historial de capturas'),
+                  leading: const Icon(Icons.history),
+                  subtitle: const Text(
+                      'Diagnostico detallado de cada notificacion/SMS'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => RouteUtils.pushRoute(
+                      const CaptureDiagnosticsPage()),
                 ),
               ],
             ),
 
-            // Battery optimization note
+            // Permissions checklist entry (Tanda 3).
+            // Replaces the old generic battery-optimization card with a
+            // dedicated guided flow that handles MIUI autostart, Doze
+            // whitelist and OEM-specific battery tweaks.
             if (isAndroid)
-              Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                color: Colors.amber.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.battery_alert,
-                          color: Colors.amber.shade800, size: 24),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Optimizacion de bateria',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.amber.shade900,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Si la captura se detiene en segundo plano, '
-                              'desactiva la optimizacion de bateria para '
-                              'Wallex en Ajustes del sistema.',
-                              style: TextStyle(
-                                color: Colors.amber.shade900,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            OutlinedButton.icon(
-                              icon: const Icon(Icons.settings, size: 16),
-                              label: const Text('Abrir ajustes de bateria'),
-                              onPressed: () {
-                                openAppSettings();
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              ListTile(
+                leading: Icon(Icons.shield_outlined,
+                    color: theme.colorScheme.primary),
+                title: const Text('Permisos del listener'),
+                subtitle: const Text(
+                    'Autoarranque, batería y accesos para Xiaomi/MIUI'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () =>
+                    RouteUtils.pushRoute(const CapturePermissionsPage()),
               ),
           ],
         ],
@@ -509,5 +485,169 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
         );
       }
     }
+  }
+}
+
+/// Reactive banner that surfaces the listener health status computed by
+/// [CaptureHealthMonitor]. Re-runs on every status change and, on tap, asks
+/// the monitor to force a re-check + re-subscribe attempt.
+class _CaptureHealthBanner extends StatelessWidget {
+  final Future<void> Function() onRequestPermission;
+
+  const _CaptureHealthBanner({
+    required this.onRequestPermission,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<CaptureHealthStatus>(
+      valueListenable: CaptureHealthMonitor.instance.statusNotifier,
+      builder: (context, status, _) {
+        final theme = Theme.of(context);
+        final lastEvent = CaptureHealthMonitor.instance.lastEventAt;
+
+        final (bg, fg, icon, title, subtitle) = _palette(
+          status: status,
+          theme: theme,
+          lastEvent: lastEvent,
+        );
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Material(
+            color: bg,
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => _onTap(context, status),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(icon, color: fg, size: 22),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: fg,
+                              fontSize: 14,
+                            ),
+                          ),
+                          if (subtitle != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              subtitle,
+                              style: TextStyle(
+                                color: fg,
+                                fontSize: 12.5,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onTap(
+    BuildContext context,
+    CaptureHealthStatus status,
+  ) async {
+    switch (status) {
+      case CaptureHealthStatus.permissionMissing:
+        // Tanda 3: route to the guided permissions checklist instead of
+        // bouncing the user to a generic system screen.
+        await RouteUtils.pushRoute(const CapturePermissionsPage());
+        break;
+      case CaptureHealthStatus.unsubscribed:
+      case CaptureHealthStatus.stale:
+      case CaptureHealthStatus.healthy:
+      case CaptureHealthStatus.unknown:
+        await CaptureHealthMonitor.instance.forceCheck();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Reintentando suscripcion al listener...'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+        break;
+    }
+  }
+
+  (Color bg, Color fg, IconData icon, String title, String? subtitle) _palette({
+    required CaptureHealthStatus status,
+    required ThemeData theme,
+    required DateTime? lastEvent,
+  }) {
+    switch (status) {
+      case CaptureHealthStatus.healthy:
+        return (
+          Colors.green.shade50,
+          Colors.green.shade900,
+          Icons.check_circle_outline,
+          'Listener activo',
+          lastEvent != null
+              ? 'Ultimo evento ${_relative(lastEvent)}'
+              : 'Esperando el primer evento',
+        );
+      case CaptureHealthStatus.stale:
+        return (
+          Colors.amber.shade50,
+          Colors.amber.shade900,
+          Icons.warning_amber_outlined,
+          'Sin eventos recientes (24h+)',
+          'Puede estar bloqueado por el sistema. '
+              'Toca para reintentar suscripcion.',
+        );
+      case CaptureHealthStatus.unsubscribed:
+        return (
+          Colors.red.shade50,
+          Colors.red.shade900,
+          Icons.link_off,
+          'Listener desconectado',
+          'Toca para reconectar.',
+        );
+      case CaptureHealthStatus.permissionMissing:
+        return (
+          Colors.red.shade50,
+          Colors.red.shade900,
+          Icons.lock_outline,
+          'Permiso de notificaciones revocado',
+          'Toca para reabrir ajustes del sistema.',
+        );
+      case CaptureHealthStatus.unknown:
+        return (
+          theme.colorScheme.surfaceContainerHighest,
+          theme.colorScheme.onSurfaceVariant,
+          Icons.hourglass_empty,
+          'Evaluando estado del listener...',
+          null,
+        );
+    }
+  }
+
+  String _relative(DateTime ts) {
+    final diff = DateTime.now().difference(ts);
+    if (diff.inSeconds < 60) return 'ahora';
+    if (diff.inMinutes < 60) return 'hace ${diff.inMinutes} min';
+    if (diff.inHours < 24) return 'hace ${diff.inHours} h';
+    if (diff.inDays < 7) return 'hace ${diff.inDays} d';
+    return '${ts.year}-${ts.month.toString().padLeft(2, '0')}-'
+        '${ts.day.toString().padLeft(2, '0')}';
   }
 }

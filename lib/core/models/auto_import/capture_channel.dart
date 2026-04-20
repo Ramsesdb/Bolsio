@@ -2,7 +2,9 @@
 enum CaptureChannel {
   sms,
   notification,
-  api;
+  api,
+  receiptImage,
+  voice;
 
   /// Value stored in the database (matches CHECK constraint on `pending_imports.channel`).
   String get dbValue {
@@ -13,6 +15,10 @@ enum CaptureChannel {
         return 'notification';
       case CaptureChannel.api:
         return 'api';
+      case CaptureChannel.receiptImage:
+        return 'receiptImage';
+      case CaptureChannel.voice:
+        return 'voice';
     }
   }
 
@@ -25,6 +31,10 @@ enum CaptureChannel {
         return CaptureChannel.notification;
       case 'api':
         return CaptureChannel.api;
+      case 'receiptImage':
+        return CaptureChannel.receiptImage;
+      case 'voice':
+        return CaptureChannel.voice;
       default:
         throw ArgumentError('Unknown CaptureChannel dbValue: $value');
     }

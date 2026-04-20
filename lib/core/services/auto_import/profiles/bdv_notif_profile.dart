@@ -113,14 +113,29 @@ class BdvNotifProfile implements BankProfile {
     RawCaptureEvent event, {
     required String? accountId,
   }) {
+    final result = tryParseWithDetails(event, accountId: accountId);
+    return result.transaction;
+  }
+
+  @override
+  ParseResult tryParseWithDetails(
+    RawCaptureEvent event, {
+    required String? accountId,
+  }) {
     final rawText = event.rawText;
     final newlineIdx = rawText.indexOf('\n');
-    if (newlineIdx < 0) return null;
+    if (newlineIdx < 0) {
+      return ParseResult.failed(
+        'Notificación sin cuerpo (solo título)',
+      );
+    }
 
     final title = rawText.substring(0, newlineIdx).trim();
     final body = rawText.substring(newlineIdx + 1).trim();
 
-    if (body.isEmpty) return null;
+    if (body.isEmpty) {
+      return ParseResult.failed('Cuerpo de la notificación vacío');
+    }
 
     // Combine title + body for flexible extraction
     final fullText = '$title\n$body';
@@ -144,12 +159,16 @@ class BdvNotifProfile implements BankProfile {
       currencyId = 'VES';
     } else {
       debugPrint('BdvNotifProfile: no amount found — skipping notification');
-      return null;
+      return ParseResult.failed(
+        'No se encontró monto (Bs. o \$.) en la notificación',
+      );
     }
 
     if (amount == null) {
       debugPrint('BdvNotifProfile: amount parsing failed — skipping');
-      return null;
+      return ParseResult.failed(
+        'Monto encontrado pero no se pudo interpretar como número',
+      );
     }
 
     debugPrint('BdvNotifProfile: amount=$amount $currencyId');
@@ -269,7 +288,7 @@ class BdvNotifProfile implements BankProfile {
 
     // ── 7. Build proposal ────────────────────────────────────────────────────
 
-    return TransactionProposal.newProposal(
+    return ParseResult.parsed(TransactionProposal.newProposal(
       accountId: accountId,
       amount: amount,
       currencyId: currencyId,
@@ -282,6 +301,6 @@ class BdvNotifProfile implements BankProfile {
       sender: event.sender,
       confidence: confidence,
       parsedBySender: 'bdv_notif_v2_dynamic',
-    );
+    ));
   }
 }
