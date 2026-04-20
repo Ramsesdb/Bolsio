@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:wallex/app/common/widgets/user_avatar_display.dart';
+import 'package:wallex/app/home/widgets/balance_delta_pill.dart';
 import 'package:wallex/app/home/widgets/click_tracker.dart';
 import 'package:wallex/app/home/widgets/dashboard_cards.dart';
 import 'package:wallex/app/home/widgets/horizontal_scrollable_account_list.dart';
@@ -33,7 +34,6 @@ import 'package:wallex/core/presentation/theme.dart';
 import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/presentation/widgets/trending_value.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
@@ -668,7 +668,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final privateMode =
         await PrivateModeService.instance.privateModeStream.first;
 
-    PrivateModeService.instance.setPrivateMode(!privateMode);
+    await PrivateModeService.instance.setPrivateMode(!privateMode);
 
     await HapticFeedback.lightImpact();
 
@@ -704,7 +704,9 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               Text(
                 t.home.total_balance,
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
@@ -754,20 +756,31 @@ class _DashboardPageState extends State<DashboardPage> {
                 enabled: !snapshot.hasData,
                 child: !snapshot.hasData
                     ? Bone(width: 90, height: 40)
-                    : CurrencyDisplayer(
-                        amountToConvert: snapshot.data!,
-                        integerStyle: TextStyle(
-                          fontSize:
+                    : Builder(
+                        builder: (context) {
+                          final double integerFontSize =
                               snapshot.data! >= 100000000 &&
                                   BreakPoint.of(
                                     context,
                                   ).isSmallerOrEqualTo(BreakpointID.xs)
                               ? 32
-                              : 42,
-                          fontWeight: FontWeight.w200,
-                          letterSpacing: -0.5,
-                          color: Colors.white,
-                        ),
+                              : 42;
+                          return CurrencyDisplayer(
+                            amountToConvert: snapshot.data!,
+                            integerStyle: TextStyle(
+                              fontSize: integerFontSize,
+                              fontWeight: FontWeight.w200,
+                              letterSpacing: -0.5,
+                              color: Colors.white,
+                            ),
+                            currencyStyle: TextStyle(
+                              fontSize: integerFontSize,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              letterSpacing: 4,
+                            ),
+                          );
+                        },
                       ),
               );
             },
@@ -806,13 +819,7 @@ class _DashboardPageState extends State<DashboardPage> {
               builder: (context, snapshot) {
                 return Skeletonizer(
                   enabled: !snapshot.hasData,
-                  child: TrendingValue(
-                    percentage: snapshot.data ?? 0,
-                    fontWeight: FontWeight.bold,
-                    filled: true,
-                    outlined: true,
-                    fontSize: 16,
-                  ),
+                  child: BalanceDeltaPill(percentage: snapshot.data ?? 0),
                 );
               },
             ),
