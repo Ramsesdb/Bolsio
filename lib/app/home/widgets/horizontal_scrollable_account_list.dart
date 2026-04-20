@@ -48,8 +48,11 @@ class HorizontalScrollableAccountList extends StatelessWidget {
           builder: (context, snapshot) {
             final allAccounts = snapshot.data ?? const <Account>[];
             final visibleIds = visibleAccountIds;
+            // null = Hidden Mode stream not ready yet. Render nothing rather
+            // than falling back to `allAccounts`, which would leak saving
+            // accounts for the first frame before the lock state resolves.
             final accounts = visibleIds == null
-                ? allAccounts
+                ? const <Account>[]
                 : allAccounts
                       .where((a) => visibleIds.contains(a.id))
                       .toList(growable: false);
