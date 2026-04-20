@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:wallex/app/accounts/account_form.dart';
 import 'package:wallex/app/accounts/details/account_details_actions.dart';
+import 'package:wallex/app/accounts/statement_import/widgets/undo_banner.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/transactions/label_value_info_list.dart';
 import 'package:wallex/app/transactions/transactions.page.dart';
@@ -163,6 +164,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      StatementImportUndoBanner(accountId: account.id),
                       CardWithHeader(
                         title: t.home.last_transactions,
                         bodyPadding: const EdgeInsets.symmetric(vertical: 6),

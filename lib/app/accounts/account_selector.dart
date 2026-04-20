@@ -54,6 +54,11 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
 
   String searchValue = '';
 
+  // Single-select mode: once a radio is tapped we schedule a pop and must
+  // ignore subsequent taps — otherwise a second pop crashes the navigator
+  // (`Bad state: No element`) because the sheet is already being disposed.
+  bool _popping = false;
+
   @override
   void initState() {
     super.initState();
@@ -199,10 +204,19 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
             groupValue: selectedAccounts.firstOrNull?.id,
             onChanged: (value) {
               if (value == null) return;
-              final account = allAccounts.firstWhere((a) => a.id == value);
+              final account = allAccounts.firstWhereOrNull((a) => a.id == value);
+              if (account == null) return;
+              if (!widget.allowMultiSelection) {
+                if (_popping) return;
+                _popping = true;
+                if (!context.mounted) return;
+                if (!Navigator.of(context).canPop()) return;
+                Navigator.of(context).pop([account]);
+                return;
+              }
+              if (!mounted) return;
               setState(() {
                 selectedAccounts = [account];
-                RouteUtils.popRoute(selectedAccounts);
               });
             },
             child: ListView.separated(

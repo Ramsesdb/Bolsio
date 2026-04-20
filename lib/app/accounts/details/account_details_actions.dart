@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/account_form.dart';
 import 'package:wallex/app/accounts/details/account_details.dart';
+import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
 import 'package:wallex/app/transactions/form/transaction_form.page.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/models/account/account.dart';
@@ -27,6 +28,16 @@ abstract class AccountDetailsActions {
         icon: Icons.edit,
         onClick: () => RouteUtils.pushRoute(AccountFormPage(account: account)),
       ),
+      if (!account.isClosed)
+        ListTileActionItem(
+          label: t.statement_import.entry_point,
+          icon: Icons.file_download_outlined,
+          onClick: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => StatementImportFlow(account: account),
+            ),
+          ),
+        ),
       ListTileActionItem(
         label: t.transfer.create,
         icon: TransactionType.transfer.icon,
