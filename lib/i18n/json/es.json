@@ -320,6 +320,8 @@
     "delete.multiple.warning-message": "Esta acción es irreversible y borrará definitivamente {{ x }} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas",
     "delete.multiple.success": "{{ x }} transacciones eliminadas correctamente",
     "details": "Detalles del movimiento",
+    "receipt-attached": "Comprobante adjunto",
+    "view-receipt": "Ver comprobante",
     "NEXT-PAYMENTS": {
       "accept": "Aceptar",
       "skip": "Saltar",
@@ -395,6 +397,32 @@
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción"
     },
+    "RECEIPT-IMPORT": {
+      "entry-gallery": "Desde comprobante (galería)",
+      "entry-camera": "Desde comprobante (cámara)",
+      "processing-ocr": "Procesando OCR...",
+      "processing-ai": "Procesando IA...",
+      "processing-done": "Listo",
+      "review-title": "Revisar comprobante",
+      "review-subtitle": "Valida y corrige los datos antes de crear la transacción",
+      "review-cta-continue": "Continuar",
+      "review-cta-retry": "Reintentar",
+      "error": {
+        "ocr_empty": "No se detectó texto en la imagen",
+        "ai_failed": "No se pudo procesar con IA, se usó extracción local",
+        "image_corrupt": "La imagen parece estar dañada",
+        "no_amount": "No se pudo detectar un monto",
+        "ambiguous_currency": "Moneda ambigua, revísala antes de continuar"
+      },
+      "field": {
+        "amount": "Monto",
+        "currency": "Moneda",
+        "date": "Fecha",
+        "type": "Tipo",
+        "counterparty": "Contraparte",
+        "reference": "Referencia"
+      }
+    },
     "REVERSED": {
       "title": "Transacción invertida",
       "title.short": "Tr. invertida",
@@ -437,6 +465,85 @@
         "other": "Transferencias"
       }
     }
+  },
+  "ATTACHMENTS": {
+    "view": "Ver adjunto",
+    "remove": "Eliminar adjunto",
+    "replace": "Reemplazar",
+    "upload-from-gallery": "Subir desde galería",
+    "upload-from-camera": "Tomar foto",
+    "empty-state": "No hay adjuntos"
+  },
+  "WALLEX-AI": {
+    "voice_settings_title": "Entrada por voz",
+    "voice_settings_subtitle": "Dicta gastos y haz preguntas al asistente",
+    "voice_permission_title": "Acceso al micrófono",
+    "voice_permission_body": "Wallex necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.",
+    "voice_permission_cta": "Entendido, seguir",
+    "voice_permission_denied_title": "Permiso de micrófono denegado",
+    "voice_permission_denied_body": "Para dictar o chatear con voz, habilita el permiso en los ajustes del sistema.",
+    "voice_permission_denied_snackbar": "Permiso de micrófono denegado",
+    "voice_permission_open_settings": "Abrir ajustes",
+    "voice_offline_hint": "Revisa tu conexión a internet para usar el dictado.",
+    "voice_stt_unavailable": "El reconocimiento de voz no está disponible en este dispositivo.",
+    "voice_empty_transcript": "No escuché nada, inténtalo de nuevo.",
+    "voice_fab_tooltip": "Dictar gasto",
+    "voice_listening_title": "Escuchando...",
+    "voice_listening_subtitle": "Dime el gasto en una frase.",
+    "voice_listening_hint": "Ej: \"gasté 20 dolares en almuerzo\"",
+    "voice_error_title": "Hubo un problema",
+    "voice_error_fallback": "Error de reconocimiento",
+    "voice_cancel": "Cancelar",
+    "voice_done": "Listo",
+    "voice_retry": "Reintentar",
+    "voice_processing": "Procesando...",
+    "voice_review_title": "Nueva transacción por voz",
+    "voice_review_tap_to_edit": "Toca para editar",
+    "voice_review_account_label": "Cuenta",
+    "voice_review_auto_countdown": "Auto {{seconds}}s",
+    "voice_review_save": "Guardar",
+    "voice_review_edit_more": "Editar más",
+    "voice_review_description_placeholder": "Descripción",
+    "voice_review_amount_placeholder": "Monto",
+    "voice_review_category_placeholder": "Categoría",
+    "voice_review_account_placeholder": "Selecciona cuenta",
+    "voice_review_description_hint": "¿En qué fue...?",
+    "voice_save_success_auto": "Gasto guardado",
+    "voice_save_success_manual": "Listo, guardado.",
+    "voice_save_undo_label": "Deshacer",
+    "voice_save_undo_success": "Eliminado",
+    "voice_validation_amount_zero": "Agrega un monto mayor a 0 para continuar.",
+    "voice_validation_account_missing": "Selecciona una cuenta.",
+    "voice_validation_category_missing": "Selecciona una categoría.",
+    "voice_flow_no_proposal": "No pude extraer un gasto de lo que dijiste.",
+    "voice_flow_error_title": "No pude interpretar eso",
+    "chat_input_hint_default": "Pregunta sobre tus finanzas...",
+    "chat_input_hint_using_tools": "Consultando tus datos...",
+    "chat_error_generic": "No pude procesar tu pregunta, intenta de nuevo.",
+    "chat_error_loop_cap": "No pude completar la consulta.",
+    "chat_tool_create_transaction_expense": "Crear gasto",
+    "chat_tool_create_transaction_income": "Registrar ingreso",
+    "chat_tool_create_transfer": "Crear transferencia",
+    "chat_tool_generic_confirm": "Confirmar acción",
+    "chat_tool_review_subtitle": "Revisa los datos antes de confirmar.",
+    "chat_tool_no_details": "Sin detalles disponibles.",
+    "chat_tool_cta_approve": "Aprobar y ejecutar",
+    "chat_tool_cta_cancel": "Cancelar",
+    "chat_tool_field_amount": "Monto",
+    "chat_tool_field_type": "Tipo",
+    "chat_tool_field_type_income": "Ingreso",
+    "chat_tool_field_type_expense": "Gasto",
+    "chat_tool_field_description": "Descripción",
+    "chat_tool_field_category": "Categoría",
+    "chat_tool_field_account": "Cuenta",
+    "chat_tool_field_date": "Fecha",
+    "chat_tool_field_from_account": "Desde",
+    "chat_tool_field_to_account": "Hacia",
+    "chat_tool_field_value_in_destiny": "Monto destino",
+    "chat_header": "Wallex AI",
+    "chat_boot_loading": "Cargando contexto financiero...",
+    "chat_disabled": "El chat de IA está deshabilitado en configuración.",
+    "chat_welcome_message": "¡Hola! Soy **Wallex AI**, tu asistente financiero.\n\nPuedo ayudarte con:\n- Ver saldos y estado de tus cuentas\n- Analizar tus gastos por categoría\n- Revisar transacciones recientes\n- Consultar presupuestos\n\n¿Qué quieres revisar?"
   },
   "TRANSFER": {
     "display": "Transferencia",
@@ -505,7 +612,23 @@
       "already-exists": "Ya existe otra cuenta con el mismo nombre. Por favor, escriba otro",
       "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "tracked-since": "Rastrear desde",
+      "tracked-since.hint": "Opcional",
+      "tracked-since.info": "Las transacciones anteriores a esta fecha aparecerán en el historial pero no afectarán el balance.",
+      "tracked-since.validation-after-closing": "La fecha de seguimiento no puede ser posterior a la fecha de cierre de la cuenta."
+    },
+    "BADGE": {
+      "pre-tracking": "Histórico",
+      "pre-tracking.tooltip": "No afecta el balance actual"
+    },
+    "RETROACTIVE": {
+      "preview-title": "Impacto en el balance",
+      "preview-message": "Balance actual: {{current}} → Balance nuevo: {{simulated}}",
+      "strong-confirm-hint": "Escribe CONFIRMAR para continuar",
+      "strong-confirm-mismatch": "El texto no coincide. Se canceló el cambio.",
+      "accept": "Aceptar",
+      "cancel": "Cancelar"
     },
     "DELETE": {
       "warning-header": "¿Eliminar cuenta?",
@@ -902,6 +1025,10 @@
       "size": "Tamaño"
     }
   },
+  "PROFILE": {
+    "upload-custom-avatar": "Subir foto personalizada",
+    "use-preset-avatar": "Usar avatar predeterminado"
+  },
   "SETTINGS": {
     "title_long": "Ajustes y Personalización",
     "title_short": "Configuración",
@@ -934,6 +1061,32 @@
       "private_mode_descr": "Oculta todos los valores monetarios",
       "private_mode_activated": "Modo privado activado",
       "private_mode_deactivated": "Modo privado desactivado"
+    },
+    "HIDDEN_MODE": {
+      "title": "Modo Oculto",
+      "menu_descr": "Oculta tus cuentas de ahorro detrás de un PIN",
+      "enable": "Activar Modo Oculto",
+      "description": "Cuando está activo, las cuentas de ahorro y sus transacciones se ocultan del saldo, gráficos y listas. Para ver el saldo real: 6 toques en tu foto de perfil + PIN.",
+      "change_pin": "Cambiar PIN",
+      "change_pin_descr": "Reemplaza tu PIN actual por uno nuevo",
+      "enabled_badge": "Activo",
+      "PIN": {
+        "setup_title": "Crea tu PIN",
+        "setup_subtitle": "Este PIN desbloqueará tus cuentas ocultas",
+        "confirm_title": "Confirma tu PIN",
+        "unlock_title": "Ingresa tu PIN",
+        "change_old_title": "Ingresa tu PIN actual",
+        "change_new_title": "Crea un PIN nuevo",
+        "change_confirm_title": "Confirma el PIN nuevo",
+        "disable_title": "Confirma tu PIN para desactivar el Modo Oculto",
+        "mismatch": "Los PINs no coinciden",
+        "incorrect": "PIN incorrecto",
+        "too_many_attempts": "Demasiados intentos. Intenta de nuevo en {{seconds}}s",
+        "use_biometric": "Usar huella",
+        "biometric_reason": "Desbloquea Wallex",
+        "pin_changed": "PIN actualizado",
+        "unlocked": "Modo completo activado"
+      }
     },
     "TRANSACTIONS": {
       "menu_title": "Transacciones",

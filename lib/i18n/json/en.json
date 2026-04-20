@@ -318,6 +318,8 @@
     "delete.multiple.warning-message": "This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated",
     "delete.multiple.success": "{{x}} transactions deleted correctly",
     "details": "Movement details",
+    "receipt-attached": "Receipt attached",
+    "view-receipt": "View receipt",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
       "skip": "Skip",
@@ -393,6 +395,32 @@
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date"
     },
+    "RECEIPT-IMPORT": {
+      "entry-gallery": "From receipt (gallery)",
+      "entry-camera": "From receipt (camera)",
+      "processing-ocr": "Processing OCR...",
+      "processing-ai": "Processing AI...",
+      "processing-done": "Done",
+      "review-title": "Review receipt",
+      "review-subtitle": "Validate and edit fields before creating the transaction",
+      "review-cta-continue": "Continue",
+      "review-cta-retry": "Retry",
+      "error": {
+        "ocr_empty": "No text was detected in the image",
+        "ai_failed": "AI processing failed, local extraction was used",
+        "image_corrupt": "The image appears to be corrupted",
+        "no_amount": "Could not detect an amount",
+        "ambiguous_currency": "Ambiguous currency, please review it before continuing"
+      },
+      "field": {
+        "amount": "Amount",
+        "currency": "Currency",
+        "date": "Date",
+        "type": "Type",
+        "counterparty": "Counterparty",
+        "reference": "Reference"
+      }
+    },
     "REVERSED": {
       "title": "Inverse transaction",
       "title.short": "Inverse tr.",
@@ -435,6 +463,85 @@
         "other": "Transfers"
       }
     }
+  },
+  "ATTACHMENTS": {
+    "view": "View attachment",
+    "remove": "Remove attachment",
+    "replace": "Replace",
+    "upload-from-gallery": "Upload from gallery",
+    "upload-from-camera": "Take photo",
+    "empty-state": "No attachments"
+  },
+  "WALLEX-AI": {
+    "voice_settings_title": "Voice input",
+    "voice_settings_subtitle": "Dictate expenses and ask the assistant",
+    "voice_permission_title": "Microphone access",
+    "voice_permission_body": "Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.",
+    "voice_permission_cta": "Got it, continue",
+    "voice_permission_denied_title": "Microphone permission denied",
+    "voice_permission_denied_body": "To dictate or voice-chat, enable the permission in your system settings.",
+    "voice_permission_denied_snackbar": "Microphone permission denied",
+    "voice_permission_open_settings": "Open settings",
+    "voice_offline_hint": "Check your internet connection to use voice dictation.",
+    "voice_stt_unavailable": "Speech recognition isn't available on this device.",
+    "voice_empty_transcript": "I didn't hear anything, try again.",
+    "voice_fab_tooltip": "Dictate expense",
+    "voice_listening_title": "Listening...",
+    "voice_listening_subtitle": "Tell me the expense in one phrase.",
+    "voice_listening_hint": "E.g. \"I spent 20 dollars on lunch\"",
+    "voice_error_title": "Something went wrong",
+    "voice_error_fallback": "Recognition error",
+    "voice_cancel": "Cancel",
+    "voice_done": "Done",
+    "voice_retry": "Retry",
+    "voice_processing": "Processing...",
+    "voice_review_title": "New voice transaction",
+    "voice_review_tap_to_edit": "Tap to edit",
+    "voice_review_account_label": "Account",
+    "voice_review_auto_countdown": "Auto {{seconds}}s",
+    "voice_review_save": "Save",
+    "voice_review_edit_more": "Edit more",
+    "voice_review_description_placeholder": "Description",
+    "voice_review_amount_placeholder": "Amount",
+    "voice_review_category_placeholder": "Category",
+    "voice_review_account_placeholder": "Select account",
+    "voice_review_description_hint": "What was it for...?",
+    "voice_save_success_auto": "Expense saved",
+    "voice_save_success_manual": "Done, saved.",
+    "voice_save_undo_label": "Undo",
+    "voice_save_undo_success": "Deleted",
+    "voice_validation_amount_zero": "Add an amount greater than 0 to continue.",
+    "voice_validation_account_missing": "Select an account.",
+    "voice_validation_category_missing": "Select a category.",
+    "voice_flow_no_proposal": "I couldn't extract an expense from what you said.",
+    "voice_flow_error_title": "I couldn't interpret that",
+    "chat_input_hint_default": "Ask about your finances...",
+    "chat_input_hint_using_tools": "Looking up your data...",
+    "chat_error_generic": "I couldn't process your question, try again.",
+    "chat_error_loop_cap": "I couldn't complete the query.",
+    "chat_tool_create_transaction_expense": "Create expense",
+    "chat_tool_create_transaction_income": "Register income",
+    "chat_tool_create_transfer": "Create transfer",
+    "chat_tool_generic_confirm": "Confirm action",
+    "chat_tool_review_subtitle": "Check the details before confirming.",
+    "chat_tool_no_details": "No details available.",
+    "chat_tool_cta_approve": "Approve and run",
+    "chat_tool_cta_cancel": "Cancel",
+    "chat_tool_field_amount": "Amount",
+    "chat_tool_field_type": "Type",
+    "chat_tool_field_type_income": "Income",
+    "chat_tool_field_type_expense": "Expense",
+    "chat_tool_field_description": "Description",
+    "chat_tool_field_category": "Category",
+    "chat_tool_field_account": "Account",
+    "chat_tool_field_date": "Date",
+    "chat_tool_field_from_account": "From",
+    "chat_tool_field_to_account": "To",
+    "chat_tool_field_value_in_destiny": "Destination amount",
+    "chat_header": "Wallex AI",
+    "chat_boot_loading": "Loading financial context...",
+    "chat_disabled": "AI chat is disabled in settings.",
+    "chat_welcome_message": "Hi! I'm **Wallex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?"
   },
   "TRANSFER": {
     "display": "Transfer",
@@ -503,7 +610,23 @@
       "already-exists": "There is already another one with the same name, please write another",
       "tr-before-opening-date": "There are transactions in this account with a date before the opening date",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "tracked-since": "Track since",
+      "tracked-since.hint": "Optional",
+      "tracked-since.info": "Transactions before this date will appear in history but will not affect balance.",
+      "tracked-since.validation-after-closing": "Track-since date cannot be later than the account closing date."
+    },
+    "BADGE": {
+      "pre-tracking": "Historical",
+      "pre-tracking.tooltip": "Does not affect current balance"
+    },
+    "RETROACTIVE": {
+      "preview-title": "Balance impact",
+      "preview-message": "Current balance: {{current}} → New balance: {{simulated}}",
+      "strong-confirm-hint": "Type CONFIRM to proceed",
+      "strong-confirm-mismatch": "Text does not match. Change canceled.",
+      "accept": "Accept",
+      "cancel": "Cancel"
     },
     "DELETE": {
       "warning-header": "Delete account?",
@@ -900,6 +1023,10 @@
       "size": "Size"
     }
   },
+  "PROFILE": {
+    "upload-custom-avatar": "Upload custom avatar",
+    "use-preset-avatar": "Use preset avatar"
+  },
   "SETTINGS": {
     "title_long": "Settings & Customization",
     "title_short": "Settings",
@@ -932,6 +1059,32 @@
       "private_mode_descr": "Hide all monetary values",
       "private_mode_activated": "Private mode activated",
       "private_mode_deactivated": "Private mode disabled"
+    },
+    "HIDDEN_MODE": {
+      "title": "Hidden Mode",
+      "menu_descr": "Hide your savings accounts behind a PIN",
+      "enable": "Enable Hidden Mode",
+      "description": "When active, your savings accounts and their transactions are hidden from balances, charts and lists. To see the real balance: 6 taps on your profile picture + PIN.",
+      "change_pin": "Change PIN",
+      "change_pin_descr": "Replace your current PIN with a new one",
+      "enabled_badge": "Active",
+      "PIN": {
+        "setup_title": "Create your PIN",
+        "setup_subtitle": "This PIN will unlock your hidden accounts",
+        "confirm_title": "Confirm your PIN",
+        "unlock_title": "Enter your PIN",
+        "change_old_title": "Enter your current PIN",
+        "change_new_title": "Create a new PIN",
+        "change_confirm_title": "Confirm the new PIN",
+        "disable_title": "Confirm your PIN to disable Hidden Mode",
+        "mismatch": "PINs do not match",
+        "incorrect": "Incorrect PIN",
+        "too_many_attempts": "Too many attempts. Try again in {{seconds}}s",
+        "use_biometric": "Use fingerprint",
+        "biometric_reason": "Unlock Wallex",
+        "pin_changed": "PIN updated",
+        "unlocked": "Full view unlocked"
+      }
     },
     "TRANSACTIONS": {
       "menu_title": "Transactions",

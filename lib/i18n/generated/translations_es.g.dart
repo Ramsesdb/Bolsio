@@ -46,6 +46,8 @@ class TranslationsEs extends Translations {
 	@override late final _TranslationsStatsEs stats = _TranslationsStatsEs._(_root);
 	@override late final _TranslationsIconSelectorEs icon_selector = _TranslationsIconSelectorEs._(_root);
 	@override late final _TranslationsTransactionEs transaction = _TranslationsTransactionEs._(_root);
+	@override late final _TranslationsAttachmentsEs attachments = _TranslationsAttachmentsEs._(_root);
+	@override late final _TranslationsWallexAiEs wallex_ai = _TranslationsWallexAiEs._(_root);
 	@override late final _TranslationsTransferEs transfer = _TranslationsTransferEs._(_root);
 	@override late final _TranslationsRecurrentTransactionsEs recurrent_transactions = _TranslationsRecurrentTransactionsEs._(_root);
 	@override late final _TranslationsAccountEs account = _TranslationsAccountEs._(_root);
@@ -57,6 +59,7 @@ class TranslationsEs extends Translations {
 	@override late final _TranslationsDebtsEs debts = _TranslationsDebtsEs._(_root);
 	@override late final _TranslationsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
+	@override late final _TranslationsProfileEs profile = _TranslationsProfileEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
 }
@@ -277,13 +280,109 @@ class _TranslationsTransactionEs extends TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String delete_multiple_success({required Object x}) => '${x} transacciones eliminadas correctamente';
 	@override String get details => 'Detalles del movimiento';
+	@override String get receipt_attached => 'Comprobante adjunto';
+	@override String get view_receipt => 'Ver comprobante';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
+	@override late final _TranslationsTransactionReceiptImportEs receipt_import = _TranslationsTransactionReceiptImportEs._(_root);
 	@override late final _TranslationsTransactionReversedEs reversed = _TranslationsTransactionReversedEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
 	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
+}
+
+// Path: attachments
+class _TranslationsAttachmentsEs extends TranslationsAttachmentsEn {
+	_TranslationsAttachmentsEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get view => 'Ver adjunto';
+	@override String get remove => 'Eliminar adjunto';
+	@override String get replace => 'Reemplazar';
+	@override String get upload_from_gallery => 'Subir desde galería';
+	@override String get upload_from_camera => 'Tomar foto';
+	@override String get empty_state => 'No hay adjuntos';
+}
+
+// Path: wallex_ai
+class _TranslationsWallexAiEs extends TranslationsWallexAiEn {
+	_TranslationsWallexAiEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get voice_settings_title => 'Entrada por voz';
+	@override String get voice_settings_subtitle => 'Dicta gastos y haz preguntas al asistente';
+	@override String get voice_permission_title => 'Acceso al micrófono';
+	@override String get voice_permission_body => 'Wallex necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.';
+	@override String get voice_permission_cta => 'Entendido, seguir';
+	@override String get voice_permission_denied_title => 'Permiso de micrófono denegado';
+	@override String get voice_permission_denied_body => 'Para dictar o chatear con voz, habilita el permiso en los ajustes del sistema.';
+	@override String get voice_permission_denied_snackbar => 'Permiso de micrófono denegado';
+	@override String get voice_permission_open_settings => 'Abrir ajustes';
+	@override String get voice_offline_hint => 'Revisa tu conexión a internet para usar el dictado.';
+	@override String get voice_stt_unavailable => 'El reconocimiento de voz no está disponible en este dispositivo.';
+	@override String get voice_empty_transcript => 'No escuché nada, inténtalo de nuevo.';
+	@override String get voice_fab_tooltip => 'Dictar gasto';
+	@override String get voice_listening_title => 'Escuchando...';
+	@override String get voice_listening_subtitle => 'Dime el gasto en una frase.';
+	@override String get voice_listening_hint => 'Ej: "gasté 20 dolares en almuerzo"';
+	@override String get voice_error_title => 'Hubo un problema';
+	@override String get voice_error_fallback => 'Error de reconocimiento';
+	@override String get voice_cancel => 'Cancelar';
+	@override String get voice_done => 'Listo';
+	@override String get voice_retry => 'Reintentar';
+	@override String get voice_processing => 'Procesando...';
+	@override String get voice_review_title => 'Nueva transacción por voz';
+	@override String get voice_review_tap_to_edit => 'Toca para editar';
+	@override String get voice_review_account_label => 'Cuenta';
+	@override String voice_review_auto_countdown({required Object seconds}) => 'Auto ${seconds}s';
+	@override String get voice_review_save => 'Guardar';
+	@override String get voice_review_edit_more => 'Editar más';
+	@override String get voice_review_description_placeholder => 'Descripción';
+	@override String get voice_review_amount_placeholder => 'Monto';
+	@override String get voice_review_category_placeholder => 'Categoría';
+	@override String get voice_review_account_placeholder => 'Selecciona cuenta';
+	@override String get voice_review_description_hint => '¿En qué fue...?';
+	@override String get voice_save_success_auto => 'Gasto guardado';
+	@override String get voice_save_success_manual => 'Listo, guardado.';
+	@override String get voice_save_undo_label => 'Deshacer';
+	@override String get voice_save_undo_success => 'Eliminado';
+	@override String get voice_validation_amount_zero => 'Agrega un monto mayor a 0 para continuar.';
+	@override String get voice_validation_account_missing => 'Selecciona una cuenta.';
+	@override String get voice_validation_category_missing => 'Selecciona una categoría.';
+	@override String get voice_flow_no_proposal => 'No pude extraer un gasto de lo que dijiste.';
+	@override String get voice_flow_error_title => 'No pude interpretar eso';
+	@override String get chat_input_hint_default => 'Pregunta sobre tus finanzas...';
+	@override String get chat_input_hint_using_tools => 'Consultando tus datos...';
+	@override String get chat_error_generic => 'No pude procesar tu pregunta, intenta de nuevo.';
+	@override String get chat_error_loop_cap => 'No pude completar la consulta.';
+	@override String get chat_tool_create_transaction_expense => 'Crear gasto';
+	@override String get chat_tool_create_transaction_income => 'Registrar ingreso';
+	@override String get chat_tool_create_transfer => 'Crear transferencia';
+	@override String get chat_tool_generic_confirm => 'Confirmar acción';
+	@override String get chat_tool_review_subtitle => 'Revisa los datos antes de confirmar.';
+	@override String get chat_tool_no_details => 'Sin detalles disponibles.';
+	@override String get chat_tool_cta_approve => 'Aprobar y ejecutar';
+	@override String get chat_tool_cta_cancel => 'Cancelar';
+	@override String get chat_tool_field_amount => 'Monto';
+	@override String get chat_tool_field_type => 'Tipo';
+	@override String get chat_tool_field_type_income => 'Ingreso';
+	@override String get chat_tool_field_type_expense => 'Gasto';
+	@override String get chat_tool_field_description => 'Descripción';
+	@override String get chat_tool_field_category => 'Categoría';
+	@override String get chat_tool_field_account => 'Cuenta';
+	@override String get chat_tool_field_date => 'Fecha';
+	@override String get chat_tool_field_from_account => 'Desde';
+	@override String get chat_tool_field_to_account => 'Hacia';
+	@override String get chat_tool_field_value_in_destiny => 'Monto destino';
+	@override String get chat_header => 'Wallex AI';
+	@override String get chat_boot_loading => 'Cargando contexto financiero...';
+	@override String get chat_disabled => 'El chat de IA está deshabilitado en configuración.';
+	@override String get chat_welcome_message => '¡Hola! Soy **Wallex AI**, tu asistente financiero.\n\nPuedo ayudarte con:\n- Ver saldos y estado de tus cuentas\n- Analizar tus gastos por categoría\n- Revisar transacciones recientes\n- Consultar presupuestos\n\n¿Qué quieres revisar?';
 }
 
 // Path: transfer
@@ -338,6 +437,8 @@ class _TranslationsAccountEs extends TranslationsAccountEn {
 	@override String get no_accounts => 'No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón \'+\' de la parte inferior';
 	@override late final _TranslationsAccountTypesEs types = _TranslationsAccountTypesEs._(_root);
 	@override late final _TranslationsAccountFormEs form = _TranslationsAccountFormEs._(_root);
+	@override late final _TranslationsAccountBadgeEs badge = _TranslationsAccountBadgeEs._(_root);
+	@override late final _TranslationsAccountRetroactiveEs retroactive = _TranslationsAccountRetroactiveEs._(_root);
 	@override late final _TranslationsAccountDeleteEs delete = _TranslationsAccountDeleteEs._(_root);
 	@override late final _TranslationsAccountCloseEs close = _TranslationsAccountCloseEs._(_root);
 	@override late final _TranslationsAccountSelectEs select = _TranslationsAccountSelectEs._(_root);
@@ -524,6 +625,17 @@ class _TranslationsBackupEs extends TranslationsBackupEn {
 	@override late final _TranslationsBackupAboutEs about = _TranslationsBackupAboutEs._(_root);
 }
 
+// Path: profile
+class _TranslationsProfileEs extends TranslationsProfileEn {
+	_TranslationsProfileEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get upload_custom_avatar => 'Subir foto personalizada';
+	@override String get use_preset_avatar => 'Usar avatar predeterminado';
+}
+
 // Path: settings
 class _TranslationsSettingsEs extends TranslationsSettingsEn {
 	_TranslationsSettingsEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -537,6 +649,7 @@ class _TranslationsSettingsEs extends TranslationsSettingsEn {
 	@override String get edit_profile => 'Editar perfil';
 	@override late final _TranslationsSettingsGeneralEs general = _TranslationsSettingsGeneralEs._(_root);
 	@override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
+	@override late final _TranslationsSettingsHiddenModeEs hidden_mode = _TranslationsSettingsHiddenModeEs._(_root);
 	@override late final _TranslationsSettingsTransactionsEs transactions = _TranslationsSettingsTransactionsEs._(_root);
 	@override late final _TranslationsSettingsAppearanceEs appearance = _TranslationsSettingsAppearanceEs._(_root);
 }
@@ -811,6 +924,26 @@ class _TranslationsTransactionFormEs extends TranslationsTransactionFormEn {
 	@override String get exchange_to_preferred_in_date => 'El día de la transacción';
 }
 
+// Path: transaction.receipt_import
+class _TranslationsTransactionReceiptImportEs extends TranslationsTransactionReceiptImportEn {
+	_TranslationsTransactionReceiptImportEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get entry_gallery => 'Desde comprobante (galería)';
+	@override String get entry_camera => 'Desde comprobante (cámara)';
+	@override String get processing_ocr => 'Procesando OCR...';
+	@override String get processing_ai => 'Procesando IA...';
+	@override String get processing_done => 'Listo';
+	@override String get review_title => 'Revisar comprobante';
+	@override String get review_subtitle => 'Valida y corrige los datos antes de crear la transacción';
+	@override String get review_cta_continue => 'Continuar';
+	@override String get review_cta_retry => 'Reintentar';
+	@override late final _TranslationsTransactionReceiptImportErrorEs error = _TranslationsTransactionReceiptImportErrorEs._(_root);
+	@override late final _TranslationsTransactionReceiptImportFieldEs field = _TranslationsTransactionReceiptImportFieldEs._(_root);
+}
+
 // Path: transaction.reversed
 class _TranslationsTransactionReversedEs extends TranslationsTransactionReversedEn {
 	_TranslationsTransactionReversedEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -946,6 +1079,36 @@ class _TranslationsAccountFormEs extends TranslationsAccountFormEn {
 	@override String get tr_before_opening_date => 'Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura';
 	@override String get iban => 'IBAN';
 	@override String get swift => 'SWIFT';
+	@override String get tracked_since => 'Rastrear desde';
+	@override String get tracked_since_hint => 'Opcional';
+	@override String get tracked_since_info => 'Las transacciones anteriores a esta fecha aparecerán en el historial pero no afectarán el balance.';
+	@override String get tracked_since_validation_after_closing => 'La fecha de seguimiento no puede ser posterior a la fecha de cierre de la cuenta.';
+}
+
+// Path: account.badge
+class _TranslationsAccountBadgeEs extends TranslationsAccountBadgeEn {
+	_TranslationsAccountBadgeEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get pre_tracking => 'Histórico';
+	@override String get pre_tracking_tooltip => 'No afecta el balance actual';
+}
+
+// Path: account.retroactive
+class _TranslationsAccountRetroactiveEs extends TranslationsAccountRetroactiveEn {
+	_TranslationsAccountRetroactiveEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get preview_title => 'Impacto en el balance';
+	@override String preview_message({required Object current, required Object simulated}) => 'Balance actual: ${current} → Balance nuevo: ${simulated}';
+	@override String get strong_confirm_hint => 'Escribe CONFIRMAR para continuar';
+	@override String get strong_confirm_mismatch => 'El texto no coincide. Se canceló el cambio.';
+	@override String get accept => 'Aceptar';
+	@override String get cancel => 'Cancelar';
 }
 
 // Path: account.delete
@@ -1373,6 +1536,23 @@ class _TranslationsSettingsSecurityEs extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_deactivated => 'Modo privado desactivado';
 }
 
+// Path: settings.hidden_mode
+class _TranslationsSettingsHiddenModeEs extends TranslationsSettingsHiddenModeEn {
+	_TranslationsSettingsHiddenModeEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Modo Oculto';
+	@override String get menu_descr => 'Oculta tus cuentas de ahorro detrás de un PIN';
+	@override String get enable => 'Activar Modo Oculto';
+	@override String get description => 'Cuando está activo, las cuentas de ahorro y sus transacciones se ocultan del saldo, gráficos y listas. Para ver el saldo real: 6 toques en tu foto de perfil + PIN.';
+	@override String get change_pin => 'Cambiar PIN';
+	@override String get change_pin_descr => 'Reemplaza tu PIN actual por uno nuevo';
+	@override String get enabled_badge => 'Activo';
+	@override late final _TranslationsSettingsHiddenModePinEs pin = _TranslationsSettingsHiddenModePinEs._(_root);
+}
+
 // Path: settings.transactions
 class _TranslationsSettingsTransactionsEs extends TranslationsSettingsTransactionsEn {
 	_TranslationsSettingsTransactionsEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -1636,6 +1816,35 @@ class _TranslationsTransactionFormValidatorsEs extends TranslationsTransactionFo
 	@override String get transfer_between_same_accounts => 'Las cuentas de origen y destino no pueden coincidir';
 }
 
+// Path: transaction.receipt_import.error
+class _TranslationsTransactionReceiptImportErrorEs extends TranslationsTransactionReceiptImportErrorEn {
+	_TranslationsTransactionReceiptImportErrorEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get ocr_empty => 'No se detectó texto en la imagen';
+	@override String get ai_failed => 'No se pudo procesar con IA, se usó extracción local';
+	@override String get image_corrupt => 'La imagen parece estar dañada';
+	@override String get no_amount => 'No se pudo detectar un monto';
+	@override String get ambiguous_currency => 'Moneda ambigua, revísala antes de continuar';
+}
+
+// Path: transaction.receipt_import.field
+class _TranslationsTransactionReceiptImportFieldEs extends TranslationsTransactionReceiptImportFieldEn {
+	_TranslationsTransactionReceiptImportFieldEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get amount => 'Monto';
+	@override String get currency => 'Moneda';
+	@override String get date => 'Fecha';
+	@override String get type => 'Tipo';
+	@override String get counterparty => 'Contraparte';
+	@override String get reference => 'Referencia';
+}
+
 // Path: transfer.form.value_in_destiny
 class _TranslationsTransferFormValueInDestinyEs extends TranslationsTransferFormValueInDestinyEn {
 	_TranslationsTransferFormValueInDestinyEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -1888,6 +2097,30 @@ class _TranslationsSettingsGeneralLocaleEs extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
+}
+
+// Path: settings.hidden_mode.pin
+class _TranslationsSettingsHiddenModePinEs extends TranslationsSettingsHiddenModePinEn {
+	_TranslationsSettingsHiddenModePinEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get setup_title => 'Crea tu PIN';
+	@override String get setup_subtitle => 'Este PIN desbloqueará tus cuentas ocultas';
+	@override String get confirm_title => 'Confirma tu PIN';
+	@override String get unlock_title => 'Ingresa tu PIN';
+	@override String get change_old_title => 'Ingresa tu PIN actual';
+	@override String get change_new_title => 'Crea un PIN nuevo';
+	@override String get change_confirm_title => 'Confirma el PIN nuevo';
+	@override String get disable_title => 'Confirma tu PIN para desactivar el Modo Oculto';
+	@override String get mismatch => 'Los PINs no coinciden';
+	@override String get incorrect => 'PIN incorrecto';
+	@override String too_many_attempts({required Object seconds}) => 'Demasiados intentos. Intenta de nuevo en ${seconds}s';
+	@override String get use_biometric => 'Usar huella';
+	@override String get biometric_reason => 'Desbloquea Wallex';
+	@override String get pin_changed => 'PIN actualizado';
+	@override String get unlocked => 'Modo completo activado';
 }
 
 // Path: settings.transactions.style
@@ -2322,6 +2555,8 @@ extension on TranslationsEs {
 		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} transacciones eliminadas correctamente';
 		map['transaction.details'] = 'Detalles del movimiento';
+		map['transaction.receipt_attached'] = 'Comprobante adjunto';
+		map['transaction.view_receipt'] = 'Ver comprobante';
 		map['transaction.next_payments.accept'] = 'Aceptar';
 		map['transaction.next_payments.skip'] = 'Saltar';
 		map['transaction.next_payments.skip_success'] = 'Transacción saltada con exito';
@@ -2383,6 +2618,26 @@ extension on TranslationsEs {
 		map['transaction.form.description_info'] = 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => 'Cambio a ${currency}';
 		map['transaction.form.exchange_to_preferred_in_date'] = 'El día de la transacción';
+		map['transaction.receipt_import.entry_gallery'] = 'Desde comprobante (galería)';
+		map['transaction.receipt_import.entry_camera'] = 'Desde comprobante (cámara)';
+		map['transaction.receipt_import.processing_ocr'] = 'Procesando OCR...';
+		map['transaction.receipt_import.processing_ai'] = 'Procesando IA...';
+		map['transaction.receipt_import.processing_done'] = 'Listo';
+		map['transaction.receipt_import.review_title'] = 'Revisar comprobante';
+		map['transaction.receipt_import.review_subtitle'] = 'Valida y corrige los datos antes de crear la transacción';
+		map['transaction.receipt_import.review_cta_continue'] = 'Continuar';
+		map['transaction.receipt_import.review_cta_retry'] = 'Reintentar';
+		map['transaction.receipt_import.error.ocr_empty'] = 'No se detectó texto en la imagen';
+		map['transaction.receipt_import.error.ai_failed'] = 'No se pudo procesar con IA, se usó extracción local';
+		map['transaction.receipt_import.error.image_corrupt'] = 'La imagen parece estar dañada';
+		map['transaction.receipt_import.error.no_amount'] = 'No se pudo detectar un monto';
+		map['transaction.receipt_import.error.ambiguous_currency'] = 'Moneda ambigua, revísala antes de continuar';
+		map['transaction.receipt_import.field.amount'] = 'Monto';
+		map['transaction.receipt_import.field.currency'] = 'Moneda';
+		map['transaction.receipt_import.field.date'] = 'Fecha';
+		map['transaction.receipt_import.field.type'] = 'Tipo';
+		map['transaction.receipt_import.field.counterparty'] = 'Contraparte';
+		map['transaction.receipt_import.field.reference'] = 'Referencia';
 		map['transaction.reversed.title'] = 'Transacción invertida';
 		map['transaction.reversed.title_short'] = 'Tr. invertida';
 		map['transaction.reversed.description_for_expenses'] = 'A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.';
@@ -2419,6 +2674,81 @@ extension on TranslationsEs {
 				one: 'Transferencia',
 				other: 'Transferencias',
 			);
+		map['attachments.view'] = 'Ver adjunto';
+		map['attachments.remove'] = 'Eliminar adjunto';
+		map['attachments.replace'] = 'Reemplazar';
+		map['attachments.upload_from_gallery'] = 'Subir desde galería';
+		map['attachments.upload_from_camera'] = 'Tomar foto';
+		map['attachments.empty_state'] = 'No hay adjuntos';
+		map['wallex_ai.voice_settings_title'] = 'Entrada por voz';
+		map['wallex_ai.voice_settings_subtitle'] = 'Dicta gastos y haz preguntas al asistente';
+		map['wallex_ai.voice_permission_title'] = 'Acceso al micrófono';
+		map['wallex_ai.voice_permission_body'] = 'Wallex necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.';
+		map['wallex_ai.voice_permission_cta'] = 'Entendido, seguir';
+		map['wallex_ai.voice_permission_denied_title'] = 'Permiso de micrófono denegado';
+		map['wallex_ai.voice_permission_denied_body'] = 'Para dictar o chatear con voz, habilita el permiso en los ajustes del sistema.';
+		map['wallex_ai.voice_permission_denied_snackbar'] = 'Permiso de micrófono denegado';
+		map['wallex_ai.voice_permission_open_settings'] = 'Abrir ajustes';
+		map['wallex_ai.voice_offline_hint'] = 'Revisa tu conexión a internet para usar el dictado.';
+		map['wallex_ai.voice_stt_unavailable'] = 'El reconocimiento de voz no está disponible en este dispositivo.';
+		map['wallex_ai.voice_empty_transcript'] = 'No escuché nada, inténtalo de nuevo.';
+		map['wallex_ai.voice_fab_tooltip'] = 'Dictar gasto';
+		map['wallex_ai.voice_listening_title'] = 'Escuchando...';
+		map['wallex_ai.voice_listening_subtitle'] = 'Dime el gasto en una frase.';
+		map['wallex_ai.voice_listening_hint'] = 'Ej: "gasté 20 dolares en almuerzo"';
+		map['wallex_ai.voice_error_title'] = 'Hubo un problema';
+		map['wallex_ai.voice_error_fallback'] = 'Error de reconocimiento';
+		map['wallex_ai.voice_cancel'] = 'Cancelar';
+		map['wallex_ai.voice_done'] = 'Listo';
+		map['wallex_ai.voice_retry'] = 'Reintentar';
+		map['wallex_ai.voice_processing'] = 'Procesando...';
+		map['wallex_ai.voice_review_title'] = 'Nueva transacción por voz';
+		map['wallex_ai.voice_review_tap_to_edit'] = 'Toca para editar';
+		map['wallex_ai.voice_review_account_label'] = 'Cuenta';
+		map['wallex_ai.voice_review_auto_countdown'] = ({required Object seconds}) => 'Auto ${seconds}s';
+		map['wallex_ai.voice_review_save'] = 'Guardar';
+		map['wallex_ai.voice_review_edit_more'] = 'Editar más';
+		map['wallex_ai.voice_review_description_placeholder'] = 'Descripción';
+		map['wallex_ai.voice_review_amount_placeholder'] = 'Monto';
+		map['wallex_ai.voice_review_category_placeholder'] = 'Categoría';
+		map['wallex_ai.voice_review_account_placeholder'] = 'Selecciona cuenta';
+		map['wallex_ai.voice_review_description_hint'] = '¿En qué fue...?';
+		map['wallex_ai.voice_save_success_auto'] = 'Gasto guardado';
+		map['wallex_ai.voice_save_success_manual'] = 'Listo, guardado.';
+		map['wallex_ai.voice_save_undo_label'] = 'Deshacer';
+		map['wallex_ai.voice_save_undo_success'] = 'Eliminado';
+		map['wallex_ai.voice_validation_amount_zero'] = 'Agrega un monto mayor a 0 para continuar.';
+		map['wallex_ai.voice_validation_account_missing'] = 'Selecciona una cuenta.';
+		map['wallex_ai.voice_validation_category_missing'] = 'Selecciona una categoría.';
+		map['wallex_ai.voice_flow_no_proposal'] = 'No pude extraer un gasto de lo que dijiste.';
+		map['wallex_ai.voice_flow_error_title'] = 'No pude interpretar eso';
+		map['wallex_ai.chat_input_hint_default'] = 'Pregunta sobre tus finanzas...';
+		map['wallex_ai.chat_input_hint_using_tools'] = 'Consultando tus datos...';
+		map['wallex_ai.chat_error_generic'] = 'No pude procesar tu pregunta, intenta de nuevo.';
+		map['wallex_ai.chat_error_loop_cap'] = 'No pude completar la consulta.';
+		map['wallex_ai.chat_tool_create_transaction_expense'] = 'Crear gasto';
+		map['wallex_ai.chat_tool_create_transaction_income'] = 'Registrar ingreso';
+		map['wallex_ai.chat_tool_create_transfer'] = 'Crear transferencia';
+		map['wallex_ai.chat_tool_generic_confirm'] = 'Confirmar acción';
+		map['wallex_ai.chat_tool_review_subtitle'] = 'Revisa los datos antes de confirmar.';
+		map['wallex_ai.chat_tool_no_details'] = 'Sin detalles disponibles.';
+		map['wallex_ai.chat_tool_cta_approve'] = 'Aprobar y ejecutar';
+		map['wallex_ai.chat_tool_cta_cancel'] = 'Cancelar';
+		map['wallex_ai.chat_tool_field_amount'] = 'Monto';
+		map['wallex_ai.chat_tool_field_type'] = 'Tipo';
+		map['wallex_ai.chat_tool_field_type_income'] = 'Ingreso';
+		map['wallex_ai.chat_tool_field_type_expense'] = 'Gasto';
+		map['wallex_ai.chat_tool_field_description'] = 'Descripción';
+		map['wallex_ai.chat_tool_field_category'] = 'Categoría';
+		map['wallex_ai.chat_tool_field_account'] = 'Cuenta';
+		map['wallex_ai.chat_tool_field_date'] = 'Fecha';
+		map['wallex_ai.chat_tool_field_from_account'] = 'Desde';
+		map['wallex_ai.chat_tool_field_to_account'] = 'Hacia';
+		map['wallex_ai.chat_tool_field_value_in_destiny'] = 'Monto destino';
+		map['wallex_ai.chat_header'] = 'Wallex AI';
+		map['wallex_ai.chat_boot_loading'] = 'Cargando contexto financiero...';
+		map['wallex_ai.chat_disabled'] = 'El chat de IA está deshabilitado en configuración.';
+		map['wallex_ai.chat_welcome_message'] = '¡Hola! Soy **Wallex AI**, tu asistente financiero.\n\nPuedo ayudarte con:\n- Ver saldos y estado de tus cuentas\n- Analizar tus gastos por categoría\n- Revisar transacciones recientes\n- Consultar presupuestos\n\n¿Qué quieres revisar?';
 		map['transfer.display'] = 'Transferencia';
 		map['transfer.transfers'] = 'Transferencias';
 		map['transfer.transfer_to'] = ({required Object account}) => 'Transferencia hacia ${account}';
@@ -2471,6 +2801,18 @@ extension on TranslationsEs {
 		map['account.form.tr_before_opening_date'] = 'Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura';
 		map['account.form.iban'] = 'IBAN';
 		map['account.form.swift'] = 'SWIFT';
+		map['account.form.tracked_since'] = 'Rastrear desde';
+		map['account.form.tracked_since_hint'] = 'Opcional';
+		map['account.form.tracked_since_info'] = 'Las transacciones anteriores a esta fecha aparecerán en el historial pero no afectarán el balance.';
+		map['account.form.tracked_since_validation_after_closing'] = 'La fecha de seguimiento no puede ser posterior a la fecha de cierre de la cuenta.';
+		map['account.badge.pre_tracking'] = 'Histórico';
+		map['account.badge.pre_tracking_tooltip'] = 'No afecta el balance actual';
+		map['account.retroactive.preview_title'] = 'Impacto en el balance';
+		map['account.retroactive.preview_message'] = ({required Object current, required Object simulated}) => 'Balance actual: ${current} → Balance nuevo: ${simulated}';
+		map['account.retroactive.strong_confirm_hint'] = 'Escribe CONFIRMAR para continuar';
+		map['account.retroactive.strong_confirm_mismatch'] = 'El texto no coincide. Se canceló el cambio.';
+		map['account.retroactive.accept'] = 'Aceptar';
+		map['account.retroactive.cancel'] = 'Cancelar';
 		map['account.delete.warning_header'] = '¿Eliminar cuenta?';
 		map['account.delete.warning_text'] = 'Esta acción borrara esta cuenta y todas sus transacciones. No podrás volver a recuperar esta información tras el borrado.';
 		map['account.delete.success'] = 'Cuenta eliminada correctamente';
@@ -2759,6 +3101,8 @@ extension on TranslationsEs {
 		map['backup.about.modify_date'] = 'Última modificación';
 		map['backup.about.last_backup'] = 'Última copia de seguridad';
 		map['backup.about.size'] = 'Tamaño';
+		map['profile.upload_custom_avatar'] = 'Subir foto personalizada';
+		map['profile.use_preset_avatar'] = 'Usar avatar predeterminado';
 		map['settings.title_long'] = 'Ajustes y Personalización';
 		map['settings.title_short'] = 'Configuración';
 		map['settings.description'] = 'Tema, Idioma, Datos y más';
@@ -2783,6 +3127,28 @@ extension on TranslationsEs {
 		map['settings.security.private_mode_descr'] = 'Oculta todos los valores monetarios';
 		map['settings.security.private_mode_activated'] = 'Modo privado activado';
 		map['settings.security.private_mode_deactivated'] = 'Modo privado desactivado';
+		map['settings.hidden_mode.title'] = 'Modo Oculto';
+		map['settings.hidden_mode.menu_descr'] = 'Oculta tus cuentas de ahorro detrás de un PIN';
+		map['settings.hidden_mode.enable'] = 'Activar Modo Oculto';
+		map['settings.hidden_mode.description'] = 'Cuando está activo, las cuentas de ahorro y sus transacciones se ocultan del saldo, gráficos y listas. Para ver el saldo real: 6 toques en tu foto de perfil + PIN.';
+		map['settings.hidden_mode.change_pin'] = 'Cambiar PIN';
+		map['settings.hidden_mode.change_pin_descr'] = 'Reemplaza tu PIN actual por uno nuevo';
+		map['settings.hidden_mode.enabled_badge'] = 'Activo';
+		map['settings.hidden_mode.pin.setup_title'] = 'Crea tu PIN';
+		map['settings.hidden_mode.pin.setup_subtitle'] = 'Este PIN desbloqueará tus cuentas ocultas';
+		map['settings.hidden_mode.pin.confirm_title'] = 'Confirma tu PIN';
+		map['settings.hidden_mode.pin.unlock_title'] = 'Ingresa tu PIN';
+		map['settings.hidden_mode.pin.change_old_title'] = 'Ingresa tu PIN actual';
+		map['settings.hidden_mode.pin.change_new_title'] = 'Crea un PIN nuevo';
+		map['settings.hidden_mode.pin.change_confirm_title'] = 'Confirma el PIN nuevo';
+		map['settings.hidden_mode.pin.disable_title'] = 'Confirma tu PIN para desactivar el Modo Oculto';
+		map['settings.hidden_mode.pin.mismatch'] = 'Los PINs no coinciden';
+		map['settings.hidden_mode.pin.incorrect'] = 'PIN incorrecto';
+		map['settings.hidden_mode.pin.too_many_attempts'] = ({required Object seconds}) => 'Demasiados intentos. Intenta de nuevo en ${seconds}s';
+		map['settings.hidden_mode.pin.use_biometric'] = 'Usar huella';
+		map['settings.hidden_mode.pin.biometric_reason'] = 'Desbloquea Wallex';
+		map['settings.hidden_mode.pin.pin_changed'] = 'PIN actualizado';
+		map['settings.hidden_mode.pin.unlocked'] = 'Modo completo activado';
 		map['settings.transactions.menu_title'] = 'Transacciones';
 		map['settings.transactions.menu_descr'] = 'Configura el comportamiento de tus transacciones';
 		map['settings.transactions.title'] = 'Ajustes de transacciones';

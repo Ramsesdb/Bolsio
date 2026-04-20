@@ -47,6 +47,8 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsStatsEn stats = TranslationsStatsEn.internal(_root);
 	late final TranslationsIconSelectorEn icon_selector = TranslationsIconSelectorEn.internal(_root);
 	late final TranslationsTransactionEn transaction = TranslationsTransactionEn.internal(_root);
+	late final TranslationsAttachmentsEn attachments = TranslationsAttachmentsEn.internal(_root);
+	late final TranslationsWallexAiEn wallex_ai = TranslationsWallexAiEn.internal(_root);
 	late final TranslationsTransferEn transfer = TranslationsTransferEn.internal(_root);
 	late final TranslationsRecurrentTransactionsEn recurrent_transactions = TranslationsRecurrentTransactionsEn.internal(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn.internal(_root);
@@ -58,6 +60,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsDebtsEn debts = TranslationsDebtsEn.internal(_root);
 	late final TranslationsTargetTimelineStatusesEn target_timeline_statuses = TranslationsTargetTimelineStatusesEn.internal(_root);
 	late final TranslationsBackupEn backup = TranslationsBackupEn.internal(_root);
+	late final TranslationsProfileEn profile = TranslationsProfileEn.internal(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn.internal(_root);
 }
@@ -550,13 +553,263 @@ class TranslationsTransactionEn {
 	/// en: 'Movement details'
 	String get details => 'Movement details';
 
+	/// en: 'Receipt attached'
+	String get receipt_attached => 'Receipt attached';
+
+	/// en: 'View receipt'
+	String get view_receipt => 'View receipt';
+
 	late final TranslationsTransactionNextPaymentsEn next_payments = TranslationsTransactionNextPaymentsEn.internal(_root);
 	late final TranslationsTransactionListEn list = TranslationsTransactionListEn.internal(_root);
 	late final TranslationsTransactionFiltersEn filters = TranslationsTransactionFiltersEn.internal(_root);
 	late final TranslationsTransactionFormEn form = TranslationsTransactionFormEn.internal(_root);
+	late final TranslationsTransactionReceiptImportEn receipt_import = TranslationsTransactionReceiptImportEn.internal(_root);
 	late final TranslationsTransactionReversedEn reversed = TranslationsTransactionReversedEn.internal(_root);
 	late final TranslationsTransactionStatusEn status = TranslationsTransactionStatusEn.internal(_root);
 	late final TranslationsTransactionTypesEn types = TranslationsTransactionTypesEn.internal(_root);
+}
+
+// Path: attachments
+class TranslationsAttachmentsEn {
+	TranslationsAttachmentsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'View attachment'
+	String get view => 'View attachment';
+
+	/// en: 'Remove attachment'
+	String get remove => 'Remove attachment';
+
+	/// en: 'Replace'
+	String get replace => 'Replace';
+
+	/// en: 'Upload from gallery'
+	String get upload_from_gallery => 'Upload from gallery';
+
+	/// en: 'Take photo'
+	String get upload_from_camera => 'Take photo';
+
+	/// en: 'No attachments'
+	String get empty_state => 'No attachments';
+}
+
+// Path: wallex_ai
+class TranslationsWallexAiEn {
+	TranslationsWallexAiEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Voice input'
+	String get voice_settings_title => 'Voice input';
+
+	/// en: 'Dictate expenses and ask the assistant'
+	String get voice_settings_subtitle => 'Dictate expenses and ask the assistant';
+
+	/// en: 'Microphone access'
+	String get voice_permission_title => 'Microphone access';
+
+	/// en: 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.'
+	String get voice_permission_body => 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.';
+
+	/// en: 'Got it, continue'
+	String get voice_permission_cta => 'Got it, continue';
+
+	/// en: 'Microphone permission denied'
+	String get voice_permission_denied_title => 'Microphone permission denied';
+
+	/// en: 'To dictate or voice-chat, enable the permission in your system settings.'
+	String get voice_permission_denied_body => 'To dictate or voice-chat, enable the permission in your system settings.';
+
+	/// en: 'Microphone permission denied'
+	String get voice_permission_denied_snackbar => 'Microphone permission denied';
+
+	/// en: 'Open settings'
+	String get voice_permission_open_settings => 'Open settings';
+
+	/// en: 'Check your internet connection to use voice dictation.'
+	String get voice_offline_hint => 'Check your internet connection to use voice dictation.';
+
+	/// en: 'Speech recognition isn't available on this device.'
+	String get voice_stt_unavailable => 'Speech recognition isn\'t available on this device.';
+
+	/// en: 'I didn't hear anything, try again.'
+	String get voice_empty_transcript => 'I didn\'t hear anything, try again.';
+
+	/// en: 'Dictate expense'
+	String get voice_fab_tooltip => 'Dictate expense';
+
+	/// en: 'Listening...'
+	String get voice_listening_title => 'Listening...';
+
+	/// en: 'Tell me the expense in one phrase.'
+	String get voice_listening_subtitle => 'Tell me the expense in one phrase.';
+
+	/// en: 'E.g. "I spent 20 dollars on lunch"'
+	String get voice_listening_hint => 'E.g. "I spent 20 dollars on lunch"';
+
+	/// en: 'Something went wrong'
+	String get voice_error_title => 'Something went wrong';
+
+	/// en: 'Recognition error'
+	String get voice_error_fallback => 'Recognition error';
+
+	/// en: 'Cancel'
+	String get voice_cancel => 'Cancel';
+
+	/// en: 'Done'
+	String get voice_done => 'Done';
+
+	/// en: 'Retry'
+	String get voice_retry => 'Retry';
+
+	/// en: 'Processing...'
+	String get voice_processing => 'Processing...';
+
+	/// en: 'New voice transaction'
+	String get voice_review_title => 'New voice transaction';
+
+	/// en: 'Tap to edit'
+	String get voice_review_tap_to_edit => 'Tap to edit';
+
+	/// en: 'Account'
+	String get voice_review_account_label => 'Account';
+
+	/// en: 'Auto {{seconds}}s'
+	String voice_review_auto_countdown({required Object seconds}) => 'Auto ${seconds}s';
+
+	/// en: 'Save'
+	String get voice_review_save => 'Save';
+
+	/// en: 'Edit more'
+	String get voice_review_edit_more => 'Edit more';
+
+	/// en: 'Description'
+	String get voice_review_description_placeholder => 'Description';
+
+	/// en: 'Amount'
+	String get voice_review_amount_placeholder => 'Amount';
+
+	/// en: 'Category'
+	String get voice_review_category_placeholder => 'Category';
+
+	/// en: 'Select account'
+	String get voice_review_account_placeholder => 'Select account';
+
+	/// en: 'What was it for...?'
+	String get voice_review_description_hint => 'What was it for...?';
+
+	/// en: 'Expense saved'
+	String get voice_save_success_auto => 'Expense saved';
+
+	/// en: 'Done, saved.'
+	String get voice_save_success_manual => 'Done, saved.';
+
+	/// en: 'Undo'
+	String get voice_save_undo_label => 'Undo';
+
+	/// en: 'Deleted'
+	String get voice_save_undo_success => 'Deleted';
+
+	/// en: 'Add an amount greater than 0 to continue.'
+	String get voice_validation_amount_zero => 'Add an amount greater than 0 to continue.';
+
+	/// en: 'Select an account.'
+	String get voice_validation_account_missing => 'Select an account.';
+
+	/// en: 'Select a category.'
+	String get voice_validation_category_missing => 'Select a category.';
+
+	/// en: 'I couldn't extract an expense from what you said.'
+	String get voice_flow_no_proposal => 'I couldn\'t extract an expense from what you said.';
+
+	/// en: 'I couldn't interpret that'
+	String get voice_flow_error_title => 'I couldn\'t interpret that';
+
+	/// en: 'Ask about your finances...'
+	String get chat_input_hint_default => 'Ask about your finances...';
+
+	/// en: 'Looking up your data...'
+	String get chat_input_hint_using_tools => 'Looking up your data...';
+
+	/// en: 'I couldn't process your question, try again.'
+	String get chat_error_generic => 'I couldn\'t process your question, try again.';
+
+	/// en: 'I couldn't complete the query.'
+	String get chat_error_loop_cap => 'I couldn\'t complete the query.';
+
+	/// en: 'Create expense'
+	String get chat_tool_create_transaction_expense => 'Create expense';
+
+	/// en: 'Register income'
+	String get chat_tool_create_transaction_income => 'Register income';
+
+	/// en: 'Create transfer'
+	String get chat_tool_create_transfer => 'Create transfer';
+
+	/// en: 'Confirm action'
+	String get chat_tool_generic_confirm => 'Confirm action';
+
+	/// en: 'Check the details before confirming.'
+	String get chat_tool_review_subtitle => 'Check the details before confirming.';
+
+	/// en: 'No details available.'
+	String get chat_tool_no_details => 'No details available.';
+
+	/// en: 'Approve and run'
+	String get chat_tool_cta_approve => 'Approve and run';
+
+	/// en: 'Cancel'
+	String get chat_tool_cta_cancel => 'Cancel';
+
+	/// en: 'Amount'
+	String get chat_tool_field_amount => 'Amount';
+
+	/// en: 'Type'
+	String get chat_tool_field_type => 'Type';
+
+	/// en: 'Income'
+	String get chat_tool_field_type_income => 'Income';
+
+	/// en: 'Expense'
+	String get chat_tool_field_type_expense => 'Expense';
+
+	/// en: 'Description'
+	String get chat_tool_field_description => 'Description';
+
+	/// en: 'Category'
+	String get chat_tool_field_category => 'Category';
+
+	/// en: 'Account'
+	String get chat_tool_field_account => 'Account';
+
+	/// en: 'Date'
+	String get chat_tool_field_date => 'Date';
+
+	/// en: 'From'
+	String get chat_tool_field_from_account => 'From';
+
+	/// en: 'To'
+	String get chat_tool_field_to_account => 'To';
+
+	/// en: 'Destination amount'
+	String get chat_tool_field_value_in_destiny => 'Destination amount';
+
+	/// en: 'Wallex AI'
+	String get chat_header => 'Wallex AI';
+
+	/// en: 'Loading financial context...'
+	String get chat_boot_loading => 'Loading financial context...';
+
+	/// en: 'AI chat is disabled in settings.'
+	String get chat_disabled => 'AI chat is disabled in settings.';
+
+	/// en: 'Hi! I'm **Wallex AI**, your financial assistant. I can help you with: - Check balances and the state of your accounts - Analyze spending by category - Review recent transactions - Review budgets What would you like to check?'
+	String get chat_welcome_message => 'Hi! I\'m **Wallex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?';
 }
 
 // Path: transfer
@@ -658,6 +911,8 @@ class TranslationsAccountEn {
 
 	late final TranslationsAccountTypesEn types = TranslationsAccountTypesEn.internal(_root);
 	late final TranslationsAccountFormEn form = TranslationsAccountFormEn.internal(_root);
+	late final TranslationsAccountBadgeEn badge = TranslationsAccountBadgeEn.internal(_root);
+	late final TranslationsAccountRetroactiveEn retroactive = TranslationsAccountRetroactiveEn.internal(_root);
 	late final TranslationsAccountDeleteEn delete = TranslationsAccountDeleteEn.internal(_root);
 	late final TranslationsAccountCloseEn close = TranslationsAccountCloseEn.internal(_root);
 	late final TranslationsAccountSelectEn select = TranslationsAccountSelectEn.internal(_root);
@@ -1010,6 +1265,21 @@ class TranslationsBackupEn {
 	late final TranslationsBackupAboutEn about = TranslationsBackupAboutEn.internal(_root);
 }
 
+// Path: profile
+class TranslationsProfileEn {
+	TranslationsProfileEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Upload custom avatar'
+	String get upload_custom_avatar => 'Upload custom avatar';
+
+	/// en: 'Use preset avatar'
+	String get use_preset_avatar => 'Use preset avatar';
+}
+
 // Path: settings
 class TranslationsSettingsEn {
 	TranslationsSettingsEn.internal(this._root);
@@ -1032,6 +1302,7 @@ class TranslationsSettingsEn {
 
 	late final TranslationsSettingsGeneralEn general = TranslationsSettingsGeneralEn.internal(_root);
 	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn.internal(_root);
+	late final TranslationsSettingsHiddenModeEn hidden_mode = TranslationsSettingsHiddenModeEn.internal(_root);
 	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn.internal(_root);
 	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn.internal(_root);
 }
@@ -1480,6 +1751,45 @@ class TranslationsTransactionFormEn {
 	String get exchange_to_preferred_in_date => 'On transaction date';
 }
 
+// Path: transaction.receipt_import
+class TranslationsTransactionReceiptImportEn {
+	TranslationsTransactionReceiptImportEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'From receipt (gallery)'
+	String get entry_gallery => 'From receipt (gallery)';
+
+	/// en: 'From receipt (camera)'
+	String get entry_camera => 'From receipt (camera)';
+
+	/// en: 'Processing OCR...'
+	String get processing_ocr => 'Processing OCR...';
+
+	/// en: 'Processing AI...'
+	String get processing_ai => 'Processing AI...';
+
+	/// en: 'Done'
+	String get processing_done => 'Done';
+
+	/// en: 'Review receipt'
+	String get review_title => 'Review receipt';
+
+	/// en: 'Validate and edit fields before creating the transaction'
+	String get review_subtitle => 'Validate and edit fields before creating the transaction';
+
+	/// en: 'Continue'
+	String get review_cta_continue => 'Continue';
+
+	/// en: 'Retry'
+	String get review_cta_retry => 'Retry';
+
+	late final TranslationsTransactionReceiptImportErrorEn error = TranslationsTransactionReceiptImportErrorEn.internal(_root);
+	late final TranslationsTransactionReceiptImportFieldEn field = TranslationsTransactionReceiptImportFieldEn.internal(_root);
+}
+
 // Path: transaction.reversed
 class TranslationsTransactionReversedEn {
 	TranslationsTransactionReversedEn.internal(this._root);
@@ -1714,6 +2024,60 @@ class TranslationsAccountFormEn {
 
 	/// en: 'SWIFT'
 	String get swift => 'SWIFT';
+
+	/// en: 'Track since'
+	String get tracked_since => 'Track since';
+
+	/// en: 'Optional'
+	String get tracked_since_hint => 'Optional';
+
+	/// en: 'Transactions before this date will appear in history but will not affect balance.'
+	String get tracked_since_info => 'Transactions before this date will appear in history but will not affect balance.';
+
+	/// en: 'Track-since date cannot be later than the account closing date.'
+	String get tracked_since_validation_after_closing => 'Track-since date cannot be later than the account closing date.';
+}
+
+// Path: account.badge
+class TranslationsAccountBadgeEn {
+	TranslationsAccountBadgeEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Historical'
+	String get pre_tracking => 'Historical';
+
+	/// en: 'Does not affect current balance'
+	String get pre_tracking_tooltip => 'Does not affect current balance';
+}
+
+// Path: account.retroactive
+class TranslationsAccountRetroactiveEn {
+	TranslationsAccountRetroactiveEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Balance impact'
+	String get preview_title => 'Balance impact';
+
+	/// en: 'Current balance: {{current}} → New balance: {{simulated}}'
+	String preview_message({required Object current, required Object simulated}) => 'Current balance: ${current} → New balance: ${simulated}';
+
+	/// en: 'Type CONFIRM to proceed'
+	String get strong_confirm_hint => 'Type CONFIRM to proceed';
+
+	/// en: 'Text does not match. Change canceled.'
+	String get strong_confirm_mismatch => 'Text does not match. Change canceled.';
+
+	/// en: 'Accept'
+	String get accept => 'Accept';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
 }
 
 // Path: account.delete
@@ -2431,6 +2795,38 @@ class TranslationsSettingsSecurityEn {
 	String get private_mode_deactivated => 'Private mode disabled';
 }
 
+// Path: settings.hidden_mode
+class TranslationsSettingsHiddenModeEn {
+	TranslationsSettingsHiddenModeEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Hidden Mode'
+	String get title => 'Hidden Mode';
+
+	/// en: 'Hide your savings accounts behind a PIN'
+	String get menu_descr => 'Hide your savings accounts behind a PIN';
+
+	/// en: 'Enable Hidden Mode'
+	String get enable => 'Enable Hidden Mode';
+
+	/// en: 'When active, your savings accounts and their transactions are hidden from balances, charts and lists. To see the real balance: 6 taps on your profile picture + PIN.'
+	String get description => 'When active, your savings accounts and their transactions are hidden from balances, charts and lists. To see the real balance: 6 taps on your profile picture + PIN.';
+
+	/// en: 'Change PIN'
+	String get change_pin => 'Change PIN';
+
+	/// en: 'Replace your current PIN with a new one'
+	String get change_pin_descr => 'Replace your current PIN with a new one';
+
+	/// en: 'Active'
+	String get enabled_badge => 'Active';
+
+	late final TranslationsSettingsHiddenModePinEn pin = TranslationsSettingsHiddenModePinEn.internal(_root);
+}
+
 // Path: settings.transactions
 class TranslationsSettingsTransactionsEn {
 	TranslationsSettingsTransactionsEn.internal(this._root);
@@ -2902,6 +3298,57 @@ class TranslationsTransactionFormValidatorsEn {
 	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
 }
 
+// Path: transaction.receipt_import.error
+class TranslationsTransactionReceiptImportErrorEn {
+	TranslationsTransactionReceiptImportErrorEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'No text was detected in the image'
+	String get ocr_empty => 'No text was detected in the image';
+
+	/// en: 'AI processing failed, local extraction was used'
+	String get ai_failed => 'AI processing failed, local extraction was used';
+
+	/// en: 'The image appears to be corrupted'
+	String get image_corrupt => 'The image appears to be corrupted';
+
+	/// en: 'Could not detect an amount'
+	String get no_amount => 'Could not detect an amount';
+
+	/// en: 'Ambiguous currency, please review it before continuing'
+	String get ambiguous_currency => 'Ambiguous currency, please review it before continuing';
+}
+
+// Path: transaction.receipt_import.field
+class TranslationsTransactionReceiptImportFieldEn {
+	TranslationsTransactionReceiptImportFieldEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Amount'
+	String get amount => 'Amount';
+
+	/// en: 'Currency'
+	String get currency => 'Currency';
+
+	/// en: 'Date'
+	String get date => 'Date';
+
+	/// en: 'Type'
+	String get type => 'Type';
+
+	/// en: 'Counterparty'
+	String get counterparty => 'Counterparty';
+
+	/// en: 'Reference'
+	String get reference => 'Reference';
+}
+
 // Path: transfer.form.value_in_destiny
 class TranslationsTransferFormValueInDestinyEn {
 	TranslationsTransferFormValueInDestinyEn.internal(this._root);
@@ -3289,6 +3736,60 @@ class TranslationsSettingsGeneralLocaleEn {
 
 	/// en: 'First day of week'
 	String get first_day_of_week => 'First day of week';
+}
+
+// Path: settings.hidden_mode.pin
+class TranslationsSettingsHiddenModePinEn {
+	TranslationsSettingsHiddenModePinEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Create your PIN'
+	String get setup_title => 'Create your PIN';
+
+	/// en: 'This PIN will unlock your hidden accounts'
+	String get setup_subtitle => 'This PIN will unlock your hidden accounts';
+
+	/// en: 'Confirm your PIN'
+	String get confirm_title => 'Confirm your PIN';
+
+	/// en: 'Enter your PIN'
+	String get unlock_title => 'Enter your PIN';
+
+	/// en: 'Enter your current PIN'
+	String get change_old_title => 'Enter your current PIN';
+
+	/// en: 'Create a new PIN'
+	String get change_new_title => 'Create a new PIN';
+
+	/// en: 'Confirm the new PIN'
+	String get change_confirm_title => 'Confirm the new PIN';
+
+	/// en: 'Confirm your PIN to disable Hidden Mode'
+	String get disable_title => 'Confirm your PIN to disable Hidden Mode';
+
+	/// en: 'PINs do not match'
+	String get mismatch => 'PINs do not match';
+
+	/// en: 'Incorrect PIN'
+	String get incorrect => 'Incorrect PIN';
+
+	/// en: 'Too many attempts. Try again in {{seconds}}s'
+	String too_many_attempts({required Object seconds}) => 'Too many attempts. Try again in ${seconds}s';
+
+	/// en: 'Use fingerprint'
+	String get use_biometric => 'Use fingerprint';
+
+	/// en: 'Unlock Wallex'
+	String get biometric_reason => 'Unlock Wallex';
+
+	/// en: 'PIN updated'
+	String get pin_changed => 'PIN updated';
+
+	/// en: 'Full view unlocked'
+	String get unlocked => 'Full view unlocked';
 }
 
 // Path: settings.transactions.style
@@ -3811,6 +4312,8 @@ extension on Translations {
 		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
 		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} transactions deleted correctly';
 		map['transaction.details'] = 'Movement details';
+		map['transaction.receipt_attached'] = 'Receipt attached';
+		map['transaction.view_receipt'] = 'View receipt';
 		map['transaction.next_payments.accept'] = 'Accept';
 		map['transaction.next_payments.skip'] = 'Skip';
 		map['transaction.next_payments.skip_success'] = 'Successfully skipped transaction';
@@ -3872,6 +4375,26 @@ extension on Translations {
 		map['transaction.form.description_info'] = 'Tap here to enter a more detailed description about this transaction';
 		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => 'Exchnage rate to ${currency}';
 		map['transaction.form.exchange_to_preferred_in_date'] = 'On transaction date';
+		map['transaction.receipt_import.entry_gallery'] = 'From receipt (gallery)';
+		map['transaction.receipt_import.entry_camera'] = 'From receipt (camera)';
+		map['transaction.receipt_import.processing_ocr'] = 'Processing OCR...';
+		map['transaction.receipt_import.processing_ai'] = 'Processing AI...';
+		map['transaction.receipt_import.processing_done'] = 'Done';
+		map['transaction.receipt_import.review_title'] = 'Review receipt';
+		map['transaction.receipt_import.review_subtitle'] = 'Validate and edit fields before creating the transaction';
+		map['transaction.receipt_import.review_cta_continue'] = 'Continue';
+		map['transaction.receipt_import.review_cta_retry'] = 'Retry';
+		map['transaction.receipt_import.error.ocr_empty'] = 'No text was detected in the image';
+		map['transaction.receipt_import.error.ai_failed'] = 'AI processing failed, local extraction was used';
+		map['transaction.receipt_import.error.image_corrupt'] = 'The image appears to be corrupted';
+		map['transaction.receipt_import.error.no_amount'] = 'Could not detect an amount';
+		map['transaction.receipt_import.error.ambiguous_currency'] = 'Ambiguous currency, please review it before continuing';
+		map['transaction.receipt_import.field.amount'] = 'Amount';
+		map['transaction.receipt_import.field.currency'] = 'Currency';
+		map['transaction.receipt_import.field.date'] = 'Date';
+		map['transaction.receipt_import.field.type'] = 'Type';
+		map['transaction.receipt_import.field.counterparty'] = 'Counterparty';
+		map['transaction.receipt_import.field.reference'] = 'Reference';
 		map['transaction.reversed.title'] = 'Inverse transaction';
 		map['transaction.reversed.title_short'] = 'Inverse tr.';
 		map['transaction.reversed.description_for_expenses'] = 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
@@ -3908,6 +4431,81 @@ extension on Translations {
 				one: 'Transfer',
 				other: 'Transfers',
 			);
+		map['attachments.view'] = 'View attachment';
+		map['attachments.remove'] = 'Remove attachment';
+		map['attachments.replace'] = 'Replace';
+		map['attachments.upload_from_gallery'] = 'Upload from gallery';
+		map['attachments.upload_from_camera'] = 'Take photo';
+		map['attachments.empty_state'] = 'No attachments';
+		map['wallex_ai.voice_settings_title'] = 'Voice input';
+		map['wallex_ai.voice_settings_subtitle'] = 'Dictate expenses and ask the assistant';
+		map['wallex_ai.voice_permission_title'] = 'Microphone access';
+		map['wallex_ai.voice_permission_body'] = 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.';
+		map['wallex_ai.voice_permission_cta'] = 'Got it, continue';
+		map['wallex_ai.voice_permission_denied_title'] = 'Microphone permission denied';
+		map['wallex_ai.voice_permission_denied_body'] = 'To dictate or voice-chat, enable the permission in your system settings.';
+		map['wallex_ai.voice_permission_denied_snackbar'] = 'Microphone permission denied';
+		map['wallex_ai.voice_permission_open_settings'] = 'Open settings';
+		map['wallex_ai.voice_offline_hint'] = 'Check your internet connection to use voice dictation.';
+		map['wallex_ai.voice_stt_unavailable'] = 'Speech recognition isn\'t available on this device.';
+		map['wallex_ai.voice_empty_transcript'] = 'I didn\'t hear anything, try again.';
+		map['wallex_ai.voice_fab_tooltip'] = 'Dictate expense';
+		map['wallex_ai.voice_listening_title'] = 'Listening...';
+		map['wallex_ai.voice_listening_subtitle'] = 'Tell me the expense in one phrase.';
+		map['wallex_ai.voice_listening_hint'] = 'E.g. "I spent 20 dollars on lunch"';
+		map['wallex_ai.voice_error_title'] = 'Something went wrong';
+		map['wallex_ai.voice_error_fallback'] = 'Recognition error';
+		map['wallex_ai.voice_cancel'] = 'Cancel';
+		map['wallex_ai.voice_done'] = 'Done';
+		map['wallex_ai.voice_retry'] = 'Retry';
+		map['wallex_ai.voice_processing'] = 'Processing...';
+		map['wallex_ai.voice_review_title'] = 'New voice transaction';
+		map['wallex_ai.voice_review_tap_to_edit'] = 'Tap to edit';
+		map['wallex_ai.voice_review_account_label'] = 'Account';
+		map['wallex_ai.voice_review_auto_countdown'] = ({required Object seconds}) => 'Auto ${seconds}s';
+		map['wallex_ai.voice_review_save'] = 'Save';
+		map['wallex_ai.voice_review_edit_more'] = 'Edit more';
+		map['wallex_ai.voice_review_description_placeholder'] = 'Description';
+		map['wallex_ai.voice_review_amount_placeholder'] = 'Amount';
+		map['wallex_ai.voice_review_category_placeholder'] = 'Category';
+		map['wallex_ai.voice_review_account_placeholder'] = 'Select account';
+		map['wallex_ai.voice_review_description_hint'] = 'What was it for...?';
+		map['wallex_ai.voice_save_success_auto'] = 'Expense saved';
+		map['wallex_ai.voice_save_success_manual'] = 'Done, saved.';
+		map['wallex_ai.voice_save_undo_label'] = 'Undo';
+		map['wallex_ai.voice_save_undo_success'] = 'Deleted';
+		map['wallex_ai.voice_validation_amount_zero'] = 'Add an amount greater than 0 to continue.';
+		map['wallex_ai.voice_validation_account_missing'] = 'Select an account.';
+		map['wallex_ai.voice_validation_category_missing'] = 'Select a category.';
+		map['wallex_ai.voice_flow_no_proposal'] = 'I couldn\'t extract an expense from what you said.';
+		map['wallex_ai.voice_flow_error_title'] = 'I couldn\'t interpret that';
+		map['wallex_ai.chat_input_hint_default'] = 'Ask about your finances...';
+		map['wallex_ai.chat_input_hint_using_tools'] = 'Looking up your data...';
+		map['wallex_ai.chat_error_generic'] = 'I couldn\'t process your question, try again.';
+		map['wallex_ai.chat_error_loop_cap'] = 'I couldn\'t complete the query.';
+		map['wallex_ai.chat_tool_create_transaction_expense'] = 'Create expense';
+		map['wallex_ai.chat_tool_create_transaction_income'] = 'Register income';
+		map['wallex_ai.chat_tool_create_transfer'] = 'Create transfer';
+		map['wallex_ai.chat_tool_generic_confirm'] = 'Confirm action';
+		map['wallex_ai.chat_tool_review_subtitle'] = 'Check the details before confirming.';
+		map['wallex_ai.chat_tool_no_details'] = 'No details available.';
+		map['wallex_ai.chat_tool_cta_approve'] = 'Approve and run';
+		map['wallex_ai.chat_tool_cta_cancel'] = 'Cancel';
+		map['wallex_ai.chat_tool_field_amount'] = 'Amount';
+		map['wallex_ai.chat_tool_field_type'] = 'Type';
+		map['wallex_ai.chat_tool_field_type_income'] = 'Income';
+		map['wallex_ai.chat_tool_field_type_expense'] = 'Expense';
+		map['wallex_ai.chat_tool_field_description'] = 'Description';
+		map['wallex_ai.chat_tool_field_category'] = 'Category';
+		map['wallex_ai.chat_tool_field_account'] = 'Account';
+		map['wallex_ai.chat_tool_field_date'] = 'Date';
+		map['wallex_ai.chat_tool_field_from_account'] = 'From';
+		map['wallex_ai.chat_tool_field_to_account'] = 'To';
+		map['wallex_ai.chat_tool_field_value_in_destiny'] = 'Destination amount';
+		map['wallex_ai.chat_header'] = 'Wallex AI';
+		map['wallex_ai.chat_boot_loading'] = 'Loading financial context...';
+		map['wallex_ai.chat_disabled'] = 'AI chat is disabled in settings.';
+		map['wallex_ai.chat_welcome_message'] = 'Hi! I\'m **Wallex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?';
 		map['transfer.display'] = 'Transfer';
 		map['transfer.transfers'] = 'Transfers';
 		map['transfer.transfer_to'] = ({required Object account}) => 'Transfer to ${account}';
@@ -3960,6 +4558,18 @@ extension on Translations {
 		map['account.form.tr_before_opening_date'] = 'There are transactions in this account with a date before the opening date';
 		map['account.form.iban'] = 'IBAN';
 		map['account.form.swift'] = 'SWIFT';
+		map['account.form.tracked_since'] = 'Track since';
+		map['account.form.tracked_since_hint'] = 'Optional';
+		map['account.form.tracked_since_info'] = 'Transactions before this date will appear in history but will not affect balance.';
+		map['account.form.tracked_since_validation_after_closing'] = 'Track-since date cannot be later than the account closing date.';
+		map['account.badge.pre_tracking'] = 'Historical';
+		map['account.badge.pre_tracking_tooltip'] = 'Does not affect current balance';
+		map['account.retroactive.preview_title'] = 'Balance impact';
+		map['account.retroactive.preview_message'] = ({required Object current, required Object simulated}) => 'Current balance: ${current} → New balance: ${simulated}';
+		map['account.retroactive.strong_confirm_hint'] = 'Type CONFIRM to proceed';
+		map['account.retroactive.strong_confirm_mismatch'] = 'Text does not match. Change canceled.';
+		map['account.retroactive.accept'] = 'Accept';
+		map['account.retroactive.cancel'] = 'Cancel';
 		map['account.delete.warning_header'] = 'Delete account?';
 		map['account.delete.warning_text'] = 'This action will delete this account and all its transactions';
 		map['account.delete.success'] = 'Account deleted successfully';
@@ -4248,6 +4858,8 @@ extension on Translations {
 		map['backup.about.modify_date'] = 'Last modified';
 		map['backup.about.last_backup'] = 'Last backup';
 		map['backup.about.size'] = 'Size';
+		map['profile.upload_custom_avatar'] = 'Upload custom avatar';
+		map['profile.use_preset_avatar'] = 'Use preset avatar';
 		map['settings.title_long'] = 'Settings & Customization';
 		map['settings.title_short'] = 'Settings';
 		map['settings.description'] = 'Theme, Language, Data and more';
@@ -4272,6 +4884,28 @@ extension on Translations {
 		map['settings.security.private_mode_descr'] = 'Hide all monetary values';
 		map['settings.security.private_mode_activated'] = 'Private mode activated';
 		map['settings.security.private_mode_deactivated'] = 'Private mode disabled';
+		map['settings.hidden_mode.title'] = 'Hidden Mode';
+		map['settings.hidden_mode.menu_descr'] = 'Hide your savings accounts behind a PIN';
+		map['settings.hidden_mode.enable'] = 'Enable Hidden Mode';
+		map['settings.hidden_mode.description'] = 'When active, your savings accounts and their transactions are hidden from balances, charts and lists. To see the real balance: 6 taps on your profile picture + PIN.';
+		map['settings.hidden_mode.change_pin'] = 'Change PIN';
+		map['settings.hidden_mode.change_pin_descr'] = 'Replace your current PIN with a new one';
+		map['settings.hidden_mode.enabled_badge'] = 'Active';
+		map['settings.hidden_mode.pin.setup_title'] = 'Create your PIN';
+		map['settings.hidden_mode.pin.setup_subtitle'] = 'This PIN will unlock your hidden accounts';
+		map['settings.hidden_mode.pin.confirm_title'] = 'Confirm your PIN';
+		map['settings.hidden_mode.pin.unlock_title'] = 'Enter your PIN';
+		map['settings.hidden_mode.pin.change_old_title'] = 'Enter your current PIN';
+		map['settings.hidden_mode.pin.change_new_title'] = 'Create a new PIN';
+		map['settings.hidden_mode.pin.change_confirm_title'] = 'Confirm the new PIN';
+		map['settings.hidden_mode.pin.disable_title'] = 'Confirm your PIN to disable Hidden Mode';
+		map['settings.hidden_mode.pin.mismatch'] = 'PINs do not match';
+		map['settings.hidden_mode.pin.incorrect'] = 'Incorrect PIN';
+		map['settings.hidden_mode.pin.too_many_attempts'] = ({required Object seconds}) => 'Too many attempts. Try again in ${seconds}s';
+		map['settings.hidden_mode.pin.use_biometric'] = 'Use fingerprint';
+		map['settings.hidden_mode.pin.biometric_reason'] = 'Unlock Wallex';
+		map['settings.hidden_mode.pin.pin_changed'] = 'PIN updated';
+		map['settings.hidden_mode.pin.unlocked'] = 'Full view unlocked';
 		map['settings.transactions.menu_title'] = 'Transactions';
 		map['settings.transactions.menu_descr'] = 'Configure the behavior of your transactions';
 		map['settings.transactions.title'] = 'Transactions Settings';
