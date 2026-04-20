@@ -61,6 +61,7 @@ class TranslationsEs extends Translations {
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
 	@override late final _TranslationsProfileEs profile = _TranslationsProfileEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
+	@override late final _TranslationsStatementImportEs statement_import = _TranslationsStatementImportEs._(_root);
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
 }
 
@@ -345,6 +346,9 @@ class _TranslationsWallexAiEs extends TranslationsWallexAiEn {
 	@override String get voice_review_description_placeholder => 'Descripción';
 	@override String get voice_review_amount_placeholder => 'Monto';
 	@override String get voice_review_category_placeholder => 'Categoría';
+	@override String get voice_review_category_none => 'Sin categoría';
+	@override String get voice_review_date_placeholder => 'Fecha';
+	@override String get voice_review_date_today => 'Hoy';
 	@override String get voice_review_account_placeholder => 'Selecciona cuenta';
 	@override String get voice_review_description_hint => '¿En qué fue...?';
 	@override String get voice_save_success_auto => 'Gasto guardado';
@@ -356,6 +360,8 @@ class _TranslationsWallexAiEs extends TranslationsWallexAiEn {
 	@override String get voice_validation_category_missing => 'Selecciona una categoría.';
 	@override String get voice_flow_no_proposal => 'No pude extraer un gasto de lo que dijiste.';
 	@override String get voice_flow_error_title => 'No pude interpretar eso';
+	@override String get voice_flow_gateway_unavailable_title => 'Servicio de IA no disponible';
+	@override String get voice_flow_gateway_unavailable => 'El servicio de IA no está disponible. Inténtalo de nuevo en un momento.';
 	@override String get chat_input_hint_default => 'Pregunta sobre tus finanzas...';
 	@override String get chat_input_hint_using_tools => 'Consultando tus datos...';
 	@override String get chat_error_generic => 'No pude procesar tu pregunta, intenta de nuevo.';
@@ -652,6 +658,26 @@ class _TranslationsSettingsEs extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsHiddenModeEs hidden_mode = _TranslationsSettingsHiddenModeEs._(_root);
 	@override late final _TranslationsSettingsTransactionsEs transactions = _TranslationsSettingsTransactionsEs._(_root);
 	@override late final _TranslationsSettingsAppearanceEs appearance = _TranslationsSettingsAppearanceEs._(_root);
+}
+
+// Path: statement_import
+class _TranslationsStatementImportEs extends TranslationsStatementImportEn {
+	_TranslationsStatementImportEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Importar estado de cuenta';
+	@override String get subtitle => 'Procesaremos los movimientos con IA';
+	@override String get ai_badge => 'IA privada · tu infraestructura';
+	@override late final _TranslationsStatementImportCaptureEs capture = _TranslationsStatementImportCaptureEs._(_root);
+	@override late final _TranslationsStatementImportProcessingEs processing = _TranslationsStatementImportProcessingEs._(_root);
+	@override late final _TranslationsStatementImportReviewEs review = _TranslationsStatementImportReviewEs._(_root);
+	@override late final _TranslationsStatementImportModesEs modes = _TranslationsStatementImportModesEs._(_root);
+	@override late final _TranslationsStatementImportConfirmEs confirm = _TranslationsStatementImportConfirmEs._(_root);
+	@override late final _TranslationsStatementImportSuccessEs success = _TranslationsStatementImportSuccessEs._(_root);
+	@override late final _TranslationsStatementImportUndoEs undo = _TranslationsStatementImportUndoEs._(_root);
+	@override String get entry_point => 'Importar estado de cuenta';
 }
 
 // Path: more
@@ -1589,6 +1615,126 @@ class _TranslationsSettingsAppearanceEs extends TranslationsSettingsAppearanceEn
 	@override String get text => 'Texto';
 	@override String get font => 'Fuente';
 	@override String get font_platform => 'Plataforma';
+}
+
+// Path: statement_import.capture
+class _TranslationsStatementImportCaptureEs extends TranslationsStatementImportCaptureEn {
+	_TranslationsStatementImportCaptureEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get cta_camera => 'Tomar foto';
+	@override String get cta_file => 'Subir PDF o imagen';
+	@override String get pdf_warning_title => 'PDF de varias páginas';
+	@override String pdf_warning_body({required Object pages}) => 'Este PDF tiene ${pages} páginas. Solo procesaremos la página 1.';
+	@override String get pdf_warning_continue => 'Continuar';
+	@override String get date_picker_title => '¿Cuándo tomaste la captura?';
+	@override String get error_read => 'No se pudo leer la imagen';
+}
+
+// Path: statement_import.processing
+class _TranslationsStatementImportProcessingEs extends TranslationsStatementImportProcessingEn {
+	_TranslationsStatementImportProcessingEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Leyendo estado de cuenta…';
+	@override String get analyzing => 'Analizando…';
+	@override String found({required Object n}) => '${n} encontrados';
+	@override String get cancel => 'Cancelar';
+	@override String get error_timeout => 'No pudimos leer en tiempo. Reintenta';
+	@override String get error_generic => 'No pudimos leer. Reintenta';
+	@override String get retry => 'Reintentar';
+	@override String get back => 'Volver';
+}
+
+// Path: statement_import.review
+class _TranslationsStatementImportReviewEs extends TranslationsStatementImportReviewEn {
+	_TranslationsStatementImportReviewEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Revisar movimientos';
+	@override String get empty => 'No se detectaron movimientos';
+	@override String get toggle_all => 'Todos';
+	@override String get toggle_none => 'Ninguno';
+	@override String continue_cta({required Object n}) => 'Continuar · ${n} movimientos';
+	@override String and_label({required Object n}) => 'AND · solo filas que cumplen ${n} criterios';
+	@override String get clear => 'Limpiar';
+	@override String get informative_warning => 'Algunas filas tienen fecha posterior al Fresh Start. Se incluirán en el historial pero no moverán el balance.';
+	@override String get fresh_start_dialog_title => 'Configura Fresh Start primero';
+	@override String get fresh_start_dialog_body => 'Para importar movimientos informativos (histórico) necesitas configurar la fecha desde la que rastreas esta cuenta.';
+	@override String get fresh_start_configure => 'Configurar ahora';
+	@override String get tag_exists => 'Ya existe';
+	@override String get tag_fee => 'Comisión';
+	@override String get tag_prefresh => 'Pre-Fresh';
+}
+
+// Path: statement_import.modes
+class _TranslationsStatementImportModesEs extends TranslationsStatementImportModesEn {
+	_TranslationsStatementImportModesEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get missing => 'Faltantes';
+	@override String get income => 'Ingresos';
+	@override String get expense => 'Gastos';
+	@override String get fees => 'Comisiones';
+	@override String get informative => 'Informativas';
+}
+
+// Path: statement_import.confirm
+class _TranslationsStatementImportConfirmEs extends TranslationsStatementImportConfirmEn {
+	_TranslationsStatementImportConfirmEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Confirmar importación';
+	@override String movements({required Object n}) => '${n} movimientos';
+	@override String get informative_chip => 'Historial · no afecta balance';
+	@override String get breakdown_title => 'Desglose';
+	@override String get breakdown_income => 'Ingresos';
+	@override String get breakdown_expense => 'Gastos';
+	@override String get breakdown_fees => 'Comisiones';
+	@override String get breakdown_total => 'Total neto';
+	@override String get undo_hint => 'Si algo se importa mal puedes deshacer desde el historial de la cuenta en los próximos 7 días.';
+	@override String get back => 'Volver';
+	@override String get import_cta => 'Importar';
+	@override String get error => 'No se pudo guardar. Reintenta.';
+}
+
+// Path: statement_import.success
+class _TranslationsStatementImportSuccessEs extends TranslationsStatementImportSuccessEn {
+	_TranslationsStatementImportSuccessEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String title({required Object n}) => '${n} movimientos importados';
+	@override String get view_history => 'Ver en el historial';
+	@override String get done => 'Listo';
+}
+
+// Path: statement_import.undo
+class _TranslationsStatementImportUndoEs extends TranslationsStatementImportUndoEn {
+	_TranslationsStatementImportUndoEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get banner_title => 'Importación reciente';
+	@override String banner_body({required Object n, required Object date}) => '${n} movimientos · ${date}';
+	@override String get undo_cta => 'Deshacer';
+	@override String get dialog_title => '¿Deshacer importación?';
+	@override String dialog_body({required Object n}) => 'Se eliminarán ${n} movimientos importados.';
+	@override String get dialog_confirm => 'Deshacer';
+	@override String get dialog_cancel => 'Cancelar';
+	@override String get success => 'Importación deshecha';
 }
 
 // Path: more.data
@@ -2711,6 +2857,9 @@ extension on TranslationsEs {
 		map['wallex_ai.voice_review_description_placeholder'] = 'Descripción';
 		map['wallex_ai.voice_review_amount_placeholder'] = 'Monto';
 		map['wallex_ai.voice_review_category_placeholder'] = 'Categoría';
+		map['wallex_ai.voice_review_category_none'] = 'Sin categoría';
+		map['wallex_ai.voice_review_date_placeholder'] = 'Fecha';
+		map['wallex_ai.voice_review_date_today'] = 'Hoy';
 		map['wallex_ai.voice_review_account_placeholder'] = 'Selecciona cuenta';
 		map['wallex_ai.voice_review_description_hint'] = '¿En qué fue...?';
 		map['wallex_ai.voice_save_success_auto'] = 'Gasto guardado';
@@ -2722,6 +2871,8 @@ extension on TranslationsEs {
 		map['wallex_ai.voice_validation_category_missing'] = 'Selecciona una categoría.';
 		map['wallex_ai.voice_flow_no_proposal'] = 'No pude extraer un gasto de lo que dijiste.';
 		map['wallex_ai.voice_flow_error_title'] = 'No pude interpretar eso';
+		map['wallex_ai.voice_flow_gateway_unavailable_title'] = 'Servicio de IA no disponible';
+		map['wallex_ai.voice_flow_gateway_unavailable'] = 'El servicio de IA no está disponible. Inténtalo de nuevo en un momento.';
 		map['wallex_ai.chat_input_hint_default'] = 'Pregunta sobre tus finanzas...';
 		map['wallex_ai.chat_input_hint_using_tools'] = 'Consultando tus datos...';
 		map['wallex_ai.chat_error_generic'] = 'No pude procesar tu pregunta, intenta de nuevo.';
@@ -3195,6 +3346,67 @@ extension on TranslationsEs {
 		map['settings.appearance.text'] = 'Texto';
 		map['settings.appearance.font'] = 'Fuente';
 		map['settings.appearance.font_platform'] = 'Plataforma';
+		map['statement_import.title'] = 'Importar estado de cuenta';
+		map['statement_import.subtitle'] = 'Procesaremos los movimientos con IA';
+		map['statement_import.ai_badge'] = 'IA privada · tu infraestructura';
+		map['statement_import.capture.cta_camera'] = 'Tomar foto';
+		map['statement_import.capture.cta_file'] = 'Subir PDF o imagen';
+		map['statement_import.capture.pdf_warning_title'] = 'PDF de varias páginas';
+		map['statement_import.capture.pdf_warning_body'] = ({required Object pages}) => 'Este PDF tiene ${pages} páginas. Solo procesaremos la página 1.';
+		map['statement_import.capture.pdf_warning_continue'] = 'Continuar';
+		map['statement_import.capture.date_picker_title'] = '¿Cuándo tomaste la captura?';
+		map['statement_import.capture.error_read'] = 'No se pudo leer la imagen';
+		map['statement_import.processing.title'] = 'Leyendo estado de cuenta…';
+		map['statement_import.processing.analyzing'] = 'Analizando…';
+		map['statement_import.processing.found'] = ({required Object n}) => '${n} encontrados';
+		map['statement_import.processing.cancel'] = 'Cancelar';
+		map['statement_import.processing.error_timeout'] = 'No pudimos leer en tiempo. Reintenta';
+		map['statement_import.processing.error_generic'] = 'No pudimos leer. Reintenta';
+		map['statement_import.processing.retry'] = 'Reintentar';
+		map['statement_import.processing.back'] = 'Volver';
+		map['statement_import.review.title'] = 'Revisar movimientos';
+		map['statement_import.review.empty'] = 'No se detectaron movimientos';
+		map['statement_import.review.toggle_all'] = 'Todos';
+		map['statement_import.review.toggle_none'] = 'Ninguno';
+		map['statement_import.review.continue_cta'] = ({required Object n}) => 'Continuar · ${n} movimientos';
+		map['statement_import.review.and_label'] = ({required Object n}) => 'AND · solo filas que cumplen ${n} criterios';
+		map['statement_import.review.clear'] = 'Limpiar';
+		map['statement_import.review.informative_warning'] = 'Algunas filas tienen fecha posterior al Fresh Start. Se incluirán en el historial pero no moverán el balance.';
+		map['statement_import.review.fresh_start_dialog_title'] = 'Configura Fresh Start primero';
+		map['statement_import.review.fresh_start_dialog_body'] = 'Para importar movimientos informativos (histórico) necesitas configurar la fecha desde la que rastreas esta cuenta.';
+		map['statement_import.review.fresh_start_configure'] = 'Configurar ahora';
+		map['statement_import.review.tag_exists'] = 'Ya existe';
+		map['statement_import.review.tag_fee'] = 'Comisión';
+		map['statement_import.review.tag_prefresh'] = 'Pre-Fresh';
+		map['statement_import.modes.missing'] = 'Faltantes';
+		map['statement_import.modes.income'] = 'Ingresos';
+		map['statement_import.modes.expense'] = 'Gastos';
+		map['statement_import.modes.fees'] = 'Comisiones';
+		map['statement_import.modes.informative'] = 'Informativas';
+		map['statement_import.confirm.title'] = 'Confirmar importación';
+		map['statement_import.confirm.movements'] = ({required Object n}) => '${n} movimientos';
+		map['statement_import.confirm.informative_chip'] = 'Historial · no afecta balance';
+		map['statement_import.confirm.breakdown_title'] = 'Desglose';
+		map['statement_import.confirm.breakdown_income'] = 'Ingresos';
+		map['statement_import.confirm.breakdown_expense'] = 'Gastos';
+		map['statement_import.confirm.breakdown_fees'] = 'Comisiones';
+		map['statement_import.confirm.breakdown_total'] = 'Total neto';
+		map['statement_import.confirm.undo_hint'] = 'Si algo se importa mal puedes deshacer desde el historial de la cuenta en los próximos 7 días.';
+		map['statement_import.confirm.back'] = 'Volver';
+		map['statement_import.confirm.import_cta'] = 'Importar';
+		map['statement_import.confirm.error'] = 'No se pudo guardar. Reintenta.';
+		map['statement_import.success.title'] = ({required Object n}) => '${n} movimientos importados';
+		map['statement_import.success.view_history'] = 'Ver en el historial';
+		map['statement_import.success.done'] = 'Listo';
+		map['statement_import.undo.banner_title'] = 'Importación reciente';
+		map['statement_import.undo.banner_body'] = ({required Object n, required Object date}) => '${n} movimientos · ${date}';
+		map['statement_import.undo.undo_cta'] = 'Deshacer';
+		map['statement_import.undo.dialog_title'] = '¿Deshacer importación?';
+		map['statement_import.undo.dialog_body'] = ({required Object n}) => 'Se eliminarán ${n} movimientos importados.';
+		map['statement_import.undo.dialog_confirm'] = 'Deshacer';
+		map['statement_import.undo.dialog_cancel'] = 'Cancelar';
+		map['statement_import.undo.success'] = 'Importación deshecha';
+		map['statement_import.entry_point'] = 'Importar estado de cuenta';
 		map['more.title'] = 'Más';
 		map['more.title_long'] = 'Más acciones';
 		map['more.data.display'] = 'Datos';

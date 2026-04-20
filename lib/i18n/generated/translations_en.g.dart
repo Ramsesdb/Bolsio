@@ -62,6 +62,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsBackupEn backup = TranslationsBackupEn.internal(_root);
 	late final TranslationsProfileEn profile = TranslationsProfileEn.internal(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
+	late final TranslationsStatementImportEn statement_import = TranslationsStatementImportEn.internal(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn.internal(_root);
 }
 
@@ -697,6 +698,15 @@ class TranslationsWallexAiEn {
 	/// en: 'Category'
 	String get voice_review_category_placeholder => 'Category';
 
+	/// en: 'No category'
+	String get voice_review_category_none => 'No category';
+
+	/// en: 'Date'
+	String get voice_review_date_placeholder => 'Date';
+
+	/// en: 'Today'
+	String get voice_review_date_today => 'Today';
+
 	/// en: 'Select account'
 	String get voice_review_account_placeholder => 'Select account';
 
@@ -729,6 +739,12 @@ class TranslationsWallexAiEn {
 
 	/// en: 'I couldn't interpret that'
 	String get voice_flow_error_title => 'I couldn\'t interpret that';
+
+	/// en: 'AI service unavailable'
+	String get voice_flow_gateway_unavailable_title => 'AI service unavailable';
+
+	/// en: 'The AI service is not available. Please try again in a moment.'
+	String get voice_flow_gateway_unavailable => 'The AI service is not available. Please try again in a moment.';
 
 	/// en: 'Ask about your finances...'
 	String get chat_input_hint_default => 'Ask about your finances...';
@@ -1305,6 +1321,35 @@ class TranslationsSettingsEn {
 	late final TranslationsSettingsHiddenModeEn hidden_mode = TranslationsSettingsHiddenModeEn.internal(_root);
 	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn.internal(_root);
 	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn.internal(_root);
+}
+
+// Path: statement_import
+class TranslationsStatementImportEn {
+	TranslationsStatementImportEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Import account statement'
+	String get title => 'Import account statement';
+
+	/// en: 'We will process the movements with AI'
+	String get subtitle => 'We will process the movements with AI';
+
+	/// en: 'Private AI · your infrastructure'
+	String get ai_badge => 'Private AI · your infrastructure';
+
+	late final TranslationsStatementImportCaptureEn capture = TranslationsStatementImportCaptureEn.internal(_root);
+	late final TranslationsStatementImportProcessingEn processing = TranslationsStatementImportProcessingEn.internal(_root);
+	late final TranslationsStatementImportReviewEn review = TranslationsStatementImportReviewEn.internal(_root);
+	late final TranslationsStatementImportModesEn modes = TranslationsStatementImportModesEn.internal(_root);
+	late final TranslationsStatementImportConfirmEn confirm = TranslationsStatementImportConfirmEn.internal(_root);
+	late final TranslationsStatementImportSuccessEn success = TranslationsStatementImportSuccessEn.internal(_root);
+	late final TranslationsStatementImportUndoEn undo = TranslationsStatementImportUndoEn.internal(_root);
+
+	/// en: 'Import account statement'
+	String get entry_point => 'Import account statement';
 }
 
 // Path: more
@@ -2897,6 +2942,240 @@ class TranslationsSettingsAppearanceEn {
 	String get font_platform => 'Platform';
 }
 
+// Path: statement_import.capture
+class TranslationsStatementImportCaptureEn {
+	TranslationsStatementImportCaptureEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Take a photo'
+	String get cta_camera => 'Take a photo';
+
+	/// en: 'Upload PDF or image'
+	String get cta_file => 'Upload PDF or image';
+
+	/// en: 'Multi-page PDF'
+	String get pdf_warning_title => 'Multi-page PDF';
+
+	/// en: 'This PDF has {{pages}} pages. We will only process page 1.'
+	String pdf_warning_body({required Object pages}) => 'This PDF has ${pages} pages. We will only process page 1.';
+
+	/// en: 'Continue'
+	String get pdf_warning_continue => 'Continue';
+
+	/// en: 'When did you take the capture?'
+	String get date_picker_title => 'When did you take the capture?';
+
+	/// en: 'Could not read the image'
+	String get error_read => 'Could not read the image';
+}
+
+// Path: statement_import.processing
+class TranslationsStatementImportProcessingEn {
+	TranslationsStatementImportProcessingEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Reading account statement…'
+	String get title => 'Reading account statement…';
+
+	/// en: 'Analyzing…'
+	String get analyzing => 'Analyzing…';
+
+	/// en: '{{n}} found'
+	String found({required Object n}) => '${n} found';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
+
+	/// en: 'Could not read in time. Try again'
+	String get error_timeout => 'Could not read in time. Try again';
+
+	/// en: 'Could not read. Try again'
+	String get error_generic => 'Could not read. Try again';
+
+	/// en: 'Retry'
+	String get retry => 'Retry';
+
+	/// en: 'Back'
+	String get back => 'Back';
+}
+
+// Path: statement_import.review
+class TranslationsStatementImportReviewEn {
+	TranslationsStatementImportReviewEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Review movements'
+	String get title => 'Review movements';
+
+	/// en: 'No movements detected'
+	String get empty => 'No movements detected';
+
+	/// en: 'All'
+	String get toggle_all => 'All';
+
+	/// en: 'None'
+	String get toggle_none => 'None';
+
+	/// en: 'Continue · {{n}} movements'
+	String continue_cta({required Object n}) => 'Continue · ${n} movements';
+
+	/// en: 'AND · only rows meeting {{n}} criteria'
+	String and_label({required Object n}) => 'AND · only rows meeting ${n} criteria';
+
+	/// en: 'Clear'
+	String get clear => 'Clear';
+
+	/// en: 'Some rows have a date after Fresh Start. They will be included in the history but will not affect the balance.'
+	String get informative_warning => 'Some rows have a date after Fresh Start. They will be included in the history but will not affect the balance.';
+
+	/// en: 'Configure Fresh Start first'
+	String get fresh_start_dialog_title => 'Configure Fresh Start first';
+
+	/// en: 'To import informative movements (history) you need to configure the date from which you track this account.'
+	String get fresh_start_dialog_body => 'To import informative movements (history) you need to configure the date from which you track this account.';
+
+	/// en: 'Configure now'
+	String get fresh_start_configure => 'Configure now';
+
+	/// en: 'Already exists'
+	String get tag_exists => 'Already exists';
+
+	/// en: 'Fee'
+	String get tag_fee => 'Fee';
+
+	/// en: 'Pre-Fresh'
+	String get tag_prefresh => 'Pre-Fresh';
+}
+
+// Path: statement_import.modes
+class TranslationsStatementImportModesEn {
+	TranslationsStatementImportModesEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Missing'
+	String get missing => 'Missing';
+
+	/// en: 'Income'
+	String get income => 'Income';
+
+	/// en: 'Expenses'
+	String get expense => 'Expenses';
+
+	/// en: 'Fees'
+	String get fees => 'Fees';
+
+	/// en: 'Informative'
+	String get informative => 'Informative';
+}
+
+// Path: statement_import.confirm
+class TranslationsStatementImportConfirmEn {
+	TranslationsStatementImportConfirmEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Confirm import'
+	String get title => 'Confirm import';
+
+	/// en: '{{n}} movements'
+	String movements({required Object n}) => '${n} movements';
+
+	/// en: 'History · does not affect balance'
+	String get informative_chip => 'History · does not affect balance';
+
+	/// en: 'Breakdown'
+	String get breakdown_title => 'Breakdown';
+
+	/// en: 'Income'
+	String get breakdown_income => 'Income';
+
+	/// en: 'Expenses'
+	String get breakdown_expense => 'Expenses';
+
+	/// en: 'Fees'
+	String get breakdown_fees => 'Fees';
+
+	/// en: 'Net total'
+	String get breakdown_total => 'Net total';
+
+	/// en: 'If something is imported incorrectly you can undo from the account history in the next 7 days.'
+	String get undo_hint => 'If something is imported incorrectly you can undo from the account history in the next 7 days.';
+
+	/// en: 'Back'
+	String get back => 'Back';
+
+	/// en: 'Import'
+	String get import_cta => 'Import';
+
+	/// en: 'Could not save. Try again.'
+	String get error => 'Could not save. Try again.';
+}
+
+// Path: statement_import.success
+class TranslationsStatementImportSuccessEn {
+	TranslationsStatementImportSuccessEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '{{n}} movements imported'
+	String title({required Object n}) => '${n} movements imported';
+
+	/// en: 'View in history'
+	String get view_history => 'View in history';
+
+	/// en: 'Done'
+	String get done => 'Done';
+}
+
+// Path: statement_import.undo
+class TranslationsStatementImportUndoEn {
+	TranslationsStatementImportUndoEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Recent import'
+	String get banner_title => 'Recent import';
+
+	/// en: '{{n}} movements · {{date}}'
+	String banner_body({required Object n, required Object date}) => '${n} movements · ${date}';
+
+	/// en: 'Undo'
+	String get undo_cta => 'Undo';
+
+	/// en: 'Undo import?'
+	String get dialog_title => 'Undo import?';
+
+	/// en: '{{n}} imported movements will be deleted.'
+	String dialog_body({required Object n}) => '${n} imported movements will be deleted.';
+
+	/// en: 'Undo'
+	String get dialog_confirm => 'Undo';
+
+	/// en: 'Cancel'
+	String get dialog_cancel => 'Cancel';
+
+	/// en: 'Import undone'
+	String get success => 'Import undone';
+}
+
 // Path: more.data
 class TranslationsMoreDataEn {
 	TranslationsMoreDataEn.internal(this._root);
@@ -4468,6 +4747,9 @@ extension on Translations {
 		map['wallex_ai.voice_review_description_placeholder'] = 'Description';
 		map['wallex_ai.voice_review_amount_placeholder'] = 'Amount';
 		map['wallex_ai.voice_review_category_placeholder'] = 'Category';
+		map['wallex_ai.voice_review_category_none'] = 'No category';
+		map['wallex_ai.voice_review_date_placeholder'] = 'Date';
+		map['wallex_ai.voice_review_date_today'] = 'Today';
 		map['wallex_ai.voice_review_account_placeholder'] = 'Select account';
 		map['wallex_ai.voice_review_description_hint'] = 'What was it for...?';
 		map['wallex_ai.voice_save_success_auto'] = 'Expense saved';
@@ -4479,6 +4761,8 @@ extension on Translations {
 		map['wallex_ai.voice_validation_category_missing'] = 'Select a category.';
 		map['wallex_ai.voice_flow_no_proposal'] = 'I couldn\'t extract an expense from what you said.';
 		map['wallex_ai.voice_flow_error_title'] = 'I couldn\'t interpret that';
+		map['wallex_ai.voice_flow_gateway_unavailable_title'] = 'AI service unavailable';
+		map['wallex_ai.voice_flow_gateway_unavailable'] = 'The AI service is not available. Please try again in a moment.';
 		map['wallex_ai.chat_input_hint_default'] = 'Ask about your finances...';
 		map['wallex_ai.chat_input_hint_using_tools'] = 'Looking up your data...';
 		map['wallex_ai.chat_error_generic'] = 'I couldn\'t process your question, try again.';
@@ -4952,6 +5236,67 @@ extension on Translations {
 		map['settings.appearance.text'] = 'Text';
 		map['settings.appearance.font'] = 'Font';
 		map['settings.appearance.font_platform'] = 'Platform';
+		map['statement_import.title'] = 'Import account statement';
+		map['statement_import.subtitle'] = 'We will process the movements with AI';
+		map['statement_import.ai_badge'] = 'Private AI · your infrastructure';
+		map['statement_import.capture.cta_camera'] = 'Take a photo';
+		map['statement_import.capture.cta_file'] = 'Upload PDF or image';
+		map['statement_import.capture.pdf_warning_title'] = 'Multi-page PDF';
+		map['statement_import.capture.pdf_warning_body'] = ({required Object pages}) => 'This PDF has ${pages} pages. We will only process page 1.';
+		map['statement_import.capture.pdf_warning_continue'] = 'Continue';
+		map['statement_import.capture.date_picker_title'] = 'When did you take the capture?';
+		map['statement_import.capture.error_read'] = 'Could not read the image';
+		map['statement_import.processing.title'] = 'Reading account statement…';
+		map['statement_import.processing.analyzing'] = 'Analyzing…';
+		map['statement_import.processing.found'] = ({required Object n}) => '${n} found';
+		map['statement_import.processing.cancel'] = 'Cancel';
+		map['statement_import.processing.error_timeout'] = 'Could not read in time. Try again';
+		map['statement_import.processing.error_generic'] = 'Could not read. Try again';
+		map['statement_import.processing.retry'] = 'Retry';
+		map['statement_import.processing.back'] = 'Back';
+		map['statement_import.review.title'] = 'Review movements';
+		map['statement_import.review.empty'] = 'No movements detected';
+		map['statement_import.review.toggle_all'] = 'All';
+		map['statement_import.review.toggle_none'] = 'None';
+		map['statement_import.review.continue_cta'] = ({required Object n}) => 'Continue · ${n} movements';
+		map['statement_import.review.and_label'] = ({required Object n}) => 'AND · only rows meeting ${n} criteria';
+		map['statement_import.review.clear'] = 'Clear';
+		map['statement_import.review.informative_warning'] = 'Some rows have a date after Fresh Start. They will be included in the history but will not affect the balance.';
+		map['statement_import.review.fresh_start_dialog_title'] = 'Configure Fresh Start first';
+		map['statement_import.review.fresh_start_dialog_body'] = 'To import informative movements (history) you need to configure the date from which you track this account.';
+		map['statement_import.review.fresh_start_configure'] = 'Configure now';
+		map['statement_import.review.tag_exists'] = 'Already exists';
+		map['statement_import.review.tag_fee'] = 'Fee';
+		map['statement_import.review.tag_prefresh'] = 'Pre-Fresh';
+		map['statement_import.modes.missing'] = 'Missing';
+		map['statement_import.modes.income'] = 'Income';
+		map['statement_import.modes.expense'] = 'Expenses';
+		map['statement_import.modes.fees'] = 'Fees';
+		map['statement_import.modes.informative'] = 'Informative';
+		map['statement_import.confirm.title'] = 'Confirm import';
+		map['statement_import.confirm.movements'] = ({required Object n}) => '${n} movements';
+		map['statement_import.confirm.informative_chip'] = 'History · does not affect balance';
+		map['statement_import.confirm.breakdown_title'] = 'Breakdown';
+		map['statement_import.confirm.breakdown_income'] = 'Income';
+		map['statement_import.confirm.breakdown_expense'] = 'Expenses';
+		map['statement_import.confirm.breakdown_fees'] = 'Fees';
+		map['statement_import.confirm.breakdown_total'] = 'Net total';
+		map['statement_import.confirm.undo_hint'] = 'If something is imported incorrectly you can undo from the account history in the next 7 days.';
+		map['statement_import.confirm.back'] = 'Back';
+		map['statement_import.confirm.import_cta'] = 'Import';
+		map['statement_import.confirm.error'] = 'Could not save. Try again.';
+		map['statement_import.success.title'] = ({required Object n}) => '${n} movements imported';
+		map['statement_import.success.view_history'] = 'View in history';
+		map['statement_import.success.done'] = 'Done';
+		map['statement_import.undo.banner_title'] = 'Recent import';
+		map['statement_import.undo.banner_body'] = ({required Object n, required Object date}) => '${n} movements · ${date}';
+		map['statement_import.undo.undo_cta'] = 'Undo';
+		map['statement_import.undo.dialog_title'] = 'Undo import?';
+		map['statement_import.undo.dialog_body'] = ({required Object n}) => '${n} imported movements will be deleted.';
+		map['statement_import.undo.dialog_confirm'] = 'Undo';
+		map['statement_import.undo.dialog_cancel'] = 'Cancel';
+		map['statement_import.undo.success'] = 'Import undone';
+		map['statement_import.entry_point'] = 'Import account statement';
 		map['more.title'] = 'More';
 		map['more.title_long'] = 'More actions';
 		map['more.data.display'] = 'Data';

@@ -506,6 +506,9 @@
     "voice_review_description_placeholder": "Descripción",
     "voice_review_amount_placeholder": "Monto",
     "voice_review_category_placeholder": "Categoría",
+    "voice_review_category_none": "Sin categoría",
+    "voice_review_date_placeholder": "Fecha",
+    "voice_review_date_today": "Hoy",
     "voice_review_account_placeholder": "Selecciona cuenta",
     "voice_review_description_hint": "¿En qué fue...?",
     "voice_save_success_auto": "Gasto guardado",
@@ -517,6 +520,8 @@
     "voice_validation_category_missing": "Selecciona una categoría.",
     "voice_flow_no_proposal": "No pude extraer un gasto de lo que dijiste.",
     "voice_flow_error_title": "No pude interpretar eso",
+    "voice_flow_gateway_unavailable_title": "Servicio de IA no disponible",
+    "voice_flow_gateway_unavailable": "El servicio de IA no está disponible. Inténtalo de nuevo en un momento.",
     "chat_input_hint_default": "Pregunta sobre tus finanzas...",
     "chat_input_hint_using_tools": "Consultando tus datos...",
     "chat_error_generic": "No pude procesar tu pregunta, intenta de nuevo.",
@@ -1148,6 +1153,83 @@
       "font": "Fuente",
       "font_platform": "Plataforma"
     }
+  },
+  "STATEMENT_IMPORT": {
+    "title": "Importar estado de cuenta",
+    "subtitle": "Procesaremos los movimientos con IA",
+    "ai-badge": "IA privada · tu infraestructura",
+    "capture": {
+      "cta-camera": "Tomar foto",
+      "cta-file": "Subir PDF o imagen",
+      "pdf-warning-title": "PDF de varias páginas",
+      "pdf-warning-body": "Este PDF tiene {{pages}} páginas. Solo procesaremos la página 1.",
+      "pdf-warning-continue": "Continuar",
+      "date-picker-title": "¿Cuándo tomaste la captura?",
+      "error-read": "No se pudo leer la imagen"
+    },
+    "processing": {
+      "title": "Leyendo estado de cuenta…",
+      "analyzing": "Analizando…",
+      "found": "{{n}} encontrados",
+      "cancel": "Cancelar",
+      "error-timeout": "No pudimos leer en tiempo. Reintenta",
+      "error-generic": "No pudimos leer. Reintenta",
+      "retry": "Reintentar",
+      "back": "Volver"
+    },
+    "review": {
+      "title": "Revisar movimientos",
+      "empty": "No se detectaron movimientos",
+      "toggle-all": "Todos",
+      "toggle-none": "Ninguno",
+      "continue-cta": "Continuar · {{n}} movimientos",
+      "and-label": "AND · solo filas que cumplen {{n}} criterios",
+      "clear": "Limpiar",
+      "informative-warning": "Algunas filas tienen fecha posterior al Fresh Start. Se incluirán en el historial pero no moverán el balance.",
+      "fresh-start-dialog-title": "Configura Fresh Start primero",
+      "fresh-start-dialog-body": "Para importar movimientos informativos (histórico) necesitas configurar la fecha desde la que rastreas esta cuenta.",
+      "fresh-start-configure": "Configurar ahora",
+      "tag-exists": "Ya existe",
+      "tag-fee": "Comisión",
+      "tag-prefresh": "Pre-Fresh"
+    },
+    "modes": {
+      "missing": "Faltantes",
+      "income": "Ingresos",
+      "expense": "Gastos",
+      "fees": "Comisiones",
+      "informative": "Informativas"
+    },
+    "confirm": {
+      "title": "Confirmar importación",
+      "movements": "{{n}} movimientos",
+      "informative-chip": "Historial · no afecta balance",
+      "breakdown-title": "Desglose",
+      "breakdown-income": "Ingresos",
+      "breakdown-expense": "Gastos",
+      "breakdown-fees": "Comisiones",
+      "breakdown-total": "Total neto",
+      "undo-hint": "Si algo se importa mal puedes deshacer desde el historial de la cuenta en los próximos 7 días.",
+      "back": "Volver",
+      "import-cta": "Importar",
+      "error": "No se pudo guardar. Reintenta."
+    },
+    "success": {
+      "title": "{{n}} movimientos importados",
+      "view-history": "Ver en el historial",
+      "done": "Listo"
+    },
+    "undo": {
+      "banner-title": "Importación reciente",
+      "banner-body": "{{n}} movimientos · {{date}}",
+      "undo-cta": "Deshacer",
+      "dialog-title": "¿Deshacer importación?",
+      "dialog-body": "Se eliminarán {{n}} movimientos importados.",
+      "dialog-confirm": "Deshacer",
+      "dialog-cancel": "Cancelar",
+      "success": "Importación deshecha"
+    },
+    "entry-point": "Importar estado de cuenta"
   },
   "MORE": {
     "title": "Más",

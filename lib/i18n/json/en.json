@@ -504,6 +504,9 @@
     "voice_review_description_placeholder": "Description",
     "voice_review_amount_placeholder": "Amount",
     "voice_review_category_placeholder": "Category",
+    "voice_review_category_none": "No category",
+    "voice_review_date_placeholder": "Date",
+    "voice_review_date_today": "Today",
     "voice_review_account_placeholder": "Select account",
     "voice_review_description_hint": "What was it for...?",
     "voice_save_success_auto": "Expense saved",
@@ -515,6 +518,8 @@
     "voice_validation_category_missing": "Select a category.",
     "voice_flow_no_proposal": "I couldn't extract an expense from what you said.",
     "voice_flow_error_title": "I couldn't interpret that",
+    "voice_flow_gateway_unavailable_title": "AI service unavailable",
+    "voice_flow_gateway_unavailable": "The AI service is not available. Please try again in a moment.",
     "chat_input_hint_default": "Ask about your finances...",
     "chat_input_hint_using_tools": "Looking up your data...",
     "chat_error_generic": "I couldn't process your question, try again.",
@@ -1146,6 +1151,83 @@
       "font": "Font",
       "font_platform": "Platform"
     }
+  },
+  "STATEMENT_IMPORT": {
+    "title": "Import account statement",
+    "subtitle": "We will process the movements with AI",
+    "ai-badge": "Private AI · your infrastructure",
+    "capture": {
+      "cta-camera": "Take a photo",
+      "cta-file": "Upload PDF or image",
+      "pdf-warning-title": "Multi-page PDF",
+      "pdf-warning-body": "This PDF has {{pages}} pages. We will only process page 1.",
+      "pdf-warning-continue": "Continue",
+      "date-picker-title": "When did you take the capture?",
+      "error-read": "Could not read the image"
+    },
+    "processing": {
+      "title": "Reading account statement…",
+      "analyzing": "Analyzing…",
+      "found": "{{n}} found",
+      "cancel": "Cancel",
+      "error-timeout": "Could not read in time. Try again",
+      "error-generic": "Could not read. Try again",
+      "retry": "Retry",
+      "back": "Back"
+    },
+    "review": {
+      "title": "Review movements",
+      "empty": "No movements detected",
+      "toggle-all": "All",
+      "toggle-none": "None",
+      "continue-cta": "Continue · {{n}} movements",
+      "and-label": "AND · only rows meeting {{n}} criteria",
+      "clear": "Clear",
+      "informative-warning": "Some rows have a date after Fresh Start. They will be included in the history but will not affect the balance.",
+      "fresh-start-dialog-title": "Configure Fresh Start first",
+      "fresh-start-dialog-body": "To import informative movements (history) you need to configure the date from which you track this account.",
+      "fresh-start-configure": "Configure now",
+      "tag-exists": "Already exists",
+      "tag-fee": "Fee",
+      "tag-prefresh": "Pre-Fresh"
+    },
+    "modes": {
+      "missing": "Missing",
+      "income": "Income",
+      "expense": "Expenses",
+      "fees": "Fees",
+      "informative": "Informative"
+    },
+    "confirm": {
+      "title": "Confirm import",
+      "movements": "{{n}} movements",
+      "informative-chip": "History · does not affect balance",
+      "breakdown-title": "Breakdown",
+      "breakdown-income": "Income",
+      "breakdown-expense": "Expenses",
+      "breakdown-fees": "Fees",
+      "breakdown-total": "Net total",
+      "undo-hint": "If something is imported incorrectly you can undo from the account history in the next 7 days.",
+      "back": "Back",
+      "import-cta": "Import",
+      "error": "Could not save. Try again."
+    },
+    "success": {
+      "title": "{{n}} movements imported",
+      "view-history": "View in history",
+      "done": "Done"
+    },
+    "undo": {
+      "banner-title": "Recent import",
+      "banner-body": "{{n}} movements · {{date}}",
+      "undo-cta": "Undo",
+      "dialog-title": "Undo import?",
+      "dialog-body": "{{n}} imported movements will be deleted.",
+      "dialog-confirm": "Undo",
+      "dialog-cancel": "Cancel",
+      "success": "Import undone"
+    },
+    "entry-point": "Import account statement"
   },
   "MORE": {
     "title": "More",
