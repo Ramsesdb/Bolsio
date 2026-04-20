@@ -17,6 +17,7 @@ import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
 import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/widgets/loading_overlay.dart';
@@ -277,15 +278,17 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
         final trValue = double.parse(row[amountColumn!].toString());
 
+        final parsedDate = dateColumn == null
+            ? DateTime.now()
+            : DateFormat(
+                _dateFormatController.text,
+                'en_US',
+              ).parse(row[dateColumn!].toString());
+
         transactionsToInsert.add(
           TransactionInDB(
             id: generateUUID(),
-            date: dateColumn == null
-                ? DateTime.now()
-                : DateFormat(
-                    _dateFormatController.text,
-                    'en_US',
-                  ).parse(row[dateColumn!].toString()),
+            date: parsedDate,
             type: trValue < 0
                 ? TransactionType.expense
                 : TransactionType.income,
@@ -299,6 +302,12 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             title: titleColumn == null || row[titleColumn!].toString().isEmpty
                 ? null
                 : row[titleColumn!].toString(),
+            // Always set an explicit status. A NULL status silently hides the
+            // transaction from stats/budgets/goals (SQL `status IN (...)`
+            // never matches NULL). Mirrors the manual form convention.
+            status: parsedDate.isAfter(DateTime.now())
+                ? TransactionStatus.pending
+                : TransactionStatus.reconciled,
             createdAt: DateTime.now(),
           ),
         );
