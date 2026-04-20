@@ -534,6 +534,17 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     requiredDuringInsert: false,
     $customConstraints: '',
   );
+  static const VerificationMeta _trackedSinceMeta = const VerificationMeta(
+    'trackedSince',
+  );
+  late final GeneratedColumn<DateTime> trackedSince = GeneratedColumn<DateTime>(
+    'trackedSince',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   static const VerificationMeta _currencyIdMeta = const VerificationMeta(
     'currencyId',
   );
@@ -576,6 +587,7 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     displayOrder,
     color,
     closingDate,
+    trackedSince,
     currencyId,
     iban,
     swift,
@@ -664,6 +676,15 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         ),
       );
     }
+    if (data.containsKey('trackedSince')) {
+      context.handle(
+        _trackedSinceMeta,
+        trackedSince.isAcceptableOrUnknown(
+          data['trackedSince']!,
+          _trackedSinceMeta,
+        ),
+      );
+    }
     if (data.containsKey('currencyId')) {
       context.handle(
         _currencyIdMeta,
@@ -735,6 +756,10 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}closingDate'],
       ),
+      trackedSince: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}trackedSince'],
+      ),
       currencyId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}currencyId'],
@@ -783,6 +808,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   /// The closing date of the account. After this date, no transactions can exists on it.
   final DateTime? closingDate;
 
+  /// Date from which transactions count toward the current balance. Transactions with date < trackedSince still appear in listings but do not affect the balance. NULL = backwards-compatible behavior (all transactions count).
+  final DateTime? trackedSince;
+
   /// ID of the currency used by this account and therefore all transactions contained in it
   final String currencyId;
   final String? iban;
@@ -798,6 +826,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     required this.displayOrder,
     this.color,
     this.closingDate,
+    this.trackedSince,
     required this.currencyId,
     this.iban,
     this.swift,
@@ -822,6 +851,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     }
     if (!nullToAbsent || closingDate != null) {
       map['closingDate'] = Variable<DateTime>(closingDate);
+    }
+    if (!nullToAbsent || trackedSince != null) {
+      map['trackedSince'] = Variable<DateTime>(trackedSince);
     }
     map['currencyId'] = Variable<String>(currencyId);
     if (!nullToAbsent || iban != null) {
@@ -851,6 +883,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       closingDate: closingDate == null && nullToAbsent
           ? const Value.absent()
           : Value(closingDate),
+      trackedSince: trackedSince == null && nullToAbsent
+          ? const Value.absent()
+          : Value(trackedSince),
       currencyId: Value(currencyId),
       iban: iban == null && nullToAbsent ? const Value.absent() : Value(iban),
       swift: swift == null && nullToAbsent
@@ -877,6 +912,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       displayOrder: serializer.fromJson<int>(json['displayOrder']),
       color: serializer.fromJson<String?>(json['color']),
       closingDate: serializer.fromJson<DateTime?>(json['closingDate']),
+      trackedSince: serializer.fromJson<DateTime?>(json['trackedSince']),
       currencyId: serializer.fromJson<String>(json['currencyId']),
       iban: serializer.fromJson<String?>(json['iban']),
       swift: serializer.fromJson<String?>(json['swift']),
@@ -896,6 +932,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'displayOrder': serializer.toJson<int>(displayOrder),
       'color': serializer.toJson<String?>(color),
       'closingDate': serializer.toJson<DateTime?>(closingDate),
+      'trackedSince': serializer.toJson<DateTime?>(trackedSince),
       'currencyId': serializer.toJson<String>(currencyId),
       'iban': serializer.toJson<String?>(iban),
       'swift': serializer.toJson<String?>(swift),
@@ -913,6 +950,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     int? displayOrder,
     Value<String?> color = const Value.absent(),
     Value<DateTime?> closingDate = const Value.absent(),
+    Value<DateTime?> trackedSince = const Value.absent(),
     String? currencyId,
     Value<String?> iban = const Value.absent(),
     Value<String?> swift = const Value.absent(),
@@ -927,6 +965,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     displayOrder: displayOrder ?? this.displayOrder,
     color: color.present ? color.value : this.color,
     closingDate: closingDate.present ? closingDate.value : this.closingDate,
+    trackedSince: trackedSince.present ? trackedSince.value : this.trackedSince,
     currencyId: currencyId ?? this.currencyId,
     iban: iban.present ? iban.value : this.iban,
     swift: swift.present ? swift.value : this.swift,
@@ -949,6 +988,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       closingDate: data.closingDate.present
           ? data.closingDate.value
           : this.closingDate,
+      trackedSince: data.trackedSince.present
+          ? data.trackedSince.value
+          : this.trackedSince,
       currencyId: data.currencyId.present
           ? data.currencyId.value
           : this.currencyId,
@@ -970,6 +1012,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
+          ..write('trackedSince: $trackedSince, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift')
@@ -989,6 +1032,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     displayOrder,
     color,
     closingDate,
+    trackedSince,
     currencyId,
     iban,
     swift,
@@ -1007,6 +1051,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.displayOrder == this.displayOrder &&
           other.color == this.color &&
           other.closingDate == this.closingDate &&
+          other.trackedSince == this.trackedSince &&
           other.currencyId == this.currencyId &&
           other.iban == this.iban &&
           other.swift == this.swift);
@@ -1023,6 +1068,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<int> displayOrder;
   final Value<String?> color;
   final Value<DateTime?> closingDate;
+  final Value<DateTime?> trackedSince;
   final Value<String> currencyId;
   final Value<String?> iban;
   final Value<String?> swift;
@@ -1038,6 +1084,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.displayOrder = const Value.absent(),
     this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
+    this.trackedSince = const Value.absent(),
     this.currencyId = const Value.absent(),
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
@@ -1054,6 +1101,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     required int displayOrder,
     this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
+    this.trackedSince = const Value.absent(),
     required String currencyId,
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
@@ -1077,6 +1125,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<int>? displayOrder,
     Expression<String>? color,
     Expression<DateTime>? closingDate,
+    Expression<DateTime>? trackedSince,
     Expression<String>? currencyId,
     Expression<String>? iban,
     Expression<String>? swift,
@@ -1093,6 +1142,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (displayOrder != null) 'displayOrder': displayOrder,
       if (color != null) 'color': color,
       if (closingDate != null) 'closingDate': closingDate,
+      if (trackedSince != null) 'trackedSince': trackedSince,
       if (currencyId != null) 'currencyId': currencyId,
       if (iban != null) 'iban': iban,
       if (swift != null) 'swift': swift,
@@ -1111,6 +1161,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Value<int>? displayOrder,
     Value<String?>? color,
     Value<DateTime?>? closingDate,
+    Value<DateTime?>? trackedSince,
     Value<String>? currencyId,
     Value<String?>? iban,
     Value<String?>? swift,
@@ -1127,6 +1178,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       displayOrder: displayOrder ?? this.displayOrder,
       color: color ?? this.color,
       closingDate: closingDate ?? this.closingDate,
+      trackedSince: trackedSince ?? this.trackedSince,
       currencyId: currencyId ?? this.currencyId,
       iban: iban ?? this.iban,
       swift: swift ?? this.swift,
@@ -1167,6 +1219,9 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     if (closingDate.present) {
       map['closingDate'] = Variable<DateTime>(closingDate.value);
     }
+    if (trackedSince.present) {
+      map['trackedSince'] = Variable<DateTime>(trackedSince.value);
+    }
     if (currencyId.present) {
       map['currencyId'] = Variable<String>(currencyId.value);
     }
@@ -1195,6 +1250,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
+          ..write('trackedSince: $trackedSince, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift, ')
@@ -8761,6 +8817,528 @@ class PendingImportsCompanion extends UpdateCompanion<PendingImportInDB> {
   }
 }
 
+class Attachments extends Table with TableInfo<Attachments, AttachmentInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Attachments(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _ownerTypeMeta = const VerificationMeta(
+    'ownerType',
+  );
+  late final GeneratedColumn<String> ownerType = GeneratedColumn<String>(
+    'ownerType',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (ownerType IN (\'transaction\', \'userProfile\', \'account\', \'budget\'))',
+  );
+  static const VerificationMeta _ownerIdMeta = const VerificationMeta(
+    'ownerId',
+  );
+  late final GeneratedColumn<String> ownerId = GeneratedColumn<String>(
+    'ownerId',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _localPathMeta = const VerificationMeta(
+    'localPath',
+  );
+  late final GeneratedColumn<String> localPath = GeneratedColumn<String>(
+    'localPath',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _mimeTypeMeta = const VerificationMeta(
+    'mimeType',
+  );
+  late final GeneratedColumn<String> mimeType = GeneratedColumn<String>(
+    'mimeType',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _sizeBytesMeta = const VerificationMeta(
+    'sizeBytes',
+  );
+  late final GeneratedColumn<int> sizeBytes = GeneratedColumn<int>(
+    'sizeBytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
+  late final GeneratedColumn<String> role = GeneratedColumn<String>(
+    'role',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'createdAt',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT CURRENT_TIMESTAMP',
+    defaultValue: const CustomExpression('CURRENT_TIMESTAMP'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    ownerType,
+    ownerId,
+    localPath,
+    mimeType,
+    sizeBytes,
+    role,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'attachments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AttachmentInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('ownerType')) {
+      context.handle(
+        _ownerTypeMeta,
+        ownerType.isAcceptableOrUnknown(data['ownerType']!, _ownerTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerTypeMeta);
+    }
+    if (data.containsKey('ownerId')) {
+      context.handle(
+        _ownerIdMeta,
+        ownerId.isAcceptableOrUnknown(data['ownerId']!, _ownerIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerIdMeta);
+    }
+    if (data.containsKey('localPath')) {
+      context.handle(
+        _localPathMeta,
+        localPath.isAcceptableOrUnknown(data['localPath']!, _localPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_localPathMeta);
+    }
+    if (data.containsKey('mimeType')) {
+      context.handle(
+        _mimeTypeMeta,
+        mimeType.isAcceptableOrUnknown(data['mimeType']!, _mimeTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mimeTypeMeta);
+    }
+    if (data.containsKey('sizeBytes')) {
+      context.handle(
+        _sizeBytesMeta,
+        sizeBytes.isAcceptableOrUnknown(data['sizeBytes']!, _sizeBytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sizeBytesMeta);
+    }
+    if (data.containsKey('role')) {
+      context.handle(
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
+    }
+    if (data.containsKey('createdAt')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['createdAt']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AttachmentInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AttachmentInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      ownerType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ownerType'],
+      )!,
+      ownerId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ownerId'],
+      )!,
+      localPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}localPath'],
+      )!,
+      mimeType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mimeType'],
+      )!,
+      sizeBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sizeBytes'],
+      )!,
+      role: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}createdAt'],
+      )!,
+    );
+  }
+
+  @override
+  Attachments createAlias(String alias) {
+    return Attachments(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class AttachmentInDB extends DataClass implements Insertable<AttachmentInDB> {
+  final String id;
+
+  /// Logical owner type of this attachment (polymorphic ownership)
+  final String ownerType;
+
+  /// Owner identifier in the corresponding domain
+  final String ownerId;
+
+  /// Path relative to ApplicationDocumentsDirectory
+  final String localPath;
+
+  /// MIME type, e.g. image/jpeg
+  final String mimeType;
+
+  /// Size in bytes of the persisted file
+  final int sizeBytes;
+
+  /// Optional role discriminator, e.g. receipt, avatar
+  final String? role;
+  final DateTime createdAt;
+  const AttachmentInDB({
+    required this.id,
+    required this.ownerType,
+    required this.ownerId,
+    required this.localPath,
+    required this.mimeType,
+    required this.sizeBytes,
+    this.role,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['ownerType'] = Variable<String>(ownerType);
+    map['ownerId'] = Variable<String>(ownerId);
+    map['localPath'] = Variable<String>(localPath);
+    map['mimeType'] = Variable<String>(mimeType);
+    map['sizeBytes'] = Variable<int>(sizeBytes);
+    if (!nullToAbsent || role != null) {
+      map['role'] = Variable<String>(role);
+    }
+    map['createdAt'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AttachmentsCompanion toCompanion(bool nullToAbsent) {
+    return AttachmentsCompanion(
+      id: Value(id),
+      ownerType: Value(ownerType),
+      ownerId: Value(ownerId),
+      localPath: Value(localPath),
+      mimeType: Value(mimeType),
+      sizeBytes: Value(sizeBytes),
+      role: role == null && nullToAbsent ? const Value.absent() : Value(role),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory AttachmentInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AttachmentInDB(
+      id: serializer.fromJson<String>(json['id']),
+      ownerType: serializer.fromJson<String>(json['ownerType']),
+      ownerId: serializer.fromJson<String>(json['ownerId']),
+      localPath: serializer.fromJson<String>(json['localPath']),
+      mimeType: serializer.fromJson<String>(json['mimeType']),
+      sizeBytes: serializer.fromJson<int>(json['sizeBytes']),
+      role: serializer.fromJson<String?>(json['role']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'ownerType': serializer.toJson<String>(ownerType),
+      'ownerId': serializer.toJson<String>(ownerId),
+      'localPath': serializer.toJson<String>(localPath),
+      'mimeType': serializer.toJson<String>(mimeType),
+      'sizeBytes': serializer.toJson<int>(sizeBytes),
+      'role': serializer.toJson<String?>(role),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  AttachmentInDB copyWith({
+    String? id,
+    String? ownerType,
+    String? ownerId,
+    String? localPath,
+    String? mimeType,
+    int? sizeBytes,
+    Value<String?> role = const Value.absent(),
+    DateTime? createdAt,
+  }) => AttachmentInDB(
+    id: id ?? this.id,
+    ownerType: ownerType ?? this.ownerType,
+    ownerId: ownerId ?? this.ownerId,
+    localPath: localPath ?? this.localPath,
+    mimeType: mimeType ?? this.mimeType,
+    sizeBytes: sizeBytes ?? this.sizeBytes,
+    role: role.present ? role.value : this.role,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  AttachmentInDB copyWithCompanion(AttachmentsCompanion data) {
+    return AttachmentInDB(
+      id: data.id.present ? data.id.value : this.id,
+      ownerType: data.ownerType.present ? data.ownerType.value : this.ownerType,
+      ownerId: data.ownerId.present ? data.ownerId.value : this.ownerId,
+      localPath: data.localPath.present ? data.localPath.value : this.localPath,
+      mimeType: data.mimeType.present ? data.mimeType.value : this.mimeType,
+      sizeBytes: data.sizeBytes.present ? data.sizeBytes.value : this.sizeBytes,
+      role: data.role.present ? data.role.value : this.role,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AttachmentInDB(')
+          ..write('id: $id, ')
+          ..write('ownerType: $ownerType, ')
+          ..write('ownerId: $ownerId, ')
+          ..write('localPath: $localPath, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('sizeBytes: $sizeBytes, ')
+          ..write('role: $role, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    ownerType,
+    ownerId,
+    localPath,
+    mimeType,
+    sizeBytes,
+    role,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AttachmentInDB &&
+          other.id == this.id &&
+          other.ownerType == this.ownerType &&
+          other.ownerId == this.ownerId &&
+          other.localPath == this.localPath &&
+          other.mimeType == this.mimeType &&
+          other.sizeBytes == this.sizeBytes &&
+          other.role == this.role &&
+          other.createdAt == this.createdAt);
+}
+
+class AttachmentsCompanion extends UpdateCompanion<AttachmentInDB> {
+  final Value<String> id;
+  final Value<String> ownerType;
+  final Value<String> ownerId;
+  final Value<String> localPath;
+  final Value<String> mimeType;
+  final Value<int> sizeBytes;
+  final Value<String?> role;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const AttachmentsCompanion({
+    this.id = const Value.absent(),
+    this.ownerType = const Value.absent(),
+    this.ownerId = const Value.absent(),
+    this.localPath = const Value.absent(),
+    this.mimeType = const Value.absent(),
+    this.sizeBytes = const Value.absent(),
+    this.role = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AttachmentsCompanion.insert({
+    required String id,
+    required String ownerType,
+    required String ownerId,
+    required String localPath,
+    required String mimeType,
+    required int sizeBytes,
+    this.role = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       ownerType = Value(ownerType),
+       ownerId = Value(ownerId),
+       localPath = Value(localPath),
+       mimeType = Value(mimeType),
+       sizeBytes = Value(sizeBytes);
+  static Insertable<AttachmentInDB> custom({
+    Expression<String>? id,
+    Expression<String>? ownerType,
+    Expression<String>? ownerId,
+    Expression<String>? localPath,
+    Expression<String>? mimeType,
+    Expression<int>? sizeBytes,
+    Expression<String>? role,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (ownerType != null) 'ownerType': ownerType,
+      if (ownerId != null) 'ownerId': ownerId,
+      if (localPath != null) 'localPath': localPath,
+      if (mimeType != null) 'mimeType': mimeType,
+      if (sizeBytes != null) 'sizeBytes': sizeBytes,
+      if (role != null) 'role': role,
+      if (createdAt != null) 'createdAt': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AttachmentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? ownerType,
+    Value<String>? ownerId,
+    Value<String>? localPath,
+    Value<String>? mimeType,
+    Value<int>? sizeBytes,
+    Value<String?>? role,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return AttachmentsCompanion(
+      id: id ?? this.id,
+      ownerType: ownerType ?? this.ownerType,
+      ownerId: ownerId ?? this.ownerId,
+      localPath: localPath ?? this.localPath,
+      mimeType: mimeType ?? this.mimeType,
+      sizeBytes: sizeBytes ?? this.sizeBytes,
+      role: role ?? this.role,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (ownerType.present) {
+      map['ownerType'] = Variable<String>(ownerType.value);
+    }
+    if (ownerId.present) {
+      map['ownerId'] = Variable<String>(ownerId.value);
+    }
+    if (localPath.present) {
+      map['localPath'] = Variable<String>(localPath.value);
+    }
+    if (mimeType.present) {
+      map['mimeType'] = Variable<String>(mimeType.value);
+    }
+    if (sizeBytes.present) {
+      map['sizeBytes'] = Variable<int>(sizeBytes.value);
+    }
+    if (role.present) {
+      map['role'] = Variable<String>(role.value);
+    }
+    if (createdAt.present) {
+      map['createdAt'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AttachmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('ownerType: $ownerType, ')
+          ..write('ownerId: $ownerId, ')
+          ..write('localPath: $localPath, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('sizeBytes: $sizeBytes, ')
+          ..write('role: $role, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDB extends GeneratedDatabase {
   _$AppDB(QueryExecutor e) : super(e);
   $AppDBManager get managers => $AppDBManager(this);
@@ -8781,6 +9359,11 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
   late final PendingImports pendingImports = PendingImports(this);
+  late final Attachments attachments = Attachments(this);
+  late final Index idxAttachmentsOwner = Index(
+    'idx_attachments_owner',
+    'CREATE INDEX IF NOT EXISTS idx_attachments_owner ON attachments (ownerType, ownerId)',
+  );
   Selectable<Account> getAccountsWithFullData({
     GetAccountsWithFullData$predicate? predicate,
     GetAccountsWithFullData$orderBy? orderBy,
@@ -8838,6 +9421,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         iconId: row.read<String>('iconId'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         closingDate: row.readNullable<DateTime>('closingDate'),
+        trackedSince: row.readNullable<DateTime>('trackedSince'),
         description: row.readNullable<String>('description'),
         iban: row.readNullable<String>('iban'),
         swift: row.readNullable<String>('swift'),
@@ -8959,7 +9543,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * CASE WHEN a.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END AS currentValueInPreferredCurrency, t.valueInDestiny * CASE WHEN ra.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied) END AS currentValueInDestinyInPreferredCurrency, t.exchangeRateApplied AS exchangeRateApplied, t.exchangeRateSource AS exchangeRateSource, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."trackedSince" AS "nested_0.trackedSince", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."trackedSince" AS "nested_3.trackedSince", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * CASE WHEN a.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END AS currentValueInPreferredCurrency, t.valueInDestiny * CASE WHEN ra.currencyId = ?1 THEN 1.0 ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied) END AS currentValueInDestinyInPreferredCurrency, t.exchangeRateApplied AS exchangeRateApplied, t.exchangeRateSource AS exchangeRateSource, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT e1.currencyCode, e1.exchangeRate FROM exchangeRates AS e1 WHERE e1.id = (SELECT e2.id FROM exchangeRates AS e2 WHERE e2.currencyCode = e1.currencyCode AND e2.date = (SELECT MAX(e3.date) FROM exchangeRates AS e3 WHERE e3.currencyCode = e1.currencyCode AND e3.date <= DATE(\'now\')) ORDER BY CASE WHEN e2.source = ?2 THEN 0 ELSE 1 END LIMIT 1)) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         Variable<String>(preferredCurrency),
         Variable<String>(rateSource),
@@ -9418,6 +10002,8 @@ abstract class _$AppDB extends GeneratedDatabase {
     userSettings,
     appData,
     pendingImports,
+    attachments,
+    idxAttachmentsOwner,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -10172,6 +10758,7 @@ typedef $AccountsCreateCompanionBuilder =
       required int displayOrder,
       Value<String?> color,
       Value<DateTime?> closingDate,
+      Value<DateTime?> trackedSince,
       required String currencyId,
       Value<String?> iban,
       Value<String?> swift,
@@ -10189,6 +10776,7 @@ typedef $AccountsUpdateCompanionBuilder =
       Value<int> displayOrder,
       Value<String?> color,
       Value<DateTime?> closingDate,
+      Value<DateTime?> trackedSince,
       Value<String> currencyId,
       Value<String?> iban,
       Value<String?> swift,
@@ -10274,6 +10862,11 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
 
   ColumnFilters<DateTime> get closingDate => $composableBuilder(
     column: $table.closingDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get trackedSince => $composableBuilder(
+    column: $table.trackedSince,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10369,6 +10962,11 @@ class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get trackedSince => $composableBuilder(
+    column: $table.trackedSince,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get iban => $composableBuilder(
     column: $table.iban,
     builder: (column) => ColumnOrderings(column),
@@ -10447,6 +11045,11 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     builder: (column) => column,
   );
 
+  GeneratedColumn<DateTime> get trackedSince => $composableBuilder(
+    column: $table.trackedSince,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get iban =>
       $composableBuilder(column: $table.iban, builder: (column) => column);
 
@@ -10515,6 +11118,7 @@ class $AccountsTableManager
                 Value<int> displayOrder = const Value.absent(),
                 Value<String?> color = const Value.absent(),
                 Value<DateTime?> closingDate = const Value.absent(),
+                Value<DateTime?> trackedSince = const Value.absent(),
                 Value<String> currencyId = const Value.absent(),
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
@@ -10530,6 +11134,7 @@ class $AccountsTableManager
                 displayOrder: displayOrder,
                 color: color,
                 closingDate: closingDate,
+                trackedSince: trackedSince,
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
@@ -10547,6 +11152,7 @@ class $AccountsTableManager
                 required int displayOrder,
                 Value<String?> color = const Value.absent(),
                 Value<DateTime?> closingDate = const Value.absent(),
+                Value<DateTime?> trackedSince = const Value.absent(),
                 required String currencyId,
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
@@ -10562,6 +11168,7 @@ class $AccountsTableManager
                 displayOrder: displayOrder,
                 color: color,
                 closingDate: closingDate,
+                trackedSince: trackedSince,
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
@@ -16927,6 +17534,257 @@ typedef $PendingImportsProcessedTableManager =
         bool receivingAccountId,
       })
     >;
+typedef $AttachmentsCreateCompanionBuilder =
+    AttachmentsCompanion Function({
+      required String id,
+      required String ownerType,
+      required String ownerId,
+      required String localPath,
+      required String mimeType,
+      required int sizeBytes,
+      Value<String?> role,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $AttachmentsUpdateCompanionBuilder =
+    AttachmentsCompanion Function({
+      Value<String> id,
+      Value<String> ownerType,
+      Value<String> ownerId,
+      Value<String> localPath,
+      Value<String> mimeType,
+      Value<int> sizeBytes,
+      Value<String?> role,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $AttachmentsFilterComposer extends Composer<_$AppDB, Attachments> {
+  $AttachmentsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerType => $composableBuilder(
+    column: $table.ownerType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localPath => $composableBuilder(
+    column: $table.localPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mimeType => $composableBuilder(
+    column: $table.mimeType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $AttachmentsOrderingComposer extends Composer<_$AppDB, Attachments> {
+  $AttachmentsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerType => $composableBuilder(
+    column: $table.ownerType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localPath => $composableBuilder(
+    column: $table.localPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mimeType => $composableBuilder(
+    column: $table.mimeType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $AttachmentsAnnotationComposer extends Composer<_$AppDB, Attachments> {
+  $AttachmentsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerType =>
+      $composableBuilder(column: $table.ownerType, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerId =>
+      $composableBuilder(column: $table.ownerId, builder: (column) => column);
+
+  GeneratedColumn<String> get localPath =>
+      $composableBuilder(column: $table.localPath, builder: (column) => column);
+
+  GeneratedColumn<String> get mimeType =>
+      $composableBuilder(column: $table.mimeType, builder: (column) => column);
+
+  GeneratedColumn<int> get sizeBytes =>
+      $composableBuilder(column: $table.sizeBytes, builder: (column) => column);
+
+  GeneratedColumn<String> get role =>
+      $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $AttachmentsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          Attachments,
+          AttachmentInDB,
+          $AttachmentsFilterComposer,
+          $AttachmentsOrderingComposer,
+          $AttachmentsAnnotationComposer,
+          $AttachmentsCreateCompanionBuilder,
+          $AttachmentsUpdateCompanionBuilder,
+          (
+            AttachmentInDB,
+            BaseReferences<_$AppDB, Attachments, AttachmentInDB>,
+          ),
+          AttachmentInDB,
+          PrefetchHooks Function()
+        > {
+  $AttachmentsTableManager(_$AppDB db, Attachments table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $AttachmentsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $AttachmentsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $AttachmentsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> ownerType = const Value.absent(),
+                Value<String> ownerId = const Value.absent(),
+                Value<String> localPath = const Value.absent(),
+                Value<String> mimeType = const Value.absent(),
+                Value<int> sizeBytes = const Value.absent(),
+                Value<String?> role = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AttachmentsCompanion(
+                id: id,
+                ownerType: ownerType,
+                ownerId: ownerId,
+                localPath: localPath,
+                mimeType: mimeType,
+                sizeBytes: sizeBytes,
+                role: role,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String ownerType,
+                required String ownerId,
+                required String localPath,
+                required String mimeType,
+                required int sizeBytes,
+                Value<String?> role = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AttachmentsCompanion.insert(
+                id: id,
+                ownerType: ownerType,
+                ownerId: ownerId,
+                localPath: localPath,
+                mimeType: mimeType,
+                sizeBytes: sizeBytes,
+                role: role,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $AttachmentsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      Attachments,
+      AttachmentInDB,
+      $AttachmentsFilterComposer,
+      $AttachmentsOrderingComposer,
+      $AttachmentsAnnotationComposer,
+      $AttachmentsCreateCompanionBuilder,
+      $AttachmentsUpdateCompanionBuilder,
+      (AttachmentInDB, BaseReferences<_$AppDB, Attachments, AttachmentInDB>),
+      AttachmentInDB,
+      PrefetchHooks Function()
+    >;
 
 class $AppDBManager {
   final _$AppDB _db;
@@ -16957,6 +17815,8 @@ class $AppDBManager {
   $AppDataTableManager get appData => $AppDataTableManager(_db, _db.appData);
   $PendingImportsTableManager get pendingImports =>
       $PendingImportsTableManager(_db, _db.pendingImports);
+  $AttachmentsTableManager get attachments =>
+      $AttachmentsTableManager(_db, _db.attachments);
 }
 
 typedef GetAccountsWithFullData$predicate =

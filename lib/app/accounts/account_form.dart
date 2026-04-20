@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:wallex/app/accounts/account_type_selector.dart';
+import 'package:wallex/app/accounts/widgets/retroactive_dialogs.dart';
 import 'package:wallex/app/categories/form/icon_and_color_selector.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/core/database/app_db.dart';
@@ -35,6 +36,13 @@ import 'package:wallex/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 
+/// Relative diff threshold that triggers the strong-confirmation flow when
+/// editing `trackedSince` on an existing account. If the absolute delta
+/// between the current and simulated balance exceeds this fraction of the
+/// current balance (and the current balance is non-zero), we require the
+/// user to type CONFIRM/CONFIRMAR.
+const double _kRetroactiveDiffThreshold = 0.5;
+
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
 
@@ -64,11 +72,22 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
   DateTime _openingDate = DateTime.now();
   DateTime? _closeDate;
+  DateTime? _trackedSinceDate;
 
   Future<void> submitForm() async {
     final accountService = AccountService.instance;
 
     double newBalance = double.parse(_balanceController.text);
+
+    // Validation: trackedSince cannot be after the closing date.
+    if (_trackedSinceDate != null &&
+        _closeDate != null &&
+        _trackedSinceDate!.isAfter(_closeDate!)) {
+      WallexSnackbar.warning(
+        SnackbarParams(t.account.form.tracked_since_validation_after_closing),
+      );
+      return;
+    }
 
     if (_accountToEdit != null) {
       // Check if there are transactions before the opening date of the account:
@@ -95,6 +114,70 @@ class _AccountFormPageState extends State<AccountFormPage> {
           await accountService.getAccountMoney(account: _accountToEdit).first;
     }
 
+    // Retroactive balance preview: only when editing an existing account and
+    // trackedSince actually changed. If the balance impact is non-negligible
+    // we ask for user confirmation (simple or strong) before persisting.
+    final isEditing = _accountToEdit != null;
+    final trackedSinceChanged =
+        isEditing && _trackedSinceDate != _accountToEdit.trackedSince;
+
+    bool needsRetroactiveConfirmation = false;
+    double currentBalance = 0;
+    double simulatedBalance = 0;
+
+    if (isEditing && trackedSinceChanged) {
+      currentBalance = await accountService
+          .getAccountsMoney(accountIds: [_accountToEdit.id])
+          .first;
+      simulatedBalance = await accountService
+          .getAccountsMoneyPreview(
+            accountId: _accountToEdit.id,
+            simulatedTrackedSince: _trackedSinceDate,
+          )
+          .first;
+
+      if ((currentBalance - simulatedBalance).abs() > 0.005) {
+        needsRetroactiveConfirmation = true;
+      }
+    }
+
+    if (needsRetroactiveConfirmation) {
+      final diff = (currentBalance - simulatedBalance).abs();
+      final bool isStrong =
+          simulatedBalance < 0 ||
+          (currentBalance.abs() > 0 &&
+              diff / currentBalance.abs() > _kRetroactiveDiffThreshold) ||
+          (currentBalance.abs() == 0 && simulatedBalance < 0);
+
+      if (!mounted) return;
+      final editingCurrency = _accountToEdit!.currency;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => isStrong
+            ? RetroactiveStrongConfirmDialog(
+                currentBalance: currentBalance,
+                simulatedBalance: simulatedBalance,
+                currency: editingCurrency,
+              )
+            : RetroactivePreviewDialog(
+                currentBalance: currentBalance,
+                simulatedBalance: simulatedBalance,
+                currency: editingCurrency,
+              ),
+      );
+
+      if (confirmed != true) {
+        if (!mounted) return;
+        if (isStrong) {
+          WallexSnackbar.warning(
+            SnackbarParams(t.account.retroactive.strong_confirm_mismatch),
+          );
+        }
+        return;
+      }
+    }
+
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
@@ -102,6 +185,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iniValue: newBalance,
       date: _openingDate,
       closingDate: _closeDate,
+      trackedSince: _trackedSinceDate,
       type: _type,
       iconId: _icon.id,
       color: _color.toHex(),
@@ -175,6 +259,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
     _openingDate = _accountToEdit.date;
     _closeDate = _accountToEdit.closingDate;
+    _trackedSinceDate = _accountToEdit.trackedSince;
 
     _type = _accountToEdit.type;
 
@@ -451,6 +536,42 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           ),
                           const SizedBox(height: 22),
                         ],
+                        DateTimeFormField(
+                          key: ValueKey(
+                            'tracked-since-${_trackedSinceDate?.toIso8601String() ?? "null"}',
+                          ),
+                          decoration: InputDecoration(
+                            suffixIcon: _trackedSinceDate != null
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    tooltip: t.account.retroactive.cancel,
+                                    onPressed: () {
+                                      setState(() {
+                                        _trackedSinceDate = null;
+                                      });
+                                    },
+                                  )
+                                : const Icon(Icons.event),
+                            labelText: t.account.form.tracked_since,
+                            hintText: t.account.form.tracked_since_hint,
+                            helperText: t.account.form.tracked_since_hint,
+                          ),
+                          initialDate: _trackedSinceDate,
+                          firstDate: _openingDate,
+                          lastDate: DateTime.now(),
+                          dateFormat: DateFormat.yMMMd().add_jm(),
+                          onDateSelected: (DateTime value) {
+                            setState(() {
+                              _trackedSinceDate = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        InlineInfoCard(
+                          text: t.account.form.tracked_since_info,
+                          mode: InlineInfoCardMode.info,
+                        ),
+                        const SizedBox(height: 22),
                         TextFormField(
                           controller: _ibanController,
                           decoration: InputDecoration(

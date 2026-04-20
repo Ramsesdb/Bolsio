@@ -112,9 +112,27 @@ enum SettingKey {
   /// Whether AI budget predictions are enabled in budget cards.
   aiBudgetPredictionEnabled,
 
+  /// Whether receipt OCR can use multimodal AI enrichment.
+  /// Defaults to enabled ('1') when unset.
+  receiptAiEnabled,
+
   /// Preferred exchange rate source for currency conversions.
   /// Values: 'bcv', 'paralelo'. Defaults to 'bcv' when null.
   preferredRateSource,
+
+  // ──── Hidden mode settings ────
+
+  /// Whether the "Hidden Mode" feature is active. '1' = enabled, '0' or null = disabled.
+  /// When enabled + locked, savings accounts and their transactions are filtered
+  /// out of dashboards, stats, and transaction lists. The PIN itself is stored
+  /// separately in flutter_secure_storage (NOT in the DB) so it does not travel
+  /// in backups. See [HiddenModeService].
+  hiddenModeEnabled,
+
+  /// Whether AI-driven voice capture is enabled. '1' (default when
+  /// [nexusAiEnabled] is '1') exposes the FAB mic action + chat mic button.
+  /// Requires BOTH [nexusAiEnabled] AND this flag to be '1'.
+  aiVoiceEnabled,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

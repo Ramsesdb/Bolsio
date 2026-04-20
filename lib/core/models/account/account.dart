@@ -60,6 +60,7 @@ class Account extends AccountInDB {
     required super.iconId,
     required this.currency,
     super.closingDate,
+    super.trackedSince,
     super.description,
     super.iban,
     super.swift,
@@ -73,6 +74,12 @@ class Account extends AccountInDB {
   SupportedIcon get icon => SupportedIconService.instance.getIconByID(iconId);
 
   bool get isClosed => closingDate != null;
+
+  /// Returns true when this account has an active tracking start date and the
+  /// given [txDate] falls before it, meaning the transaction exists for
+  /// historical/reference purposes but must not affect the current balance.
+  bool isTrackingHistorical(DateTime txDate) =>
+      trackedSince != null && txDate.isBefore(trackedSince!);
 
   Color getComputedColor(BuildContext context) {
     return color != null
@@ -122,6 +129,7 @@ class Account extends AccountInDB {
     name: account.name,
     iconId: account.iconId,
     closingDate: account.closingDate,
+    trackedSince: account.trackedSince,
     type: account.type,
     color: account.color,
   );

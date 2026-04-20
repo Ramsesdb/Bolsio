@@ -4,6 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
+import 'package:wallex/core/services/attachments/attachment_model.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/database/utils/drift_utils.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
@@ -38,8 +40,16 @@ typedef TransactionQueryOrderBy =
 
 class TransactionService {
   final AppDB db;
+  final AttachmentsService attachmentsService;
 
-  TransactionService._(this.db);
+  TransactionService._(this.db, {AttachmentsService? attachmentsService})
+      : attachmentsService = attachmentsService ?? AttachmentsService.instance;
+
+  TransactionService.forTesting(
+    this.db, {
+    required this.attachmentsService,
+  });
+
   static final TransactionService instance = TransactionService._(
     AppDB.instance,
   );
@@ -98,6 +108,12 @@ class TransactionService {
     return db.transaction(() async {
       // Delete from organization collection for multi-device sync (Fire and forget)
       unawaited(FirebaseSyncService.instance.deleteTransaction(transactionId));
+
+      // Keep attachments in sync with transaction lifecycle.
+      await attachmentsService.deleteByOwner(
+        ownerType: AttachmentOwnerType.transaction,
+        ownerId: transactionId,
+      );
 
       final result = await (db.delete(
         db.transactions,
