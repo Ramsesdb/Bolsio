@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 1.0.0+1
+version: 1.0.0+99999
 
 environment:
   flutter: 3.35.6
@@ -30,7 +30,6 @@ dependencies:
   firebase_core: ^3.3.0
   cloud_firestore: ^5.2.1
   firebase_auth: ^5.1.4
-  firebase_storage: ^12.3.0
   google_sign_in: ^6.2.2
 
   # General
@@ -94,6 +93,8 @@ dependencies:
   device_info_plus: ^11.3.0
   app_settings: ^6.1.1
   speech_to_text: ^7.3.0
+  pdfx: ^2.9.0
+  exif: ^3.3.0
 
 dev_dependencies:
   flutter_test:
