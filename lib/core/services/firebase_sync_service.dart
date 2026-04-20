@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drift/drift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wallex/core/database/app_db.dart';
@@ -12,6 +13,7 @@ import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/category/category.dart';
@@ -24,6 +26,7 @@ import 'package:wallex/core/services/auto_import/binance/binance_credentials_sto
 import 'package:wallex/core/services/firebase_credentials_cipher.dart';
 import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/core/utils/uuid.dart';
+import 'package:wallex/main.dart' show appStateKey;
 
 /// Service that syncs local data to Firestore for multi-device sharing.
 ///
@@ -365,6 +368,12 @@ class FirebaseSyncService {
       await Future.delayed(Duration.zero); // yield to UI
     }
 
+    // One-shot rebuild after all settings are applied — avoids N setState
+    // calls while still making theme/accent/etc. take effect without restart.
+    if (writeCount > 0) {
+      appStateKey.currentState?.refreshAppState();
+    }
+
     Logger.printDebug(
       'FirebaseSyncService: Pulled $writeCount user settings',
     );
@@ -372,13 +381,20 @@ class FirebaseSyncService {
   }
 
   // ============================================================
-  // USER AVATAR - sync profile image through Firebase Storage
+  // USER AVATAR - sync profile image as base64 inside a Firestore doc
   // ============================================================
 
   /// Owner ID used for the user's avatar attachment. Keep in sync with the
   /// value used in `edit_profile_modal.dart` / `user_avatar_display.dart`.
   static const String _avatarOwnerId = 'current';
   static const String _avatarRole = 'avatar';
+
+  // Firestore single-doc limit is 1 MiB; base64 inflates by ~33%, so we aim
+  // to keep the raw bytes well below ~700 KB. 400 KB is a comfortable
+  // threshold and 512x512 @ JPEG q80 virtually always fits.
+  static const int _avatarCompressThresholdBytes = 400 * 1000;
+  static const int _avatarMaxDimension = 512;
+  static const int _avatarJpegQuality = 80;
 
   Future<Attachment?> _getLocalAvatarAttachment() {
     return AttachmentsService.instance.firstByOwner(
@@ -388,9 +404,9 @@ class FirebaseSyncService {
     );
   }
 
-  /// Push the current user's avatar image to Firebase Storage, and store the
-  /// resulting download URL + metadata in Firestore at
-  /// `users/{uid}/profile/avatar`.
+  /// Push the current user's avatar image to Firestore at
+  /// `users/{uid}/profile/avatar` as a base64-encoded blob inside the
+  /// document itself (Spark plan friendly — no Firebase Storage).
   ///
   /// Conservative: if there is no local avatar, we do NOTHING (we don't
   /// delete the remote one). A failure here does not propagate — the caller
@@ -404,7 +420,7 @@ class FirebaseSyncService {
       final attachment = await _getLocalAvatarAttachment();
       if (attachment == null) {
         Logger.printDebug(
-          'FirebaseSyncService: No local avatar, skipping push',
+          'FirebaseSyncService: No local avatar attachment, skipping push',
         );
         return;
       }
@@ -412,51 +428,108 @@ class FirebaseSyncService {
       final file = await AttachmentsService.instance.resolveFile(attachment);
       if (!await file.exists()) {
         Logger.printDebug(
-          'FirebaseSyncService: Local avatar row exists but file missing, skipping push',
+          'FirebaseSyncService: Local avatar file does not exist at '
+          '${file.path}, skipping push',
         );
         return;
       }
 
-      final ext = p.extension(attachment.localPath).isNotEmpty
-          ? p.extension(attachment.localPath)
-          : '.jpg';
-      final storagePath = 'users/$uid/avatar$ext';
-      final ref = FirebaseStorage.instance.ref(storagePath);
+      Uint8List bytes = await file.readAsBytes();
+      final originalSize = bytes.length;
+      String mimeType = attachment.mimeType;
+      int? width;
+      int? height;
+      bool resized = false;
 
-      await ref.putFile(
-        file,
-        SettableMetadata(contentType: attachment.mimeType),
-      );
-      final downloadUrl = await ref.getDownloadURL();
+      if (originalSize > _avatarCompressThresholdBytes) {
+        final decoded = img.decodeImage(bytes);
+        if (decoded != null) {
+          final needsResize = decoded.width > _avatarMaxDimension ||
+              decoded.height > _avatarMaxDimension;
+          final processed = needsResize
+              ? img.copyResize(
+                  decoded,
+                  width: decoded.width >= decoded.height
+                      ? _avatarMaxDimension
+                      : null,
+                  height: decoded.height > decoded.width
+                      ? _avatarMaxDimension
+                      : null,
+                )
+              : decoded;
+          bytes = Uint8List.fromList(
+            img.encodeJpg(processed, quality: _avatarJpegQuality),
+          );
+          mimeType = 'image/jpeg';
+          width = processed.width;
+          height = processed.height;
+          resized = true;
+        } else {
+          Logger.printDebug(
+            'FirebaseSyncService: Could not decode avatar for compression, '
+            'uploading original $originalSize bytes',
+          );
+        }
+      }
 
-      await _firestore!
+      final docRef = _firestore!
           .collection('$_userBasePath/profile')
-          .doc('avatar')
-          .set({
-            'downloadUrl': downloadUrl,
-            'storagePath': storagePath,
-            'fileSize': attachment.sizeBytes,
-            'mimeType': attachment.mimeType,
-            'updatedAt': FieldValue.serverTimestamp(),
-            'updatedBy': currentUserEmail,
-          });
+          .doc('avatar');
+
+      // Dedupe: skip if remote doc already has same size + mimeType.
+      try {
+        final remoteSnap = await docRef.get();
+        if (remoteSnap.exists) {
+          final remoteData = remoteSnap.data();
+          final remoteSize = (remoteData?['size'] as num?)?.toInt();
+          final remoteMime = remoteData?['mimeType'] as String?;
+          if (remoteSize == bytes.length && remoteMime == mimeType) {
+            Logger.printDebug(
+              'FirebaseSyncService: Remote avatar matches local '
+              '(${bytes.length} bytes, $mimeType), skipping push',
+            );
+            return;
+          }
+        }
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Avatar dedupe read failed, continuing: $e',
+        );
+      }
+
+      final encoded = base64Encode(bytes);
+      Logger.printDebug(
+        'FirebaseSyncService: Pushing avatar: original $originalSize bytes '
+        '-> encoded ${encoded.length} bytes (resized: ${resized ? "yes" : "no"})',
+      );
+
+      await docRef.set({
+        'data': encoded,
+        'mimeType': mimeType,
+        'size': bytes.length,
+        if (width != null) 'width': width,
+        if (height != null) 'height': height,
+        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedBy': currentUserEmail,
+      });
 
       Logger.printDebug(
-        'FirebaseSyncService: Pushed user avatar (${attachment.sizeBytes} bytes)',
+        'FirebaseSyncService: Avatar push successful '
+        '(${bytes.length} bytes, $mimeType)',
       );
     } catch (e) {
       Logger.printDebug('FirebaseSyncService: Error pushing avatar: $e');
     }
   }
 
-  /// Pull the user's avatar from Firebase Storage via the Firestore
-  /// pointer doc and materialize it locally so the UI can show it.
+  /// Pull the user's avatar from Firestore. The avatar payload lives as a
+  /// base64-encoded string inside `users/{uid}/profile/avatar` itself
+  /// (no Firebase Storage — Spark plan compatible).
   ///
   /// Steps:
-  /// 1. Read `users/{uid}/profile/avatar` for the downloadUrl + size.
-  /// 2. If local DB already has an avatar with the same size, assume it's
-  ///    current and skip (cheap dedupe — avoids re-downloading every sync).
-  /// 3. Otherwise download the file into
+  /// 1. Read `users/{uid}/profile/avatar` for data + size + mimeType.
+  /// 2. If local DB already has an avatar with the same size, skip.
+  /// 3. Otherwise decode base64 into
   ///    `{docsDir}/attachments/userProfile/{uuid}{ext}` and upsert an
   ///    `attachments` row pointing at it. Any previous local avatar row
   ///    (and its file) is removed first so only one avatar exists.
@@ -471,17 +544,24 @@ class FirebaseSyncService {
           .get();
       if (!doc.exists) {
         Logger.printDebug(
-          'FirebaseSyncService: No remote avatar doc, skipping pull',
+          'FirebaseSyncService: No remote avatar doc in Firestore, '
+          'skipping pull',
         );
         return;
       }
       final data = doc.data();
       if (data == null) return;
 
-      final downloadUrl = data['downloadUrl'] as String?;
-      if (downloadUrl == null || downloadUrl.isEmpty) return;
+      final encoded = data['data'] as String?;
+      if (encoded == null || encoded.isEmpty) {
+        Logger.printDebug(
+          'FirebaseSyncService: Remote avatar doc has no `data` field, '
+          'skipping pull',
+        );
+        return;
+      }
 
-      final remoteSize = (data['fileSize'] as num?)?.toInt();
+      final remoteSize = (data['size'] as num?)?.toInt();
       final remoteMime = (data['mimeType'] as String?) ?? 'image/jpeg';
 
       final existing = await _getLocalAvatarAttachment();
@@ -493,10 +573,21 @@ class FirebaseSyncService {
         );
         if (await existingFile.exists()) {
           Logger.printDebug(
-            'FirebaseSyncService: Avatar already in sync (size $remoteSize), skipping download',
+            'FirebaseSyncService: Remote avatar size matches local '
+            '($remoteSize bytes), skipping download',
           );
           return;
         }
+      }
+
+      final Uint8List bytes;
+      try {
+        bytes = base64Decode(encoded);
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Failed to base64-decode avatar: $e',
+        );
+        return;
       }
 
       final docsDir = await getApplicationDocumentsDirectory();
@@ -510,14 +601,6 @@ class FirebaseSyncService {
       final targetPath = p.join(ownerFolder.path, '$newId$ext');
       final targetFile = File(targetPath);
 
-      final ref = FirebaseStorage.instance.refFromURL(downloadUrl);
-      final bytes = await ref.getData(10 * 1024 * 1024); // cap 10 MB
-      if (bytes == null) {
-        Logger.printDebug(
-          'FirebaseSyncService: Avatar download returned null bytes',
-        );
-        return;
-      }
       await targetFile.writeAsBytes(bytes, flush: true);
 
       // Remove the previous local avatar (row + file) so only one remains.
@@ -547,7 +630,8 @@ class FirebaseSyncService {
           );
 
       Logger.printDebug(
-        'FirebaseSyncService: Pulled user avatar (${bytes.length} bytes)',
+        'FirebaseSyncService: Avatar pull successful, wrote ${bytes.length} '
+        'bytes to $targetPath',
       );
     } catch (e) {
       Logger.printDebug('FirebaseSyncService: Error pulling avatar: $e');
@@ -848,6 +932,27 @@ class FirebaseSyncService {
 
       // Pull encrypted third-party credentials (optional, failures swallowed)
       await _pullCredentials();
+
+      // Re-initialize Hidden Mode so the in-memory lock state reflects the
+      // freshly-pulled PIN (secure storage) and `hiddenModeEnabled` flag (DB).
+      // Without this, widgets subscribed to `isLockedStream` keep the boot-time
+      // value (usually `false` on fresh installs) until the user restarts the
+      // app, causing saving accounts to leak into the dashboard.
+      //
+      // Safe to call multiple times: `_isLockedController` is a
+      // `BehaviorSubject` and `isLockedStream` applies `.distinct()`, so
+      // repeated calls with the same resolved state do not produce duplicate
+      // downstream emissions.
+      try {
+        Logger.printDebug(
+          'FirebaseSyncService: re-initializing HiddenModeService after pull',
+        );
+        await HiddenModeService.instance.init();
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: HiddenModeService re-init failed: $e',
+        );
+      }
 
       result['errors'] = totalErrors;
       result['firstError'] = firstError;
@@ -1274,6 +1379,19 @@ class FirebaseSyncService {
             await cipher.encryptForUser(binance.apiSecret, uid);
       }
 
+      // Hidden Mode PIN: hash + salt must travel together, or not at all.
+      final hiddenHash = await HiddenModeService.instance.readPinHash();
+      final hiddenSalt = await HiddenModeService.instance.readPinSalt();
+      if (hiddenHash != null &&
+          hiddenHash.isNotEmpty &&
+          hiddenSalt != null &&
+          hiddenSalt.isNotEmpty) {
+        payload['hiddenModePinHash'] =
+            await cipher.encryptForUser(hiddenHash, uid);
+        payload['hiddenModePinSalt'] =
+            await cipher.encryptForUser(hiddenSalt, uid);
+      }
+
       if (payload.isEmpty) {
         Logger.printDebug(
           'FirebaseSyncService: No local credentials to push, skipping',
@@ -1354,6 +1472,22 @@ class FirebaseSyncService {
           apiSecret: binanceSecret,
         );
         written += 2;
+      }
+
+      // Hidden Mode PIN must be restored as a pair. If either side failed to
+      // decrypt or is missing, skip entirely — writing only one would leave
+      // the service in a broken half-provisioned state.
+      final hiddenHash = await decryptField('hiddenModePinHash');
+      final hiddenSalt = await decryptField('hiddenModePinSalt');
+      if (hiddenHash != null && hiddenSalt != null) {
+        await HiddenModeService.instance
+            .writePinHashAndSalt(hiddenHash, hiddenSalt);
+        written += 2;
+      } else if (hiddenHash != null || hiddenSalt != null) {
+        Logger.printDebug(
+          'FirebaseSyncService: Hidden Mode PIN incomplete '
+          '(hash=${hiddenHash != null}, salt=${hiddenSalt != null}), skipping',
+        );
       }
 
       Logger.printDebug(
