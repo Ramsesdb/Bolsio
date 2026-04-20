@@ -20,6 +20,14 @@ class TransactionFilterSet {
   /// Accounts that this filter contains. Will be null if this filter is not in use, or if all accounts are selected
   final Iterable<String>? accountsIDs;
 
+  /// Accounts whose transactions should be excluded from the results. Unlike
+  /// [accountsIDs] this filter applies with AND semantics to **both sides** of
+  /// a transfer: a transaction is discarded if either its origin account or
+  /// its receiving account appears in this set. Used by Hidden Mode to hide
+  /// every transaction/transfer that touches a saving account while the app
+  /// is locked.
+  final Iterable<String>? excludeAccountsIDs;
+
   final bool includeReceivingAccountsInAccountFilters;
 
   /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected
@@ -51,6 +59,15 @@ class TransactionFilterSet {
   /// Exclude transactions that belong to a specific debt (useful when linking new transactions)
   final String? excludeDebtId;
 
+  /// Runtime-only flag: when true, the predicate builder excludes transactions
+  /// with `date < account.trackedSince` (and the symmetric check for the
+  /// receiving account of transfers). Used by balance calculations to honour
+  /// the account pre-tracking period. Stats/reporting queries keep this as
+  /// false so that historical data remains visible in aggregates.
+  ///
+  /// Not persisted: intentionally excluded from [fromDB]/[toDBModel].
+  final bool respectTrackedSince;
+
   const TransactionFilterSet({
     this.minDate,
     this.maxDate,
@@ -62,11 +79,13 @@ class TransactionFilterSet {
     this.transactionTypes,
     this.isRecurrent,
     this.accountsIDs,
+    this.excludeAccountsIDs,
     this.categoriesIds,
     this.status,
     this.tagsIDs,
     this.debtId,
     this.excludeDebtId,
+    this.respectTrackedSince = false,
   });
 
   /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
@@ -110,6 +129,9 @@ class TransactionFilterSet {
     transactionTypes,
     isRecurrent,
     accountsIDs,
+    // excludeAccountsIDs is deliberately omitted here: it's an internal filter
+    // driven by Hidden Mode, not a user-visible one. Counting it would light
+    // up the FilterRowIndicator chip even though the user never chose it.
     categoriesIds,
     status,
     tagsIDs,
@@ -192,6 +214,17 @@ class TransactionFilterSet {
       if (accountsIDs != null && includeReceivingAccountsInAccountFilters)
         transaction.accountID.isIn(accountsIDs!) |
             transaction.receivingAccountID.isIn(accountsIDs!),
+      // Exclude transactions that touch any account in [excludeAccountsIDs].
+      // For transfers this must gate **both** sides (AND), otherwise a
+      // transfer from a visible account into a hidden saving would leak. A
+      // normal transaction has receivingAccountID = NULL, so the right-hand
+      // side short-circuits to true and only accountID is checked.
+      if (excludeAccountsIDs != null && excludeAccountsIDs!.isNotEmpty)
+        transaction.accountID.isIn(excludeAccountsIDs!).not() &
+            (transaction.receivingAccountID.isNull() |
+                transaction.receivingAccountID
+                    .isIn(excludeAccountsIDs!)
+                    .not()),
       if (categoriesIds != null && includeParentCategoriesInSearch)
         transaction.categoryID.isIn(categoriesIds!) |
             c.parentCategoryID.isIn(categoriesIds!),
@@ -202,6 +235,19 @@ class TransactionFilterSet {
       if (excludeDebtId != null)
         (transaction.debtId.isNull() |
             transaction.debtId.equals(excludeDebtId!).not()),
+      // Pre-tracking period: when enabled, exclude transactions whose date
+      // falls before the origin account's `trackedSince`. For transfers, the
+      // receiving account (`ra`, LEFT JOIN) may be NULL — the left side of
+      // the OR handles that case. The symmetric check on the receiving
+      // account guarantees that a transfer crossing the frontier on only one
+      // side is ignored on both legs, avoiding asymmetrical balance drift.
+      if (respectTrackedSince) ...[
+        (account.trackedSince.isNull() |
+            transaction.date.isBiggerOrEqual(account.trackedSince)),
+        (receivingAccount.id.isNull() |
+            receivingAccount.trackedSince.isNull() |
+            transaction.date.isBiggerOrEqual(receivingAccount.trackedSince)),
+      ],
       if (extraFilters != null)
         buildDriftExpr(
           extraFilters(
@@ -220,6 +266,6 @@ class TransactionFilterSet {
 
   @override
   String toString() {
-    return 'TransactionFilterSet(accountsIDs: $accountsIDs, categoriesIds: $categoriesIds, includeParentCategoriesInSearch: $includeParentCategoriesInSearch, status: $status, minDate: $minDate, maxDate: $maxDate, searchValue: $searchValue, transactionTypes: $transactionTypes, isRecurrent: $isRecurrent, minValue: $minValue, maxValue: $maxValue, tagsIDs: $tagsIDs)';
+    return 'TransactionFilterSet(accountsIDs: $accountsIDs, excludeAccountsIDs: $excludeAccountsIDs, categoriesIds: $categoriesIds, includeParentCategoriesInSearch: $includeParentCategoriesInSearch, status: $status, minDate: $minDate, maxDate: $maxDate, searchValue: $searchValue, transactionTypes: $transactionTypes, isRecurrent: $isRecurrent, minValue: $minValue, maxValue: $maxValue, tagsIDs: $tagsIDs, respectTrackedSince: $respectTrackedSince)';
   }
 }

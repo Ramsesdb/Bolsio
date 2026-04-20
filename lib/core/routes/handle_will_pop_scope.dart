@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wallex/core/routes/destinations.dart';
-import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
-/// A widget that handles the WillPopScope for the entire app
 class HandleWillPopScope extends StatefulWidget {
   const HandleWillPopScope({required this.child, super.key});
   final Widget child;
@@ -13,50 +14,81 @@ class HandleWillPopScope extends StatefulWidget {
 }
 
 class _HandleWillPopScopeState extends State<HandleWillPopScope> {
-  bool canExitApp = true;
+  DateTime? _lastBackPressAt;
+  Timer? _resetTimer;
+
+  static const _exitWindow = Duration(seconds: 2);
+
+  bool get _nestedCanPop => navigatorKey.currentState?.canPop() ?? false;
+
+  AppMenuDestinationsID? get _selectedDestination =>
+      tabsPageKey.currentState?.selectedDestination;
+
+  @override
+  void dispose() {
+    _resetTimer?.cancel();
+    super.dispose();
+  }
+
+  void _armExitWindow() {
+    _lastBackPressAt = DateTime.now();
+    _resetTimer?.cancel();
+    _resetTimer = Timer(_exitWindow, () {
+      if (!mounted) return;
+      _lastBackPressAt = null;
+    });
+  }
+
+  bool _withinExitWindow() {
+    final at = _lastBackPressAt;
+    if (at == null) return false;
+    return DateTime.now().difference(at) <= _exitWindow;
+  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      // We need to add this cause otherwise after using
-      // the root navigator (in the showDialog method for example)
-      // the WillPopScope inside this widget stops working and the
-      // back button closes the app directly.
-      //
-      // This may be a stateless widget otherwise
-      canPop: canExitApp,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
-        // This code is fired AFTER the PopScope onPopInvokedWithResult of any page
-        // inside the navigatorKey navigator
-        bool popResult = await RouteUtils.maybePopRoute(
-          navigatorKey.currentContext,
-        );
+        final destinationBefore = _selectedDestination;
 
-        if (popResult == true) {
-          if (canExitApp == true) {
-            canExitApp = false;
-            setState(() {});
-          }
-
+        if (_nestedCanPop) {
+          await navigatorKey.currentState!.maybePop();
           return;
         }
 
-        // If the nested navigator can not handle the pop usually that
-        // means that we have just start the app, so we allow the pop
-        // if we are in the dashboard.
-        //
-        // We don't allow popping if we are in other pages, but we could not
-        // reach any case where this happens right now.
-
-        if (tabsPageKey.currentState?.selectedDestination ==
-            AppMenuDestinationsID.dashboard) {
-          if (canExitApp == false) {
-            canExitApp = true;
-            setState(() {});
-          }
+        if (destinationBefore == AppMenuDestinationsID.transactions &&
+            transactionsPageKey.currentState?.canPop == false) {
+          return;
         }
+
+        if (destinationBefore != null &&
+            destinationBefore != AppMenuDestinationsID.dashboard) {
+          tabsPageKey.currentState?.changePage(AppMenuDestinationsID.dashboard);
+          return;
+        }
+
+        if (_withinExitWindow()) {
+          _resetTimer?.cancel();
+          _lastBackPressAt = null;
+          await SystemNavigator.pop();
+          return;
+        }
+
+        _armExitWindow();
+
+        final messenger =
+            ScaffoldMessenger.maybeOf(context) ?? snackbarKey.currentState;
+        messenger
+          ?..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              duration: _exitWindow,
+              content: Text('Press again to exit'),
+            ),
+          );
       },
       child: widget.child,
     );

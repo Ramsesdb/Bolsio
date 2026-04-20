@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:wallex/core/models/date-utils/date_period.dart';
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/models/date-utils/period_type.dart';
 import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
 
 class SegmentedCalendarButton extends StatefulWidget {
@@ -151,10 +154,40 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                   onPressed: !widget.canChangePeriodType
                       ? null
                       : () {
+                          // Hidden Mode: restrict the picker to bounded
+                          // ranges (cycle / lastDays) so savings data cannot
+                          // leak via "all time" or a custom range while the
+                          // app is locked.
+                          final isLocked =
+                              HiddenModeService.instance.isLocked;
+                          final allowedTypes = isLocked
+                              ? const [
+                                  PeriodType.cycle,
+                                  PeriodType.lastDays,
+                                ]
+                              : null;
+
+                          final currentType =
+                              datePeriodService.datePeriod.periodType;
+                          if (isLocked &&
+                              (currentType == PeriodType.allTime ||
+                                  currentType == PeriodType.dateRange)) {
+                            setState(() {
+                              datePeriodService = datePeriodService.copyWith(
+                                periodModifier: 0,
+                                datePeriod: const DatePeriod(
+                                  periodType: PeriodType.cycle,
+                                ),
+                              );
+                            });
+                            widget.onChanged(datePeriodService);
+                          }
+
                           openDatePeriodModal(
                             context,
                             DatePeriodModal(
                               initialDatePeriod: datePeriodService.datePeriod,
+                              allowedTypes: allowedTypes,
                             ),
                           ).then((value) {
                             if (value == null) return;

@@ -49,53 +49,41 @@ class PageSwitcherState extends State<PageSwitcher> {
       (element) => element.id == selectedDestination,
     );
 
-    return PopScope(
-      canPop: selectedDestination == AppMenuDestinationsID.dashboard,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-
-        if (selectedDestination != AppMenuDestinationsID.dashboard &&
-            (transactionsPageKey.currentState == null ||
-                transactionsPageKey.currentState?.canPop == true)) {
-          changePage(AppMenuDestinationsID.dashboard);
-          return;
-        }
-      },
-      child: PageFramework(
-        enableAppBar: false,
-        body: PageContext(
-          isInTabs: true,
-          child: FadeIndexedStack(
-            index: selectedIndex,
-            duration: !AppUtils.isDesktop
-                ? Duration.zero
-                : const Duration(milliseconds: 300),
-            children: allDestinations.map((e) => e.destination).toList(),
-          ),
+    return PageFramework(
+      enableAppBar: false,
+      body: PageContext(
+        isInTabs: true,
+        child: FadeIndexedStack(
+          index: selectedIndex,
+          duration: !AppUtils.isDesktop
+              ? Duration.zero
+              : const Duration(milliseconds: 300),
+          children: allDestinations.map((e) => e.destination).toList(),
         ),
-        floatingActionButton: AnimateFAB(
-          condition:
-              selectedDestination == AppMenuDestinationsID.transactions ||
-              selectedDestination == AppMenuDestinationsID.dashboard ||
-              selectedDestination == AppMenuDestinationsID.budgets,
-          fab: Builder(
-            builder: (context) {
-              if (selectedDestination == AppMenuDestinationsID.budgets) {
-                return const BudgetFabButton();
-              }
-
-              return NewTransactionButton(
-                isExtended: BreakPoint.of(
-                  context,
-                ).isLargerThan(BreakpointID.md),
-              );
-            },
-          ),
-        ),
-        bottomNavigationBar: AppUtils.isMobileLayout(context)
-            ? AppBottomBar(selectedDestination: selectedDestination!)
-            : null,
       ),
+      floatingActionButton: AnimateFAB(
+        condition:
+            selectedDestination == AppMenuDestinationsID.transactions ||
+            selectedDestination == AppMenuDestinationsID.dashboard ||
+            selectedDestination == AppMenuDestinationsID.budgets,
+        fab: Builder(
+          builder: (context) {
+            if (selectedDestination == AppMenuDestinationsID.budgets) {
+              return const BudgetFabButton();
+            }
+
+            return NewTransactionButton(
+              isExtended: BreakPoint.of(
+                context,
+              ).isLargerThan(BreakpointID.md),
+            );
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      bottomNavigationBar: AppUtils.isMobileLayout(context)
+          ? AppBottomBar(selectedDestination: selectedDestination!)
+          : null,
     );
   }
 }

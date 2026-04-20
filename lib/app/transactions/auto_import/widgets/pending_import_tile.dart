@@ -46,6 +46,8 @@ class PendingImportTile extends StatelessWidget {
       CaptureChannel.sms => (Icons.sms_outlined, Colors.blue),
       CaptureChannel.notification => (Icons.notifications_outlined, Colors.purple),
       CaptureChannel.api => (Icons.sync, Colors.teal),
+      CaptureChannel.receiptImage => (Icons.receipt_long, Colors.orange),
+      CaptureChannel.voice => (Icons.mic_none_rounded, Colors.deepPurple),
     };
 
     return CircleAvatar(

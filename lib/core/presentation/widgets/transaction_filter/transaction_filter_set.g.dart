@@ -33,6 +33,8 @@ abstract class _$TransactionFilterSetCWProxy {
 
   TransactionFilterSet accountsIDs(Iterable<String>? accountsIDs);
 
+  TransactionFilterSet excludeAccountsIDs(Iterable<String>? excludeAccountsIDs);
+
   TransactionFilterSet categoriesIds(Iterable<String>? categoriesIds);
 
   TransactionFilterSet status(List<TransactionStatus?>? status);
@@ -42,6 +44,8 @@ abstract class _$TransactionFilterSetCWProxy {
   TransactionFilterSet debtId(String? debtId);
 
   TransactionFilterSet excludeDebtId(String? excludeDebtId);
+
+  TransactionFilterSet respectTrackedSince(bool respectTrackedSince);
 
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
@@ -61,11 +65,13 @@ abstract class _$TransactionFilterSetCWProxy {
     List<TransactionType>? transactionTypes,
     bool? isRecurrent,
     Iterable<String>? accountsIDs,
+    Iterable<String>? excludeAccountsIDs,
     Iterable<String>? categoriesIds,
     List<TransactionStatus?>? status,
     Iterable<String?>? tagsIDs,
     String? debtId,
     String? excludeDebtId,
+    bool respectTrackedSince,
   });
 }
 
@@ -120,6 +126,11 @@ class _$TransactionFilterSetCWProxyImpl
       call(accountsIDs: accountsIDs);
 
   @override
+  TransactionFilterSet excludeAccountsIDs(
+    Iterable<String>? excludeAccountsIDs,
+  ) => call(excludeAccountsIDs: excludeAccountsIDs);
+
+  @override
   TransactionFilterSet categoriesIds(Iterable<String>? categoriesIds) =>
       call(categoriesIds: categoriesIds);
 
@@ -137,6 +148,10 @@ class _$TransactionFilterSetCWProxyImpl
   @override
   TransactionFilterSet excludeDebtId(String? excludeDebtId) =>
       call(excludeDebtId: excludeDebtId);
+
+  @override
+  TransactionFilterSet respectTrackedSince(bool respectTrackedSince) =>
+      call(respectTrackedSince: respectTrackedSince);
 
   @override
   /// Creates a new instance with the provided field values.
@@ -158,11 +173,13 @@ class _$TransactionFilterSetCWProxyImpl
     Object? transactionTypes = const $CopyWithPlaceholder(),
     Object? isRecurrent = const $CopyWithPlaceholder(),
     Object? accountsIDs = const $CopyWithPlaceholder(),
+    Object? excludeAccountsIDs = const $CopyWithPlaceholder(),
     Object? categoriesIds = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
     Object? tagsIDs = const $CopyWithPlaceholder(),
     Object? debtId = const $CopyWithPlaceholder(),
     Object? excludeDebtId = const $CopyWithPlaceholder(),
+    Object? respectTrackedSince = const $CopyWithPlaceholder(),
   }) {
     return TransactionFilterSet(
       minDate: minDate == const $CopyWithPlaceholder()
@@ -210,6 +227,10 @@ class _$TransactionFilterSetCWProxyImpl
           ? _value.accountsIDs
           // ignore: cast_nullable_to_non_nullable
           : accountsIDs as Iterable<String>?,
+      excludeAccountsIDs: excludeAccountsIDs == const $CopyWithPlaceholder()
+          ? _value.excludeAccountsIDs
+          // ignore: cast_nullable_to_non_nullable
+          : excludeAccountsIDs as Iterable<String>?,
       categoriesIds: categoriesIds == const $CopyWithPlaceholder()
           ? _value.categoriesIds
           // ignore: cast_nullable_to_non_nullable
@@ -230,6 +251,12 @@ class _$TransactionFilterSetCWProxyImpl
           ? _value.excludeDebtId
           // ignore: cast_nullable_to_non_nullable
           : excludeDebtId as String?,
+      respectTrackedSince:
+          respectTrackedSince == const $CopyWithPlaceholder() ||
+              respectTrackedSince == null
+          ? _value.respectTrackedSince
+          // ignore: cast_nullable_to_non_nullable
+          : respectTrackedSince as bool,
     );
   }
 }
@@ -257,6 +284,7 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
     bool transactionTypes = false,
     bool isRecurrent = false,
     bool accountsIDs = false,
+    bool excludeAccountsIDs = false,
     bool categoriesIds = false,
     bool status = false,
     bool tagsIDs = false,
@@ -275,11 +303,15 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
       transactionTypes: transactionTypes == true ? null : this.transactionTypes,
       isRecurrent: isRecurrent == true ? null : this.isRecurrent,
       accountsIDs: accountsIDs == true ? null : this.accountsIDs,
+      excludeAccountsIDs: excludeAccountsIDs == true
+          ? null
+          : this.excludeAccountsIDs,
       categoriesIds: categoriesIds == true ? null : this.categoriesIds,
       status: status == true ? null : this.status,
       tagsIDs: tagsIDs == true ? null : this.tagsIDs,
       debtId: debtId == true ? null : this.debtId,
       excludeDebtId: excludeDebtId == true ? null : this.excludeDebtId,
+      respectTrackedSince: respectTrackedSince,
     );
   }
 }

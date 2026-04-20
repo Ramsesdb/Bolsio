@@ -20,14 +20,15 @@ import 'package:wallex/i18n/generated/translations.g.dart';
 
 Future<DatePeriod?> openDatePeriodModal(
   BuildContext context,
-  DatePeriodModal? modalComp,
-) {
+  DatePeriodModal? modalComp, {
+  List<PeriodType>? allowedTypes,
+}) {
   return showModalBottomSheet<DatePeriod>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
     builder: (context) {
-      return modalComp ?? const DatePeriodModal();
+      return modalComp ?? DatePeriodModal(allowedTypes: allowedTypes);
     },
   );
 }
@@ -36,9 +37,16 @@ class DatePeriodModal extends StatefulWidget {
   const DatePeriodModal({
     super.key,
     this.initialDatePeriod = const DatePeriod(periodType: PeriodType.cycle),
+    this.allowedTypes,
   });
 
   final DatePeriod initialDatePeriod;
+
+  /// Subset of [PeriodType] values to render as options. When `null` (default)
+  /// every value is shown. Used by Hidden Mode to restrict the user to
+  /// bounded ranges (cycle / lastDays) while the app is locked so savings
+  /// data cannot leak via an "all time" or custom-range query.
+  final List<PeriodType>? allowedTypes;
 
   @override
   State<DatePeriodModal> createState() => _DatePeriodModalState();
@@ -227,7 +235,8 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                for (final periodType in PeriodType.values)
+                for (final periodType
+                    in (widget.allowedTypes ?? PeriodType.values))
                   PeriodTypeEntry(
                     onTap: () {
                       HapticFeedback.lightImpact();

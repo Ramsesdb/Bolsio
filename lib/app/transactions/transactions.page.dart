@@ -3,13 +3,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:wallex/app/transactions/widgets/transaction_list.dart';
 import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
 import 'package:wallex/core/presentation/animations/animated_expanded.dart';
@@ -81,6 +85,44 @@ class TransactionsPageState extends State<TransactionsPage> {
 
   bool get canPop => !searchActive && selectedTransactions.isEmpty;
 
+  /// Hidden-Mode-aware view of the page filters.
+  ///
+  /// We intentionally do **not** intersect [TransactionFilterSet.accountsIDs]
+  /// with the visible account ids (as dashboard/stats do). The default
+  /// account filter uses OR semantics across origin/destiny accounts, which
+  /// would still show a transfer from a visible account into a saving
+  /// account — exactly what Hidden Mode needs to hide.
+  ///
+  /// Instead we populate [TransactionFilterSet.excludeAccountsIDs] with the
+  /// complement of the visible set (i.e. the saving accounts the user opted
+  /// to hide). That filter applies with AND semantics to both sides of every
+  /// transfer, so a transaction/transfer is dropped as soon as *either* side
+  /// is hidden.
+  TransactionFilterSet _applyHiddenAccountsFilter(
+    TransactionFilterSet base,
+    List<String>? visibleIds,
+    List<Account>? allAccounts,
+  ) {
+    if (visibleIds == null || allAccounts == null) return base;
+
+    final visibleSet = visibleIds.toSet();
+    final hidden = allAccounts
+        .map((a) => a.id)
+        .where((id) => !visibleSet.contains(id))
+        .toList(growable: false);
+
+    if (hidden.isEmpty) return base;
+
+    // Preserve any exclude set the caller already provided (there is none
+    // today, but this keeps the helper composable).
+    final baseExcluded = base.excludeAccountsIDs;
+    final merged = baseExcluded == null
+        ? hidden
+        : <String>{...baseExcluded, ...hidden}.toList(growable: false);
+
+    return base.copyWith(excludeAccountsIDs: merged);
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -115,6 +157,7 @@ class TransactionsPageState extends State<TransactionsPage> {
         floatingActionButton: ifIsInTabs(context)
             ? null
             : NewTransactionButton(scrollController: listScrollController),
+        floatingActionButtonLocation: ExpandableFab.location,
         body: Column(
           children: [
             AnimatedExpanded(
@@ -129,134 +172,182 @@ class TransactionsPageState extends State<TransactionsPage> {
                 },
               ),
             ),
-            StreamBuilder(
-              stream: Rx.combineLatest2(
-                TransactionService.instance.countTransactions(
-                  filters: filters.copyWith(searchValue: searchController.text),
+            // Hidden-Mode gate. While the feature is locked the inner stream
+            // emits the complement of visible accounts via `excludeAccountsIDs`
+            // on both the count/balance card and the list below, so savings
+            // transactions AND transfers touching savings disappear at the SQL
+            // level — no client-side filtering needed.
+            Expanded(
+              child: StreamBuilder<({List<String>? visible, List<Account>? all})>(
+                stream: Rx.combineLatest2<List<String>, List<Account>,
+                    ({List<String>? visible, List<Account>? all})>(
+                  HiddenModeService.instance.visibleAccountIdsStream,
+                  AccountService.instance.getAccounts(),
+                  (v, a) => (visible: v, all: a),
                 ),
-                TransactionService.instance.getTransactionsValueBalance(
-                  filters: filters.copyWith(searchValue: searchController.text),
-                ),
-                (a, b) => (count: a, value: b),
-              ),
-              builder: (context, snapshot) {
-                final trCountAndBalance = snapshot.data;
+                builder: (context, hiddenSnapshot) {
+                  final effectiveFilters = _applyHiddenAccountsFilter(
+                    filters.copyWith(searchValue: searchController.text),
+                    hiddenSnapshot.data?.visible,
+                    hiddenSnapshot.data?.all,
+                  );
 
-                const smallerTextStyle = TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                );
+                  return Column(
+                    children: [
+                      StreamBuilder(
+                        stream: Rx.combineLatest2(
+                          TransactionService.instance.countTransactions(
+                            filters: effectiveFilters,
+                          ),
+                          TransactionService.instance
+                              .getTransactionsValueBalance(
+                                filters: effectiveFilters,
+                              ),
+                          (a, b) => (count: a, value: b),
+                        ),
+                        builder: (context, snapshot) {
+                          final trCountAndBalance = snapshot.data;
 
-                return Skeletonizer(
-                  enabled: trCountAndBalance == null,
-                  child: Card(
-                    elevation: 2,
-                    //color: Theme.of(context).colorScheme.primary,
-                    margin: const EdgeInsets.all(8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 14,
-                      ),
-                      child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.titleMedium!,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (trCountAndBalance == null)
-                              Text("XX Transactions"),
-                            if (trCountAndBalance != null)
-                              Text.rich(
-                                TextSpan(
-                                  text: selectedTransactions.isNotEmpty
-                                      ? ('${selectedTransactions.length.toStringAsFixed(0)}')
-                                      : '',
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '${selectedTransactions.isNotEmpty ? ' / ' : ''}${trCountAndBalance.count} ',
-                                      style: selectedTransactions.isNotEmpty
-                                          ? smallerTextStyle
-                                          : null,
-                                    ),
+                          const smallerTextStyle = TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                          );
 
-                                    if (selectedTransactions.isNotEmpty)
-                                      const TextSpan(text: " "),
-
-                                    TextSpan(
-                                      text: t.transaction
-                                          .display(n: trCountAndBalance.count)
-                                          .toLowerCase(),
-                                    ),
-                                  ],
+                          return Skeletonizer(
+                            enabled: trCountAndBalance == null,
+                            child: Card(
+                              elevation: 2,
+                              margin: const EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 14,
+                                ),
+                                child: DefaultTextStyle(
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium!,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (trCountAndBalance == null)
+                                        Text("XX Transactions"),
+                                      if (trCountAndBalance != null)
+                                        Text.rich(
+                                          TextSpan(
+                                            text:
+                                                selectedTransactions.isNotEmpty
+                                                ? ('${selectedTransactions.length.toStringAsFixed(0)}')
+                                                : '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    '${selectedTransactions.isNotEmpty ? ' / ' : ''}${trCountAndBalance.count} ',
+                                                style:
+                                                    selectedTransactions
+                                                        .isNotEmpty
+                                                    ? smallerTextStyle
+                                                    : null,
+                                              ),
+                                              if (selectedTransactions
+                                                  .isNotEmpty)
+                                                const TextSpan(text: " "),
+                                              TextSpan(
+                                                text: t.transaction
+                                                    .display(
+                                                      n: trCountAndBalance
+                                                          .count,
+                                                    )
+                                                    .toLowerCase(),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (selectedTransactions
+                                              .isNotEmpty) ...[
+                                            CurrencyDisplayer(
+                                              amountToConvert:
+                                                  selectedTransactions
+                                                      .map(
+                                                        (e) =>
+                                                            e.getCurrentBalanceInPreferredCurrency() ??
+                                                            0.0,
+                                                      )
+                                                      .sum,
+                                              showDecimals: false,
+                                            ),
+                                            const Text(
+                                              " / ",
+                                              style: smallerTextStyle,
+                                            ),
+                                          ],
+                                          CurrencyDisplayer(
+                                            amountToConvert:
+                                                trCountAndBalance?.value ?? 0,
+                                            showDecimals:
+                                                selectedTransactions.isEmpty,
+                                            integerStyle:
+                                                selectedTransactions.isEmpty
+                                                ? const TextStyle(
+                                                    inherit: true,
+                                                  )
+                                                : smallerTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (selectedTransactions.isNotEmpty) ...[
-                                  CurrencyDisplayer(
-                                    amountToConvert: selectedTransactions
-                                        .map(
-                                          (e) => e
-                                              .getCurrentBalanceInPreferredCurrency() ?? 0.0,
-                                        )
-                                        .sum,
-                                    showDecimals: false,
-                                  ),
-                                  const Text(" / ", style: smallerTextStyle),
-                                ],
-                                CurrencyDisplayer(
-                                  amountToConvert:
-                                      trCountAndBalance?.value ?? 0,
-                                  showDecimals: selectedTransactions.isEmpty,
-                                  integerStyle: selectedTransactions.isEmpty
-                                      ? const TextStyle(inherit: true)
-                                      : smallerTextStyle,
-                                ),
-                              ],
                             ),
-                          ],
+                          );
+                        },
+                      ),
+                      Expanded(
+                        child: TransactionListComponent(
+                          scrollController: listScrollController,
+                          isScrollable: true,
+                          listPadding: const EdgeInsets.only(
+                            bottom: 64,
+                          ).withSafeBottom(context),
+                          tileBuilder: (tr) => TransactionListTile(
+                            transaction: tr,
+                            heroTag:
+                                'transactions-page__tr-icon-${tr.id}',
+                            onLongPress: selectedTransactions.isNotEmpty
+                                ? null
+                                : () => toggleTransaction(tr),
+                            onTap: selectedTransactions.isEmpty
+                                ? null
+                                : () => toggleTransaction(tr),
+                            isSelected: selectedTransactions.any(
+                              (element) => element.id == tr.id,
+                            ),
+                            showDateTime: false,
+                            applySwipeActions: true,
+                          ),
+                          filters: effectiveFilters,
+                          onEmptyList: NoResults(
+                            title: filters.hasFilter
+                                ? null
+                                : t.general.empty_warn,
+                            description: filters.hasFilter
+                                ? t.transaction.list.searcher_no_results
+                                : t.transaction.list.empty,
+                            noSearchResultsVariation: filters.hasFilter,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Expanded(
-              child: TransactionListComponent(
-                scrollController: listScrollController,
-                isScrollable: true,
-                listPadding: const EdgeInsets.only(
-                  bottom: 64,
-                ).withSafeBottom(context),
-                tileBuilder: (tr) => TransactionListTile(
-                  transaction: tr,
-                  heroTag: 'transactions-page__tr-icon-${tr.id}',
-                  onLongPress: selectedTransactions.isNotEmpty
-                      ? null
-                      : () => toggleTransaction(tr),
-                  onTap: selectedTransactions.isEmpty
-                      ? null
-                      : () => toggleTransaction(tr),
-                  isSelected: selectedTransactions.any(
-                    (element) => element.id == tr.id,
-                  ),
-                  showDateTime: false,
-                  applySwipeActions: true,
-                ),
-                filters: filters.copyWith(searchValue: searchController.text),
-                onEmptyList: NoResults(
-                  title: filters.hasFilter ? null : t.general.empty_warn,
-                  description: filters.hasFilter
-                      ? t.transaction.list.searcher_no_results
-                      : t.transaction.list.empty,
-                  noSearchResultsVariation: filters.hasFilter,
-                ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -307,10 +398,7 @@ class TransactionsPageState extends State<TransactionsPage> {
               final count = snapshot.data ?? 0;
               return IconButton(
                 icon: count > 0
-                    ? Badge.count(
-                        count: count,
-                        child: const Icon(Icons.inbox),
-                      )
+                    ? Badge.count(count: count, child: const Icon(Icons.inbox))
                     : const Icon(Icons.inbox_outlined),
                 tooltip: 'Auto-import',
                 onPressed: () {

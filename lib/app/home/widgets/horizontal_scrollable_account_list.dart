@@ -18,9 +18,17 @@ bool _useSmallLayout(BuildContext context) =>
     BreakPoint.of(context).isSmallerThan(BreakpointID.lg);
 
 class HorizontalScrollableAccountList extends StatelessWidget {
-  const HorizontalScrollableAccountList({required this.dateRangeService});
+  const HorizontalScrollableAccountList({
+    required this.dateRangeService,
+    this.visibleAccountIds,
+  });
 
   final DatePeriodState dateRangeService;
+
+  /// When non-null, only the accounts whose id is contained in this list are
+  /// rendered. Passed by the dashboard so Hidden Mode can remove savings
+  /// accounts from the carousel without having to touch the internal stream.
+  final List<String>? visibleAccountIds;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +46,18 @@ class HorizontalScrollableAccountList extends StatelessWidget {
             predicate: (acc, curr) => acc.closingDate.isNull(),
           ),
           builder: (context, snapshot) {
+            final allAccounts = snapshot.data ?? const <Account>[];
+            final visibleIds = visibleAccountIds;
+            final accounts = visibleIds == null
+                ? allAccounts
+                : allAccounts
+                      .where((a) => visibleIds.contains(a.id))
+                      .toList(growable: false);
+
             return Row(
               children: [
-                ...List.generate(snapshot.data?.length ?? 0, (index) {
-                  final account = snapshot.data!.elementAt(index);
+                ...List.generate(accounts.length, (index) {
+                  final account = accounts.elementAt(index);
 
                   return _buildAccountCard(
                     context,

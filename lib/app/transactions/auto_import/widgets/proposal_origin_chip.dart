@@ -44,6 +44,10 @@ class ProposalOriginChip extends StatelessWidget {
       case CaptureChannel.api:
         final apiName = _apiNameFromSender(sender);
         return (Icons.sync, '$apiName API');
+      case CaptureChannel.receiptImage:
+        return (Icons.receipt_long, 'Comprobante');
+      case CaptureChannel.voice:
+        return (Icons.mic_none_rounded, 'Voz');
     }
   }
 

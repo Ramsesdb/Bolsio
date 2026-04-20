@@ -8,7 +8,7 @@ import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
 import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:wallex/app/common/widgets/user_avatar_display.dart';
 import 'package:wallex/core/routes/destinations.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/app_utils.dart';
@@ -100,7 +100,7 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
               trailing: Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 alignment: Alignment.bottomCenter,
-                child: UserAvatar(
+                child: UserAvatarDisplay(
                   avatar: appStateSettings[SettingKey.avatar],
                   backgroundColor: AppColors.of(
                     context,

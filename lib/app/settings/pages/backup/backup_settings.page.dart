@@ -12,6 +12,7 @@ import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
 import 'package:wallex/core/routes/destinations.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
@@ -142,6 +143,22 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                     return Text(fileStats.size.readableFileSize());
                   },
                 ),
+              ),
+              ListTile(
+                title: const Text('Limpieza de adjuntos huerfanos'),
+                subtitle: const Text(
+                  'Eliminar archivos o registros de adjuntos inconsistentes',
+                ),
+                leading: const Icon(Icons.cleaning_services_outlined),
+                onTap: () async {
+                  final removed = await AttachmentsService.instance
+                      .purgeOrphans();
+
+                  if (!context.mounted) return;
+                  WallexSnackbar.success(
+                    SnackbarParams('Limpieza completada: $removed elementos'),
+                  );
+                },
               ),
 
               ListTile(

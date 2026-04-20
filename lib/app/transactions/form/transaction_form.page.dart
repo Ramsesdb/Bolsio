@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -28,12 +30,15 @@ import 'package:wallex/core/models/transaction/recurrency_data.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
 import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
+import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
 import 'package:wallex/core/presentation/animations/shake_widget.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/responsive/breakpoint_container.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/attachments/attachment_model.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/utils/uuid.dart';
 import 'package:wallex/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:wallex/core/models/debt/debt.dart';
@@ -48,7 +53,30 @@ class TransactionFormPage extends StatefulWidget {
     this.fromAccount,
     this.transactionToEdit,
     this.linkedDebt,
+    this.receiptPrefill,
+    this.voicePrefill,
+    this.pendingAttachmentPath,
   });
+
+  const TransactionFormPage.fromReceipt({
+    super.key,
+    required this.receiptPrefill,
+    required this.pendingAttachmentPath,
+  }) : mode = null,
+       fromAccount = null,
+       transactionToEdit = null,
+       linkedDebt = null,
+       voicePrefill = null;
+
+  const TransactionFormPage.fromVoice({
+    super.key,
+    required this.voicePrefill,
+  }) : mode = null,
+       fromAccount = null,
+       transactionToEdit = null,
+       linkedDebt = null,
+       receiptPrefill = null,
+       pendingAttachmentPath = null;
 
   final TransactionType? mode;
 
@@ -58,6 +86,15 @@ class TransactionFormPage extends StatefulWidget {
 
   /// When non-null, the transaction being created will be pre-linked to this debt.
   final Debt? linkedDebt;
+
+  /// Optional prefill data when coming from receipt OCR review.
+  final TransactionProposal? receiptPrefill;
+
+  /// Optional prefill data when coming from the voice quick-expense flow.
+  final TransactionProposal? voicePrefill;
+
+  /// Temporary local image path pending attachment persistence after submit.
+  final String? pendingAttachmentPath;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -174,10 +211,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     _tabController.addListener(_onTabSelectionChanged);
 
     // Load the user's preferred currency code for FX selector logic
-    CurrencyService.instance
-        .ensureAndGetPreferredCurrency()
-        .first
-        .then((currency) {
+    CurrencyService.instance.ensureAndGetPreferredCurrency().first.then((
+      currency,
+    ) {
       if (mounted) {
         setState(() => _preferredCurrencyCode = currency.code);
       }
@@ -185,6 +221,16 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     if (widget.transactionToEdit != null) {
       _fillForm(widget.transactionToEdit!);
+      return;
+    }
+
+    if (widget.receiptPrefill != null) {
+      _initializeFromReceipt(widget.receiptPrefill!);
+      return;
+    }
+
+    if (widget.voicePrefill != null) {
+      _initializeFromReceipt(widget.voicePrefill!);
       return;
     }
 
@@ -453,6 +499,24 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               tagIds: tagsToAdd.map((t) => t.id).toList(),
             );
 
+            final pendingPath = widget.pendingAttachmentPath;
+            if (!isEditMode && pendingPath != null && pendingPath.isNotEmpty) {
+              final pendingFile = File(pendingPath);
+              if (pendingFile.existsSync()) {
+                await AttachmentsService.instance.attach(
+                  ownerType: AttachmentOwnerType.transaction,
+                  ownerId: newTrID,
+                  sourceFile: pendingFile,
+                  role: 'receipt',
+                );
+                try {
+                  pendingFile.deleteSync();
+                } on FileSystemException {
+                  // Ignore cleanup races; attachment was already persisted.
+                }
+              }
+            }
+
             DefaultTransactionValuesService.lastCreatedTransaction.value = (
               transaction: transactionToPost,
               tagIds: tags.map((t) => t.id).toList(),
@@ -482,6 +546,49 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           if (mounted) setState(() => _isSaving = false);
           WallexSnackbar.error(SnackbarParams.fromError(error));
         });
+  }
+
+  Future<void> _initializeFromReceipt(TransactionProposal prefill) async {
+    transactionType = prefill.type;
+    _tabController.animateTo(transactionType.index);
+
+    transactionValue = prefill.amount.abs();
+    date = prefill.date;
+    notesController.text = prefill.rawText;
+    titleController.text = prefill.counterpartyName ?? '';
+
+    if (prefill.accountId != null) {
+      fromAccount = await AccountService.instance
+          .getAccountById(prefill.accountId!)
+          .first;
+    }
+
+    // If still null (or account was deleted/archived), fall back to the first
+    // available non-saving, non-archived account.
+    if (fromAccount == null) {
+      final accounts = await AccountService.instance
+          .getAccounts(
+            predicate: (acc, curr) => buildDriftExpr([
+              acc.type.equalsValue(AccountType.saving).not(),
+              acc.closingDate.isNull(),
+            ]),
+            limit: 1,
+          )
+          .first;
+
+      if (accounts.isNotEmpty) {
+        fromAccount = accounts[0];
+      }
+    }
+
+    if (prefill.proposedCategoryId != null &&
+        transactionType.isIncomeOrExpense) {
+      selectedCategory = await CategoryService.instance
+          .getCategoryById(prefill.proposedCategoryId!)
+          .first;
+    }
+
+    setState(() {});
   }
 
   Future<List<Account>?> showAccountSelector(Account? account) {
@@ -658,7 +765,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                 ? (fromAccount?.currency.code ?? 'USD')
                 : (fromAccount?.currency.code ?? 'USD'),
             toCurrency: transactionType.isTransfer
-                ? (transferAccount?.currency.code ?? _preferredCurrencyCode ?? 'VES')
+                ? (transferAccount?.currency.code ??
+                      _preferredCurrencyCode ??
+                      'VES')
                 : (_preferredCurrencyCode ?? 'VES'),
             initialRate: _selectedExchangeRate,
             initialSource: _selectedExchangeSource,
@@ -692,7 +801,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             : transactionType == TransactionType.expense
             ? t.transaction.new_expense
             : t.transaction.new_income,
-        appBarBackgroundColor: transactionType.color(context).withValues(alpha: 0.85),
+        appBarBackgroundColor: transactionType
+            .color(context)
+            .withValues(alpha: 0.85),
         appBarForegroundColor: foregroundColor,
         tabBar: TabBar(
           indicatorColor: foregroundColor,
@@ -711,7 +822,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
-              onPressed: _isSaving
+              key: const ValueKey('transaction_form_save_button'),
+              onPressed: _isSaving || fromAccount == null
                   ? null
                   : () {
                       if (_formKey.currentState!.validate()) {

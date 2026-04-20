@@ -7,6 +7,7 @@ import 'package:wallex/app/settings/pages/ai/ai_settings.page.dart';
 import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
 import 'package:wallex/app/settings/pages/auto_import/auto_import_settings.page.dart';
 import 'package:wallex/app/settings/pages/general_settings.page.dart';
+import 'package:wallex/app/settings/pages/hidden_mode_settings.page.dart';
 import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
 import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
@@ -123,6 +124,14 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: t.more.data.display_descr,
               icon: Icons.save_rounded,
               onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
+            ),
+            const Divider(),
+            _SettingRouteTile(
+              title: t.settings.hidden_mode.title,
+              subtitle: t.settings.hidden_mode.menu_descr,
+              icon: Icons.visibility_off_outlined,
+              onTap: () =>
+                  RouteUtils.pushRoute(const HiddenModeSettingsPage()),
             ),
             const Divider(),
 

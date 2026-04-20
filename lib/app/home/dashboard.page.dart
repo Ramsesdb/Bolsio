@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:wallex/app/common/widgets/user_avatar_display.dart';
 import 'package:wallex/app/home/widgets/click_tracker.dart';
 import 'package:wallex/app/home/widgets/dashboard_cards.dart';
 import 'package:wallex/app/home/widgets/horizontal_scrollable_account_list.dart';
@@ -12,12 +14,18 @@ import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
+import 'package:wallex/app/settings/widgets/pin_modal.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/models/account/account.dart';
+import 'package:wallex/core/models/date-utils/date_period.dart';
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:wallex/core/models/date-utils/period_type.dart';
 import 'package:wallex/core/presentation/debug_page.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
@@ -26,7 +34,6 @@ import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:wallex/core/presentation/widgets/tappable.dart';
 import 'package:wallex/core/presentation/widgets/trending_value.dart';
-import 'package:wallex/core/presentation/widgets/user_avatar.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
@@ -72,118 +79,136 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
-  Stream<double> _getBalanceVariationStream() {
-    return AccountService.instance
-        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
-        .switchMap(
-      (accounts) => AccountService.instance.getAccountsMoneyVariation(
-        accounts: accounts,
-        startDate: dateRangeService.startDate,
-        endDate: dateRangeService.endDate,
-        convertToPreferredCurrency: true,
+  /// Combines the base account stream with [HiddenModeService.visibleAccountIdsStream]
+  /// so every derived balance on the dashboard silently excludes saving
+  /// accounts while Hidden Mode is locked. When the feature is disabled the
+  /// visibility stream emits every id, so the filter is a no-op.
+  Stream<List<Account>> _visibleAccountsStream() {
+    return Rx.combineLatest2<List<Account>, List<String>, List<Account>>(
+      AccountService.instance.getAccounts(
+        predicate: (acc, curr) => acc.closingDate.isNull(),
       ),
+      HiddenModeService.instance.visibleAccountIdsStream,
+      (accounts, visibleIds) {
+        final visibleSet = visibleIds.toSet();
+        return accounts
+            .where((a) => visibleSet.contains(a.id))
+            .toList(growable: false);
+      },
     );
   }
 
+  Stream<double> _getBalanceVariationStream() {
+    return _visibleAccountsStream()
+        .switchMap(
+          (accounts) => AccountService.instance.getAccountsMoneyVariation(
+            accounts: accounts,
+            startDate: dateRangeService.startDate,
+            endDate: dateRangeService.endDate,
+            convertToPreferredCurrency: true,
+          ),
+        )
+        .shareValue();
+  }
+
   Stream<double> _getTotalBalanceStream() {
-    return AccountService.instance
-        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
-        .switchMap((accounts) {
-      if (accounts.isEmpty) return Stream.value(0);
+    return _visibleAccountsStream().switchMap<double>((accounts) {
+          if (accounts.isEmpty) return Stream<double>.value(0);
 
-      final accountMoneyStreams = accounts
-          .map(
-            (account) => AccountService.instance.getAccountMoney(
-              account: account,
-              convertToPreferredCurrency: false,
-            ),
-          )
-          .toList();
+          final accountMoneyStreams = accounts
+              .map(
+                (account) => AccountService.instance.getAccountMoney(
+                  account: account,
+                  convertToPreferredCurrency: false,
+                ),
+              )
+              .toList();
 
-      final preferredCurrencyCode =
-          appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+          final preferredCurrencyCode =
+              appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
 
-      return Rx.combineLatestList<double>(accountMoneyStreams).switchMap(
-        (balances) {
-          final convertedStreams = List.generate(accounts.length, (i) {
-            final account = accounts[i];
-            final balance = i < balances.length ? balances[i] : 0.0;
+          return Rx.combineLatestList<double>(accountMoneyStreams).switchMap((
+            balances,
+          ) {
+            final convertedStreams = List.generate(accounts.length, (i) {
+              final account = accounts[i];
+              final balance = i < balances.length ? balances[i] : 0.0;
 
-            if (account.currency.code == preferredCurrencyCode) {
-              return Stream.value(balance);
-            }
+              if (account.currency.code == preferredCurrencyCode) {
+                return Stream.value(balance);
+              }
 
-            return ExchangeRateService.instance
-                .calculateExchangeRate(
-                  fromCurrency: account.currency.code,
-                  toCurrency: preferredCurrencyCode,
-                  amount: balance,
-                  source: _rateSource,
-                )
-                .map((v) => v ?? 0);
+              return ExchangeRateService.instance
+                  .calculateExchangeRate(
+                    fromCurrency: account.currency.code,
+                    toCurrency: preferredCurrencyCode,
+                    amount: balance,
+                    source: _rateSource,
+                  )
+                  .map((v) => v ?? 0);
+            });
+
+            return Rx.combineLatestList<double>(convertedStreams).map((values) {
+              final total = values.fold<double>(0, (sum, value) => sum + value);
+
+              if (kDebugMode) {
+                final details = List.generate(accounts.length, (i) {
+                  final account = accounts[i];
+                  final rawBalance = i < balances.length ? balances[i] : 0.0;
+                  final converted = i < values.length ? values[i] : 0.0;
+                  return '${account.name}: ${rawBalance.toStringAsFixed(2)} ${account.currency.code} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
+                }).join(' | ');
+
+                debugPrint(
+                  'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
+                );
+              }
+
+              return total;
+            });
           });
-
-          return Rx.combineLatestList<double>(convertedStreams).map((values) {
-            final total = values.fold<double>(0, (sum, value) => sum + value);
-
-            if (kDebugMode) {
-              final details = List.generate(accounts.length, (i) {
-                final account = accounts[i];
-                final rawBalance = i < balances.length ? balances[i] : 0.0;
-                final converted = i < values.length ? values[i] : 0.0;
-                return '${account.name}: ${rawBalance.toStringAsFixed(2)} ${account.currency.code} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
-              }).join(' | ');
-
-              debugPrint(
-                'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
-              );
-            }
-
-            return total;
-          });
-        },
-      );
-    });
+        }).asBroadcastStream();
   }
 
   Stream<double> _getTotalBalanceInVesStream() {
-    return AccountService.instance
-        .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
-        .switchMap((accounts) {
-      if (accounts.isEmpty) return Stream.value(0);
+    return _visibleAccountsStream().switchMap<double>((accounts) {
+          if (accounts.isEmpty) return Stream<double>.value(0);
 
-      final accountMoneyStreams = accounts
-          .map((account) => AccountService.instance.getAccountMoney(
-                account: account,
-                convertToPreferredCurrency: false,
-              ))
-          .toList();
+          final accountMoneyStreams = accounts
+              .map(
+                (account) => AccountService.instance.getAccountMoney(
+                  account: account,
+                  convertToPreferredCurrency: false,
+                ),
+              )
+              .toList();
 
-      return Rx.combineLatestList<double>(accountMoneyStreams).switchMap(
-        (balances) {
-          final convertedStreams = List.generate(accounts.length, (i) {
-            final account = accounts[i];
-            final balance = i < balances.length ? balances[i] : 0.0;
+          return Rx.combineLatestList<double>(accountMoneyStreams).switchMap((
+            balances,
+          ) {
+            final convertedStreams = List.generate(accounts.length, (i) {
+              final account = accounts[i];
+              final balance = i < balances.length ? balances[i] : 0.0;
 
-            if (account.currency.code == 'VES') {
-              return Stream.value(balance);
-            }
+              if (account.currency.code == 'VES') {
+                return Stream.value(balance);
+              }
 
-            return ExchangeRateService.instance
-                .calculateExchangeRate(
-                  fromCurrency: account.currency.code,
-                  toCurrency: 'VES',
-                  amount: balance,
-                  source: _rateSource,
-                )
-                .map((v) => v ?? 0);
+              return ExchangeRateService.instance
+                  .calculateExchangeRate(
+                    fromCurrency: account.currency.code,
+                    toCurrency: 'VES',
+                    amount: balance,
+                    source: _rateSource,
+                  )
+                  .map((v) => v ?? 0);
+            });
+
+            return Rx.combineLatestList<double>(
+              convertedStreams,
+            ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
           });
-
-          return Rx.combineLatestList<double>(convertedStreams)
-              .map((values) => values.fold<double>(0, (sum, v) => sum + v));
-        },
-      );
-    });
+        }).asBroadcastStream();
   }
 
   bool _isIncomeExpenseAtSameLevel(BuildContext context) {
@@ -214,6 +239,7 @@ class _DashboardPageState extends State<DashboardPage> {
               key: const Key('dashboard--new-transaction-button'),
               scrollController: _scrollController,
             ),
+      floatingActionButtonLocation: ExpandableFab.location,
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: SingleChildScrollView(
@@ -225,13 +251,22 @@ class _DashboardPageState extends State<DashboardPage> {
               // ── Big header (scrolls away naturally) ──
               buildDashboadHeader(context, accountService),
 
-              HorizontalScrollableAccountList(
-                dateRangeService: dateRangeService,
+              // Visibility-aware carousel: while Hidden Mode is locked the
+              // stream omits savings account ids, so the carousel hides them
+              // without having to know anything about the feature.
+              StreamBuilder<List<String>>(
+                stream: HiddenModeService.instance.visibleAccountIdsStream,
+                builder: (context, snapshot) {
+                  return HorizontalScrollableAccountList(
+                    dateRangeService: dateRangeService,
+                    visibleAccountIds: snapshot.data,
+                  );
+                },
               ),
 
               // ── Exchange Rates Card ──
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
                 child: _buildRatesCard(context),
               ),
 
@@ -265,10 +300,12 @@ class _DashboardPageState extends State<DashboardPage> {
   }) {
     return Builder(
       builder: (context) {
-        final glassTint =
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
-        final glassBorder =
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
+        final glassTint = Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.15);
+        final glassBorder = Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.1);
 
         final container = DecoratedBox(
           decoration: BoxDecoration(
@@ -339,13 +376,21 @@ class _DashboardPageState extends State<DashboardPage> {
                   color: Colors.white.withValues(alpha: 0.15),
                 ),
                 const SizedBox(height: 8),
-                Builder(
-                  builder: (context) {
-                    final labelStyle = Theme.of(context)
-                        .textTheme
-                        .labelMedium!
-                        .copyWith(
-                            color: Colors.white.withValues(alpha: 0.7));
+                StreamBuilder<List<String>>(
+                  stream: HiddenModeService.instance.visibleAccountIdsStream,
+                  builder: (context, snapshot) {
+                    final labelStyle = Theme.of(context).textTheme.labelMedium!
+                        .copyWith(color: Colors.white.withValues(alpha: 0.7));
+
+                    // While Hidden Mode is locked this list excludes savings
+                    // account ids, so the income/expense totals are computed
+                    // without their transactions. When null (first frame)
+                    // fall back to unfiltered totals; the stream immediately
+                    // emits and re-renders.
+                    final visibleIds = snapshot.data;
+                    final accountFilter = visibleIds == null
+                        ? null
+                        : TransactionFilterSet(accountsIDs: visibleIds);
 
                     final incomeAndExpenseCards = [
                       IncomeOrExpenseCard(
@@ -353,12 +398,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         periodState: dateRangeService,
                         labelStyle: labelStyle,
                         rateSource: _rateSource,
+                        filters: accountFilter,
                       ),
                       IncomeOrExpenseCard(
                         type: TransactionType.income,
                         periodState: dateRangeService,
                         labelStyle: labelStyle,
                         rateSource: _rateSource,
+                        filters: accountFilter,
                       ),
                     ];
 
@@ -408,14 +455,40 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: Colors.white.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(
-          color: Colors.white.withValues(alpha: 0.2),
-        ),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
       ),
       onPressed: () {
+        // Hidden Mode restricts the period picker to bounded ranges so the
+        // user cannot peek at savings-era data through an "all time" query
+        // while the app is locked. See HiddenModeService.
+        final isLocked = HiddenModeService.instance.isLocked;
+        final allowedTypes = isLocked
+            ? const [PeriodType.cycle, PeriodType.lastDays]
+            : null;
+
+        // Edge case: if the current state holds a PeriodType that is no
+        // longer allowed (because the mode was just locked), coerce it to
+        // `cycle` before opening the modal so the sheet doesn't highlight
+        // a hidden option.
+        final currentType = dateRangeService.datePeriod.periodType;
+        if (isLocked &&
+            (currentType == PeriodType.allTime ||
+                currentType == PeriodType.dateRange)) {
+          setState(() {
+            dateRangeService = dateRangeService.copyWith(
+              periodModifier: 0,
+              datePeriod: const DatePeriod(periodType: PeriodType.cycle),
+            );
+            _balanceVariationStream = _getBalanceVariationStream();
+          });
+        }
+
         openDatePeriodModal(
           context,
-          DatePeriodModal(initialDatePeriod: dateRangeService.datePeriod),
+          DatePeriodModal(
+            initialDatePeriod: dateRangeService.datePeriod,
+            allowedTypes: allowedTypes,
+          ),
         ).then((value) {
           if (value == null) return;
 
@@ -452,12 +525,19 @@ class _DashboardPageState extends State<DashboardPage> {
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           children: [
-            UserAvatar(
-              avatar: appStateSettings[SettingKey.avatar],
-              backgroundColor: Colors.white.withValues(alpha: 0.15),
-              border: Border.all(
-                width: 2,
-                color: Colors.white.withValues(alpha: 0.5),
+            // Long-press on the avatar opens the unlock PIN modal when
+            // Hidden Mode is enabled and currently locked. Short taps
+            // propagate to the surrounding Tappable (edit-profile sheet).
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onLongPress: _handleSecretTap,
+              child: UserAvatarDisplay(
+                avatar: appStateSettings[SettingKey.avatar],
+                backgroundColor: Colors.white.withValues(alpha: 0.15),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white.withValues(alpha: 0.5),
+                ),
               ),
             ),
             Flexible(
@@ -526,8 +606,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Builder(
                           builder: (context) {
                             if (!snapshot.hasData) {
-                              return Text('9999',
-                                  style: TextStyle(fontSize: 22));
+                              return Text(
+                                '9999',
+                                style: TextStyle(fontSize: 22),
+                              );
                             }
 
                             return CurrencyDisplayer(
@@ -535,12 +617,11 @@ class _DashboardPageState extends State<DashboardPage> {
                               integerStyle: TextStyle(
                                 fontSize:
                                     snapshot.data! >= 10000000 &&
-                                            BreakPoint.of(
-                                              context,
-                                            ).isSmallerOrEqualTo(
-                                                BreakpointID.xs)
-                                        ? 22
-                                        : 28,
+                                        BreakPoint.of(
+                                          context,
+                                        ).isSmallerOrEqualTo(BreakpointID.xs)
+                                    ? 22
+                                    : 28,
                                 fontWeight: FontWeight.w200,
                                 letterSpacing: -0.5,
                                 color: Colors.white,
@@ -560,6 +641,27 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+
+  /// Secret 6-tap handler wired to the avatar. Silently no-ops when Hidden
+  /// Mode is disabled or already unlocked so users who don't have the
+  /// feature never see the PIN modal.
+  Future<void> _handleSecretTap() async {
+    final enabled = await HiddenModeService.instance.isEnabled();
+    if (!enabled) return;
+    if (!HiddenModeService.instance.isLocked) return;
+    if (!mounted) return;
+    final ok = await showUnlockPinModal(context);
+    if (!mounted) return;
+    if (ok) {
+      final pinT = Translations.of(context).settings.hidden_mode.pin;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(pinT.unlocked),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> _togglePrivateModeValue({bool showSnackbar = false}) async {
@@ -677,11 +779,12 @@ class _DashboardPageState extends State<DashboardPage> {
             stream: _totalBalanceInVesStream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const SizedBox.shrink();
-              final formatted =
-                  snapshot.data!.toStringAsFixed(2).replaceAllMapped(
-                        RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-                        (m) => '${m[1]}.',
-                      );
+              final formatted = snapshot.data!
+                  .toStringAsFixed(2)
+                  .replaceAllMapped(
+                    RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                    (m) => '${m[1]}.',
+                  );
               return BlurBasedOnPrivateMode(
                 child: Text(
                   '= $formatted Bs',
@@ -723,6 +826,14 @@ class _DashboardPageState extends State<DashboardPage> {
     return GestureDetector(
       onTap: () {
         if (_rateSource == source) return;
+        // Persist globally so transaction-service streams (used by Gasto/
+        // Ingreso cards) requery with the new rate source. setItem updates
+        // appStateSettings synchronously, so the following setState rebuild
+        // picks up the new value when recreating the StreamBuilders.
+        UserSettingService.instance.setItem(
+          SettingKey.preferredRateSource,
+          source,
+        );
         setState(() {
           _rateSource = source;
           _totalBalanceStream = _getTotalBalanceStream();
@@ -737,9 +848,7 @@ class _DashboardPageState extends State<DashboardPage> {
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withValues(
-              alpha: isSelected ? 0.4 : 0.15,
-            ),
+            color: Colors.white.withValues(alpha: isSelected ? 0.4 : 0.15),
           ),
         ),
         child: Text(
@@ -747,9 +856,7 @@ class _DashboardPageState extends State<DashboardPage> {
           style: TextStyle(
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: Colors.white.withValues(
-              alpha: isSelected ? 0.9 : 0.5,
-            ),
+            color: Colors.white.withValues(alpha: isSelected ? 0.9 : 0.5),
           ),
         ),
       ),
@@ -769,8 +876,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Row(
             children: [
-              Icon(Icons.currency_exchange, size: 18,
-                  color: primary),
+              Icon(Icons.currency_exchange, size: 18, color: primary),
               const SizedBox(width: 8),
               Text(
                 'Tasas de cambio',
@@ -824,16 +930,19 @@ class _DashboardPageState extends State<DashboardPage> {
     );
 
     if (isDark) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          color: primary.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: primary.withValues(alpha: 0.1),
-            width: 0.5,
+      return Padding(
+        padding: const EdgeInsets.all(4),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: primary.withValues(alpha: 0.1),
+              width: 0.5,
+            ),
           ),
+          child: cardContent,
         ),
-        child: cardContent,
       );
     } else {
       return Card(child: cardContent);
@@ -883,9 +992,9 @@ class _DashboardPageState extends State<DashboardPage> {
     double? paralelo,
     double? avg,
   ) {
-    final labelStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
-      fontWeight: FontWeight.w600,
-    );
+    final labelStyle = Theme.of(
+      context,
+    ).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w600);
     final valueStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
       fontFeatures: [const FontFeature.tabularFigures()],
     );

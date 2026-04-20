@@ -190,6 +190,19 @@ class TransactionListTile extends StatelessWidget {
                     color: AppColors.of(context).brand,
                   ),
                 ],
+                if (transaction.account.isTrackingHistorical(
+                  transaction.date,
+                )) ...[
+                  const SizedBox(width: 4),
+                  Tooltip(
+                    message: t.account.badge.pre_tracking_tooltip,
+                    child: Icon(
+                      Icons.history,
+                      size: 12,
+                      color: Theme.of(context).disabledColor,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
+import 'package:wallex/i18n/generated/translations.g.dart';
 
 class AiSettingsPage extends StatefulWidget {
   const AiSettingsPage({super.key});
@@ -17,6 +18,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
   bool _chatEnabled = false;
   bool _insightsEnabled = false;
   bool _budgetPredictionEnabled = false;
+  bool _receiptAiEnabled = true;
+  bool _voiceEnabled = true;
   bool _isSavingKey = false;
 
   String? _maskedApiKey;
@@ -41,6 +44,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
     _insightsEnabled = appStateSettings[SettingKey.aiInsightsEnabled] == '1';
     _budgetPredictionEnabled =
         appStateSettings[SettingKey.aiBudgetPredictionEnabled] == '1';
+    _receiptAiEnabled = appStateSettings[SettingKey.receiptAiEnabled] != '0';
+    _voiceEnabled = appStateSettings[SettingKey.aiVoiceEnabled] != '0';
 
     final apiKey = await NexusCredentialsStore.instance.loadApiKey();
     _maskedApiKey = apiKey == null ? null : _maskKey(apiKey);
@@ -64,6 +69,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
         _insightsEnabled = appStateSettings[SettingKey.aiInsightsEnabled] == '1';
         _budgetPredictionEnabled =
             appStateSettings[SettingKey.aiBudgetPredictionEnabled] == '1';
+        _receiptAiEnabled = appStateSettings[SettingKey.receiptAiEnabled] != '0';
+        _voiceEnabled = appStateSettings[SettingKey.aiVoiceEnabled] != '0';
       });
     }
   }
@@ -110,6 +117,8 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Wallex AI')),
       body: ListView(
@@ -205,6 +214,24 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                 : null,
             title: const Text('Prediccion de presupuesto'),
             subtitle: const Text('Estimacion de consumo por budget'),
+          ),
+          SwitchListTile(
+            value: _receiptAiEnabled,
+            onChanged: _aiEnabled
+                ? (v) => _saveSetting(SettingKey.receiptAiEnabled, v)
+                : null,
+            title: const Text('IA en importacion de comprobantes'),
+            subtitle: const Text(
+              'Usa analisis multimodal para enriquecer OCR de recibos',
+            ),
+          ),
+          SwitchListTile(
+            value: _aiEnabled && _voiceEnabled,
+            onChanged: _aiEnabled
+                ? (v) => _saveSetting(SettingKey.aiVoiceEnabled, v)
+                : null,
+            title: Text(t.wallex_ai.voice_settings_title),
+            subtitle: Text(t.wallex_ai.voice_settings_subtitle),
           ),
         ],
       ),

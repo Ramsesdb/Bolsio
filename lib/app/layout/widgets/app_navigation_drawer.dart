@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wallex/app/common/widgets/user_avatar_display.dart';
 import 'package:wallex/app/layout/window_bar.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/user_avatar.dart';
 import 'package:wallex/core/routes/destinations.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 
@@ -38,7 +38,7 @@ class SideNavigationDrawer extends StatelessWidget {
           child: Row(
             spacing: 12,
             children: [
-              UserAvatar(
+              UserAvatarDisplay(
                 avatar: appStateSettings[SettingKey.avatar],
                 backgroundColor: AppColors.of(
                   context,

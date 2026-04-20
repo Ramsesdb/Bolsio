@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wallex/app/common/widgets/attachment_viewer.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/transactions/label_value_info_table.dart';
 import 'package:wallex/app/transactions/utils/transaction_details.utils.dart';
@@ -26,6 +27,8 @@ import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_d
 import 'package:wallex/core/database/services/debts/debt_service.dart';
 import 'package:wallex/core/models/debt/debt.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/attachments/attachment_model.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:wallex/core/utils/constants.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
@@ -139,7 +142,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       child: ListTile(
         enabled: isNext,
         contentPadding: const EdgeInsets.only(left: 16, right: 6),
-        tileColor: transaction.nextPayStatus!.color(context).withValues(alpha: 0.1),
+        tileColor: transaction.nextPayStatus!
+            .color(context)
+            .withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
@@ -160,7 +165,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           children: [
             IconButton(
               color: AppColors.of(context).danger,
-              disabledColor: AppColors.of(context).danger.withValues(alpha: 0.7),
+              disabledColor: AppColors.of(
+                context,
+              ).danger.withValues(alpha: 0.7),
               icon: const Icon(Icons.cancel_rounded),
               tooltip: t.transaction.next_payments.skip,
               onPressed: !isNext
@@ -173,7 +180,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   : () => showPayModal(context, transaction),
               color: AppColors.of(context).success,
               tooltip: !isNext ? null : t.transaction.next_payments.accept,
-              disabledColor: AppColors.of(context).success.withValues(alpha: 0.7),
+              disabledColor: AppColors.of(
+                context,
+              ).success.withValues(alpha: 0.7),
               icon: const Icon(Icons.price_check_rounded),
             ),
           ],
@@ -447,12 +456,18 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 if (transaction.isTransfer &&
                                     transaction.valueInDestiny != null &&
                                     transaction.receivingAccount != null &&
-                                    transaction.receivingAccount!.currency.code !=
+                                    transaction
+                                            .receivingAccount!
+                                            .currency
+                                            .code !=
                                         transaction.account.currency.code)
                                   LabelValueInfoItem(
                                     value: CurrencyDisplayer(
-                                      amountToConvert: transaction.valueInDestiny!,
-                                      currency: transaction.receivingAccount!.currency,
+                                      amountToConvert:
+                                          transaction.valueInDestiny!,
+                                      currency: transaction
+                                          .receivingAccount!
+                                          .currency,
                                       integerStyle: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -515,9 +530,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           Icon(
                                             Icons.info_outline,
                                             size: 14,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .error,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.error,
                                           ),
                                           const SizedBox(width: 4),
                                           const Text(
@@ -558,6 +573,46 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               debtId: transaction.debtId!,
                               transactionId: transaction.id,
                             ),
+                          const SizedBox(height: 12),
+                          FutureBuilder(
+                            future: AttachmentsService.instance.firstByOwner(
+                              ownerType: AttachmentOwnerType.transaction,
+                              ownerId: transaction.id,
+                              role: 'receipt',
+                            ),
+                            builder: (context, snapshot) {
+                              final attachment = snapshot.data;
+                              if (attachment == null) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Align(
+                                alignment: Alignment.centerLeft,
+                                child: ActionChip(
+                                  avatar: const Icon(
+                                    Icons.receipt_long_outlined,
+                                  ),
+                                  label: Text(t.transaction.view_receipt),
+                                  onPressed: () async {
+                                    final file = await AttachmentsService
+                                        .instance
+                                        .resolveFile(attachment);
+                                    if (!file.existsSync() ||
+                                        !context.mounted) {
+                                      return;
+                                    }
+
+                                    await RouteUtils.pushRoute(
+                                      AttachmentViewer(
+                                        file: file,
+                                        attachmentId: attachment.id,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                           if (transaction.notes != null) ...[
                             const SizedBox(height: 16),
                             CardWithHeader(
@@ -597,8 +652,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                               date: DateTime.now(),
                                             )
                                             .map(
-                                              (event) =>
-                                                  event?.exchangeRate,
+                                              (event) => event?.exchangeRate,
                                             ),
                                         builder: (context, snapshot) {
                                           final rate = snapshot.data;
@@ -644,8 +698,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
-                                                  rate *
-                                                  transaction.value,
+                                                  rate * transaction.value,
                                             ),
                                           );
                                         },
@@ -659,15 +712,16 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                   .code,
                                               date: transaction.date,
                                             )
-                                            .map(
-                                              (event) {
-                                                // Prefer the stored transaction rate over the DB lookup
-                                                if (transaction.exchangeRateApplied != null) {
-                                                  return transaction.exchangeRateApplied;
-                                                }
-                                                return event?.exchangeRate;
-                                              },
-                                            ),
+                                            .map((event) {
+                                              // Prefer the stored transaction rate over the DB lookup
+                                              if (transaction
+                                                      .exchangeRateApplied !=
+                                                  null) {
+                                                return transaction
+                                                    .exchangeRateApplied;
+                                              }
+                                              return event?.exchangeRate;
+                                            }),
                                         builder: (context, snapshot) {
                                           final rate = snapshot.data;
 
@@ -697,7 +751,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           // rate is in "1 accountCurrency = X preferredCurrency" direction.
                                           // For display, show the human-friendly inverted form
                                           // (e.g. "1 USD = 479.78 VES" instead of "1 VES = 0.002 USD").
-                                          final displayRate = rate != 0 ? (1.0 / rate) : 0.0;
+                                          final displayRate = rate != 0
+                                              ? (1.0 / rate)
+                                              : 0.0;
 
                                           return buildInfoListTile(
                                             title: t
@@ -723,8 +779,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
-                                                  rate *
-                                                  transaction.value,
+                                                  rate * transaction.value,
                                             ),
                                           );
                                         },
@@ -771,7 +826,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.85),
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.85),
         ),
       ),
     );
@@ -972,10 +1029,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
 }
 
 class _LinkedDebtCard extends StatelessWidget {
-  const _LinkedDebtCard({
-    required this.debtId,
-    required this.transactionId,
-  });
+  const _LinkedDebtCard({required this.debtId, required this.transactionId});
 
   final String debtId;
   final String transactionId;

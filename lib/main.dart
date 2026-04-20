@@ -15,6 +15,7 @@ import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:wallex/app/layout/window_bar.dart';
 import 'package:wallex/app/onboarding/intro.page.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
+import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/database/services/user-setting/utils/get_theme_from_string.dart';
@@ -24,6 +25,7 @@ import 'package:wallex/core/routes/handle_will_pop_scope.dart';
 import 'package:wallex/core/routes/root_navigator_observer.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 import 'package:wallex/core/utils/keyboard_intents.dart';
 import 'package:wallex/core/utils/logger.dart';
@@ -75,6 +77,20 @@ void main() async {
   );
   // -----------------------------------------
 
+  if (kDebugMode) {
+    // Debug-only housekeeping to keep attachment storage clean while iterating.
+    unawaited(
+      AttachmentsService.instance
+          .purgeOrphans()
+          .then((removed) {
+            debugPrint('purgeOrphans removed $removed items');
+          })
+          .catchError((e) {
+            debugPrint('purgeOrphans error: $e');
+          }),
+    );
+  }
+
   // --- Local notifications bootstrap ---
   unawaited(
     LocalNotificationService.instance
@@ -98,26 +114,29 @@ void main() async {
 
   // Initialize background service (configures but does not start)
   unawaited(
-    WallexBackgroundService.instance.initialize().then((_) async {
-      if (autoImportEnabled) {
-        // Wire the orchestrator's callback so the main isolate can show
-        // local notifications when a new pending import arrives.
-        CaptureOrchestrator.instance.onNewPendingImport =
-            (int count) async {
-          await LocalNotificationService.instance
-              .showNewPendingNotification(count);
-        };
+    WallexBackgroundService.instance
+        .initialize()
+        .then((_) async {
+          if (autoImportEnabled) {
+            // Wire the orchestrator's callback so the main isolate can show
+            // local notifications when a new pending import arrives.
+            CaptureOrchestrator.instance.onNewPendingImport =
+                (int count) async {
+                  await LocalNotificationService.instance
+                      .showNewPendingNotification(count);
+                };
 
-        // Start the background service — it handles ALL capture sources
-        // (SMS, notifications, Binance API) and keeps capture alive when
-        // the app is closed.  The notification_listener_service plugin uses
-        // a BroadcastReceiver that works in both isolates; running it only
-        // in the background service avoids duplicate captures.
-        await WallexBackgroundService.instance.startService();
-      }
-    }).catchError((e) {
-      debugPrint('Auto-import bootstrap error: $e');
-    }),
+            // Start the background service — it handles ALL capture sources
+            // (SMS, notifications, Binance API) and keeps capture alive when
+            // the app is closed.  The notification_listener_service plugin uses
+            // a BroadcastReceiver that works in both isolates; running it only
+            // in the background service avoids duplicate captures.
+            await WallexBackgroundService.instance.startService();
+          }
+        })
+        .catchError((e) {
+          debugPrint('Auto-import bootstrap error: $e');
+        }),
   );
   // ---------------------------------------------------
 
@@ -126,22 +145,24 @@ void main() async {
   );
 
   // Set plural resolver for Turkish
-  unawaited(LocaleSettings.setPluralResolver(
-    language: 'tr',
-    cardinalResolver:
-        (
-          n, {
-          String? few,
-          String? many,
-          String? one,
-          String? other,
-          String? two,
-          String? zero,
-        }) {
-          if (n == 1) return 'one';
-          return 'other';
-        },
-  ));
+  unawaited(
+    LocaleSettings.setPluralResolver(
+      language: 'tr',
+      cardinalResolver:
+          (
+            n, {
+            String? few,
+            String? many,
+            String? one,
+            String? other,
+            String? two,
+            String? zero,
+          }) {
+            if (n == 1) return 'one';
+            return 'other';
+          },
+    ),
+  );
 
   // --- Preload locale asynchronously BEFORE runApp ---
   // slang uses deferred imports for locale libs, so the *Sync variants fail
@@ -188,6 +209,22 @@ class InitializeApp extends StatefulWidget {
 
 class _InitializeAppState extends State<InitializeApp> {
   bool _biometricPassed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Bootstrap the Hidden Mode service: restores locked state from the
+    // persisted preference and starts listening for lifecycle events so the
+    // app re-locks whenever it goes to background.
+    unawaited(HiddenModeService.instance.init());
+    WidgetsBinding.instance.addObserver(HiddenModeService.instance);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(HiddenModeService.instance);
+    super.dispose();
+  }
 
   void refreshAppState() {
     setState(() {});
@@ -307,6 +344,10 @@ class MaterialAppContainer extends StatelessWidget {
             accentColor: accentColor,
           ),
           themeMode: themeMode,
+          // Instant theme swap (no cross-fade) — avoids thrashing animated
+          // children (e.g. ExpandableFab) during the transition, which was
+          // stalling the FAB fan after an accent color change.
+          themeAnimationDuration: Duration.zero,
           navigatorKey: rootNavigatorKey,
           navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
@@ -434,9 +475,7 @@ class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          widget.introSeen
-              ? PageSwitcher(key: tabsPageKey)
-              : const IntroPage(),
+          widget.introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
         ),
       ),
     );
@@ -483,11 +522,13 @@ Future<void> _migrateInvertedExchangeRates() async {
     if (FirebaseSyncService.instance.isFirebaseAvailable &&
         FirebaseSyncService.instance.currentUserId != null) {
       try {
-        final corrected = await db.customSelect(
-          'SELECT * FROM transactions '
-          'WHERE exchangeRateApplied IS NOT NULL '
-          'AND exchangeRateApplied > 0 AND exchangeRateApplied < 1.0',
-        ).get();
+        final corrected = await db
+            .customSelect(
+              'SELECT * FROM transactions '
+              'WHERE exchangeRateApplied IS NOT NULL '
+              'AND exchangeRateApplied > 0 AND exchangeRateApplied < 1.0',
+            )
+            .get();
         debugPrint(
           'Migration: ${corrected.length} corrected transactions to re-push',
         );
@@ -501,9 +542,7 @@ Future<void> _migrateInvertedExchangeRates() async {
   // when preferred currency IS 'USD' (USD doesn't need a conversion rate
   // to itself — the CASE WHEN handles it).
   if (preferredCurrency == 'USD') {
-    await ExchangeRateService.instance.deleteExchangeRates(
-      currencyCode: 'USD',
-    );
+    await ExchangeRateService.instance.deleteExchangeRates(currencyCode: 'USD');
     debugPrint('Migration: deleted bad currencyCode=USD exchange rate rows');
   }
 
