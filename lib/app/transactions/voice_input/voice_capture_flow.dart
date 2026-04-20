@@ -99,10 +99,19 @@ abstract class VoiceCaptureFlow {
     if (!context.mounted) return;
 
     if (result.status == AgentRunStatus.error) {
+      // Distinguish "gateway / upstream LLM transient failure" (502/503/504,
+      // surfaced by NexusAiService as 'gateway_unavailable') from genuine
+      // comprehension failures — the former is a server issue, not the user's
+      // fault, so we show a clearer message instead of "no pude interpretar".
+      final isGatewayDown = result.error == 'gateway_unavailable';
       WallexSnackbar.error(
         SnackbarParams(
-          t.wallex_ai.voice_flow_error_title,
-          message: result.error,
+          isGatewayDown
+              ? t.wallex_ai.voice_flow_gateway_unavailable_title
+              : t.wallex_ai.voice_flow_error_title,
+          message: isGatewayDown
+              ? t.wallex_ai.voice_flow_gateway_unavailable
+              : result.error,
         ),
       );
       return;

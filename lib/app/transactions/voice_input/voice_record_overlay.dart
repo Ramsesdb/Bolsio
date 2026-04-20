@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:wallex/app/chat/widgets/voice_action_buttons.dart';
 import 'package:wallex/core/services/voice/voice_service.dart';
 import 'package:wallex/core/services/voice/voice_service_speech_to_text.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
@@ -38,13 +39,17 @@ Future<String?> showVoiceRecordOverlay(
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// Wallex palette tokens (mirror the HTML mockup; see try/project/*.jsx)
+// Wallex palette tokens (neutrals only). The accent is resolved per-build
+// from Theme.of(context).colorScheme.primary so the voice overlay follows
+// the user's selected accent (or Material You dynamic color) rather than
+// the legacy hardcoded mustard.
 // ──────────────────────────────────────────────────────────────────────
-const Color _kWallexAccent = Color(0xFFC8B560); // mustard/olive
-const Color _kWallexAccentSoft = Color(0x55C8B560); // 33%
 const Color _kSheetTint = Color.fromRGBO(22, 22, 22, 0.62);
 const Color _kHairline = Color.fromRGBO(255, 255, 255, 0.08);
 const Color _kInnerShineTop = Color.fromRGBO(255, 255, 255, 0.08);
+
+Color _kAccentOf(BuildContext context) =>
+    Theme.of(context).colorScheme.primary;
 
 class _VoiceRecordOverlay extends StatefulWidget {
   const _VoiceRecordOverlay({required this.service, required this.locale});
@@ -330,7 +335,11 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
                       ),
                     ],
                   ),
-                  // Bottom action row
+                  // Bottom action row — unified X + Enviar pair.
+                  // In the error state we layer a "Reintentar" text button
+                  // above the row so the retry affordance survives the
+                  // switch to the shared widget (which only exposes
+                  // cancel + send, not retry).
                   Positioned(
                     left: 0,
                     right: 0,
@@ -340,29 +349,30 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
                       minimum: const EdgeInsets.only(bottom: 20),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(24, 12, 24, 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _TextActionButton(
-                              label: t.voice_cancel,
-                              color: Colors.white.withValues(alpha: 0.55),
-                              fontWeight: FontWeight.w500,
-                              onTap: _cancel,
-                            ),
                             if (_state == _OverlayState.error)
-                              _TextActionButton(
-                                label: t.voice_retry,
-                                color: _kWallexAccent,
-                                fontWeight: FontWeight.w700,
-                                onTap: _retry,
-                              )
-                            else
-                              _TextActionButton(
-                                label: t.voice_done,
-                                color: _kWallexAccent,
-                                fontWeight: FontWeight.w700,
-                                onTap: _finalize,
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: _TextActionButton(
+                                    label: t.voice_retry,
+                                    color: _kAccentOf(context),
+                                    fontWeight: FontWeight.w700,
+                                    onTap: _retry,
+                                  ),
+                                ),
                               ),
+                            VoiceActionButtons(
+                              onCancel: _cancel,
+                              onSend: _state == _OverlayState.error
+                                  ? null
+                                  : _finalize,
+                              isSending: _state == _OverlayState.processing,
+                            ),
                           ],
                         ),
                       ),
@@ -392,7 +402,7 @@ class _StatusBadge extends StatelessWidget {
     final String label;
     switch (state) {
       case _OverlayState.listening:
-        color = _kWallexAccent;
+        color = _kAccentOf(context);
         label = '● ${t.voice_listening_title}';
       case _OverlayState.processing:
         color = Colors.white.withValues(alpha: 0.45);
@@ -430,7 +440,9 @@ class _MicButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = isError ? const Color(0xFFF75959) : _kWallexAccent;
+    final accent =
+        isError ? const Color(0xFFF75959) : _kAccentOf(context);
+    final accentSoft = accent.withValues(alpha: 0.33);
     return SizedBox(
       width: 260,
       height: 260,
@@ -488,7 +500,7 @@ class _MicButton extends StatelessWidget {
                 stops: const [0.0, 0.6, 1.0],
               ),
               color: Colors.white.withValues(alpha: 0.05),
-              border: Border.all(color: _kWallexAccentSoft, width: 1),
+              border: Border.all(color: accentSoft, width: 1),
               boxShadow: [
                 BoxShadow(
                   color: accent.withValues(alpha: 0.20),
@@ -555,28 +567,66 @@ class _LiveTranscript extends StatelessWidget {
     final color = dim
         ? Colors.white.withValues(alpha: 0.55)
         : Colors.white;
+    final wordCount = words.length;
 
+    // NOTE: the old impl used a `Wrap` of per-word `Text` widgets. `Wrap`
+    // shrink-wraps its width to its children, so `WrapAlignment.center` only
+    // centers the *internal* runs — the Wrap itself remained left-biased inside
+    // the outer column whenever its intrinsic width was narrower than the
+    // available width. Visually this showed up as the transcript hugging the
+    // left edge and overflowing leftward as it grew. Switching to a single
+    // `Text.rich` with `TextAlign.center` + full-width `SizedBox` makes the
+    // text block occupy the whole centered strip and wraps cleanly on word
+    // boundaries, with the caret pinned to the end of the last line.
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 88),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 180),
-          switchInCurve: Curves.easeOut,
-          switchOutCurve: Curves.easeIn,
-          // Key by length so the fade only triggers when new words arrive,
-          // NOT on every character change within a word. This keeps the
-          // transcript visible and stable during rapid partial updates.
-          child: Wrap(
-            key: ValueKey<int>(words.length),
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 6,
-            runSpacing: 4,
-            children: [
-              for (int i = 0; i < words.length; i++)
-                Text(
-                  words[i],
+        child: SizedBox(
+          width: double.infinity,
+          child: Center(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 180),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              // Key by word count so the fade only triggers when new words
+              // arrive, NOT on every character change within a word. Keeps the
+              // transcript visible and stable during rapid partial updates.
+              child: Align(
+                key: ValueKey<int>(wordCount),
+                alignment: Alignment.center,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: words.join(' ')),
+                      if (showCaret) ...[
+                        const TextSpan(text: ' '),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: FadeTransition(
+                            opacity: TweenSequence<double>([
+                              TweenSequenceItem(
+                                  tween: ConstantTween(1.0), weight: 50),
+                              TweenSequenceItem(
+                                  tween: ConstantTween(0.0), weight: 50),
+                            ]).animate(caretCtrl),
+                            child: Container(
+                              width: 3,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                color: _kAccentOf(context),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: color,
                     fontSize: 30,
@@ -585,23 +635,8 @@ class _LiveTranscript extends StatelessWidget {
                     letterSpacing: -0.6,
                   ),
                 ),
-              if (showCaret)
-                FadeTransition(
-                  opacity: TweenSequence<double>([
-                    TweenSequenceItem(tween: ConstantTween(1.0), weight: 50),
-                    TweenSequenceItem(tween: ConstantTween(0.0), weight: 50),
-                  ]).animate(caretCtrl),
-                  child: Container(
-                    width: 3,
-                    height: 26,
-                    margin: const EdgeInsets.only(left: 2),
-                    decoration: BoxDecoration(
-                      color: _kWallexAccent,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-            ],
+              ),
+            ),
           ),
         ),
       ),
@@ -639,7 +674,7 @@ class _ProcessingPill extends StatelessWidget {
             child: RotationTransition(
               turns: spinCtrl,
               child: CustomPaint(
-                painter: _SpinnerArcPainter(),
+                painter: _SpinnerArcPainter(accent: _kAccentOf(context)),
               ),
             ),
           ),
@@ -659,6 +694,9 @@ class _ProcessingPill extends StatelessWidget {
 }
 
 class _SpinnerArcPainter extends CustomPainter {
+  _SpinnerArcPainter({required this.accent});
+  final Color accent;
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
@@ -673,7 +711,7 @@ class _SpinnerArcPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round
-      ..color = _kWallexAccent;
+      ..color = accent;
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -1.5708, // -90deg
@@ -684,7 +722,7 @@ class _SpinnerArcPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _SpinnerArcPainter old) => old.accent != accent;
 }
 
 // ──────────────────────────────────────────────────────────────────────
