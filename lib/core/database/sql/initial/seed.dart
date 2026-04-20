@@ -27,5 +27,6 @@ String settingsInitialSeedSQL =
   ('${SettingKey.transactionSwipeRightAction.name}', null),
   ('${SettingKey.showAllDecimals.name}', '1'),
   ('${SettingKey.transactionTileShowTags.name}', '1'),
-  ('${SettingKey.transactionTileShowTime.name}', '1')
+  ('${SettingKey.transactionTileShowTime.name}', '1'),
+  ('${SettingKey.receiptAiEnabled.name}', '1')
 """;

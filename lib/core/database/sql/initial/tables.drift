@@ -75,6 +75,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     -- The closing date of the account. After this date, no transactions can exists on it.
     closingDate DATETIME,
 
+    -- Date from which transactions count toward the current balance. Transactions with date < trackedSince still appear in listings but do not affect the balance. NULL = backwards-compatible behavior (all transactions count).
+    trackedSince DATETIME,
+
     -- ID of the currency used by this account and therefore all transactions contained in it
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     
@@ -409,4 +412,31 @@ CREATE TABLE IF NOT EXISTS pendingImports (
   -- (Transfer only) Amount arriving at destination (net of fees)
   valueInDestiny REAL
 ) AS PendingImportInDB;
+
+CREATE TABLE IF NOT EXISTS attachments (
+  id TEXT NOT NULL PRIMARY KEY,
+
+  -- Logical owner type of this attachment (polymorphic ownership)
+  ownerType TEXT NOT NULL CHECK(ownerType IN ('transaction', 'userProfile', 'account', 'budget')),
+
+  -- Owner identifier in the corresponding domain
+  ownerId TEXT NOT NULL,
+
+  -- Path relative to ApplicationDocumentsDirectory
+  localPath TEXT NOT NULL,
+
+  -- MIME type, e.g. image/jpeg
+  mimeType TEXT NOT NULL,
+
+  -- Size in bytes of the persisted file
+  sizeBytes INTEGER NOT NULL,
+
+  -- Optional role discriminator, e.g. receipt, avatar
+  role TEXT,
+
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) AS AttachmentInDB;
+
+CREATE INDEX IF NOT EXISTS idx_attachments_owner
+  ON attachments(ownerType, ownerId);
 

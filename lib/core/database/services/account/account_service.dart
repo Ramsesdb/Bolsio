@@ -197,6 +197,9 @@ class AccountService {
             filters: trFilters.copyWith(
               maxDate: useDate,
               accountsIDs: accountIds,
+              // Exclude pre-tracking transactions from the current balance.
+              // See account.trackedSince / `account-pre-tracking-period`.
+              respectTrackedSince: true,
             ),
             convertToPreferredCurrency: convertToPreferredCurrency,
           )
@@ -262,6 +265,87 @@ class AccountService {
 
         return (finalBalance - startBalance) / startBalance;
       },
+    );
+  }
+
+  /// Preview-only variant of [getAccountsMoney] that simulates what the
+  /// balance of a single account would look like if its `trackedSince`
+  /// column had the value [simulatedTrackedSince], **without persisting**
+  /// that change in the database.
+  ///
+  /// Implementation detail: because we are previewing a single account, the
+  /// pre-tracking filter is equivalent to forcing `transactions.date >=
+  /// simulatedTrackedSince` on the sub-queries (origin + both transfer
+  /// legs). We bypass `respectTrackedSince` (which reads the real DB column)
+  /// and feed the simulated date as `minDate` of the filter set. When
+  /// [simulatedTrackedSince] is null, behaviour is equivalent to not
+  /// filtering that account for tracking (full historical balance).
+  Stream<double> getAccountsMoneyPreview({
+    required String accountId,
+    required DateTime? simulatedTrackedSince,
+    bool convertToPreferredCurrency = true,
+  }) {
+    final useDate = DateTime.now();
+    final preferredCurrency =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+    final rateSource =
+        appStateSettings[SettingKey.preferredRateSource] ?? 'bcv';
+
+    // Mirror of [getAccountsMoney]'s initial-balance query, restricted to
+    // the single account being previewed.
+    final initialBalanceQuery = db
+        .customSelect(
+          '''
+          SELECT COALESCE(
+            SUM(
+              CASE WHEN accounts.date > ? THEN 0
+              ELSE accounts.iniValue
+                ${convertToPreferredCurrency ? ' * CASE WHEN accounts.currencyId = ? THEN 1.0 ELSE excRate.exchangeRate END' : ''}
+              END
+            )
+          , 0)
+          AS balance
+          FROM accounts
+              ${convertToPreferredCurrency ? _joinAccountAndRate(null, rateSource: rateSource) : ''}
+              WHERE accounts.id = ?
+          ''',
+          readsFrom: {
+            db.accounts,
+            db.transactions,
+            if (convertToPreferredCurrency) db.exchangeRates,
+          },
+          variables: [
+            Variable.withDateTime(useDate),
+            if (convertToPreferredCurrency)
+              Variable.withString(preferredCurrency),
+            if (convertToPreferredCurrency) Variable.withString(rateSource),
+            Variable.withString(accountId),
+          ],
+        )
+        .watch()
+        .map((rows) {
+          if (rows.isNotEmpty && rows.first.data['balance'] != null) {
+            return (rows.first.data['balance'] as num).roundWithDecimals(8);
+          }
+          return 0.0;
+        });
+
+    // Transactions affecting this account, optionally constrained by the
+    // simulated tracking start date. `respectTrackedSince` is explicitly
+    // false so the real DB column is ignored for this preview.
+    final txBalance = TransactionService.instance.getTransactionsValueBalance(
+      filters: TransactionFilterSet(
+        accountsIDs: [accountId],
+        maxDate: useDate,
+        minDate: simulatedTrackedSince,
+      ),
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
+    return Rx.combineLatest2(
+      initialBalanceQuery,
+      txBalance,
+      (double initial, double tx) => initial + tx,
     );
   }
 }
