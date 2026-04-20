@@ -31,6 +31,11 @@ class AgentProfile {
   /// Sampling temperature. Defaults to 0.2 for tool-calling reliability.
   final double temperature;
 
+  /// Maximum output tokens per model call. Kept modest by default so free-tier
+  /// upstream providers (OpenRouter) don't reject the request. Tool-calling
+  /// agents rarely need more than ~2k; conversational agents may push to ~4k.
+  final int maxTokens;
+
   /// Optional model override. `null` = use provider default / user setting.
   final String? modelOverride;
 
@@ -45,6 +50,7 @@ class AgentProfile {
     this.toolChoice = 'auto',
     this.maxLoops = 3,
     this.temperature = 0.2,
+    this.maxTokens = 2048,
     this.modelOverride,
     this.approvalRequiredTools = const {},
   });

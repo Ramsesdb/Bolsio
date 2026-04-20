@@ -48,6 +48,7 @@ class AgentRunner {
         toolChoice: profile.toolChoice,
         model: profile.modelOverride,
         temperature: profile.temperature,
+        maxTokens: profile.maxTokens,
       );
 
       if (r.finishReason == AiCompletionFinishReason.error ||
@@ -80,7 +81,7 @@ class AgentRunner {
       // finishReason == toolCalls
       messages.add(<String, dynamic>{
         'role': 'assistant',
-        'content': r.content,
+        'content': r.content ?? '',
         'tool_calls': r.toolCalls
             .map((tc) => <String, dynamic>{
                   'id': tc.id,
@@ -133,7 +134,6 @@ class AgentRunner {
           messages.add(<String, dynamic>{
             'role': 'tool',
             'tool_call_id': call.id,
-            'name': call.name,
             'content': jsonEncode(<String, dynamic>{
               'status': 'error',
               'error': 'invalid_arguments_json',
@@ -152,7 +152,6 @@ class AgentRunner {
         messages.add(<String, dynamic>{
           'role': 'tool',
           'tool_call_id': call.id,
-          'name': call.name,
           'content': result.toModelJson(),
         });
       }

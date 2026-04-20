@@ -1,4 +1,3 @@
-import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -6,14 +5,11 @@ import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_
 import '../ai_tool.dart';
 
 class GetStatsByCategoryTool implements AiTool {
-  final CategoryService _categoryService;
   final TransactionService _transactionService;
 
   GetStatsByCategoryTool({
-    CategoryService? categoryService,
     TransactionService? transactionService,
-  })  : _categoryService = categoryService ?? CategoryService.instance,
-        _transactionService =
+  }) : _transactionService =
             transactionService ?? TransactionService.instance;
 
   @override
@@ -69,40 +65,45 @@ class GetStatsByCategoryTool implements AiTool {
         ? TransactionType.income
         : TransactionType.expense;
 
-    final categories = await _categoryService
-        .getCategories(
-          predicate: (c, pc) =>
-              c.type.equals(txType == TransactionType.income ? 'I' : 'E'),
+    // Use the same query path as `list_transactions` (no forced stats-status
+    // filter) so auto-imported transactions with NULL status are included.
+    // Aggregation by category is done here in Dart.
+    final transactions = await _transactionService
+        .getTransactions(
+          filters: TransactionFilterSet(
+            minDate: fromDate,
+            maxDate: toDate,
+            transactionTypes: [txType],
+          ),
         )
         .first;
 
-    final results = <Map<String, dynamic>>[];
+    final perCategory = <String, Map<String, dynamic>>{};
     double total = 0.0;
 
-    for (final category in categories) {
-      final amount = await _transactionService
-          .getTransactionsValueBalance(
-            filters: TransactionFilterSet(
-              minDate: fromDate,
-              maxDate: toDate,
-              categoriesIds: [category.id],
-              transactionTypes: [txType],
-            ),
-          )
-          .first;
-      final absAmount = amount.abs();
-      if (absAmount == 0) continue;
-      results.add({
-        'categoryId': category.id,
-        'categoryName': category.name,
-        'amount': absAmount,
-      });
-      total += absAmount;
+    for (final tx in transactions) {
+      final category = tx.category;
+      if (category == null) continue;
+
+      final amount = (tx.currentValueInPreferredCurrency ?? tx.value).abs();
+      if (amount == 0) continue;
+
+      final bucket = perCategory.putIfAbsent(
+        category.id,
+        () => <String, dynamic>{
+          'categoryId': category.id,
+          'categoryName': category.name,
+          'amount': 0.0,
+        },
+      );
+      bucket['amount'] = (bucket['amount'] as double) + amount;
+      total += amount;
     }
 
-    results.sort(
-      (a, b) => (b['amount'] as double).compareTo(a['amount'] as double),
-    );
+    final results = perCategory.values.toList()
+      ..sort(
+        (a, b) => (b['amount'] as double).compareTo(a['amount'] as double),
+      );
 
     return AiToolResult.ok({
       'fromDate': fromDate.toIso8601String(),

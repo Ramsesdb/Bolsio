@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
@@ -79,6 +80,14 @@ class CreateTransactionTool implements AiTool {
             'type': 'string',
             'description': 'Fecha ISO 8601; por defecto ahora.',
           },
+          'currency': {
+            'type': 'string',
+            'description':
+                'Codigo ISO 4217 en mayusculas (USD, VES, EUR, COP). '
+                'Completalo SOLO si el usuario menciona la divisa explicitamente '
+                '(dolares, bolivares, euros...). Si se omite, se asume la divisa '
+                'de la cuenta.',
+          },
         },
         'required': ['amount', 'type'],
         'additionalProperties': false,
@@ -120,30 +129,79 @@ class CreateTransactionTool implements AiTool {
         code: 'no_account',
       );
     }
-    final account = accountId != null
+    final matchedById = accountId != null
         ? openAccounts.where((a) => a.id == accountId).toList()
-        : <dynamic>[];
-    final resolved = account.isNotEmpty ? account.first : openAccounts.first;
+        : const [];
 
-    if (accountId != null && account.isEmpty) {
+    if (accountId != null && matchedById.isEmpty) {
       return AiToolResult.error(
         'Account not found or closed: $accountId',
         code: 'account_not_found',
       );
     }
 
-    DateTime date = DateTime.now();
-    final dateArg = args['date'] as String?;
+    final rawCurrencyArg = args['currency'];
+    final voicedCurrencyCode = (rawCurrencyArg is String &&
+            rawCurrencyArg.trim().isNotEmpty)
+        ? rawCurrencyArg.trim().toUpperCase()
+        : null;
+
+    // Currency-aware account fallback: when the LLM didn't pick an account
+    // (or picked one whose currency doesn't match the voiced currency), find
+    // the first open account whose currency matches what the user said.
+    var resolved = matchedById.isNotEmpty
+        ? matchedById.first
+        : openAccounts.first;
+    if (voicedCurrencyCode != null) {
+      final currentCode = resolved.currency.code.toUpperCase();
+      if (currentCode != voicedCurrencyCode) {
+        final match = openAccounts
+            .where((a) => a.currency.code.toUpperCase() == voicedCurrencyCode);
+        if (match.isNotEmpty) {
+          resolved = match.first;
+        } else {
+          debugPrint(
+            'CreateTransactionTool: no open account in currency '
+            '"$voicedCurrencyCode"; falling back to "${resolved.name}" '
+            '(${resolved.currency.code}).',
+          );
+        }
+      }
+    }
+
+    // Date sanitization: LLMs sometimes hallucinate dates from their training
+    // data (e.g. 2024-06-07) when the user didn't mention one. We treat any
+    // missing / empty / unparseable value as "use now", and if the parsed
+    // value is suspiciously far in the past (>7 days old) we also fall back
+    // to now — voice capture is always about "right now" expenses.
+    final now = DateTime.now();
+    DateTime date = now;
+    final rawDate = args['date'];
+    final dateArg =
+        (rawDate is String && rawDate.trim().isNotEmpty) ? rawDate.trim() : null;
+    DateTime? parsed;
     if (dateArg != null) {
-      try {
-        date = DateTime.parse(dateArg);
-      } catch (_) {
-        return AiToolResult.error(
-          'Invalid date: $dateArg',
-          code: 'invalid_date',
+      parsed = DateTime.tryParse(dateArg);
+      if (parsed != null) {
+        final lowerBound = now.subtract(const Duration(days: 7));
+        if (parsed.isBefore(lowerBound)) {
+          debugPrint(
+            'CreateTransactionTool: rejecting stale LLM date '
+            '"$dateArg" -> $parsed (older than $lowerBound); using now.',
+          );
+          parsed = null;
+        }
+      } else {
+        debugPrint(
+          'CreateTransactionTool: unparseable LLM date "$dateArg"; using now.',
         );
       }
     }
+    debugPrint(
+      'CreateTransactionTool date arg: $rawDate -> parsed: $parsed '
+      '(final: ${parsed ?? now})',
+    );
+    if (parsed != null) date = parsed;
 
     final categoryId = args['categoryId'] as String?;
     final title = args['title'] as String?;
@@ -153,7 +211,7 @@ class CreateTransactionTool implements AiTool {
       final proposal = TransactionProposal.newProposal(
         accountId: resolved.id,
         amount: rawAmount,
-        currencyId: resolved.currency.code,
+        currencyId: voicedCurrencyCode ?? resolved.currency.code,
         date: date,
         type: txType,
         counterpartyName: title,

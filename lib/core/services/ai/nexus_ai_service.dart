@@ -46,6 +46,7 @@ class NexusAiService {
   Future<String?> complete({
     required List<Map<String, String>> messages,
     double temperature = 0.2,
+    int maxTokens = 2048,
   }) async {
     final apiKey = await _loadApiKey();
     if (apiKey == null || apiKey.isEmpty) {
@@ -66,6 +67,7 @@ class NexusAiService {
             body: jsonEncode({
               'stream': false,
               'temperature': temperature,
+              'max_tokens': maxTokens,
               'messages': messages,
             }),
           )
@@ -106,6 +108,7 @@ class NexusAiService {
     required String userPrompt,
     required String imageBase64,
     double temperature = 0.1,
+    int maxTokens = 2048,
   }) async {
     final apiKey = await _loadApiKey();
     if (apiKey == null || apiKey.isEmpty) {
@@ -130,6 +133,7 @@ class NexusAiService {
                   : model,
               'stream': false,
               'temperature': temperature,
+              'max_tokens': maxTokens,
               'messages': [
                 {
                   'role': 'system',
@@ -245,6 +249,7 @@ class NexusAiService {
     Object toolChoice = 'auto',
     String? model,
     double temperature = 0.2,
+    int maxTokens = 2048,
   }) async {
     final apiKey = await _loadApiKey();
     if (apiKey == null || apiKey.isEmpty) {
@@ -269,22 +274,39 @@ class NexusAiService {
       'model': resolvedModel,
       'stream': false,
       'temperature': temperature,
+      'max_tokens': maxTokens,
       'messages': messages,
       'tools': tools,
       'tool_choice': toolChoice,
     };
 
+    final encodedBody = jsonEncode(body);
+    final uri = Uri.parse('$_baseUrl$_endpoint');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $apiKey',
+    };
+
     try {
-      final response = await _client
-          .post(
-            Uri.parse('$_baseUrl$_endpoint'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $apiKey',
-            },
-            body: jsonEncode(body),
-          )
+      // Retry once on transient 5xx (502/503/504 — Nexus gateway / upstream
+      // provider hiccups) with a short backoff. Anything else is returned
+      // verbatim so the agent layer can decide what to do.
+      http.Response response = await _client
+          .post(uri, headers: headers, body: encodedBody)
           .timeout(_requestTimeout);
+
+      if (_isRetryableGatewayError(response.statusCode)) {
+        debugPrint(
+          'NexusAiService.completeWithTools transient status=${response.statusCode} — retrying once in 500ms',
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        response = await _client
+            .post(uri, headers: headers, body: encodedBody)
+            .timeout(_requestTimeout);
+        debugPrint(
+          'NexusAiService.completeWithTools retry status=${response.statusCode}',
+        );
+      }
 
       final latencyMs = DateTime.now().difference(startedAt).inMilliseconds;
       debugPrint(
@@ -298,9 +320,16 @@ class NexusAiService {
         debugPrint(
           'NexusAiService.completeWithTools non-2xx body=$preview',
         );
+        // Tag gateway-level transient failures distinctly so the UI can show
+        // a "servicio no disponible" message instead of confusing the user
+        // with a generic "couldn't understand you" error.
+        final code = response.statusCode;
+        final errorTag = _isRetryableGatewayError(code)
+            ? 'gateway_unavailable'
+            : 'http_$code';
         return AiCompletionResult(
           finishReason: AiCompletionFinishReason.error,
-          error: 'http_${response.statusCode}',
+          error: errorTag,
           messages: messages,
         );
       }
@@ -359,12 +388,19 @@ class NexusAiService {
       if (rawToolCalls is List) {
         for (final call in rawToolCalls) {
           if (call is! Map) continue;
-          final id = call['id'];
+          final rawId = call['id'];
           final fn = call['function'];
-          if (id is! String || fn is! Map) continue;
+          if (fn is! Map) continue;
           final fnName = fn['name'];
           final fnArgs = fn['arguments'];
           if (fnName is! String || fnName.isEmpty) continue;
+          // Some providers (or malformed proxies) return an empty/missing id.
+          // Both Groq and OpenAI reject `role:'tool'` messages without a
+          // matching `tool_call_id`, so synthesize a stable placeholder here
+          // and mirror it on the assistant message so the pair stays in sync.
+          final String id = (rawId is String && rawId.isNotEmpty)
+              ? rawId
+              : 'call_${DateTime.now().microsecondsSinceEpoch}_${toolCalls.length}';
           // Providers sometimes return arguments as a String (OpenAI style) and
           // sometimes as an already-decoded Map (some proxies). Normalize to a
           // JSON string — the registry dispatcher re-decodes it.
@@ -420,6 +456,7 @@ class NexusAiService {
   Stream<String> streamComplete({
     required List<Map<String, String>> messages,
     double temperature = 0.7,
+    int maxTokens = 4096,
   }) async* {
     final apiKey = await _loadApiKey();
     if (apiKey == null || apiKey.isEmpty) {
@@ -438,7 +475,9 @@ class NexusAiService {
       request.body = jsonEncode({
         'stream': true,
         'temperature': temperature,
+        'max_tokens': maxTokens,
         'messages': messages,
+        'tool_choice': 'none',
       });
 
         final response = await _client
@@ -484,6 +523,13 @@ class NexusAiService {
       debugPrint('$st');
       return;
     }
+  }
+
+  /// Returns `true` when [status] is one of the transient gateway/upstream
+  /// failures (502/503/504) that are worth retrying exactly once. The Nexus
+  /// gateway relays these as-is when the upstream LLM provider hiccups.
+  static bool _isRetryableGatewayError(int status) {
+    return status == 502 || status == 503 || status == 504;
   }
 
   String? _extractSseContent(String rawLine) {
