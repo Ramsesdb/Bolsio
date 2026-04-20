@@ -16,7 +16,12 @@ import 'package:wallex/core/services/auto_import/capture/binance_api_capture_sou
 import 'package:wallex/core/services/auto_import/capture/capture_source.dart';
 import 'package:wallex/core/services/auto_import/capture/notification_capture_source.dart';
 import 'package:wallex/core/services/auto_import/capture/sms_capture_source.dart';
+import 'package:wallex/core/services/auto_import/capture/capture_event_log.dart';
+import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:wallex/core/services/auto_import/capture/models/capture_event.dart';
 import 'package:wallex/core/services/auto_import/dedupe/dedupe_checker.dart';
+import 'package:wallex/core/services/auto_import/dedupe/fingerprint_registry.dart';
+import 'package:wallex/core/services/auto_import/dedupe/notif_fingerprint.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profiles_registry.dart';
 import 'package:wallex/core/services/ai/auto_categorization_service.dart';
@@ -115,12 +120,18 @@ class CaptureOrchestrator {
         );
       }
     }
+
+    // Stop the health monitor too — there is nothing left to watch over.
+    try {
+      await CaptureHealthMonitor.instance.stop();
+    } catch (_) {}
   }
 
   /// Remove all registered sources (after stopping them).
   Future<void> clearSources() async {
     await stop();
     _sources.clear();
+    CaptureHealthMonitor.instance.unbindNotificationSource();
   }
 
   /// The currently registered sources (read-only view, useful for tests).
@@ -230,6 +241,12 @@ class CaptureOrchestrator {
         }
         if (await notifSource.hasPermission()) {
           await registerSource(notifSource);
+          if (notifSource is NotificationCaptureSource) {
+            CaptureHealthMonitor.instance
+                .bindNotificationSource(notifSource);
+            // Idempotent — if already running this is a no-op.
+            await CaptureHealthMonitor.instance.start();
+          }
         } else {
           debugPrint(
             'CaptureOrchestrator: Notification source enabled but no permission — skipping',
@@ -292,24 +309,132 @@ class CaptureOrchestrator {
   /// Resilient: exceptions in individual profiles are caught and logged,
   /// never crashing the stream.
   Future<void> _handleEvent(RawCaptureEvent event) async {
+    // Diagnostic: log the incoming raw event so the diagnostics screen sees
+    // every message the orchestrator got, regardless of what happens next.
+    final diagnosticBase = _buildDiagnosticBase(event);
+    _logDiagnostic(diagnosticBase);
+
+    // -----------------------------------------------------------------
+    // Tanda 4 — fingerprint-based pre-dedupe.
+    //
+    // Goal: kill reposts (Android redispatches the same notif when the bank
+    // updates the line, user taps it, etc.) and distinguish "user removed"
+    // events (hasRemoved) from new captures — BEFORE we even try to parse.
+    // -----------------------------------------------------------------
+    // Only notifications carry the native metadata; SMS events bypass this
+    // block entirely (they already have their own robust dedupe via bankRef).
+    if (event.channel == CaptureChannel.notification) {
+      final fingerprint = NotifFingerprint.from(event);
+
+      // A "notification removed" event is NOT a new capture. Register the
+      // fact and exit early so the orchestrator doesn't try to parse a
+      // phantom transaction from the OS-generated removal hook.
+      if (event.hasRemoved) {
+        try {
+          await FingerprintRegistry.instance.markRemoved(fingerprint);
+        } catch (e) {
+          debugPrint(
+            'CaptureOrchestrator: markRemoved error: $e',
+          );
+        }
+        _logDiagnostic(diagnosticBase.copyWith(
+          id: generateUUID(),
+          status: CaptureEventStatus.systemEvent,
+          reason:
+              'Usuario borró notif id=${event.nativeNotifId ?? '?'} (hasRemoved)',
+        ));
+        return;
+      }
+
+      // Known fingerprint? Skip the whole pipeline.
+      try {
+        final seen = await FingerprintRegistry.instance.lookup(fingerprint);
+        if (seen != null) {
+          final isStableMatch = seen.stable == fingerprint.stable;
+          final linked = seen.linkedTransactionId ?? '-';
+          final hoursSince =
+              DateTime.now().difference(seen.lastSeen).inHours;
+          final fpShort = fingerprint.contentHash;
+          final firstSeenRel = _relativeAgo(seen.firstSeen);
+          final headline = isStableMatch
+              ? 'Repost exacto de notif previa (tx=$linked, ocurrencias=${seen.occurrences + 1})'
+              : 'Contenido idéntico visto hace ${hoursSince}h, tx=$linked';
+          final reason =
+              '$headline · Fingerprint: $fpShort · Primera vez: $firstSeenRel';
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.duplicate,
+            reason: reason,
+          ));
+          // Still bump the `lastSeen` / occurrences counter so the diagnostic
+          // tile reflects the real event rate.
+          try {
+            await FingerprintRegistry.instance.markSeen(fingerprint);
+          } catch (_) {}
+          return;
+        }
+      } catch (e) {
+        debugPrint('CaptureOrchestrator: fingerprint lookup error: $e');
+        // Graceful degrade: keep processing even if the registry is broken.
+      }
+    }
+
     // Find matching profiles by channel + sender
-    final matchingProfiles = bankProfilesRegistry.where((profile) =>
-        profile.channel == event.channel &&
-        profile.knownSenders.contains(event.sender));
+    final matchingProfiles = bankProfilesRegistry
+        .where((profile) =>
+            profile.channel == event.channel &&
+            profile.knownSenders.contains(event.sender))
+        .toList();
+
+    if (matchingProfiles.isEmpty) {
+      final reason = event.channel == CaptureChannel.notification
+          ? 'Package "${event.sender}" no tiene perfil en el registro'
+          : 'Remitente "${event.sender}" no tiene perfil en el registro';
+      _logDiagnostic(diagnosticBase.copyWith(
+        id: generateUUID(),
+        status: CaptureEventStatus.filteredOut,
+        reason: reason,
+      ));
+      return;
+    }
+
+    // From here on, a notification event has a matching profile and is going
+    // into the parser. Register its fingerprint (without a tx id yet) so that
+    // any repost — even a parse failure — is caught by the early exit above.
+    NotifFingerprint? fingerprintForMarking;
+    if (event.channel == CaptureChannel.notification) {
+      fingerprintForMarking = NotifFingerprint.from(event);
+    }
+    // Track the tx id of the first successfully-persisted proposal so we can
+    // link it to the fingerprint after the loop. Null means either parse
+    // failed everywhere or every profile was a duplicate; we still mark the
+    // fingerprint as "seen" to avoid re-parsing the same raw text on repost.
+    String? createdTransactionId;
 
     for (final profile in matchingProfiles) {
       try {
         // Parse first so we can resolve account by bank name + proposal currency.
-        final parsedProposal = profile.tryParse(event, accountId: null);
+        final parseResult =
+            profile.tryParseWithDetails(event, accountId: null);
 
-        if (parsedProposal == null) {
+        if (!parseResult.success || parseResult.transaction == null) {
           debugPrint(
             'CaptureOrchestrator: Profile ${profile.bankName} (${profile.channel.dbValue}) '
             'could not parse event from ${event.sender}: '
-            '"${event.rawText.length > 60 ? '${event.rawText.substring(0, 60)}...' : event.rawText}"',
+            '"${event.rawText.length > 60 ? '${event.rawText.substring(0, 60)}...' : event.rawText}" '
+            '— reason: ${parseResult.failureReason ?? 'unspecified'}',
           );
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.parsedFailed,
+            reason: parseResult.failureReason ??
+                'El perfil no pudo extraer una transacción',
+            matchedProfile: profile.bankName,
+          ));
           continue;
         }
+
+        final parsedProposal = parseResult.transaction!;
 
         final resolvedAccountId = await _resolveAccountId(
           profile.accountMatchName,
@@ -341,6 +466,17 @@ class CaptureOrchestrator {
             'CaptureOrchestrator: Skipping duplicate proposal: '
             '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
           );
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.duplicate,
+            reason: enhancedProposal.bankRef != null &&
+                    enhancedProposal.bankRef!.isNotEmpty
+                ? 'Duplicado por bankRef=${enhancedProposal.bankRef}'
+                : 'Duplicado (coincidencia con transacción existente)',
+            matchedProfile: profile.bankName,
+            parsedAmount: enhancedProposal.amount,
+            parsedCurrency: enhancedProposal.currencyId,
+          ));
           continue;
         }
 
@@ -349,6 +485,15 @@ class CaptureOrchestrator {
             'CaptureOrchestrator: Skipping Binance proposal to avoid double count: '
             '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
           );
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.duplicate,
+            reason:
+                'Saltado para evitar doble conteo con transferencia Binance reciente',
+            matchedProfile: profile.bankName,
+            parsedAmount: enhancedProposal.amount,
+            parsedCurrency: enhancedProposal.currencyId,
+          ));
           continue;
         }
 
@@ -358,10 +503,31 @@ class CaptureOrchestrator {
         await pendingImportService
             .insertPendingImport(enhancedProposal.toCompanion(status: status));
 
+        // Remember the first successfully-persisted tx id so we can link it
+        // to the notification fingerprint once the loop is done.
+        createdTransactionId ??= enhancedProposal.id;
+
         debugPrint(
           'CaptureOrchestrator: Persisted proposal: ${enhancedProposal.bankRef ?? 'no-ref'} '
           'as $status (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
         );
+
+        _logDiagnostic(diagnosticBase.copyWith(
+          id: generateUUID(),
+          status: CaptureEventStatus.parsedSuccess,
+          reason: resolvedAccountId == null
+              ? 'Parseada OK — sin cuenta asociada'
+              : 'Parseada OK — propuesta creada',
+          matchedProfile: profile.bankName,
+          parsedAmount: enhancedProposal.amount,
+          parsedCurrency: enhancedProposal.currencyId,
+        ));
+
+        // Health signal: the pipeline produced a parseable proposal — this is
+        // the strongest "things are working end-to-end" indicator we have.
+        try {
+          CaptureHealthMonitor.instance.markSuccess();
+        } catch (_) {}
 
         // Notify background service about new pending imports
         if (status == TransactionProposalStatus.pending &&
@@ -383,7 +549,71 @@ class CaptureOrchestrator {
         debugPrint(
           'CaptureOrchestrator: Error processing event with profile ${profile.bankName}: $e\n$stackTrace',
         );
+        _logDiagnostic(diagnosticBase.copyWith(
+          id: generateUUID(),
+          status: CaptureEventStatus.parsedFailed,
+          reason: 'Excepción al procesar: $e',
+          matchedProfile: profile.bankName,
+        ));
       }
+    }
+
+    // Register the notification fingerprint after the loop. This runs even
+    // when parsing failed or was deduped — so a later repost with the same
+    // content is caught by the early-exit in this same method.
+    if (fingerprintForMarking != null) {
+      try {
+        await FingerprintRegistry.instance.markSeen(
+          fingerprintForMarking,
+          transactionId: createdTransactionId,
+        );
+      } catch (e) {
+        debugPrint('CaptureOrchestrator: markSeen error: $e');
+      }
+    }
+  }
+
+  /// Build the baseline diagnostic record for [event] with status `received`.
+  CaptureEvent _buildDiagnosticBase(RawCaptureEvent event) {
+    final isNotif = event.channel == CaptureChannel.notification;
+    final rawText = event.rawText;
+    final newlineIdx = rawText.indexOf('\n');
+    String? title;
+    String content = rawText;
+    if (isNotif && newlineIdx > 0) {
+      title = rawText.substring(0, newlineIdx).trim();
+      content = rawText.substring(newlineIdx + 1).trim();
+    }
+
+    return CaptureEvent(
+      id: generateUUID(),
+      timestamp: event.receivedAt,
+      source: isNotif
+          ? CaptureEventSource.notification
+          : CaptureEventSource.sms,
+      packageName: isNotif ? event.sender : null,
+      sender: isNotif ? null : event.sender,
+      title: title,
+      content: content,
+      status: CaptureEventStatus.received,
+      reason: 'Notificación recibida',
+    );
+  }
+
+  /// Human-readable "X time ago" for the diagnostic reason strings.
+  String _relativeAgo(DateTime ts) {
+    final diff = DateTime.now().difference(ts);
+    if (diff.inSeconds < 60) return 'hace <1min';
+    if (diff.inMinutes < 60) return 'hace ${diff.inMinutes}min';
+    if (diff.inHours < 24) return 'hace ${diff.inHours}h';
+    return 'hace ${diff.inDays}d';
+  }
+
+  void _logDiagnostic(CaptureEvent event) {
+    try {
+      CaptureEventLog.instance.log(event);
+    } catch (e) {
+      debugPrint('CaptureOrchestrator: failed to log diagnostic: $e');
     }
   }
 

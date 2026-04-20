@@ -1,6 +1,31 @@
+import 'package:flutter/foundation.dart';
 import 'package:wallex/core/models/auto_import/capture_channel.dart';
 import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
 import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
+
+/// Outcome of a [BankProfile.tryParseWithDetails] invocation.
+///
+/// Carries either a parsed [TransactionProposal] (on success) or a
+/// human-readable [failureReason] (on failure), so the capture diagnostics
+/// surface can tell the user exactly why a message was rejected.
+@immutable
+class ParseResult {
+  final bool success;
+  final TransactionProposal? transaction;
+  final String? failureReason;
+
+  const ParseResult._({
+    required this.success,
+    this.transaction,
+    this.failureReason,
+  });
+
+  factory ParseResult.parsed(TransactionProposal proposal) =>
+      ParseResult._(success: true, transaction: proposal);
+
+  factory ParseResult.failed(String reason) =>
+      ParseResult._(success: false, failureReason: reason);
+}
 
 /// Abstract interface for a bank-specific message parser.
 ///
@@ -43,4 +68,21 @@ abstract class BankProfile {
     RawCaptureEvent event, {
     required String? accountId,
   });
+
+  /// Same as [tryParse] but returns a structured [ParseResult] carrying a
+  /// human-readable reason on failure.
+  ///
+  /// Profiles that want to expose granular diagnostics should override this.
+  /// The default implementation just delegates to [tryParse] and reports a
+  /// generic failure reason — which keeps existing profiles functional.
+  ParseResult tryParseWithDetails(
+    RawCaptureEvent event, {
+    required String? accountId,
+  }) {
+    final proposal = tryParse(event, accountId: accountId);
+    if (proposal != null) {
+      return ParseResult.parsed(proposal);
+    }
+    return ParseResult.failed('El perfil no pudo extraer una transacción');
+  }
 }

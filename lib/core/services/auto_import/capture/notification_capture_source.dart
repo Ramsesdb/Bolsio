@@ -6,6 +6,7 @@ import 'package:notification_listener_service/notification_event.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import 'package:wallex/core/models/auto_import/capture_channel.dart';
 import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
+import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
 
 import 'capture_source.dart';
 
@@ -34,6 +35,13 @@ class NotificationCaptureSource implements CaptureSource {
 
   @override
   Stream<RawCaptureEvent> get events => _controller.stream;
+
+  /// Whether there is currently a live subscription to the native stream.
+  ///
+  /// Used by [CaptureHealthMonitor] to diagnose zombie state — the OS may
+  /// report the permission as granted while our Dart-side subscription is
+  /// null or was cancelled after an error.
+  bool get isSubscriptionAlive => _subscription != null;
 
   @override
   Future<bool> isAvailable() async {
@@ -66,20 +74,47 @@ class NotificationCaptureSource implements CaptureSource {
 
   @override
   Future<void> start() async {
+    await ensureSubscribed();
+  }
+
+  /// Make sure there is a live subscription to the native notification stream.
+  ///
+  /// - If [forceReconnect] is `false` and a subscription already exists, this
+  ///   is a no-op. Safe to call on every health tick.
+  /// - If [forceReconnect] is `true`, the current subscription (if any) is
+  ///   cancelled first and a brand new one is created. Use this to recover
+  ///   from a zombie state where MIUI revoked the native bind silently.
+  Future<void> ensureSubscribed({bool forceReconnect = false}) async {
     if (!Platform.isAndroid) return;
-    if (_subscription != null) return; // Already listening
 
-    debugPrint('NotificationCaptureSource: started listening for packages: $allowlistPackages');
+    if (forceReconnect) {
+      await _subscription?.cancel();
+      _subscription = null;
+    } else if (_subscription != null) {
+      return;
+    }
 
-    _subscription =
-        NotificationListenerService.notificationsStream.listen(
+    debugPrint(
+      'NotificationCaptureSource: subscribing to native stream '
+      '(forceReconnect=$forceReconnect, packages=$allowlistPackages)',
+    );
+
+    _subscription = NotificationListenerService.notificationsStream.listen(
       _onNotification,
       onError: (error) {
         debugPrint(
           'NotificationCaptureSource: Error in notification stream: $error',
         );
-        // Don't rethrow — keep the stream alive
+        // Don't rethrow — keep the source usable. The next health tick will
+        // notice and try to re-subscribe.
       },
+      onDone: () {
+        debugPrint(
+          'NotificationCaptureSource: native stream closed — dropping subscription',
+        );
+        _subscription = null;
+      },
+      cancelOnError: false,
     );
   }
 
@@ -91,9 +126,21 @@ class NotificationCaptureSource implements CaptureSource {
 
   void _onNotification(ServiceNotificationEvent event) {
     try {
+      // Liveness signal to the health monitor — record BEFORE the allowlist
+      // filter so that notifications from unrelated apps still prove the
+      // stream is alive.
+      try {
+        CaptureHealthMonitor.instance.markEvent();
+      } catch (e) {
+        debugPrint('NotificationCaptureSource: health markEvent error: $e');
+      }
+
       final packageName = event.packageName;
 
-      debugPrint('NotificationCaptureSource: raw event pkg=$packageName title="${event.title}"');
+      debugPrint(
+        'NotificationCaptureSource: raw event pkg=$packageName '
+        'id=${event.id} hasRemoved=${event.hasRemoved} title="${event.title}"',
+      );
 
       if (packageName == null) return;
 
@@ -105,11 +152,20 @@ class NotificationCaptureSource implements CaptureSource {
       final content = event.content ?? '';
       final rawText = '$title\n$content';
 
+      // Plugin `notification_listener_service` 0.3.5 exposes `id` (int?) and
+      // `hasRemoved` (bool?) but NOT `postTime`. Use `receivedAt` as proxy.
+      final nowMs = DateTime.now().millisecondsSinceEpoch;
+      final nativeId = event.id?.toString();
+      final wasRemoved = event.hasRemoved == true;
+
       _controller.add(RawCaptureEvent(
         rawText: rawText,
         sender: packageName,
         receivedAt: DateTime.now(),
         channel: CaptureChannel.notification,
+        nativeNotifId: nativeId,
+        nativeNotifPostTime: nowMs,
+        hasRemoved: wasRemoved,
       ));
     } catch (e) {
       debugPrint(

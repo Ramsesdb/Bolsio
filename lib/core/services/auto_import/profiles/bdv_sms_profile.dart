@@ -53,14 +53,30 @@ class BdvSmsProfile implements BankProfile {
     RawCaptureEvent event, {
     required String? accountId,
   }) {
+    return tryParseWithDetails(event, accountId: accountId).transaction;
+  }
+
+  @override
+  ParseResult tryParseWithDetails(
+    RawCaptureEvent event, {
+    required String? accountId,
+  }) {
     // Try pagomovil recibido
     final match = _pagomovilRecibidoRegex.firstMatch(event.rawText);
     if (match != null) {
-      return _parsePagomovilRecibido(match, event, accountId);
+      final proposal = _parsePagomovilRecibido(match, event, accountId);
+      if (proposal != null) {
+        return ParseResult.parsed(proposal);
+      }
+      return ParseResult.failed(
+        'Patrón de Pagomóvil detectado pero monto o fecha inválidos',
+      );
     }
 
-    // No pattern matched — silently reject (OTPs, codes, etc.)
-    return null;
+    // No pattern matched — likely OTP / código / promoción
+    return ParseResult.failed(
+      'SMS no coincide con ningún patrón conocido (OTP/código/promo)',
+    );
   }
 
   TransactionProposal? _parsePagomovilRecibido(
