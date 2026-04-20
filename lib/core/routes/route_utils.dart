@@ -62,6 +62,13 @@ abstract class RouteUtils {
   }
 
   static void popRoute<T extends Object?>([T? result]) {
-    return navigatorKey.currentState!.pop(result);
+    final state = navigatorKey.currentState;
+    if (state == null) return;
+    // maybePop handles the "empty stack" case gracefully instead of throwing
+    // `Bad state: No element` from `_history.lastWhere(...)` when a rapid
+    // double-tap pops twice (the second pop lands on an already-disposed
+    // navigator).
+    if (!state.canPop()) return;
+    state.pop(result);
   }
 }

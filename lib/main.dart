@@ -38,6 +38,7 @@ import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrat
 import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:wallex/core/services/statement_import/statement_batches_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallex/core/database/app_db.dart';
 
@@ -47,6 +48,11 @@ void main() async {
   // Initialize settings first so we can check the sync flag
   await UserSettingService.instance.initializeGlobalStateMap();
   await AppDataService.instance.initializeGlobalStateMap();
+
+  // Must complete BEFORE runApp: visibleAccountIdsStream seeds from the
+  // locked state, and a late init lets the dashboard render with
+  // `visibleIds == null` for the first frame — leaking saving accounts.
+  await HiddenModeService.instance.init();
 
   // Always initialize Firebase — sync is always available.
   // If Firebase init fails (offline, misconfigured), the app works offline.
@@ -140,8 +146,14 @@ void main() async {
   );
   // ---------------------------------------------------
 
-  PrivateModeService.instance.setPrivateMode(
-    appStateSettings[SettingKey.privateModeAtLaunch] == '1',
+  // Initial state: ON if the user asked us to start locked, OR if the user
+  // left the runtime toggle ON in the previous session. This keeps the
+  // toggle sticky across restarts (FIX: was only reading privateModeAtLaunch).
+  unawaited(
+    PrivateModeService.instance.setPrivateMode(
+      appStateSettings[SettingKey.privateModeAtLaunch] == '1' ||
+          appStateSettings[SettingKey.privateMode] == '1',
+    ),
   );
 
   // Set plural resolver for Turkish
@@ -213,10 +225,9 @@ class _InitializeAppState extends State<InitializeApp> {
   @override
   void initState() {
     super.initState();
-    // Bootstrap the Hidden Mode service: restores locked state from the
-    // persisted preference and starts listening for lifecycle events so the
-    // app re-locks whenever it goes to background.
-    unawaited(HiddenModeService.instance.init());
+    // HiddenModeService.init() is awaited in main() before runApp so the
+    // lock state is authoritative by the first frame. Here we only hook the
+    // lifecycle observer so the app re-locks when it goes to background.
     WidgetsBinding.instance.addObserver(HiddenModeService.instance);
   }
 
@@ -446,6 +457,13 @@ class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
       if (onboarded && FirebaseSyncService.instance.isFirebaseAvailable) {
         FirebaseSyncService.instance.pullAllData();
       }
+    });
+
+    // Purge statement import batches older than 7 days on each session start.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      StatementBatchesService.instance.purge().catchError((e) {
+        debugPrint('StatementBatchesService.purge error: $e');
+      });
     });
   }
 

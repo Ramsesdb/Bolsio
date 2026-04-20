@@ -13,6 +13,7 @@ import 'package:wallex/core/database/services/transaction/transaction_service.da
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
 import 'package:wallex/core/models/category/category.dart';
+import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/utils/uuid.dart';
 
@@ -872,6 +873,14 @@ class _ProposalReviewPageState extends State<ProposalReviewPage> {
           type: _type,
           categoryID: effectiveCategory.id,
           isHidden: false,
+          // Always set an explicit status. Leaving it NULL silently excludes
+          // the transaction from stats/budgets/goals (SQL `status IN (...)`
+          // never matches NULL). Mirrors the convention used by the manual
+          // transaction form: pending for future-dated rows, reconciled
+          // otherwise.
+          status: _date.isAfter(DateTime.now())
+              ? TransactionStatus.pending
+              : TransactionStatus.reconciled,
           createdAt: DateTime.now(),
         );
 

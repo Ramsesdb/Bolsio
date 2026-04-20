@@ -230,7 +230,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (widget.voicePrefill != null) {
-      _initializeFromReceipt(widget.voicePrefill!);
+      _initializeFromReceipt(widget.voicePrefill!, fromVoice: true);
       return;
     }
 
@@ -548,12 +548,27 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         });
   }
 
-  Future<void> _initializeFromReceipt(TransactionProposal prefill) async {
+  Future<void> _initializeFromReceipt(
+    TransactionProposal prefill, {
+    bool fromVoice = false,
+  }) async {
     transactionType = prefill.type;
     _tabController.animateTo(transactionType.index);
 
     transactionValue = prefill.amount.abs();
-    date = prefill.date;
+    // Defense-in-depth vs. LLM-hallucinated stale dates reaching the full
+    // form on the voice flow: if the proposal date is clearly stale (>7
+    // days old) treat it as missing and default to now. Receipts can
+    // legitimately have old dates (scanning an old invoice) so we only
+    // apply this guard when the prefill came from voice capture.
+    final nowTs = DateTime.now();
+    final proposalDate = prefill.date;
+    if (fromVoice &&
+        proposalDate.isBefore(nowTs.subtract(const Duration(days: 7)))) {
+      date = nowTs;
+    } else {
+      date = proposalDate;
+    }
     notesController.text = prefill.rawText;
     titleController.text = prefill.counterpartyName ?? '';
 

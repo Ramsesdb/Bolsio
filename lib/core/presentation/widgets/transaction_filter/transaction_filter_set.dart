@@ -230,7 +230,25 @@ class TransactionFilterSet {
             c.parentCategoryID.isIn(categoriesIds!),
       if (categoriesIds != null && !includeParentCategoriesInSearch)
         transaction.categoryID.isIn(categoriesIds!),
-      if (status != null) transaction.status.isInValues(status!),
+      // Status filter. Defensive against NULL status rows: SQL `IN (...)`
+      // never matches NULL, so if the caller explicitly passed `null` inside
+      // the list (representing the "no status" bucket) we also include rows
+      // where status IS NULL. This protects us from edge cases where a
+      // transaction slips through without a status being assigned (see v26
+      // backfill migration and the proposal_review / import_csv fixes).
+      if (status != null)
+        () {
+          final nonNullStatuses = status!.whereType<TransactionStatus>().toList();
+          final includeNull = status!.any((s) => s == null);
+          if (nonNullStatuses.isEmpty && includeNull) {
+            return transaction.status.isNull();
+          }
+          if (includeNull) {
+            return transaction.status.isInValues(nonNullStatuses) |
+                transaction.status.isNull();
+          }
+          return transaction.status.isInValues(nonNullStatuses);
+        }(),
       if (debtId != null) transaction.debtId.equals(debtId!),
       if (excludeDebtId != null)
         (transaction.debtId.isNull() |
