@@ -4,6 +4,10 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Voice input for AI dictation (voice-input-and-ai-tools) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <!-- Biometric authentication -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
@@ -14,10 +18,20 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
+    <!-- Robust permissions for listener liveness (Tanda 3: Permisos Robustos) -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:label="Wallex"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -77,6 +91,20 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Battery optimization settings (Tanda 3: Permisos Robustos) -->
+        <intent>
+            <action android:name="android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS"/>
+        </intent>
+        <intent>
+            <action android:name="android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+        </intent>
+        <!-- Android 11+ package visibility: speech_to_text uses this to
+             enumerate installed RecognitionService implementations. Without
+             this intent filter, availableLocales() returns an empty list on
+             API 30+ and `listen()` silently fails. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
         </intent>
     </queries>
 </manifest>

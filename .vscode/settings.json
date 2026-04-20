@@ -6,6 +6,10 @@
     "**/*.freezed.dart": true,
     "**/*.g.dart": false
   },
+  "files.associations": {
+    "*.sql": "sqlite"
+  },
+  "mssql.lintingEnabled": false,
   "cmake.configureOnOpen": false,
 
   "conventionalCommits.gitmoji": false,
