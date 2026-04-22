@@ -51,6 +51,23 @@ android/app/.cxx/
 # Google Services (Sensitive Data)
 google-services.json
 ios/Runner/GoogleService-Info.plist
+**/google-services*.json
+**/GoogleService-Info*.plist
+
+# Local secrets / credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+android/key.properties
+
+# Local tool caches
+android/.kotlin/
 
 # Binaries
 *.apk
