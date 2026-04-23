@@ -91,3 +91,6 @@ same_code.txt
 same_files.txt
 up_files.txt
 up_only_files.txt
+
+# Design bundles (Claude Design exports, local-only reference)
+guia/
