@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'dart:ui';
-
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:wallex/core/models/auto_import/capture_channel.dart';
 import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
 import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
@@ -49,6 +48,12 @@ class WallexBackgroundService {
         androidConfiguration: AndroidConfiguration(
           onStart: _onStart,
           autoStart: false,
+          // Boot-start is handled by our own BootReceiver (BootReceiver.kt),
+          // which is whitelisted under the app's package and survives MIUI's
+          // OEM autostart pruning better than the plugin's internal receiver.
+          // Keeping this false prevents the plugin from firing its own internal
+          // BroadcastReceiver on cold-start, which was competing with the main
+          // engine during the first-frame window and causing a UI freeze.
           autoStartOnBoot: false,
           isForegroundMode: true,
           foregroundServiceNotificationId:
@@ -150,6 +155,28 @@ class WallexBackgroundService {
   }
 }
 
+/// Retry helper: initializes UserSettingService with exponential backoff.
+///
+/// Catches any exception (including SqliteException 261 — database locked)
+/// and retries up to [maxAttempts] times before giving up.
+Future<void> _initSettingsWithRetry() async {
+  const maxAttempts = 4;
+  for (int attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      await UserSettingService.instance.initializeGlobalStateMap();
+      return;
+    } catch (e) {
+      if (attempt < maxAttempts - 1) {
+        await Future.delayed(Duration(milliseconds: 500 * (1 << attempt)));
+      } else {
+        debugPrint(
+          'WallexBackgroundService: settings init failed after $maxAttempts attempts: $e',
+        );
+      }
+    }
+  }
+}
+
 /// Entry point for the background isolate.
 ///
 /// This function runs in a SEPARATE isolate from the main app. It must
@@ -158,21 +185,20 @@ class WallexBackgroundService {
 @pragma('vm:entry-point')
 Future<void> _onStart(ServiceInstance service) async {
   // Initialize Flutter bindings in the background isolate
-  DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
   debugPrint(
     'WallexBackgroundService: Background isolate started',
   );
 
-  // Initialize settings so the orchestrator can read toggle states
-  try {
-    await UserSettingService.instance.initializeGlobalStateMap();
-  } catch (e) {
-    debugPrint(
-      'WallexBackgroundService: Failed to init settings in background: $e',
-    );
-  }
+  // Wait for the main isolate to finish its own DB init before touching SQLite.
+  // Without this delay the two isolates race on the same DB file, causing
+  // SqliteException 261 (database is locked) and a 2-3s cold-start freeze.
+  await Future.delayed(const Duration(seconds: 4));
+
+  // Initialize settings so the orchestrator can read toggle states.
+  // Retry with exponential backoff in case the main isolate still holds the DB.
+  await _initSettingsWithRetry();
 
   // Initialize local notifications for showing "pending" alerts
   final localNotif = LocalNotificationService.instance;
@@ -198,14 +224,15 @@ Future<void> _onStart(ServiceInstance service) async {
     }
   };
 
-  // Apply settings and start capturing.
-  // The plugin uses a BroadcastReceiver: each engine that calls onListen
-  // registers its own receiver, so the background isolate receives the same
-  // notification broadcasts as the main isolate.  The DedupeChecker prevents
-  // double-processing on the rare case both isolates capture the same event.
-  // When the app is closed, only this isolate runs — so it handles ALL sources.
+  // Apply settings and start capturing — background-safe channels only.
+  // NotificationCaptureSource uses a Flutter EventChannel that is bound to the
+  // main FlutterEngine and must NOT be instantiated from a background isolate
+  // (throws "This class should only be used in the main isolate"). SMS and
+  // Binance API sources are safe here. The main isolate owns notifications.
   try {
-    await orchestrator.applySettings();
+    await orchestrator.applySettings(
+      channels: {CaptureChannel.sms, CaptureChannel.api},
+    );
     debugPrint(
       'WallexBackgroundService: Orchestrator started in background isolate',
     );
@@ -231,7 +258,9 @@ Future<void> _onStart(ServiceInstance service) async {
     // Re-read settings (they may have changed in the main isolate's DB)
     try {
       await UserSettingService.instance.initializeGlobalStateMap();
-      await orchestrator.applySettings();
+      await orchestrator.applySettings(
+        channels: {CaptureChannel.sms, CaptureChannel.api},
+      );
     } catch (e) {
       debugPrint(
         'WallexBackgroundService: Error restarting orchestrator: $e',

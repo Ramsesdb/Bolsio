@@ -3,10 +3,15 @@ import 'package:flutter/foundation.dart';
 /// Source channel for a diagnostic [CaptureEvent].
 ///
 /// Intentionally separate from [CaptureChannel] so the diagnostic surface
-/// stays decoupled from storage enums used by the persistence layer.
+/// stays decoupled from storage enums used by the persistence layer. Kept
+/// aligned with the set of values accepted by [CaptureChannel] so every
+/// runtime channel can produce diagnostic events.
 enum CaptureEventSource {
   notification,
-  sms;
+  sms,
+  api,
+  receiptImage,
+  voice;
 
   String get name {
     switch (this) {
@@ -14,17 +19,34 @@ enum CaptureEventSource {
         return 'notification';
       case CaptureEventSource.sms:
         return 'sms';
+      case CaptureEventSource.api:
+        return 'api';
+      case CaptureEventSource.receiptImage:
+        return 'receiptImage';
+      case CaptureEventSource.voice:
+        return 'voice';
     }
   }
 
+  /// Parse a persisted `name` back into a [CaptureEventSource].
+  ///
+  /// Throws [ArgumentError] on unknown values — we prefer failing loud over
+  /// silently routing unrecognized sources to `notification`, which was the
+  /// old behaviour and hid diagnostic bugs.
   static CaptureEventSource fromName(String value) {
     switch (value) {
       case 'notification':
         return CaptureEventSource.notification;
       case 'sms':
         return CaptureEventSource.sms;
+      case 'api':
+        return CaptureEventSource.api;
+      case 'receiptImage':
+        return CaptureEventSource.receiptImage;
+      case 'voice':
+        return CaptureEventSource.voice;
       default:
-        return CaptureEventSource.notification;
+        throw ArgumentError('Unknown CaptureEventSource name: $value');
     }
   }
 }

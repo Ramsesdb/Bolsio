@@ -24,6 +24,9 @@ const List<String> _bdvPackageCandidates = [
 /// (returns `null`) — it's likely promotional or informational.
 class BdvNotifProfile implements BankProfile {
   @override
+  String get profileId => 'bdv_notif';
+
+  @override
   String get bankName => 'Banco de Venezuela';
 
   @override

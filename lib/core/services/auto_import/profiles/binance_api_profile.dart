@@ -14,6 +14,9 @@ import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
 /// [TransactionProposal]s.
 class BinanceApiProfile implements BankProfile {
   @override
+  String get profileId => 'binance_api';
+
+  @override
   String get bankName => 'Binance';
 
   @override

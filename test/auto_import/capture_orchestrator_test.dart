@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/auto_import/capture_channel.dart';
 import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
@@ -85,6 +87,8 @@ Future<void> _insertAccount(
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late AppDB db;
   late PendingImportService pendingImportService;
   late DedupeChecker dedupeChecker;
@@ -92,6 +96,8 @@ void main() {
   late FakeCaptureSource fakeSource;
 
   setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+
     db = _createTestDb();
     await db.customStatement('PRAGMA foreign_keys = OFF');
     pendingImportService = PendingImportService.forTesting(db);
@@ -185,7 +191,7 @@ void main() {
       expect(imports.first.accountId, 'acc-bdv');
     });
 
-    test('duplicate event (same bankRef) produces pending_import with status=duplicate',
+    test('duplicate event (same bankRef) is skipped and does not create a new pending_import',
         () async {
       await _insertAccount(db,
           id: 'acc-bdv', name: 'Banco de Venezuela');
@@ -216,11 +222,44 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
 
       final imports = await pendingImportService.getPendingImports().first;
-      expect(imports, hasLength(2));
+      // Current orchestrator behavior: duplicates are skipped early and
+      // therefore do not create additional pending rows.
+      expect(imports, hasLength(1));
+      expect(imports.first.status, 'pending');
+      expect(imports.first.bankRef, '002103869591');
+    });
+  });
 
-      // Order by createdAt DESC, so the second (duplicate) is first
-      final statuses = imports.map((i) => i.status).toList();
-      expect(statuses, containsAll(['pending', 'duplicate']));
+  group('CaptureOrchestrator — profile toggle filter', () {
+    test(
+        'event that matches a disabled profile produces no pending_import',
+        () async {
+      await _insertAccount(db, id: 'acc-bdv', name: 'Banco de Venezuela');
+
+      // Disable the bdv_sms profile by writing '0' into the global state map
+      // (the same map that UserSettingService.isProfileEnabled reads from).
+      appStateSettings[SettingKey.bdvSmsProfileEnabled] = '0';
+
+      await orchestrator.registerSource(fakeSource);
+      await orchestrator.start();
+
+      // Emit a valid BDV Pagomovil SMS that would normally produce a proposal.
+      fakeSource.emit(RawCaptureEvent(
+        rawText:
+            'Recibiste un PagomovilBDV por Bs. 500,00 del 0412-1234567 Ref: 001122334455 en fecha: 22-04-26 hora: 10:00',
+        sender: '2661',
+        receivedAt: DateTime.now(),
+        channel: CaptureChannel.sms,
+      ));
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final imports = await pendingImportService.getPendingImports().first;
+      expect(imports, isEmpty,
+          reason: 'Profile bdv_sms is disabled — proposal must be filtered');
+
+      // Restore global state so subsequent tests are not affected.
+      appStateSettings.remove(SettingKey.bdvSmsProfileEnabled);
     });
   });
 

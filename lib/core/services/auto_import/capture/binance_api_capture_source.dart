@@ -76,11 +76,19 @@ class BinanceApiCaptureSource implements CaptureSource {
       );
     }
 
-    // Immediate first poll
-    await poll();
-
-    // Schedule periodic polling
+    // Schedule periodic polling FIRST so the deferred-first-poll guard
+    // (`_timer == null` means "stopped") works correctly.
     _timer = Timer.periodic(pollInterval, (_) => poll());
+
+    // Defer the initial poll so the home dashboard can render first.
+    // The 7 sequential Binance HTTP calls would otherwise contend with
+    // main-isolate DB access during startup, causing ~2s of jank.
+    // If [stop] is called within this 5s window, _timer is nulled and
+    // the deferred poll becomes a no-op.
+    Future.delayed(const Duration(seconds: 5), () {
+      if (_timer == null) return; // stopped before first poll
+      poll();
+    });
   }
 
   @override

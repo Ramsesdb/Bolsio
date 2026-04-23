@@ -15,6 +15,9 @@ import 'bank_profile.dart';
 /// are silently rejected (returns `null`).
 class BdvSmsProfile implements BankProfile {
   @override
+  String get profileId => 'bdv_sms';
+
+  @override
   String get bankName => 'Banco de Venezuela';
 
   @override

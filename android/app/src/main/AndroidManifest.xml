@@ -59,12 +59,22 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- Background Service for auto-import (Tanda 4) -->
+        <!-- Background Service for auto-import (Tanda 4)
+             android:process=":capture" isolates the second FlutterEngine into
+             a dedicated OS process so loading libflutter.so a second time
+             (~295 ms on arm64) does NOT block the main UI thread during cold
+             start. Main process renders the first frame immediately; the
+             capture process spins up in parallel and owns the foreground
+             notification + SMS/API sources. Drift DB uses WAL (multi-process
+             safe readers) and notification capture is pinned to the main
+             isolate via applySettings(channels: {sms, api}) in the background
+             onStart, so no cross-process EventChannel coupling. -->
         <service
             android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:process=":capture"
             android:foregroundServiceType="specialUse"
             android:exported="false"
-            tools:replace="android:exported">
+            tools:replace="android:exported,android:process,android:foregroundServiceType">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="financial_transaction_monitoring"/>
@@ -81,6 +91,27 @@
                 <action android:name="android.service.notification.NotificationListenerService"/>
             </intent-filter>
         </service>
+
+        <!--
+          Explicit boot receiver to resurrect the capture foreground service
+          after a reboot. flutter_background_service's `autoStartOnBoot: true`
+          registers its own receiver inside the plugin module; on MIUI /
+          HyperOS that receiver is frequently disabled by OEM autostart
+          policies. Having our OWN receiver under the app's package
+          maximizes the chance that at least one survives OEM pruning.
+          Tanda listener-hardening / overnight-death fix.
+        -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:directBootAware="false">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

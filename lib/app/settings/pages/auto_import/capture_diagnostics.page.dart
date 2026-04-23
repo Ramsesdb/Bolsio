@@ -313,14 +313,27 @@ class _CaptureEventTile extends StatelessWidget {
 
   String _tr({required String es, required String en}) => isSpanish ? es : en;
 
+  String _labelForSource(CaptureEventSource source) {
+    switch (source) {
+      case CaptureEventSource.notification:
+        return _tr(es: 'Notificación', en: 'Notification');
+      case CaptureEventSource.sms:
+        return 'SMS';
+      case CaptureEventSource.api:
+        return 'API';
+      case CaptureEventSource.receiptImage:
+        return _tr(es: 'Recibo (imagen)', en: 'Receipt (image)');
+      case CaptureEventSource.voice:
+        return _tr(es: 'Voz', en: 'Voice');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final (icon, color) = _statusIconAndColor(event.status, theme);
 
-    final sourceLabel = event.source == CaptureEventSource.notification
-        ? _tr(es: 'Notificación', en: 'Notification')
-        : 'SMS';
+    final sourceLabel = _labelForSource(event.source);
     final from = event.packageName ?? event.sender ?? '-';
 
     final preview = _buildPreview(event);
@@ -547,7 +560,7 @@ class _HealthCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () => CaptureHealthMonitor.instance.forceCheck(),
+              onTap: () => _onRepair(context),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(
@@ -586,6 +599,21 @@ class _HealthCard extends StatelessWidget {
                             ),
                             style: TextStyle(color: fg, fontSize: 12.5),
                           ),
+                          ValueListenableBuilder<DateTime?>(
+                            valueListenable: CaptureHealthMonitor
+                                .instance.lastResubscribeAtNotifier,
+                            builder: (context, ts, _) {
+                              return Text(
+                                _tr(
+                                  es: 'Última reconexión automática: '
+                                      '${_fmt(ts)}',
+                                  en: 'Last auto-reconnect: '
+                                      '${_fmt(ts)}',
+                                ),
+                                style: TextStyle(color: fg, fontSize: 12.5),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -596,6 +624,35 @@ class _HealthCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Future<void> _onRepair(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(_tr(
+          es: 'Reparando listener...',
+          en: 'Repairing listener...',
+        )),
+        duration: const Duration(seconds: 30),
+      ),
+    );
+    final recovered = await CaptureHealthMonitor.instance.repairNow();
+    messenger.hideCurrentSnackBar();
+    if (!context.mounted) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          recovered
+              ? _tr(es: 'Listener reparado', en: 'Listener repaired')
+              : _tr(
+                  es: 'No se pudo recuperar, revisa permisos',
+                  en: "Couldn't recover — check permissions",
+                ),
+        ),
+        duration: const Duration(seconds: 3),
+      ),
     );
   }
 

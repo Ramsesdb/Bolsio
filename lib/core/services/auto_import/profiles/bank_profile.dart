@@ -35,6 +35,13 @@ class ParseResult {
 /// Profiles are registered in [bankProfilesRegistry] and matched by
 /// [channel] + [knownSenders].
 abstract class BankProfile {
+  /// Stable, snake_case profile identifier used to look up the
+  /// corresponding on/off toggle in [UserSettingService.isProfileEnabled].
+  ///
+  /// Must be unique within [bankProfilesRegistry]. Example: `bdv_sms`,
+  /// `bdv_notif`, `binance_api`.
+  String get profileId;
+
   /// Human-readable bank name (e.g. 'Banco de Venezuela').
   String get bankName;
 

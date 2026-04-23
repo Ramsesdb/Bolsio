@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
 import 'package:wallex/core/services/auto_import/capture/capture_event_log.dart';
 import 'package:wallex/core/services/auto_import/capture/models/capture_event.dart';
 import 'package:wallex/core/services/auto_import/capture/notification_capture_source.dart';
@@ -35,10 +36,9 @@ enum CaptureHealthStatus {
 
 /// How long without any inbound event before we consider the listener stale.
 ///
-/// 24 hours is a reasonable window for a bank notification listener — most
-/// users at least get a balance / push at that cadence. Set to 2 minutes
-/// temporarily for manual QA of the stale banner.
-const Duration kStaleEventThreshold = Duration(hours: 24);
+/// Kept shorter on Xiaomi/POCO-like devices to recover faster from
+/// notification-listener zombie states that can appear overnight.
+const Duration kStaleEventThreshold = Duration(hours: 8);
 
 /// Grace period after (re)starting the monitor during which we report
 /// [CaptureHealthStatus.healthy] even without any events yet.
@@ -49,6 +49,22 @@ const Duration kFreshStartGrace = Duration(minutes: 5);
 /// wakelock / battery usage inside the foreground service isolate.
 const Duration kMonitorInterval = Duration(seconds: 60);
 
+/// Periodic forced refresh of the native listener subscription even while
+/// healthy, to proactively heal silent OEM binder drops.
+const Duration kProactiveReconnectInterval = Duration(hours: 3);
+
+/// After this many *consecutive* reconnect failures we escalate to a full
+/// pipeline restart (stop + start of the background service) rather than
+/// retrying a soft re-subscribe. Set at 2 so the first reconnect attempt has
+/// already happened and a second one also failed — strong signal that the
+/// native binder is wedged and Dart-side retries won't fix it.
+const int kConsecutiveFailThresholdForRestart = 2;
+
+/// Throttle for pipeline restarts — do not bounce the foreground service more
+/// than once per hour even if we keep failing. Prevents a restart loop if the
+/// service itself fails to start (e.g. OEM killed the autostart permission).
+const Duration kMinPipelineRestartInterval = Duration(hours: 1);
+
 /// Singleton that watches the liveness of the capture pipeline and tries to
 /// auto-heal it by re-subscribing the native stream when needed.
 class CaptureHealthMonitor {
@@ -58,8 +74,12 @@ class CaptureHealthMonitor {
 
   static const String _prefsLastEventAt = 'capture_health_last_event_at';
   static const String _prefsLastSuccessAt = 'capture_health_last_success_at';
+  static const String _prefsLastResubscribeAt =
+      'capture_health_last_resubscribe_at';
   static const String _prefsLastBatteryWarnAt = 'capture_health_last_battery_warn_at';
   static const String _prefsLastFpPruneAt = 'capture_health_last_fp_prune_at';
+  static const String _prefsLastPipelineRestartAt =
+      'capture_health_last_pipeline_restart_at';
 
   /// Run fingerprint-registry pruning at most once every 24h so we don't
   /// spam SharedPreferences from every health tick.
@@ -80,6 +100,33 @@ class CaptureHealthMonitor {
   /// Last time the orchestrator produced a successful parsed proposal.
   DateTime? _lastSuccessAt;
   DateTime? get lastSuccessAt => _lastSuccessAt;
+
+  /// Last time we successfully forced a listener re-subscribe.
+  DateTime? _lastResubscribeAt;
+  DateTime? get lastResubscribeAt => _lastResubscribeAt;
+
+  /// Reactive copy of [lastResubscribeAt] so the UI can rebuild when the
+  /// monitor re-binds the native stream without having to poll every minute.
+  final ValueNotifier<DateTime?> _lastResubscribeAtNotifier =
+      ValueNotifier<DateTime?>(null);
+  ValueListenable<DateTime?> get lastResubscribeAtNotifier =>
+      _lastResubscribeAtNotifier;
+
+  /// Last time we escalated to a full pipeline restart (stop + start of the
+  /// foreground service). Null if we have never had to do one.
+  DateTime? _lastPipelineRestartAt;
+  DateTime? get lastPipelineRestartAt => _lastPipelineRestartAt;
+
+  final ValueNotifier<DateTime?> _lastPipelineRestartAtNotifier =
+      ValueNotifier<DateTime?>(null);
+  ValueListenable<DateTime?> get lastPipelineRestartAtNotifier =>
+      _lastPipelineRestartAtNotifier;
+
+  /// Count of consecutive reconnect attempts that did NOT result in an
+  /// `isSubscribed == true` listener. Reset to 0 on any success. When this
+  /// crosses [kConsecutiveFailThresholdForRestart] we escalate to a pipeline
+  /// restart (throttled by [kMinPipelineRestartInterval]).
+  int _consecutiveReconnectFailures = 0;
 
   /// Set once [start] has been called. Used to implement the fresh-start grace
   /// period for the [CaptureHealthStatus.healthy] verdict.
@@ -159,6 +206,81 @@ class CaptureHealthMonitor {
   /// UI when the user taps the health banner.
   Future<void> forceCheck() => _tick(forceResubscribe: true);
 
+  /// User-triggered deep repair cascade. Unlike [forceCheck] which is just an
+  /// on-demand version of the regular timer tick, this method escalates
+  /// proactively:
+  ///
+  ///   1. Re-run the [PermissionCoordinator] check (permissions may have
+  ///      been granted in system settings while the app was in background).
+  ///   2. Force re-subscribe the native notification stream.
+  ///   3. If the listener is still not subscribed, bounce the whole
+  ///      foreground service (stop + start). This is the nuclear option and
+  ///      is what the user actually wants when they tap "Repair listener"
+  ///      in despair.
+  ///
+  /// Returns `true` if, at the end of the cascade, the listener looks
+  /// healthy (subscribed + permissions OK). Returns `false` if something is
+  /// still wrong — the UI can use that to show a follow-up hint.
+  ///
+  /// Unlike the automatic escalation path, the pipeline-restart here is
+  /// NOT throttled: the user is explicitly asking for it, so their
+  /// intent overrides the 1 h guard.
+  Future<bool> repairNow() async {
+    final now = DateTime.now();
+    CaptureEventLog.instance.log(CaptureEvent(
+      id: generateUUID(),
+      timestamp: now,
+      source: CaptureEventSource.notification,
+      content: 'Reparación manual solicitada desde la UI',
+      status: CaptureEventStatus.systemEvent,
+      reason: 'manual-repair',
+    ));
+
+    // Step 1: re-check permissions.
+    try {
+      await PermissionCoordinator.instance.check();
+    } catch (e) {
+      debugPrint('CaptureHealthMonitor: repair permission check error: $e');
+    }
+
+    // Step 2: force re-subscribe. Reuses _tryResubscribe so the event log
+    // stays consistent and the consecutive-failure counter still tracks.
+    await _tryResubscribe(reason: 'manual-repair');
+
+    // Quick read of the resulting state so step 3 has accurate data.
+    final src = _notifSource;
+    final subscribed = src?.isSubscriptionAlive ?? false;
+
+    // Step 3: if still broken, bounce the whole service. Skip the 1h
+    // throttle because the user is driving.
+    if (!subscribed) {
+      CaptureEventLog.instance.log(CaptureEvent(
+        id: generateUUID(),
+        timestamp: DateTime.now(),
+        source: CaptureEventSource.notification,
+        content:
+            'Listener sigue desconectado tras reintento — reiniciando servicio',
+        status: CaptureEventStatus.systemEvent,
+        reason: 'manual-repair: escalada a stop+start',
+      ));
+      try {
+        await WallexBackgroundService.instance.stopService();
+        await WallexBackgroundService.instance.startService();
+        final stamp = DateTime.now();
+        _lastPipelineRestartAt = stamp;
+        _lastPipelineRestartAtNotifier.value = stamp;
+        unawaited(_persist(key: _prefsLastPipelineRestartAt, value: stamp));
+        _consecutiveReconnectFailures = 0;
+      } catch (e) {
+        debugPrint('CaptureHealthMonitor: manual repair restart error: $e');
+      }
+    }
+
+    // Final health snapshot.
+    await _tick();
+    return status == CaptureHealthStatus.healthy;
+  }
+
   Future<void> _hydrate() async {
     if (_hydrated) return;
     _hydrated = true;
@@ -166,11 +288,26 @@ class CaptureHealthMonitor {
       final prefs = await SharedPreferences.getInstance();
       final lastEventMs = prefs.getInt(_prefsLastEventAt);
       final lastSuccessMs = prefs.getInt(_prefsLastSuccessAt);
+      final lastResubscribeMs = prefs.getInt(_prefsLastResubscribeAt);
+      final lastPipelineRestartMs =
+          prefs.getInt(_prefsLastPipelineRestartAt);
       if (lastEventMs != null) {
         _lastEventAt = DateTime.fromMillisecondsSinceEpoch(lastEventMs);
       }
       if (lastSuccessMs != null) {
         _lastSuccessAt = DateTime.fromMillisecondsSinceEpoch(lastSuccessMs);
+      }
+      if (lastResubscribeMs != null) {
+        _lastResubscribeAt = DateTime.fromMillisecondsSinceEpoch(
+          lastResubscribeMs,
+        );
+        _lastResubscribeAtNotifier.value = _lastResubscribeAt;
+      }
+      if (lastPipelineRestartMs != null) {
+        _lastPipelineRestartAt = DateTime.fromMillisecondsSinceEpoch(
+          lastPipelineRestartMs,
+        );
+        _lastPipelineRestartAtNotifier.value = _lastPipelineRestartAt;
       }
     } catch (e) {
       debugPrint('CaptureHealthMonitor: hydrate error: $e');
@@ -231,10 +368,9 @@ class CaptureHealthMonitor {
 
       if (stale) {
         _setStatus(CaptureHealthStatus.stale);
-        // Preventive toggle: only if we had at least one healthy event before.
-        if (lastEvent != null || forceResubscribe) {
-          await _tryResubscribe(reason: 'stale');
-        }
+        // Always re-subscribe when stale. Requiring a previous event can trap
+        // us in a dead-on-arrival state on some OEMs.
+        await _tryResubscribe(reason: 'stale');
         return;
       }
 
@@ -242,6 +378,8 @@ class CaptureHealthMonitor {
 
       if (forceResubscribe) {
         await _tryResubscribe(reason: 'user-forced');
+      } else {
+        await _maybeProactiveResubscribe(now);
       }
 
       // Opportunistic daily chore: prune the fingerprint registry so it
@@ -269,6 +407,20 @@ class CaptureHealthMonitor {
     } catch (e) {
       debugPrint('CaptureHealthMonitor: fingerprint prune error: $e');
     }
+  }
+
+  Future<void> _maybeProactiveResubscribe(DateTime now) async {
+    // Avoid aggressive churn right after startup.
+    if (_startedAt != null && now.difference(_startedAt!) < kFreshStartGrace) {
+      return;
+    }
+
+    final last = _lastResubscribeAt;
+    if (last != null && now.difference(last) < kProactiveReconnectInterval) {
+      return;
+    }
+
+    await _tryResubscribe(reason: 'proactive-refresh');
   }
 
   Future<bool> _checkPermission() async {
@@ -328,13 +480,26 @@ class CaptureHealthMonitor {
   Future<void> _tryResubscribe({required String reason}) async {
     final src = _notifSource;
     if (src == null) return;
+    bool succeeded = false;
     try {
       await src.ensureSubscribed(forceReconnect: true);
+      // ensureSubscribed can silently return without flipping
+      // `isSubscriptionAlive` true on some OEMs where the native bind is
+      // wedged. Treat that as a failure for escalation purposes even though
+      // no exception was thrown.
+      succeeded = src.isSubscriptionAlive;
+      final now = DateTime.now();
+      _lastResubscribeAt = now;
+      _lastResubscribeAtNotifier.value = now;
+      unawaited(_persist(key: _prefsLastResubscribeAt, value: now));
       CaptureEventLog.instance.log(CaptureEvent(
         id: generateUUID(),
-        timestamp: DateTime.now(),
+        timestamp: now,
         source: CaptureEventSource.notification,
-        content: 'Health monitor reconectó listener (motivo: $reason)',
+        content: succeeded
+            ? 'Health monitor reconectó listener (motivo: $reason)'
+            : 'Reconexión de listener completó sin error pero '
+                'isSubscribed=false (motivo: $reason)',
         status: CaptureEventStatus.systemEvent,
         reason: 'Reintento automatico de suscripcion al stream nativo',
       ));
@@ -349,6 +514,75 @@ class CaptureHealthMonitor {
         reason: 'Excepcion en ensureSubscribed() (motivo: $reason)',
       ));
     }
+
+    if (succeeded) {
+      _consecutiveReconnectFailures = 0;
+      return;
+    }
+
+    _consecutiveReconnectFailures += 1;
+    if (_consecutiveReconnectFailures >= kConsecutiveFailThresholdForRestart) {
+      await _maybeRestartPipeline(
+        reason: 'pipeline-restart-after-$_consecutiveReconnectFailures-fails',
+      );
+    }
+  }
+
+  /// Escalation path: the soft re-subscribe cycle has failed repeatedly, so
+  /// bounce the whole foreground service. This makes the plugin re-create its
+  /// isolate + re-run `CaptureOrchestrator.applySettings()` from scratch,
+  /// which is the only way to recover when MIUI has suspended the native
+  /// binder at the OS level.
+  ///
+  /// Throttled by [kMinPipelineRestartInterval] so we can't end up in a
+  /// tight loop if the service itself can't be restarted (e.g. the OEM
+  /// autostart permission was revoked and stopService() + startService()
+  /// keeps returning immediately).
+  Future<void> _maybeRestartPipeline({required String reason}) async {
+    final now = DateTime.now();
+    final last = _lastPipelineRestartAt;
+    if (last != null &&
+        now.difference(last) < kMinPipelineRestartInterval) {
+      debugPrint(
+        'CaptureHealthMonitor: skip pipeline restart — throttled '
+        '(last=${last.toIso8601String()})',
+      );
+      return;
+    }
+
+    CaptureEventLog.instance.log(CaptureEvent(
+      id: generateUUID(),
+      timestamp: now,
+      source: CaptureEventSource.notification,
+      content:
+          'Reiniciando pipeline de captura tras fallos consecutivos ($reason)',
+      status: CaptureEventStatus.systemEvent,
+      reason: 'Escalada automatica: stopService() + startService()',
+    ));
+
+    try {
+      await WallexBackgroundService.instance.stopService();
+      await WallexBackgroundService.instance.startService();
+    } catch (e) {
+      debugPrint('CaptureHealthMonitor: pipeline restart error: $e');
+      CaptureEventLog.instance.log(CaptureEvent(
+        id: generateUUID(),
+        timestamp: DateTime.now(),
+        source: CaptureEventSource.notification,
+        content: 'Fallo al reiniciar pipeline: $e',
+        status: CaptureEventStatus.systemEvent,
+        reason: 'Excepcion en stopService()/startService()',
+      ));
+    }
+
+    // Update the timestamp regardless of outcome — the throttle must apply
+    // even to failed attempts so we don't hammer the plugin.
+    _lastPipelineRestartAt = now;
+    _lastPipelineRestartAtNotifier.value = now;
+    unawaited(_persist(key: _prefsLastPipelineRestartAt, value: now));
+
+    // Reset the counter so the next cycle is measured fresh.
+    _consecutiveReconnectFailures = 0;
   }
 
   void _recomputeStatus() {

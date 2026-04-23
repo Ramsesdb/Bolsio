@@ -380,13 +380,13 @@ class CaptureOrchestrator {
     }
 
     // Find matching profiles by channel + sender
-    final matchingProfiles = bankProfilesRegistry
+    final candidateProfiles = bankProfilesRegistry
         .where((profile) =>
             profile.channel == event.channel &&
             profile.knownSenders.contains(event.sender))
         .toList();
 
-    if (matchingProfiles.isEmpty) {
+    if (candidateProfiles.isEmpty) {
       final reason = event.channel == CaptureChannel.notification
           ? 'Package "${event.sender}" no tiene perfil en el registro'
           : 'Remitente "${event.sender}" no tiene perfil en el registro';
@@ -395,6 +395,29 @@ class CaptureOrchestrator {
         status: CaptureEventStatus.filteredOut,
         reason: reason,
       ));
+      return;
+    }
+
+    // Respect per-profile toggles from the auto-import settings UI. A profile
+    // whose toggle is OFF must not parse anything — we log a diagnostic so
+    // the user can see *why* a known sender was ignored.
+    final matchingProfiles = <BankProfile>[];
+    for (final profile in candidateProfiles) {
+      if (UserSettingService.instance.isProfileEnabled(profile.profileId)) {
+        matchingProfiles.add(profile);
+      } else {
+        _logDiagnostic(diagnosticBase.copyWith(
+          id: generateUUID(),
+          status: CaptureEventStatus.filteredOut,
+          reason:
+              'Perfil "${profile.bankName}" está desactivado en ajustes',
+          matchedProfile: profile.bankName,
+        ));
+      }
+    }
+
+    if (matchingProfiles.isEmpty) {
+      // Every candidate was disabled — nothing else to do.
       return;
     }
 
@@ -585,12 +608,29 @@ class CaptureOrchestrator {
       content = rawText.substring(newlineIdx + 1).trim();
     }
 
+    final CaptureEventSource source;
+    switch (event.channel) {
+      case CaptureChannel.notification:
+        source = CaptureEventSource.notification;
+        break;
+      case CaptureChannel.sms:
+        source = CaptureEventSource.sms;
+        break;
+      case CaptureChannel.api:
+        source = CaptureEventSource.api;
+        break;
+      case CaptureChannel.receiptImage:
+        source = CaptureEventSource.receiptImage;
+        break;
+      case CaptureChannel.voice:
+        source = CaptureEventSource.voice;
+        break;
+    }
+
     return CaptureEvent(
       id: generateUUID(),
       timestamp: event.receivedAt,
-      source: isNotif
-          ? CaptureEventSource.notification
-          : CaptureEventSource.sms,
+      source: source,
       packageName: isNotif ? event.sender : null,
       sender: isNotif ? null : event.sender,
       title: title,

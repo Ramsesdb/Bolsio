@@ -13,6 +13,7 @@ import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
 import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
 import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
 import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// Settings page for the auto-import feature.
@@ -58,15 +59,27 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
         appStateSettings[SettingKey.bdvSmsProfileEnabled] != '0';
     _bdvNotifProfileEnabled =
         appStateSettings[SettingKey.bdvNotifProfileEnabled] != '0';
+    // MIGRATION: this toggle used to live under SettingKey.binanceNotifProfileEnabled.
+    // That key was a misnomer — the profile is Binance API, not Binance notifications.
+    // We now read/write to `binanceApiProfileEnabled`. Users who had disabled the old
+    // key will have their Binance API profile re-enabled by default; they can flip it
+    // off again manually here. No automatic data migration is performed.
     _binanceApiProfileEnabled =
-        appStateSettings[SettingKey.binanceNotifProfileEnabled] != '0';
+        appStateSettings[SettingKey.binanceApiProfileEnabled] != '0';
   }
 
   Future<void> _checkPermissions() async {
     if (!kIsWeb && Platform.isAndroid) {
       try {
         _hasSmsPermission = await Permission.sms.isGranted;
-        _hasNotifPermission = await Permission.notification.isGranted;
+      } catch (_) {}
+      try {
+        // The notification-listener binding is the real signal we need for
+        // the push notifications channel — `Permission.notification` is only
+        // the POST_NOTIFICATIONS runtime permission and doesn't tell us
+        // whether the listener service is actually bound.
+        final permState = await PermissionCoordinator.instance.check();
+        _hasNotifPermission = permState.notificationListener;
       } catch (_) {}
     }
     try {
@@ -294,7 +307,7 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
               subtitle: const Text('Binance via API REST'),
               value: _binanceApiProfileEnabled,
               onChanged: (v) =>
-                  _saveSetting(SettingKey.binanceNotifProfileEnabled, v),
+                  _saveSetting(SettingKey.binanceApiProfileEnabled, v),
             ),
             ListTile(
               title: const Text('Zinli'),
@@ -467,23 +480,27 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
   }
 
   Future<void> _requestNotifPermission() async {
-    final status = await Permission.notification.request();
-    if (status.isGranted) {
-      _hasNotifPermission = true;
-      if (mounted) setState(() {});
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-                'Habilita el acceso a notificaciones en configuracion del sistema.'),
-            action: SnackBarAction(
-              label: 'Abrir',
-              onPressed: openAppSettings,
-            ),
+    // Request the notification-listener binding (real dependency for the
+    // notifications capture channel). Also fire the POST_NOTIFICATIONS
+    // runtime request so Android 13+ foreground notifications work.
+    try {
+      await PermissionCoordinator.instance.requestPostNotifications();
+      await PermissionCoordinator.instance.requestNotificationListener();
+    } catch (_) {}
+    final permState = await PermissionCoordinator.instance.check();
+    _hasNotifPermission = permState.notificationListener;
+    if (mounted) setState(() {});
+    if (!_hasNotifPermission && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              'Habilita el acceso a notificaciones en configuracion del sistema.'),
+          action: SnackBarAction(
+            label: 'Abrir',
+            onPressed: openAppSettings,
           ),
-        );
-      }
+        ),
+      );
     }
   }
 }
@@ -549,6 +566,21 @@ class _CaptureHealthBanner extends StatelessWidget {
                               ),
                             ),
                           ],
+                          const SizedBox(height: 2),
+                          ValueListenableBuilder<DateTime?>(
+                            valueListenable: CaptureHealthMonitor
+                                .instance.lastResubscribeAtNotifier,
+                            builder: (context, ts, _) {
+                              return Text(
+                                'Última reconexión automática: '
+                                '${ts == null ? 'nunca' : _relative(ts)}',
+                                style: TextStyle(
+                                  color: fg,
+                                  fontSize: 12.5,
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -576,12 +608,26 @@ class _CaptureHealthBanner extends StatelessWidget {
       case CaptureHealthStatus.stale:
       case CaptureHealthStatus.healthy:
       case CaptureHealthStatus.unknown:
-        await CaptureHealthMonitor.instance.forceCheck();
+        final messenger = ScaffoldMessenger.of(context);
+        // "In progress" snack — kept as indefinite so we can hide it
+        // ourselves when repairNow() returns.
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('Reparando listener...'),
+            duration: Duration(seconds: 30),
+          ),
+        );
+        final recovered = await CaptureHealthMonitor.instance.repairNow();
+        messenger.hideCurrentSnackBar();
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Reintentando suscripcion al listener...'),
-              duration: Duration(seconds: 2),
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                recovered
+                    ? 'Listener reparado'
+                    : 'No se pudo recuperar, revisa permisos',
+              ),
+              duration: const Duration(seconds: 3),
             ),
           );
         }
@@ -610,7 +656,7 @@ class _CaptureHealthBanner extends StatelessWidget {
           Colors.amber.shade50,
           Colors.amber.shade900,
           Icons.warning_amber_outlined,
-          'Sin eventos recientes (24h+)',
+          'Sin eventos recientes (${kStaleEventThreshold.inHours}h+)',
           'Puede estar bloqueado por el sistema. '
               'Toca para reintentar suscripcion.',
         );
