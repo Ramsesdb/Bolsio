@@ -46,6 +46,7 @@ class TranslationsDe extends Translations {
 	@override late final _TranslationsStatsDe stats = _TranslationsStatsDe._(_root);
 	@override late final _TranslationsIconSelectorDe icon_selector = _TranslationsIconSelectorDe._(_root);
 	@override late final _TranslationsTransactionDe transaction = _TranslationsTransactionDe._(_root);
+	@override late final _TranslationsAttachmentsDe attachments = _TranslationsAttachmentsDe._(_root);
 	@override late final _TranslationsTransferDe transfer = _TranslationsTransferDe._(_root);
 	@override late final _TranslationsRecurrentTransactionsDe recurrent_transactions = _TranslationsRecurrentTransactionsDe._(_root);
 	@override late final _TranslationsAccountDe account = _TranslationsAccountDe._(_root);
@@ -284,6 +285,24 @@ class _TranslationsTransactionDe extends TranslationsTransactionEn {
 	@override late final _TranslationsTransactionReversedDe reversed = _TranslationsTransactionReversedDe._(_root);
 	@override late final _TranslationsTransactionStatusDe status = _TranslationsTransactionStatusDe._(_root);
 	@override late final _TranslationsTransactionTypesDe types = _TranslationsTransactionTypesDe._(_root);
+	@override String get receipt_attached => 'Receipt attached';
+	@override String get view_receipt => 'View receipt';
+	@override late final _TranslationsTransactionReceiptImportDe receipt_import = _TranslationsTransactionReceiptImportDe._(_root);
+}
+
+// Path: attachments
+class _TranslationsAttachmentsDe extends TranslationsAttachmentsEn {
+	_TranslationsAttachmentsDe._(TranslationsDe root) : this._root = root, super.internal(root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get view => 'View attachment';
+	@override String get remove => 'Remove attachment';
+	@override String get replace => 'Replace';
+	@override String get upload_from_gallery => 'Upload from gallery';
+	@override String get upload_from_camera => 'Take photo';
+	@override String get empty_state => 'No attachments';
 }
 
 // Path: transfer
@@ -872,6 +891,26 @@ class _TranslationsTransactionTypesDe extends TranslationsTransactionTypesEn {
 		one: 'Überweisen',
 		other: 'Überweisungen',
 	);
+}
+
+// Path: transaction.receipt_import
+class _TranslationsTransactionReceiptImportDe extends TranslationsTransactionReceiptImportEn {
+	_TranslationsTransactionReceiptImportDe._(TranslationsDe root) : this._root = root, super.internal(root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get entry_gallery => 'From receipt (gallery)';
+	@override String get entry_camera => 'From receipt (camera)';
+	@override String get processing_ocr => 'Processing OCR...';
+	@override String get processing_ai => 'Processing AI...';
+	@override String get processing_done => 'Done';
+	@override String get review_title => 'Review receipt';
+	@override String get review_subtitle => 'Validate and edit fields before creating the transaction';
+	@override String get review_cta_continue => 'Continue';
+	@override String get review_cta_retry => 'Retry';
+	@override late final _TranslationsTransactionReceiptImportErrorDe error = _TranslationsTransactionReceiptImportErrorDe._(_root);
+	@override late final _TranslationsTransactionReceiptImportFieldDe field = _TranslationsTransactionReceiptImportFieldDe._(_root);
 }
 
 // Path: transfer.form
@@ -1633,6 +1672,35 @@ class _TranslationsTransactionFormValidatorsDe extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';
 	@override String get negative_transfer => 'Der Geldwert einer Überweisung darf nicht negativ sein';
 	@override String get transfer_between_same_accounts => 'Das Ursprungs- und das Zielkonto dürfen nicht identisch sein';
+}
+
+// Path: transaction.receipt_import.error
+class _TranslationsTransactionReceiptImportErrorDe extends TranslationsTransactionReceiptImportErrorEn {
+	_TranslationsTransactionReceiptImportErrorDe._(TranslationsDe root) : this._root = root, super.internal(root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get ocr_empty => 'No text was detected in the image';
+	@override String get ai_failed => 'AI processing failed, local extraction was used';
+	@override String get image_corrupt => 'The image appears to be corrupted';
+	@override String get no_amount => 'Could not detect an amount';
+	@override String get ambiguous_currency => 'Ambiguous currency, please review it before continuing';
+}
+
+// Path: transaction.receipt_import.field
+class _TranslationsTransactionReceiptImportFieldDe extends TranslationsTransactionReceiptImportFieldEn {
+	_TranslationsTransactionReceiptImportFieldDe._(TranslationsDe root) : this._root = root, super.internal(root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get amount => 'Amount';
+	@override String get currency => 'Currency';
+	@override String get date => 'Date';
+	@override String get type => 'Type';
+	@override String get counterparty => 'Counterparty';
+	@override String get reference => 'Reference';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2417,6 +2485,34 @@ extension on TranslationsDe {
 				one: 'Überweisen',
 				other: 'Überweisungen',
 			);
+		map['transaction.receipt_attached'] = 'Receipt attached';
+		map['transaction.view_receipt'] = 'View receipt';
+		map['transaction.receipt_import.entry_gallery'] = 'From receipt (gallery)';
+		map['transaction.receipt_import.entry_camera'] = 'From receipt (camera)';
+		map['transaction.receipt_import.processing_ocr'] = 'Processing OCR...';
+		map['transaction.receipt_import.processing_ai'] = 'Processing AI...';
+		map['transaction.receipt_import.processing_done'] = 'Done';
+		map['transaction.receipt_import.review_title'] = 'Review receipt';
+		map['transaction.receipt_import.review_subtitle'] = 'Validate and edit fields before creating the transaction';
+		map['transaction.receipt_import.review_cta_continue'] = 'Continue';
+		map['transaction.receipt_import.review_cta_retry'] = 'Retry';
+		map['transaction.receipt_import.error.ocr_empty'] = 'No text was detected in the image';
+		map['transaction.receipt_import.error.ai_failed'] = 'AI processing failed, local extraction was used';
+		map['transaction.receipt_import.error.image_corrupt'] = 'The image appears to be corrupted';
+		map['transaction.receipt_import.error.no_amount'] = 'Could not detect an amount';
+		map['transaction.receipt_import.error.ambiguous_currency'] = 'Ambiguous currency, please review it before continuing';
+		map['transaction.receipt_import.field.amount'] = 'Amount';
+		map['transaction.receipt_import.field.currency'] = 'Currency';
+		map['transaction.receipt_import.field.date'] = 'Date';
+		map['transaction.receipt_import.field.type'] = 'Type';
+		map['transaction.receipt_import.field.counterparty'] = 'Counterparty';
+		map['transaction.receipt_import.field.reference'] = 'Reference';
+		map['attachments.view'] = 'View attachment';
+		map['attachments.remove'] = 'Remove attachment';
+		map['attachments.replace'] = 'Replace';
+		map['attachments.upload_from_gallery'] = 'Upload from gallery';
+		map['attachments.upload_from_camera'] = 'Take photo';
+		map['attachments.empty_state'] = 'No attachments';
 		map['transfer.display'] = 'Überweisen';
 		map['transfer.transfers'] = 'Überweisungen';
 		map['transfer.transfer_to'] = ({required Object account}) => 'Überweisen an ${account}';

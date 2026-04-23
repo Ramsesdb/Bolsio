@@ -433,7 +433,43 @@
         "one": "Überweisen",
         "other": "Überweisungen"
       }
+    },
+    "receipt-attached": "Receipt attached",
+    "view-receipt": "View receipt",
+    "RECEIPT-IMPORT": {
+      "entry-gallery": "From receipt (gallery)",
+      "entry-camera": "From receipt (camera)",
+      "processing-ocr": "Processing OCR...",
+      "processing-ai": "Processing AI...",
+      "processing-done": "Done",
+      "review-title": "Review receipt",
+      "review-subtitle": "Validate and edit fields before creating the transaction",
+      "review-cta-continue": "Continue",
+      "review-cta-retry": "Retry",
+      "error": {
+        "ocr_empty": "No text was detected in the image",
+        "ai_failed": "AI processing failed, local extraction was used",
+        "image_corrupt": "The image appears to be corrupted",
+        "no_amount": "Could not detect an amount",
+        "ambiguous_currency": "Ambiguous currency, please review it before continuing"
+      },
+      "field": {
+        "amount": "Amount",
+        "currency": "Currency",
+        "date": "Date",
+        "type": "Type",
+        "counterparty": "Counterparty",
+        "reference": "Reference"
+      }
     }
+  },
+  "ATTACHMENTS": {
+    "view": "View attachment",
+    "remove": "Remove attachment",
+    "replace": "Replace",
+    "upload-from-gallery": "Upload from gallery",
+    "upload-from-camera": "Take photo",
+    "empty-state": "No attachments"
   },
   "TRANSFER": {
     "display": "Überweisen",
