@@ -204,7 +204,18 @@ class _FloatingAiSectionState extends State<_FloatingAiSection>
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    _fetchInsight();
+    // Defer the AI insight HTTP call: the first frame should NOT wait on
+    // NexusAI latency (~2s/call on MIUI cold start). Wait until after the
+    // first frame paints, then add a 5s delay so the rest of the app (DB
+    // streams, images, background service) has room to settle before we
+    // fire the insights request. Cancelled cleanly if the widget is
+    // disposed before the delay fires.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 5), () {
+        if (!mounted) return;
+        _fetchInsight();
+      });
+    });
   }
 
   Future<void> _fetchInsight() async {

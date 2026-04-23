@@ -235,7 +235,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       if (trCountAndBalance == null)
-                                        Text("XX Transactions"),
+                                        const SizedBox.shrink(),
                                       if (trCountAndBalance != null)
                                         Text.rich(
                                           TextSpan(

@@ -15,6 +15,7 @@ import 'package:wallex/core/extensions/color.extensions.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/extensions/string.extension.dart';
 import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:wallex/core/services/supported_icon/supported_icon_service.dart';
 import 'package:wallex/core/models/tags/tag.dart';
 import 'package:wallex/core/models/transaction/transaction.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
@@ -428,16 +429,17 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 if (transaction.isIncomeOrExpense)
                                   LabelValueInfoItem(
                                     value: buildInfoTileWithIconAndColor(
-                                      icon: transaction.category!.icon,
-                                      color:
-                                          ColorHex.get(
-                                            transaction.category!.color,
-                                          ).lighten(
-                                            isAppInDarkBrightness(context)
-                                                ? 0.5
-                                                : 0,
-                                          ),
-                                      data: transaction.category!.name,
+                                      icon: transaction.category?.icon ??
+                                          SupportedIconService
+                                              .instance.defaultSupportedIcon,
+                                      color: ColorHex.get(
+                                        transaction.category?.color ?? '737373',
+                                      ).lighten(
+                                        isAppInDarkBrightness(context)
+                                            ? 0.5
+                                            : 0,
+                                      ),
+                                      data: transaction.category?.name ?? '',
                                     ),
                                     label: t.general.category,
                                   ),

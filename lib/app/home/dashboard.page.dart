@@ -111,61 +111,67 @@ class _DashboardPageState extends State<DashboardPage> {
         .shareValue();
   }
 
+  /// Builds a per-account stream that emits the account's balance converted
+  /// to [toCurrencyCode]. Balance and exchange-rate are combined with
+  /// `combineLatest2` (orthogonal dimensions). Crucially, the rate stream is
+  /// subscribed to **once** per account for the lifetime of the outer
+  /// subscription — we do NOT regenerate it on every balance tick, which was
+  /// the cascade that pegged the CPU at cold start (rates write → watches
+  /// emit → switchMap re-created conversion streams → more watches → loop).
+  Stream<double> _perAccountConvertedStream(
+    Account account,
+    String toCurrencyCode,
+  ) {
+    final balanceStream = AccountService.instance.getAccountMoney(
+      account: account,
+      convertToPreferredCurrency: false,
+    );
+
+    if (account.currency.code == toCurrencyCode) {
+      return balanceStream;
+    }
+
+    // amount: 1 → pure rate stream, stable across balance changes.
+    final rateStream = ExchangeRateService.instance.calculateExchangeRate(
+      fromCurrency: account.currency.code,
+      toCurrency: toCurrencyCode,
+      source: _rateSource,
+    );
+
+    return Rx.combineLatest2<double, double?, double>(
+      balanceStream,
+      rateStream,
+      (balance, rate) => balance * (rate ?? 1),
+    );
+  }
+
   Stream<double> _getTotalBalanceStream() {
+    final preferredCurrencyCode =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
     return _visibleAccountsStream().switchMap<double>((accounts) {
           if (accounts.isEmpty) return Stream<double>.value(0);
 
-          final accountMoneyStreams = accounts
-              .map(
-                (account) => AccountService.instance.getAccountMoney(
-                  account: account,
-                  convertToPreferredCurrency: false,
-                ),
-              )
+          final perAccountStreams = accounts
+              .map((a) => _perAccountConvertedStream(a, preferredCurrencyCode))
               .toList();
 
-          final preferredCurrencyCode =
-              appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+          return Rx.combineLatestList<double>(perAccountStreams).map((values) {
+            final total = values.fold<double>(0, (sum, value) => sum + value);
 
-          return Rx.combineLatestList<double>(accountMoneyStreams).switchMap((
-            balances,
-          ) {
-            final convertedStreams = List.generate(accounts.length, (i) {
-              final account = accounts[i];
-              final balance = i < balances.length ? balances[i] : 0.0;
+            if (kDebugMode) {
+              final details = List.generate(accounts.length, (i) {
+                final account = accounts[i];
+                final converted = i < values.length ? values[i] : 0.0;
+                return '${account.name} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
+              }).join(' | ');
 
-              if (account.currency.code == preferredCurrencyCode) {
-                return Stream.value(balance);
-              }
+              debugPrint(
+                'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
+              );
+            }
 
-              return ExchangeRateService.instance
-                  .calculateExchangeRate(
-                    fromCurrency: account.currency.code,
-                    toCurrency: preferredCurrencyCode,
-                    amount: balance,
-                    source: _rateSource,
-                  )
-                  .map((v) => v ?? 0);
-            });
-
-            return Rx.combineLatestList<double>(convertedStreams).map((values) {
-              final total = values.fold<double>(0, (sum, value) => sum + value);
-
-              if (kDebugMode) {
-                final details = List.generate(accounts.length, (i) {
-                  final account = accounts[i];
-                  final rawBalance = i < balances.length ? balances[i] : 0.0;
-                  final converted = i < values.length ? values[i] : 0.0;
-                  return '${account.name}: ${rawBalance.toStringAsFixed(2)} ${account.currency.code} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
-                }).join(' | ');
-
-                debugPrint(
-                  'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
-                );
-              }
-
-              return total;
-            });
+            return total;
           });
         }).asBroadcastStream();
   }
@@ -174,40 +180,13 @@ class _DashboardPageState extends State<DashboardPage> {
     return _visibleAccountsStream().switchMap<double>((accounts) {
           if (accounts.isEmpty) return Stream<double>.value(0);
 
-          final accountMoneyStreams = accounts
-              .map(
-                (account) => AccountService.instance.getAccountMoney(
-                  account: account,
-                  convertToPreferredCurrency: false,
-                ),
-              )
+          final perAccountStreams = accounts
+              .map((a) => _perAccountConvertedStream(a, 'VES'))
               .toList();
 
-          return Rx.combineLatestList<double>(accountMoneyStreams).switchMap((
-            balances,
-          ) {
-            final convertedStreams = List.generate(accounts.length, (i) {
-              final account = accounts[i];
-              final balance = i < balances.length ? balances[i] : 0.0;
-
-              if (account.currency.code == 'VES') {
-                return Stream.value(balance);
-              }
-
-              return ExchangeRateService.instance
-                  .calculateExchangeRate(
-                    fromCurrency: account.currency.code,
-                    toCurrency: 'VES',
-                    amount: balance,
-                    source: _rateSource,
-                  )
-                  .map((v) => v ?? 0);
-            });
-
-            return Rx.combineLatestList<double>(
-              convertedStreams,
-            ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
-          });
+          return Rx.combineLatestList<double>(
+            perAccountStreams,
+          ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
         }).asBroadcastStream();
   }
 
@@ -242,49 +221,58 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButtonLocation: ExpandableFab.location,
       body: RefreshIndicator(
         onRefresh: _refreshData,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(bottom: 80),
-          child: Column(
-            children: [
-              // ── Big header (scrolls away naturally) ──
-              buildDashboadHeader(context, accountService),
+        // Single top-level subscription to the (now shared) visible-account-ids
+        // stream. Consumers below (header income/expense block, carousel,
+        // DashboardCards) receive `visibleIds` as a parameter instead of each
+        // subscribing independently — which previously caused 3+ parallel
+        // account queries on home dashboard cold start.
+        child: StreamBuilder<List<String>>(
+          stream: HiddenModeService.instance.visibleAccountIdsStream,
+          builder: (context, snapshot) {
+            final visibleIds = snapshot.data;
+            return SingleChildScrollView(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 80),
+              child: Column(
+                children: [
+                  // ── Big header (scrolls away naturally) ──
+                  buildDashboadHeader(context, accountService, visibleIds),
 
-              // Visibility-aware carousel: while Hidden Mode is locked the
-              // stream omits savings account ids, so the carousel hides them
-              // without having to know anything about the feature.
-              StreamBuilder<List<String>>(
-                stream: HiddenModeService.instance.visibleAccountIdsStream,
-                builder: (context, snapshot) {
-                  return HorizontalScrollableAccountList(
+                  // Visibility-aware carousel: when Hidden Mode is locked the
+                  // upstream stream omits savings account ids, so the carousel
+                  // hides them without having to know anything about the feature.
+                  HorizontalScrollableAccountList(
                     dateRangeService: dateRangeService,
-                    visibleAccountIds: snapshot.data,
-                  );
-                },
-              ),
+                    visibleAccountIds: visibleIds,
+                  ),
 
-              // ── Exchange Rates Card ──
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
-                child: _buildRatesCard(context),
-              ),
+                  // ── Exchange Rates Card ──
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
+                    child: _buildRatesCard(context),
+                  ),
 
-              // ── Stats Cards ──
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: DashboardCards(dateRangeService: dateRangeService),
-              ),
+                  // ── Stats Cards ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: DashboardCards(
+                      dateRangeService: dateRangeService,
+                      visibleIds: visibleIds,
+                    ),
+                  ),
 
-              if (kDebugMode)
-                TextButton(
-                  onPressed: () {
-                    RouteUtils.pushRoute(const DebugPage());
-                  },
-                  child: const Text('DEBUG PAGE'),
-                ),
-            ],
-          ),
+                  if (kDebugMode)
+                    TextButton(
+                      onPressed: () {
+                        RouteUtils.pushRoute(const DebugPage());
+                      },
+                      child: const Text('DEBUG PAGE'),
+                    ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -334,6 +322,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget buildDashboadHeader(
     BuildContext context,
     AccountService accountService,
+    List<String>? visibleIds,
   ) {
     final shouldHavePadding =
         !AppUtils.isDesktop && !AppUtils.isMobileLayout(context);
@@ -376,18 +365,18 @@ class _DashboardPageState extends State<DashboardPage> {
                   color: Colors.white.withValues(alpha: 0.15),
                 ),
                 const SizedBox(height: 8),
-                StreamBuilder<List<String>>(
-                  stream: HiddenModeService.instance.visibleAccountIdsStream,
-                  builder: (context, snapshot) {
+                Builder(
+                  builder: (context) {
                     final labelStyle = Theme.of(context).textTheme.labelMedium!
                         .copyWith(color: Colors.white.withValues(alpha: 0.7));
 
-                    // While Hidden Mode is locked this list excludes savings
-                    // account ids, so the income/expense totals are computed
-                    // without their transactions. When null (first frame)
-                    // fall back to unfiltered totals; the stream immediately
-                    // emits and re-renders.
-                    final visibleIds = snapshot.data;
+                    // `visibleIds` is pushed down from the single top-level
+                    // StreamBuilder on HiddenModeService.visibleAccountIdsStream
+                    // in `build()`. While Hidden Mode is locked the list
+                    // excludes savings account ids, so the income/expense
+                    // totals are computed without their transactions. When
+                    // null (first frame before the stream emits) fall back to
+                    // unfiltered totals; the parent rebuilds on emission.
                     final accountFilter = visibleIds == null
                         ? null
                         : TransactionFilterSet(accountsIDs: visibleIds);
