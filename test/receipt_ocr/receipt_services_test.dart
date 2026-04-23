@@ -51,6 +51,9 @@ class _CountingProfile extends BankProfile {
   TransactionProposal? result;
 
   @override
+  String get profileId => 'fake_counting';
+
+  @override
   String get bankName => 'Fake';
 
   @override

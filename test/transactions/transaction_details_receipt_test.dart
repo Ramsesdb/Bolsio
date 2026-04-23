@@ -177,7 +177,12 @@ void main() {
         TransactionDetailsPage(transaction: tx!, heroTag: null),
       ),
     );
-    await tester.pumpAndSettle();
+    // TransactionDetailsPage contains Drift watch-stream StreamBuilders
+    // (TransactionService, CurrencyService, ExchangeRateService) that never
+    // complete, so pumpAndSettle() would loop until the test timeout.
+    // pump(2s) is enough to let all FutureBuilders and the first stream events
+    // settle without blocking forever.
+    await tester.pump(const Duration(seconds: 2));
 
     final ctx = tester.element(find.byType(TransactionDetailsPage));
     final t = Translations.of(ctx);
@@ -199,7 +204,7 @@ void main() {
         TransactionDetailsPage(transaction: tx, heroTag: null),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.text(t.transaction.view_receipt), findsOneWidget);
   });
