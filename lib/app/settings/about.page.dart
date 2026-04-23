@@ -102,7 +102,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/enrique-lozano/Monekin/graphs/contributors',
+                  'https://github.com/Ramsesdb/Wallex/graphs/contributors',
                 );
               },
             ),
@@ -111,14 +111,14 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/enrique-lozano/Monekin/issues/new/choose',
+                  'https://github.com/Ramsesdb/Wallex/issues/new/choose',
                 );
               },
             ),
             buildLinkItem(
               t.more.about_us.project.contact,
               onTap: () {
-                openExternalURL(context, 'mailto:lozin.technologies@gmail.com');
+                openExternalURL(context, 'mailto:ramsesdavidba@gmail.com');
               },
             ),
             createListSeparator(context, t.more.about_us.legal.display),
@@ -127,7 +127,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md',
+                  'https://github.com/Ramsesdb/Wallex/blob/main/docs/TERMS_OF_USE.md',
                 );
               },
             ),
@@ -136,7 +136,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md',
+                  'https://github.com/Ramsesdb/Wallex/blob/main/docs/PRIVACY_POLICY.md',
                 );
               },
             ),

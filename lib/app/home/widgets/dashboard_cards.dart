@@ -19,14 +19,35 @@ import 'package:wallex/core/presentation/app_colors.dart';
 import 'package:wallex/core/services/finance_health_service.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
-class DashboardCards extends StatelessWidget {
-  const DashboardCards({super.key, required this.dateRangeService});
+class DashboardCards extends StatefulWidget {
+  const DashboardCards({
+    super.key,
+    required this.dateRangeService,
+    this.visibleIds,
+  });
 
   final DatePeriodState dateRangeService;
+
+  /// Visible account ids passed down from the dashboard's single
+  /// `HiddenModeService.visibleAccountIdsStream` subscription. When `null`
+  /// (first frame before the stream emits) the finance-health filter does
+  /// not constrain accounts and will re-render once the parent emits.
+  final List<String>? visibleIds;
+
+  @override
+  State<DashboardCards> createState() => _DashboardCardsState();
+}
+
+class _DashboardCardsState extends State<DashboardCards> {
+  /// Memoized instance so rebuilds driven by parent stream emissions don't
+  /// allocate a fresh `FinanceHealthService` every frame.
+  late final FinanceHealthService _healthService = FinanceHealthService();
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final dateRangeService = widget.dateRangeService;
+    final visibleIds = widget.visibleIds;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -139,11 +160,20 @@ class DashboardCards extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Respect Hidden Mode: while locked, `visibleIds` excludes
+              // savings account ids, so the health score is computed
+              // **without** those accounts' transactions — matching the
+              // stats-page semantics (see [FinanceHealthDetails] call site
+              // in stats_page.dart). When Hidden Mode is disabled the list
+              // contains every id and the filter is a no-op. `visibleIds`
+              // is passed down from the dashboard's single upstream
+              // subscription to avoid re-running the combineLatest pipeline.
               StreamBuilder(
-                stream: FinanceHealthService().getHealthyValue(
+                stream: _healthService.getHealthyValue(
                   filters: TransactionFilterSet(
                     minDate: dateRangeService.startDate,
                     maxDate: dateRangeService.endDate,
+                    accountsIDs: visibleIds,
                   ),
                 ),
                 builder: (context, snapshot) {
