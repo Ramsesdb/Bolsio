@@ -77,3 +77,17 @@ android/.kotlin/
 *.xlsx
 *.xls
 generate_excel_*.py
+
+# Local diff/analysis script outputs
+common_files.txt
+diff_code.txt
+diff_files.txt
+diff_numstat.csv
+head_files.txt
+head_only_code.txt
+head_only_files.txt
+module_lines.csv
+same_code.txt
+same_files.txt
+up_files.txt
+up_only_files.txt
