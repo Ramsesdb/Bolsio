@@ -13,7 +13,7 @@ import 'package:wallex/app/auth/welcome_screen.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:wallex/app/layout/window_bar.dart';
-import 'package:wallex/app/onboarding/intro.page.dart';
+import 'package:wallex/app/onboarding/onboarding.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
@@ -34,6 +34,7 @@ import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
 import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
 import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
@@ -44,6 +45,13 @@ import 'package:wallex/core/database/app_db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Hold the native splash screen while Vulkan shader pipelines compile.
+  // The first 3 frames take ~85 ms each on cold start; deferring the first
+  // frame keeps the OS splash visible until we explicitly call allowFirstFrame,
+  // so the user never sees the shader-compilation jank.
+  // This only runs on cold start — warm/hot restarts do not re-enter main().
+  WidgetsBinding.instance.deferFirstFrame();
 
   // Initialize settings first so we can check the sync flag
   await UserSettingService.instance.initializeGlobalStateMap();
@@ -70,6 +78,19 @@ void main() async {
   unawaited(
     _migrateInvertedExchangeRates().catchError((e) {
       debugPrint('Error running exchange rate migration: $e');
+    }),
+  );
+  // -----------------------------------------
+
+  // --- One-time migration: purge legacy color/type fields on Firestore
+  // subcategory docs (see cleanupLegacySubcategoryFields for context).
+  // Fire-and-forget: gated internally by a SharedPreferences flag, no-ops
+  // when Firebase sync is not initialized or the user is signed out.
+  unawaited(
+    FirebaseSyncService.instance.cleanupLegacySubcategoryFields().catchError((
+      e,
+    ) {
+      debugPrint('Error running Firebase subcategory cleanup: $e');
     }),
   );
   // -----------------------------------------
@@ -114,36 +135,48 @@ void main() async {
   );
   // -----------------------------------------
 
-  // --- Background service + Auto-import bootstrap ---
+  // --- Background service + Auto-import bootstrap (DEFERRED) ---
+  // The background service spins up a second Flutter engine (second
+  // libflutter.so load) which visibly delays the cold-start frame on MIUI /
+  // HyperOS. We configure + start the service 3s AFTER the first frame so the
+  // main UI renders immediately; the service is not needed to paint the UI.
   final autoImportEnabled =
       appStateSettings[SettingKey.autoImportEnabled] == '1';
 
-  // Initialize background service (configures but does not start)
-  unawaited(
-    WallexBackgroundService.instance
-        .initialize()
-        .then((_) async {
-          if (autoImportEnabled) {
-            // Wire the orchestrator's callback so the main isolate can show
-            // local notifications when a new pending import arrives.
-            CaptureOrchestrator.instance.onNewPendingImport =
-                (int count) async {
-                  await LocalNotificationService.instance
-                      .showNewPendingNotification(count);
-                };
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    Future.delayed(const Duration(seconds: 8), () {
+      unawaited(
+        WallexBackgroundService.instance
+            .initialize()
+            .then((_) async {
+              if (autoImportEnabled) {
+                // Wire the orchestrator's callback so the main isolate can show
+                // local notifications when a new pending import arrives.
+                CaptureOrchestrator.instance.onNewPendingImport =
+                    (int count) async {
+                      await LocalNotificationService.instance
+                          .showNewPendingNotification(count);
+                    };
 
-            // Start the background service — it handles ALL capture sources
-            // (SMS, notifications, Binance API) and keeps capture alive when
-            // the app is closed.  The notification_listener_service plugin uses
-            // a BroadcastReceiver that works in both isolates; running it only
-            // in the background service avoids duplicate captures.
-            await WallexBackgroundService.instance.startService();
-          }
-        })
-        .catchError((e) {
-          debugPrint('Auto-import bootstrap error: $e');
-        }),
-  );
+                // Start the background service — it handles ALL capture sources
+                // (SMS, notifications, Binance API) and keeps capture alive when
+                // the app is closed.  The notification_listener_service plugin uses
+                // a BroadcastReceiver that works in both isolates; running it only
+                // in the background service avoids duplicate captures.
+                await WallexBackgroundService.instance.startService();
+              }
+            })
+            .catchError((e) {
+              debugPrint('Auto-import bootstrap error: $e');
+            })
+            .whenComplete(() {
+              // Mark startup window as closed so the lifecycle watchdog
+              // is now allowed to trigger background service restarts.
+              appStateKey.currentState?._startupComplete = true;
+            }),
+      );
+    });
+  });
   // ---------------------------------------------------
 
   // Initial state: ON if the user asked us to start locked, OR if the user
@@ -207,6 +240,11 @@ void main() async {
 
   debugPaintSizeEnabled = false;
   runApp(InitializeApp(key: appStateKey));
+
+  // Release the native splash after 1.5 s to let Vulkan shader pipelines
+  // finish compiling in the background before the user sees interactive UI.
+  await Future.delayed(const Duration(milliseconds: 1500));
+  WidgetsBinding.instance.allowFirstFrame();
 }
 
 // ignore: library_private_types_in_public_api
@@ -219,8 +257,15 @@ class InitializeApp extends StatefulWidget {
   State<InitializeApp> createState() => _InitializeAppState();
 }
 
-class _InitializeAppState extends State<InitializeApp> {
+class _InitializeAppState extends State<InitializeApp>
+    with WidgetsBindingObserver {
   bool _biometricPassed = false;
+
+  /// Guard for the lifecycle watchdog: true once the post-frame background
+  /// service startup path has fired. Prevents the watchdog from doubling up
+  /// with the deferred post-frame startup during the first few seconds of
+  /// a cold start.
+  bool _startupComplete = false;
 
   @override
   void initState() {
@@ -228,13 +273,54 @@ class _InitializeAppState extends State<InitializeApp> {
     // HiddenModeService.init() is awaited in main() before runApp so the
     // lock state is authoritative by the first frame. Here we only hook the
     // lifecycle observer so the app re-locks when it goes to background.
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(HiddenModeService.instance);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     WidgetsBinding.instance.removeObserver(HiddenModeService.instance);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Only run the watchdog after the post-frame startup path has completed.
+      // During the first few seconds of a cold start the deferred
+      // addPostFrameCallback path is already scheduling the service; firing
+      // again here would cause a double-start race.
+      if (!_startupComplete) return;
+      unawaited(_ensureAutoImportServiceHealthy());
+    }
+  }
+
+  Future<void> _ensureAutoImportServiceHealthy() async {
+    final autoImportEnabled =
+        appStateSettings[SettingKey.autoImportEnabled] == '1';
+    final isAndroid =
+        !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+    if (!autoImportEnabled || !isAndroid) return;
+
+    try {
+      await WallexBackgroundService.instance.initialize();
+      final isRunning = await WallexBackgroundService.instance.isRunning();
+
+      if (!isRunning) {
+        await WallexBackgroundService.instance.startService();
+        debugPrint(
+          'AutoImport watchdog: background service was down on resume and was restarted',
+        );
+      } else {
+        // Cheap liveness poke: triggers an immediate health tick + optional
+        // re-subscribe if the listener drifted into stale/zombie state.
+        await CaptureHealthMonitor.instance.forceCheck();
+      }
+    } catch (e) {
+      debugPrint('AutoImport watchdog: resume health check failed: $e');
+    }
   }
 
   void refreshAppState() {
@@ -430,7 +516,7 @@ class MaterialAppContainer extends StatelessWidget {
 ///
 /// Flow:
 /// 1. If not onboarded → WelcomeScreen (first run)
-/// 2. If onboarded but introSeen is false → IntroPage (currency/category setup)
+/// 2. If onboarded but introSeen is false → OnboardingPage (currency/category setup)
 /// 3. Otherwise → PageSwitcher (main app)
 ///
 /// Firebase sync is triggered in the background only when enabled + logged in.
@@ -493,7 +579,7 @@ class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          widget.introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
+          widget.introSeen ? PageSwitcher(key: tabsPageKey) : const OnboardingPage(),
         ),
       ),
     );
