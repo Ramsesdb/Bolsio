@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
@@ -223,6 +224,25 @@ class FirebaseSyncService {
     }
   }
 
+  /// Delete an account from Firestore
+  Future<void> deleteAccount(String accountId) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/accounts')
+          .doc(accountId)
+          .delete();
+
+      Logger.printDebug(
+        'FirebaseSyncService: Deleted account $accountId',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error deleting account: $e');
+    }
+  }
+
   /// Push a category to Firestore.
   ///
   /// Defensive normalization: the DB CHECK constraint enforces XOR between
@@ -259,6 +279,25 @@ class FirebaseSyncService {
       Logger.printDebug('FirebaseSyncService: Pushed category ${category.id}');
     } catch (e) {
       Logger.printDebug('FirebaseSyncService: Error pushing category: $e');
+    }
+  }
+
+  /// Delete a category from Firestore
+  Future<void> deleteCategory(String categoryId) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/categories')
+          .doc(categoryId)
+          .delete();
+
+      Logger.printDebug(
+        'FirebaseSyncService: Deleted category $categoryId',
+      );
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error deleting category: $e');
     }
   }
 
@@ -693,6 +732,49 @@ class FirebaseSyncService {
     }
   }
 
+  /// Push a single tag to Firestore (matches the doc shape written by
+  /// [pushTags]).
+  Future<void> pushTag(TagInDB tag) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/tags')
+          .doc(tag.id)
+          .set({
+            'id': tag.id,
+            'name': tag.name,
+            'color': tag.color,
+            'displayOrder': tag.displayOrder,
+            'description': tag.description,
+            'updatedAt': FieldValue.serverTimestamp(),
+            'updatedBy': currentUserEmail,
+          });
+
+      Logger.printDebug('FirebaseSyncService: Pushed tag ${tag.id}');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing tag: $e');
+    }
+  }
+
+  /// Delete a tag from Firestore
+  Future<void> deleteTag(String tagId) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/tags')
+          .doc(tagId)
+          .delete();
+
+      Logger.printDebug('FirebaseSyncService: Deleted tag $tagId');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error deleting tag: $e');
+    }
+  }
+
   Future<int> _pullTags() async {
     final snapshot =
         await _firestore!.collection('$_userBasePath/tags').get();
@@ -851,6 +933,113 @@ class FirebaseSyncService {
       Logger.printDebug('FirebaseSyncService: Pushed exchange rate ${rate.id}');
     } catch (e) {
       Logger.printDebug('FirebaseSyncService: Error pushing exchange rate: $e');
+    }
+  }
+
+  // ============================================================
+  // BUDGETS & GOALS - per-entity sync (push + delete only for now)
+  // ============================================================
+
+  /// Push a budget to Firestore. The referenced [TransactionFilterSetInDB]
+  /// is denormalized into `trFilters` so the doc is self-contained — the
+  /// transaction_filter_sets table is an internal join table and is not
+  /// synced on its own.
+  Future<void> pushBudget(
+    BudgetInDB budget, {
+    TransactionFilterSetInDB? trFilters,
+  }) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      final docRef = _firestore!
+          .collection('$_userBasePath/budgets')
+          .doc(budget.id);
+
+      await docRef.set({
+        'id': budget.id,
+        'name': budget.name,
+        'limitAmount': budget.limitAmount,
+        'intervalPeriod': budget.intervalPeriod?.name,
+        'startDate': budget.startDate?.toIso8601String(),
+        'endDate': budget.endDate?.toIso8601String(),
+        'filterID': budget.filterID,
+        if (trFilters != null) 'trFilters': trFilters.toJson(),
+        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedBy': currentUserEmail,
+      });
+
+      Logger.printDebug('FirebaseSyncService: Pushed budget ${budget.id}');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing budget: $e');
+    }
+  }
+
+  /// Delete a budget from Firestore
+  Future<void> deleteBudget(String budgetId) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/budgets')
+          .doc(budgetId)
+          .delete();
+
+      Logger.printDebug('FirebaseSyncService: Deleted budget $budgetId');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error deleting budget: $e');
+    }
+  }
+
+  /// Push a goal to Firestore. See [pushBudget] for the filter-set
+  /// denormalization rationale.
+  Future<void> pushGoal(
+    GoalInDB goal, {
+    TransactionFilterSetInDB? trFilters,
+  }) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      final docRef = _firestore!
+          .collection('$_userBasePath/goals')
+          .doc(goal.id);
+
+      await docRef.set({
+        'id': goal.id,
+        'name': goal.name,
+        'amount': goal.amount,
+        'initialAmount': goal.initialAmount,
+        'startDate': goal.startDate.toIso8601String(),
+        'endDate': goal.endDate?.toIso8601String(),
+        'type': goal.type.name,
+        'filterID': goal.filterID,
+        if (trFilters != null) 'trFilters': trFilters.toJson(),
+        'updatedAt': FieldValue.serverTimestamp(),
+        'updatedBy': currentUserEmail,
+      });
+
+      Logger.printDebug('FirebaseSyncService: Pushed goal ${goal.id}');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error pushing goal: $e');
+    }
+  }
+
+  /// Delete a goal from Firestore
+  Future<void> deleteGoal(String goalId) async {
+    if (!_initialized || _firestore == null) return;
+    try {
+      if (currentUserId == null) return;
+
+      await _firestore!
+          .collection('$_userBasePath/goals')
+          .doc(goalId)
+          .delete();
+
+      Logger.printDebug('FirebaseSyncService: Deleted goal $goalId');
+    } catch (e) {
+      Logger.printDebug('FirebaseSyncService: Error deleting goal: $e');
     }
   }
 
@@ -1560,10 +1749,19 @@ class FirebaseSyncService {
           ),
         );
       }
-      // TODO(firebase-cleanup): Existing Firestore docs from prior buggy
-      // pushes may still contain non-null color/type on subcategories.
-      // A one-time cleanup script should iterate users/{uid}/categories
-      // and unset `color` + `type` wherever `parentCategoryID` is non-null.
+      // Existing Firestore docs from prior buggy pushes may still contain
+      // non-null color/type on subcategories. The one-time cleanup runs at
+      // app startup via [cleanupLegacySubcategoryFields]; we invoke it here
+      // again (idempotent — SharedPreferences flag short-circuits after the
+      // first run) so that a full-push right after enabling sync cannot leave
+      // the collection in a dirty state.
+      try {
+        await cleanupLegacySubcategoryFields();
+      } catch (e) {
+        Logger.printDebug(
+          'FirebaseSyncService: Error in cleanupLegacySubcategoryFields: $e',
+        );
+      }
 
       // Push tags BEFORE transactions/transactionTags. Failures here must
       // not tumble the rest of the sync — mirror the avatar/credentials
@@ -1633,6 +1831,118 @@ class FirebaseSyncService {
       Logger.printDebug('FirebaseSyncService: Full data push completed!');
     } catch (e) {
       Logger.printDebug('FirebaseSyncService: Error in full push: $e');
+    }
+  }
+
+  // ============================================================
+  // ONE-TIME MIGRATIONS
+  // ============================================================
+
+  /// SharedPreferences flag key for the subcategory-cleanup migration.
+  /// Bump the `v1` suffix if the migration logic ever needs to re-run.
+  static const String _legacySubcategoryCleanupKey =
+      'migration_firebase_cleanup_subcategory_color_type_v1';
+
+  /// One-time migration: remove `color` and `type` fields from Firestore
+  /// category docs that represent subcategories (i.e. `parentCategoryID`
+  /// is non-null).
+  ///
+  /// ### Why this exists
+  /// An earlier version of [pushCategory]/[_pushFullData] pushed
+  /// [Category] objects whose `color`/`type` getters fell back to the
+  /// parent category's values when the subcategory's own columns were
+  /// null. As a result, subcategory docs in Firestore ended up with
+  /// non-null `color` and `type`, violating the XOR CHECK constraint
+  /// (`parentCategoryID` XOR (`color`, `type`)) on the local DB when
+  /// those docs were pulled back down.
+  ///
+  /// [pushCategory] and [_pullCategories] already normalize defensively
+  /// so new writes and new pulls are safe, but the stale docs sitting
+  /// in Firestore continue to be bad data. This migration reaches into
+  /// the user's `users/{uid}/categories` collection and unsets the two
+  /// fields on every subcategory doc.
+  ///
+  /// ### Guarantees
+  /// - Runs at most once per device (tracked via SharedPreferences flag
+  ///   [_legacySubcategoryCleanupKey]).
+  /// - No-op when sync is not initialized or the user is signed out.
+  /// - Never throws: all errors are swallowed and logged.
+  /// - Idempotent: calling it after a successful run is a cheap flag
+  ///   check that returns immediately.
+  Future<void> cleanupLegacySubcategoryFields() async {
+    if (!_initialized || _firestore == null) return;
+
+    final uid = currentUserId;
+    if (uid == null) return;
+
+    SharedPreferences? prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } catch (e) {
+      Logger.printDebug(
+        'FirebaseSyncService: cleanupLegacySubcategoryFields: '
+        'SharedPreferences unavailable: $e',
+      );
+      return;
+    }
+
+    if (prefs.getBool(_legacySubcategoryCleanupKey) == true) {
+      return; // Already migrated on this device.
+    }
+
+    try {
+      final snapshot = await _firestore!
+          .collection('$_userBasePath/categories')
+          .get();
+
+      int cleaned = 0;
+      int skipped = 0;
+
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+
+        final parentId = data['parentCategoryID'];
+        final hasParent = parentId != null && (parentId as String).isNotEmpty;
+        if (!hasParent) {
+          skipped++;
+          continue; // Main category — color/type MUST stay.
+        }
+
+        final hasColor = data.containsKey('color') && data['color'] != null;
+        final hasType = data.containsKey('type') && data['type'] != null;
+        if (!hasColor && !hasType) {
+          skipped++;
+          continue; // Already clean.
+        }
+
+        try {
+          await doc.reference.update({
+            if (hasColor) 'color': FieldValue.delete(),
+            if (hasType) 'type': FieldValue.delete(),
+            'updatedAt': FieldValue.serverTimestamp(),
+            'updatedBy': currentUserEmail,
+          });
+          cleaned++;
+        } catch (e) {
+          Logger.printDebug(
+            'FirebaseSyncService: cleanupLegacySubcategoryFields: '
+            'failed to clean ${doc.id}: $e',
+          );
+        }
+
+        await Future.delayed(Duration.zero); // yield to UI
+      }
+
+      await prefs.setBool(_legacySubcategoryCleanupKey, true);
+      Logger.printDebug(
+        'FirebaseSyncService: cleanupLegacySubcategoryFields done '
+        '(cleaned=$cleaned, skipped=$skipped)',
+      );
+    } catch (e) {
+      // Do NOT set the flag — let the next startup retry.
+      Logger.printDebug(
+        'FirebaseSyncService: cleanupLegacySubcategoryFields failed: $e',
+      );
     }
   }
 }
