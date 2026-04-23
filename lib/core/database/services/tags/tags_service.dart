@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/models/tags/tag.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 
 class TagService {
   final AppDB db;
@@ -8,16 +11,23 @@ class TagService {
   TagService._(this.db);
   static final TagService instance = TagService._(AppDB.instance);
 
-  Future<int> insertTag(TagInDB tag) {
-    return db.into(db.tags).insert(tag);
+  Future<int> insertTag(TagInDB tag) async {
+    final toReturn = await db.into(db.tags).insert(tag);
+    unawaited(FirebaseSyncService.instance.pushTag(tag));
+    return toReturn;
   }
 
-  Future<bool> updateTag(TagInDB tag) {
-    return db.update(db.tags).replace(tag);
+  Future<bool> updateTag(TagInDB tag) async {
+    final toReturn = await db.update(db.tags).replace(tag);
+    unawaited(FirebaseSyncService.instance.pushTag(tag));
+    return toReturn;
   }
 
-  Future<int> deleteTag(String tagId) {
-    return (db.delete(db.tags)..where((tbl) => tbl.id.equals(tagId))).go();
+  Future<int> deleteTag(String tagId) async {
+    final toReturn =
+        await (db.delete(db.tags)..where((tbl) => tbl.id.equals(tagId))).go();
+    unawaited(FirebaseSyncService.instance.deleteTag(tagId));
+    return toReturn;
   }
 
   Future<void> linkTagsToTransaction({

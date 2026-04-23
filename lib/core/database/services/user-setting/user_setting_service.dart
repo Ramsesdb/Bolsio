@@ -80,9 +80,6 @@ enum SettingKey {
   /// Whether the BDV notification bank profile is active. '1' (default) = enabled, '0' = disabled.
   bdvNotifProfileEnabled,
 
-  /// Whether the Binance notification bank profile is active. '1' (default) = enabled, '0' = disabled.
-  binanceNotifProfileEnabled,
-
   /// Whether the Zinli notification bank profile is active. '1' (default) = enabled, '0' = disabled.
   zinliNotifProfileEnabled,
 
@@ -164,5 +161,36 @@ class UserSettingService
           ..where((tbl) => tbl.settingKey.equalsValue(settingKey)))
         .map((e) => e.settingValue)
         .watchSingleOrNull();
+  }
+
+  /// Resolve the on/off toggle for the bank profile identified by [profileId].
+  ///
+  /// Profile IDs are stable, underscore-snake-case identifiers that each
+  /// [BankProfile] advertises (e.g. `bdv_sms`, `bdv_notif`, `binance_api`).
+  /// Unknown profile IDs are treated as enabled — this is the safer default
+  /// for new profiles added to the registry before a matching [SettingKey]
+  /// is introduced.
+  ///
+  /// Toggle default is ON: missing/`null`/anything-other-than `'0'` == true.
+  bool isProfileEnabled(String profileId) {
+    final SettingKey? key;
+    switch (profileId) {
+      case 'bdv_sms':
+        key = SettingKey.bdvSmsProfileEnabled;
+        break;
+      case 'bdv_notif':
+        key = SettingKey.bdvNotifProfileEnabled;
+        break;
+      case 'binance_api':
+        key = SettingKey.binanceApiProfileEnabled;
+        break;
+      case 'zinli_notif':
+        key = SettingKey.zinliNotifProfileEnabled;
+        break;
+      default:
+        key = null;
+    }
+    if (key == null) return true;
+    return appStateSettings[key] != '0';
   }
 }

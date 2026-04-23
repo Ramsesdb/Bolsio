@@ -32,10 +32,12 @@ class AccountService {
     return toReturn;
   }
 
-  Future<int> deleteAccount(String accountId) {
-    return (db.delete(
+  Future<int> deleteAccount(String accountId) async {
+    final toReturn = await (db.delete(
       db.accounts,
     )..where((tbl) => tbl.id.equals(accountId))).go();
+    unawaited(FirebaseSyncService.instance.deleteAccount(accountId));
+    return toReturn;
   }
 
   Stream<List<Account>> getAccounts({
@@ -62,27 +64,48 @@ class AccountService {
     ).map((res) => res.firstOrNull);
   }
 
-  String _joinAccountAndRate(DateTime? date, {String columnName = 'excRate', String? rateSource}) =>
-      '''
-    LEFT JOIN
-      (
-          SELECT e1.currencyCode,
-                 e1.exchangeRate
-            FROM exchangeRates e1
-            WHERE e1.id = (
-              SELECT e2.id FROM exchangeRates e2
-              WHERE e2.currencyCode = e1.currencyCode
-                AND e2.date = (
-                  SELECT MAX(e3.date) FROM exchangeRates e3
-                  WHERE e3.currencyCode = e1.currencyCode
-                  ${date != null ? 'AND e3.date <= ?' : ''}
-                )
-              ORDER BY CASE WHEN e2.source = ? THEN 0 ELSE 1 END
-              LIMIT 1
-            )
-      )
-      AS $columnName ON accounts.currencyId = $columnName.currencyCode
+  /// Build a CTE + JOIN pair that exposes the latest exchange rate per
+  /// currency, preferring the [rateSource] when multiple rates share the same
+  /// date. Replaces the legacy triple-nested correlated subquery (O(n×m))
+  /// with a single pass over `exchangeRates` using `ROW_NUMBER()` (O(n+m)).
+  ///
+  /// The returned [withClause] must be prepended to the full SQL **once**,
+  /// before `SELECT`. The [joinClause] uses a plain `LEFT JOIN latestRates …`.
+  ///
+  /// Parameter ordering (CRITICAL): `?` placeholders bind in textual order
+  /// across the final SQL string, so callers MUST put the CTE variables at
+  /// the very start of their `variables:` list — `rateSource` first, then
+  /// `date` if provided.
+  ({String withClause, String joinClause}) _latestRatesCte({
+    required DateTime? date,
+    String columnName = 'excRate',
+  }) {
+    final withClause =
+        '''
+    WITH latestRates AS (
+      SELECT currencyCode, exchangeRate FROM (
+        SELECT
+          er.currencyCode,
+          er.exchangeRate,
+          ROW_NUMBER() OVER (
+            PARTITION BY er.currencyCode
+            ORDER BY er.date DESC,
+              CASE WHEN er.source = ? THEN 0 ELSE 1 END,
+              er.id
+          ) AS rn
+        FROM exchangeRates er
+        ${date != null ? 'WHERE unixepoch(er.date) <= unixepoch(?)' : ''}
+      ) WHERE rn = 1
+    )
     ''';
+
+    final joinClause =
+        '''
+    LEFT JOIN latestRates AS $columnName ON accounts.currencyId = $columnName.currencyCode
+    ''';
+
+    return (withClause: withClause, joinClause: joinClause);
+  }
 
   /// Get the amount of money that an account has in a certain period of time,
   /// specified in the [date] param. If the [date] param is null, it will return
@@ -144,10 +167,17 @@ class AccountService {
     final rateSource =
         appStateSettings[SettingKey.preferredRateSource] ?? 'bcv';
 
+    // Build the latest-rates CTE once; its `?` placeholders bind in textual
+    // order so they MUST come first in the `variables:` list below.
+    final cte = convertToPreferredCurrency
+        ? _latestRatesCte(date: date)
+        : null;
+
     // Get the accounts initial balance (converted to the preferred currency if necessary)
     final initialBalanceQuery = db
         .customSelect(
           """
+          ${cte?.withClause ?? ''}
           SELECT COALESCE(
             SUM(
               CASE WHEN accounts.date > ? THEN 0
@@ -158,7 +188,7 @@ class AccountService {
           , 0)
           AS balance
           FROM accounts
-              ${convertToPreferredCurrency ? _joinAccountAndRate(date, rateSource: rateSource) : ''}
+              ${cte?.joinClause ?? ''}
               ${accountIds != null ? 'WHERE accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''}
           """,
           readsFrom: {
@@ -167,13 +197,17 @@ class AccountService {
             if (convertToPreferredCurrency) db.exchangeRates,
           },
           variables: [
+            // CTE parameters MUST come first (textual order of `?` in SQL):
+            //   1. rateSource            → `CASE WHEN er.source = ?`
+            //   2. useDate (only when date != null) → `unixepoch(er.date) <= unixepoch(?)`
+            if (convertToPreferredCurrency)
+              Variable.withString(rateSource),
+            if (convertToPreferredCurrency && date != null)
+              Variable.withDateTime(useDate),
+            // Main query parameters:
             Variable.withDateTime(useDate),
             if (convertToPreferredCurrency)
               Variable.withString(preferredCurrency),
-            if (convertToPreferredCurrency && date != null)
-              Variable.withDateTime(useDate),
-            if (convertToPreferredCurrency)
-              Variable.withString(rateSource),
             if (accountIds != null)
               for (final id in accountIds) Variable.withString(id),
           ],
@@ -291,11 +325,17 @@ class AccountService {
     final rateSource =
         appStateSettings[SettingKey.preferredRateSource] ?? 'bcv';
 
+    // No date cutoff for the preview, so the CTE only binds `rateSource`.
+    final cte = convertToPreferredCurrency
+        ? _latestRatesCte(date: null)
+        : null;
+
     // Mirror of [getAccountsMoney]'s initial-balance query, restricted to
     // the single account being previewed.
     final initialBalanceQuery = db
         .customSelect(
           '''
+          ${cte?.withClause ?? ''}
           SELECT COALESCE(
             SUM(
               CASE WHEN accounts.date > ? THEN 0
@@ -306,7 +346,7 @@ class AccountService {
           , 0)
           AS balance
           FROM accounts
-              ${convertToPreferredCurrency ? _joinAccountAndRate(null, rateSource: rateSource) : ''}
+              ${cte?.joinClause ?? ''}
               WHERE accounts.id = ?
           ''',
           readsFrom: {
@@ -315,10 +355,15 @@ class AccountService {
             if (convertToPreferredCurrency) db.exchangeRates,
           },
           variables: [
+            // CTE parameters MUST come first (textual order of `?` in SQL):
+            //   1. rateSource → `CASE WHEN er.source = ?`
+            //   (no date cutoff in preview, so no second CTE binding)
+            if (convertToPreferredCurrency)
+              Variable.withString(rateSource),
+            // Main query parameters:
             Variable.withDateTime(useDate),
             if (convertToPreferredCurrency)
               Variable.withString(preferredCurrency),
-            if (convertToPreferredCurrency) Variable.withString(rateSource),
             Variable.withString(accountId),
           ],
         )

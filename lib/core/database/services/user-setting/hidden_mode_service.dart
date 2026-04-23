@@ -76,6 +76,10 @@ class HiddenModeService with WidgetsBindingObserver {
   /// Synchronous view of the current locked state (defaults to `true`).
   bool get isLocked => _isLockedController.value;
 
+  /// Cached shared stream; built lazily on first access so tests that replace
+  /// [_accountService] via [forTesting] get the injected instance.
+  Stream<List<String>>? _visibleAccountIdsStream;
+
   /// IDs of the accounts that should be visible at any given moment.
   ///
   /// - Locked  → every [AccountType.normal] account id.
@@ -83,17 +87,25 @@ class HiddenModeService with WidgetsBindingObserver {
   ///
   /// Emits distinct values only so downstream queries are not re-fired on
   /// spurious ticks.
+  ///
+  /// Shared via [shareValue] so every dashboard subscriber (total balance,
+  /// income/expense cards, carousel, finance-health) reuses the same upstream
+  /// `Rx.combineLatest2` + `AccountService.getAccounts()` pipeline instead of
+  /// firing one parallel account query per subscriber at startup.
   Stream<List<String>> get visibleAccountIdsStream {
-    return Rx.combineLatest2<bool, List<Account>, List<String>>(
-      isLockedStream,
-      _accountService.getAccounts(),
-      (locked, accounts) {
-        final filtered = locked
-            ? accounts.where((a) => a.type != AccountType.saving)
-            : accounts;
-        return filtered.map((a) => a.id).toList(growable: false);
-      },
-    ).distinct(_listEquals);
+    return _visibleAccountIdsStream ??= Rx.combineLatest2<bool, List<Account>,
+            List<String>>(
+          isLockedStream,
+          _accountService.getAccounts(),
+          (locked, accounts) {
+            final filtered = locked
+                ? accounts.where((a) => a.type != AccountType.saving)
+                : accounts;
+            return filtered.map((a) => a.id).toList(growable: false);
+          },
+        )
+        .distinct(_listEquals)
+        .shareValue();
   }
 
   static bool _listEquals(List<String> a, List<String> b) {

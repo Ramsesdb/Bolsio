@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/models/goal/goal.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 
 class GoalService {
   final AppDB db;
@@ -8,33 +11,32 @@ class GoalService {
   GoalService._(this.db);
   static final GoalService instance = GoalService._(AppDB.instance);
 
-  Future<bool> insertGoal(Goal goal) {
-    return db.transaction(() async {
-      await db
-          .into(db.transactionFilterSets)
-          .insert(goal.trFilters.toDBModel(id: goal.filterID));
+  Future<bool> insertGoal(Goal goal) async {
+    final goalInDb = GoalInDB(
+      id: goal.id,
+      name: goal.name,
+      amount: goal.amount,
+      initialAmount: goal.initialAmount,
+      type: goal.type,
+      startDate: goal.startDate,
+      endDate: goal.endDate,
+      filterID: goal.filterID,
+    );
+    final trFiltersInDb = goal.trFilters.toDBModel(id: goal.filterID);
 
-      await db
-          .into(db.goals)
-          .insert(
-            GoalInDB(
-              id: goal.id,
-              name: goal.name,
-              amount: goal.amount,
-              initialAmount: goal.initialAmount,
-              type: goal.type,
-              startDate: goal.startDate,
-              endDate: goal.endDate,
-              filterID: goal.filterID,
-            ),
-          );
-
+    final toReturn = await db.transaction(() async {
+      await db.into(db.transactionFilterSets).insert(trFiltersInDb);
+      await db.into(db.goals).insert(goalInDb);
       return true;
     });
+
+    unawaited(FirebaseSyncService.instance
+        .pushGoal(goalInDb, trFilters: trFiltersInDb));
+    return toReturn;
   }
 
-  Future<bool> deleteGoal(String id) {
-    return db.transaction(() async {
+  Future<bool> deleteGoal(String id) async {
+    final toReturn = await db.transaction(() async {
       // Delete the filter first:
       final goalToDelete = await (db.select(
         db.goals,
@@ -52,6 +54,11 @@ class GoalService {
 
       return true;
     });
+
+    if (toReturn) {
+      unawaited(FirebaseSyncService.instance.deleteGoal(id));
+    }
+    return toReturn;
   }
 
   Future<bool> updateGoal(Goal goal) {

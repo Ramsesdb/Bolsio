@@ -14,9 +14,13 @@ import 'package:wallex/core/utils/uuid.dart';
 class PersonalVESeeder {
   /// Run the full seed: accounts, categories, and tags.
   ///
+  /// [selectedBankIds] controls which optional bank accounts are created.
+  /// Accounts for "Efectivo Bs" and "Efectivo USD" are always created.
+  /// Pass an empty list to create only the always-on accounts.
+  ///
   /// Safe to call multiple times — if accounts already exist the method
   /// returns immediately without inserting anything.
-  static Future<void> seedAll() async {
+  static Future<void> seedAll({List<String> selectedBankIds = const []}) async {
     final db = AppDB.instance;
 
     // ── Idempotency guard ───────────────────────────────────────────────
@@ -31,7 +35,7 @@ class PersonalVESeeder {
 
     Logger.printDebug('[PersonalVESeeder] Starting personal VE seed...');
 
-    await _seedAccounts();
+    await _seedAccounts(selectedBankIds: selectedBankIds);
     await _seedCategories();
     await _seedTags();
 
@@ -54,7 +58,17 @@ class PersonalVESeeder {
   /// Seed accounts + categories + tags, then apply Ramses's real balances.
   /// Used after Google sign-in when email matches.
   static Future<void> seedAllWithBalances() async {
-    await seedAll();
+    // Seed all known accounts for the balance-restoration path.
+    await seedAll(
+      selectedBankIds: const [
+        'bdv',
+        'binance',
+        'bnc',
+        'banplus',
+        'provincial',
+        'zinli',
+      ],
+    );
 
     final db = AppDB.instance;
     for (final entry in _ramseBalances.entries) {
@@ -73,15 +87,25 @@ class PersonalVESeeder {
   // Accounts
   // ====================================================================
 
-  static Future<void> _seedAccounts() async {
+  // Maps onboarding bank IDs to their seeded AccountInDB definitions.
+  // Only banks in [selectedBankIds] will be created (plus always-on accounts).
+  static Future<void> _seedAccounts({
+    required List<String> selectedBankIds,
+  }) async {
     final now = DateTime.now();
+    final selected = selectedBankIds.toSet();
 
-    // iconId values come from the supported_icons list (SVG assets).
-    // 'account_balance' → generic bank icon (scope: money)
-    // 'wallet'          → cash/wallet icon  (scope: money)
-    // 'savings'         → piggy-bank icon   (scope: money)
-    // 'universal_currency_alt' → multi-currency icon (scope: money)
-    final accounts = <AccountInDB>[
+    // ── Optional bank accounts (created only if their ID is selected) ───
+
+    /// Helper to conditionally add a bank account.
+    final optionalAccounts = <AccountInDB>[];
+
+    void addIfSelected(String id, AccountInDB account) {
+      if (selected.contains(id)) optionalAccounts.add(account);
+    }
+
+    addIfSelected(
+      'bdv',
       AccountInDB(
         id: generateUUID(),
         name: 'Banco de Venezuela',
@@ -91,8 +115,11 @@ class PersonalVESeeder {
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: '1A237E', // dark blue – BDV brand
+        color: '1A237E',
       ),
+    );
+    addIfSelected(
+      'bdv',
       AccountInDB(
         id: generateUUID(),
         name: 'Banco de Venezuela USD',
@@ -102,109 +129,205 @@ class PersonalVESeeder {
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: '1A237E', // dark blue – BDV brand
+        color: '1A237E',
       ),
+    );
+    addIfSelected(
+      'banesco',
       AccountInDB(
         id: generateUUID(),
-        name: 'Binance',
+        name: 'Banesco',
         displayOrder: 3,
         type: AccountType.normal,
-        currencyId: 'USD',
+        currencyId: 'VES',
         iniValue: 0,
         date: now,
-        iconId: 'universal_currency_alt',
-        color: 'F9A825', // Binance yellow
+        iconId: 'account_balance',
+        color: '003087',
       ),
+    );
+    addIfSelected(
+      'mercantil',
       AccountInDB(
         id: generateUUID(),
-        name: 'Banco Nacional de Credito #1',
+        name: 'Mercantil',
         displayOrder: 4,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: '00838F', // teal – BNC brand
+        color: 'B71C1C',
       ),
+    );
+    addIfSelected(
+      'provincial',
       AccountInDB(
         id: generateUUID(),
-        name: 'Banco Nacional de Credito #2',
+        name: 'Provincial',
         displayOrder: 5,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: '00695C', // dark teal
+        color: '2E7D32',
       ),
+    );
+    addIfSelected(
+      'bnc',
       AccountInDB(
         id: generateUUID(),
-        name: 'Banplus',
+        name: 'Banco Nacional de Credito #1',
         displayOrder: 6,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: 'EF6C00', // orange – Banplus brand
+        color: '00838F',
       ),
+    );
+    addIfSelected(
+      'bnc',
       AccountInDB(
         id: generateUUID(),
-        name: 'Provincial',
+        name: 'Banco Nacional de Credito #2',
         displayOrder: 7,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
         date: now,
         iconId: 'account_balance',
-        color: '2E7D32', // green – Provincial brand
+        color: '00695C',
       ),
+    );
+    addIfSelected(
+      'banplus',
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Banplus',
+        displayOrder: 8,
+        type: AccountType.normal,
+        currencyId: 'VES',
+        iniValue: 0,
+        date: now,
+        iconId: 'account_balance',
+        color: 'EF6C00',
+      ),
+    );
+    addIfSelected(
+      'bicentenario',
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Bicentenario',
+        displayOrder: 9,
+        type: AccountType.normal,
+        currencyId: 'VES',
+        iniValue: 0,
+        date: now,
+        iconId: 'account_balance',
+        color: 'C62828',
+      ),
+    );
+    addIfSelected(
+      'bancamiga',
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Bancamiga',
+        displayOrder: 10,
+        type: AccountType.normal,
+        currencyId: 'VES',
+        iniValue: 0,
+        date: now,
+        iconId: 'account_balance',
+        color: '6A1B9A',
+      ),
+    );
+    addIfSelected(
+      'binance',
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Binance',
+        displayOrder: 11,
+        type: AccountType.normal,
+        currencyId: 'USD',
+        iniValue: 0,
+        date: now,
+        iconId: 'universal_currency_alt',
+        color: 'F3BA2F',
+      ),
+    );
+    addIfSelected(
+      'zinli',
       AccountInDB(
         id: generateUUID(),
         name: 'Zinli',
-        displayOrder: 8,
+        displayOrder: 12,
         type: AccountType.normal,
         currencyId: 'USD',
         iniValue: 0,
         date: now,
         iconId: 'credit_card',
-        color: '6A1B9A', // purple – Zinli brand
+        color: '6A1B9A',
       ),
+    );
+    addIfSelected(
+      'reserve',
       AccountInDB(
         id: generateUUID(),
-        name: 'Ahorro Efectivo USD',
-        displayOrder: 9,
-        type: AccountType.saving,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        description: 'Ahorro en efectivo fisico USD. No tocar.',
-        iconId: 'savings',
-        color: '0277BD', // light blue
-      ),
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Efectivo USD',
-        displayOrder: 10,
+        name: 'Reserve',
+        displayOrder: 13,
         type: AccountType.normal,
         currencyId: 'USD',
         iniValue: 0,
         date: now,
         iconId: 'wallet',
-        color: '388E3C', // green
+        color: '1565C0',
+      ),
+    );
+    addIfSelected(
+      'paypal',
+      AccountInDB(
+        id: generateUUID(),
+        name: 'PayPal',
+        displayOrder: 14,
+        type: AccountType.normal,
+        currencyId: 'USD',
+        iniValue: 0,
+        date: now,
+        iconId: 'payment',
+        color: '003087',
+      ),
+    );
+
+    // ── Always-on accounts ──────────────────────────────────────────────
+    final alwaysOnAccounts = <AccountInDB>[
+      AccountInDB(
+        id: generateUUID(),
+        name: 'Efectivo USD',
+        displayOrder: 20,
+        type: AccountType.normal,
+        currencyId: 'USD',
+        iniValue: 0,
+        date: now,
+        iconId: 'wallet',
+        color: '388E3C',
       ),
       AccountInDB(
         id: generateUUID(),
         name: 'Efectivo Bs',
-        displayOrder: 11,
+        displayOrder: 21,
         type: AccountType.normal,
         currencyId: 'VES',
         iniValue: 0,
         date: now,
         iconId: 'wallet',
-        color: '795548', // brown
+        color: '795548',
       ),
     ];
+
+    final accounts = [...optionalAccounts, ...alwaysOnAccounts];
 
     for (final acc in accounts) {
       await AccountService.instance.insertAccount(acc);

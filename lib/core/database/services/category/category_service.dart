@@ -29,10 +29,12 @@ class CategoryService {
     return toReturn;
   }
 
-  Future<int> deleteCategory(String categoryId) {
-    return (db.delete(
+  Future<int> deleteCategory(String categoryId) async {
+    final toReturn = await (db.delete(
       db.categories,
     )..where((tbl) => tbl.id.equals(categoryId))).go();
+    unawaited(FirebaseSyncService.instance.deleteCategory(categoryId));
+    return toReturn;
   }
 
   Stream<List<Category>> getCategories({

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/models/budget/budget.dart';
+import 'package:wallex/core/services/firebase_sync_service.dart';
 
 class BudgetServive {
   final AppDB db;
@@ -8,32 +11,31 @@ class BudgetServive {
   BudgetServive._(this.db);
   static final BudgetServive instance = BudgetServive._(AppDB.instance);
 
-  Future<bool> insertBudget(Budget budget) {
-    return db.transaction(() async {
-      await db
-          .into(db.transactionFilterSets)
-          .insert(budget.trFilters.toDBModel(id: budget.filterID));
+  Future<bool> insertBudget(Budget budget) async {
+    final budgetInDb = BudgetInDB(
+      id: budget.id,
+      name: budget.name,
+      limitAmount: budget.limitAmount,
+      intervalPeriod: budget.intervalPeriod,
+      startDate: budget.startDate,
+      endDate: budget.endDate,
+      filterID: budget.filterID,
+    );
+    final trFiltersInDb = budget.trFilters.toDBModel(id: budget.filterID);
 
-      await db
-          .into(db.budgets)
-          .insert(
-            BudgetInDB(
-              id: budget.id,
-              name: budget.name,
-              limitAmount: budget.limitAmount,
-              intervalPeriod: budget.intervalPeriod,
-              startDate: budget.startDate,
-              endDate: budget.endDate,
-              filterID: budget.filterID,
-            ),
-          );
-
+    final toReturn = await db.transaction(() async {
+      await db.into(db.transactionFilterSets).insert(trFiltersInDb);
+      await db.into(db.budgets).insert(budgetInDb);
       return true;
     });
+
+    unawaited(FirebaseSyncService.instance
+        .pushBudget(budgetInDb, trFilters: trFiltersInDb));
+    return toReturn;
   }
 
-  Future<bool> deleteBudget(String id) {
-    return db.transaction(() async {
+  Future<bool> deleteBudget(String id) async {
+    final toReturn = await db.transaction(() async {
       // Delete the filter first:
       final budgetToDelete = await (db.select(
         db.budgets,
@@ -51,6 +53,11 @@ class BudgetServive {
 
       return true;
     });
+
+    if (toReturn) {
+      unawaited(FirebaseSyncService.instance.deleteBudget(id));
+    }
+    return toReturn;
   }
 
   Future<bool> updateBudget(Budget budget) {

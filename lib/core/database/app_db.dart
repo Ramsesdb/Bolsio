@@ -95,7 +95,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 26;
+  int get schemaVersion => 27;
 
   @override
   MigrationStrategy get migration {
@@ -114,7 +114,7 @@ class AppDB extends _$AppDB {
 
           try {
             final initialDbSeedersStatements = [
-              settingsInitialSeedSQL,
+              await settingsInitialSeedSQL(),
               appDataInitialSeedSQL(schemaVersion),
             ];
 
@@ -174,6 +174,7 @@ LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
     return NativeDatabase.createBackgroundConnection(
       file,
       logStatements: logStatements,
+      setup: (rawDb) => rawDb.execute('PRAGMA busy_timeout = 5000;'),
     );
   });
 }
@@ -194,9 +195,74 @@ LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
 ///
 /// Returns a list of individual SQL statements.
 List<String> splitSQLStatements(String sqliteStr) {
-  return sqliteStr
-      .split(RegExp(r';\s'))
-      .map((e) => e.trim())
-      .where((e) => e.isNotEmpty)
-      .toList();
+  final statements = <String>[];
+  final buffer = StringBuffer();
+  var inLineComment = false;
+  var inBlockComment = false;
+  var inSingleQuote = false;
+  var inDoubleQuote = false;
+
+  for (var i = 0; i < sqliteStr.length; i++) {
+    final ch = sqliteStr[i];
+    final next = i + 1 < sqliteStr.length ? sqliteStr[i + 1] : '';
+
+    if (inLineComment) {
+      buffer.write(ch);
+      if (ch == '\n') inLineComment = false;
+      continue;
+    }
+    if (inBlockComment) {
+      buffer.write(ch);
+      if (ch == '*' && next == '/') {
+        buffer.write(next);
+        i++;
+        inBlockComment = false;
+      }
+      continue;
+    }
+    if (inSingleQuote) {
+      buffer.write(ch);
+      if (ch == "'") inSingleQuote = false;
+      continue;
+    }
+    if (inDoubleQuote) {
+      buffer.write(ch);
+      if (ch == '"') inDoubleQuote = false;
+      continue;
+    }
+
+    if (ch == '-' && next == '-') {
+      inLineComment = true;
+      buffer.write(ch);
+      continue;
+    }
+    if (ch == '/' && next == '*') {
+      inBlockComment = true;
+      buffer.write(ch);
+      continue;
+    }
+    if (ch == "'") {
+      inSingleQuote = true;
+      buffer.write(ch);
+      continue;
+    }
+    if (ch == '"') {
+      inDoubleQuote = true;
+      buffer.write(ch);
+      continue;
+    }
+
+    if (ch == ';') {
+      final stmt = buffer.toString().trim();
+      if (stmt.isNotEmpty) statements.add(stmt);
+      buffer.clear();
+      continue;
+    }
+
+    buffer.write(ch);
+  }
+
+  final tail = buffer.toString().trim();
+  if (tail.isNotEmpty) statements.add(tail);
+  return statements;
 }
