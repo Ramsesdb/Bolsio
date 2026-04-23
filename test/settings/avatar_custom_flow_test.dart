@@ -134,7 +134,11 @@ void main() {
     await tester.pumpWidget(
       _wrap(const UserAvatarDisplay(avatar: 'man')),
     );
-    await tester.pumpAndSettle();
+    // UserAvatarDisplay uses FutureBuilder + Image.file. The image decode
+    // pipeline schedules additional frames that prevent pumpAndSettle from
+    // ever draining the frame queue, causing a ~112s hang. pump(2s) is
+    // sufficient for both FutureBuilders and Image decode to complete.
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.byType(UserAvatar), findsOneWidget);
 
@@ -149,7 +153,7 @@ void main() {
     await tester.pumpWidget(
       _wrap(const UserAvatarDisplay(avatar: 'man')),
     );
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.byType(Image), findsOneWidget);
   });
@@ -170,7 +174,7 @@ void main() {
     await tester.pumpWidget(
       _wrap(const UserAvatarDisplay(avatar: 'woman')),
     );
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.byType(UserAvatar), findsOneWidget);
   });
