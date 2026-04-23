@@ -24,7 +24,6 @@ targets:
       slang_build_runner:
         options:
           base_locale: en
-          fallback_strategy: base_locale
           input_directory: lib/i18n/json
           input_file_pattern: .json
           output_directory: lib/i18n/generated
@@ -35,3 +34,4 @@ targets:
           key_case: snake
           param_case: camel
           string_interpolation: double_braces
+          fallback_strategy: base_locale
