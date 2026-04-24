@@ -62,13 +62,13 @@
 
 ## Fase 5 — Controller (reescritura de onboarding.dart)
 
-- [ ] 5.1 Reescribir `lib/app/onboarding/onboarding.dart` conservando la clase `OnboardingPage` (el router la referencia por nombre):
+- [x] 5.1 Reescribir `lib/app/onboarding/onboarding.dart` conservando la clase `OnboardingPage` (el router la referencia por nombre):
       - campos de estado: `_selectedGoals`, `_selectedCurrency`, `_selectedRateSource`, `_selectedBankIds`, `_currentIndex`, `_pageController`
       - calcular `_totalSlides`: 10 en Android, 6 en no-Android (slides 5–8 omitidos); construir lista de widgets de slide condicionalmente con `Platform.isAndroid`
       - método `_next()` / `_prev()` con `pageController.animateToPage`
       - método `_finish()` en orden: `UserSettingService.setItem(onboardingGoals, json)` → `setItem(preferredCurrency)` → `setItem(preferredRateSource)` → `PersonalVESeeder.seedAll` (ya ejecutado en slide 9 — esta llamada es un no-op por idempotencia, pero es el último punto de seguridad) → `AppDataService.setItem(introSeen, '1')` → `RouteUtils.pushRoute(PageSwitcher, withReplacement: true)`
       - pasar `v3_progress_bar` con `currentIndex` y `totalSlides`
-- [ ] 5.2 Verificar que `lib/main.dart` no requiere cambios: el gate `AppDataKey.introSeen` y la referencia a `OnboardingPage` permanecen intactos
+- [x] 5.2 Verificar que `lib/main.dart` no requiere cambios: el gate `AppDataKey.introSeen` y la referencia a `OnboardingPage` permanecen intactos
 
 ## Fase 6 — i18n
 
