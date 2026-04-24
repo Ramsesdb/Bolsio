@@ -10,6 +10,12 @@ import 'package:wallex/core/utils/uuid.dart';
 
 import '../ai_tool.dart';
 
+/// Deterministic fallback category assigned to expense proposals when
+/// neither the AI nor the regex profile resolves one. Without this the
+/// `transactions` XOR CHECK constraint (`categoryID` vs `receivingAccountID`)
+/// fails on INSERT. Matches `personal_ve_seeders.dart` "Otros Gastos".
+const String _kFallbackExpenseCategoryId = 'pve_e12';
+
 /// Tool that creates a single income or expense transaction.
 ///
 /// In [AiToolExecMode.propose] mode (used by quick-expense voice capture),
@@ -218,7 +224,10 @@ class CreateTransactionTool implements AiTool {
         rawText: [title, notes].whereType<String>().join(' - '),
         channel: captureChannel,
         confidence: 0.9,
-        proposedCategoryId: categoryId,
+        proposedCategoryId: categoryId ??
+            (txType == TransactionType.expense
+                ? _kFallbackExpenseCategoryId
+                : null),
       );
       return AiToolResult.proposal(proposal);
     }
@@ -234,7 +243,10 @@ class CreateTransactionTool implements AiTool {
       isHidden: false,
       type: txType,
       accountID: resolved.id,
-      categoryID: categoryId,
+      categoryID: categoryId ??
+          (txType == TransactionType.expense
+              ? _kFallbackExpenseCategoryId
+              : null),
       status: date.isAfter(DateTime.now())
           ? TransactionStatus.pending
           : TransactionStatus.reconciled,

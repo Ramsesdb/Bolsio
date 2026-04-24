@@ -73,6 +73,12 @@ enum ExtractionOutcome {
   imageCorrupt,
 }
 
+/// Deterministic fallback category assigned to non-transfer proposals when
+/// neither the AI nor the regex profile resolves one. Without this the
+/// `transactions` XOR CHECK constraint (`categoryID` vs `receivingAccountID`)
+/// fails on INSERT. Matches `personal_ve_seeders.dart` "Otros Gastos".
+const String _kFallbackExpenseCategoryId = 'pve_e12';
+
 class ExtractionResult {
   const ExtractionResult._({
     required this.outcome,
@@ -358,6 +364,9 @@ class ReceiptExtractorService {
       rawText: normalized,
       currencyId: effectiveCurrency,
       confidence: forceFallbackConfidence ? 0.7 : parsed.confidence,
+      proposedCategoryId: parsed.type.isIncomeOrExpense
+          ? (parsed.proposedCategoryId ?? _kFallbackExpenseCategoryId)
+          : parsed.proposedCategoryId,
     );
 
     return ExtractionResult.success(
@@ -536,6 +545,8 @@ class ReceiptExtractorService {
       sender: sender,
       confidence: confidence,
       parsedBySender: 'nexus_multimodal',
+      proposedCategoryId:
+          type.isIncomeOrExpense ? _kFallbackExpenseCategoryId : null,
     );
 
     return ExtractionResult.success(
