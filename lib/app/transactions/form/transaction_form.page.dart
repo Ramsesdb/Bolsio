@@ -357,13 +357,23 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   void submitForm() {
     if (_isSaving) return; // Prevent duplicate submissions
 
-    if (transactionType.isIncomeOrExpense && selectedCategory == null ||
-        transactionType.isTransfer && transferAccount == null) {
+    final t = Translations.of(context);
+
+    // Defense-in-depth for the XOR CHECK constraint on `transactions`
+    // (categoryID vs receivingAccountID). The receipt OCR path always assigns
+    // a fallback category, but manual edits could still clear it.
+    if (transactionType.isIncomeOrExpense && selectedCategory == null) {
       _shakeKey.currentState?.shake();
+      WallexSnackbar.warning(
+        SnackbarParams(t.transaction.form.validators.category_required),
+      );
       return;
     }
 
-    final t = Translations.of(context);
+    if (transactionType.isTransfer && transferAccount == null) {
+      _shakeKey.currentState?.shake();
+      return;
+    }
 
     if (transactionValue == 0) {
       WallexSnackbar.warning(
