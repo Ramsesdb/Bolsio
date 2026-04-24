@@ -72,13 +72,23 @@
 
 ## Fase 6 — i18n
 
-- [ ] 6.1 En los 10 ficheros `lib/i18n/json/*.json`: eliminar el bloque `"INTRO": { … }` completo
+- [x] 6.1 En los 10 ficheros `lib/i18n/json/*.json`: eliminar el bloque `"INTRO": { … }` completo
       — ejecutar antes `grep -r "t\.INTRO" lib/` para confirmar cero consumidores
-      - **Precondition (found during audit 2026-04-24):** three callers still consume `t.INTRO.*` and must be migrated first — `lib/main.dart`, `lib/core/database/app_db.g.dart`, `lib/app/settings/about.page.dart`. Do this migration as step 6.1.a before the deletion.
+      - **Audit correction 2026-04-24:** the "3 callers" assumption was wrong — only `about.page.dart:82` actually consumed the namespace (`t.intro.welcome_subtitle2` → app tagline). `main.dart` and `app_db.g.dart` were false positives (`introSeen` AppDataKey + drift `introducedVariables`). That single caller has been migrated to a new `shared.app_tagline` key; the full `INTRO` block is now deleted from all 10 locale JSONs.
 - [ ] 6.2 En `lib/i18n/json/es.json`: añadir bloque `"intro"` snake_case con todas las claves necesarias para los 10 slides (títulos, subtítulos, CTAs, labels de chips/tiles, mensajes de estado del listener, bullets de privacidad, texto de seeding)
 - [ ] 6.3 En `lib/i18n/json/en.json`: replicar el bloque `"intro"` completo en inglés
 - [ ] 6.4 En los otros 8 JSON (`de, fr, hu, it, tr, uk, zh-CN, zh-TW`): no añadir claves `intro` — el fallback a `en` via `fallback_strategy: base_locale` cubre estas locales
 - [ ] 6.5 Ejecutar `dart run slang` y verificar que `translations.g.dart` regenera sin errores ni claves faltantes para `es` y `en`
+
+### Deferred to a future change (scoped out 2026-04-24)
+
+Tasks 6.2-6.5 required wiring the v3 slides, the `onboarding.dart` controller, and `v3_seeding_overlay.dart` to a new `t.intro.*` namespace. This was deferred during the minimal-close pass for path A because:
+
+- Wallex's sole active audience is Spanish-speaking Venezuelan users; the other 9 locales are Monekin legacy with no Wallex-specific content.
+- The slides' strings are deeply Venezuela-specific (BCV, paralelo, local bank names) and would not translate meaningfully into the other locales.
+- The slides ship working in Spanish today. Hardcoded Spanish is not a correctness bug.
+
+Follow-up: open a new SDD change (e.g. `onboarding-i18n-extension`) if/when Wallex targets a second locale.
 
 ## Fase 7 — Verificación y smoke tests
 

@@ -165,26 +165,6 @@
       "max_number": "应小于{{x}}"
     }
   },
-  "INTRO": {
-    "start": "开始",
-    "skip": "跳过",
-    "next": "继续",
-    "select-your-currency": "选择您的货币",
-    "welcome.subtitle": "您的个人财务管家",
-    "welcome.subtitle2": "100% 开放，100% 免费",
-    "welcome.footer": "登录即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隐私策略</a>和此应用的<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>使用条款</a>",
-    "offline.descr.title": "本地账户：",
-    "offline.descr": "您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。",
-    "offline.start": "开始使用本地账户",
-    "sl1Title": "选择您的货币",
-    "sl1Descr": "您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和应用语言",
-    "sl2Title": "安全、隐私、可靠",
-    "sl2Descr": "您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此应用",
-    "sl2Descr2": "此外，此应用的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量",
-    "lastSlideTitle": "全部就绪",
-    "lastSlideDescr": "使用 Monekin，您最终可以实现自己想要的财务独立。您将拥有和您的钱相关的图表、预算、提示、统计信息等。",
-    "lastSlideDescr2": "祝您使用愉快！如果您有任何疑问或建议，请随时与我们联系……"
-  },
   "HOME": {
     "title": "面板",
     "filter-transactions": "筛选交易",
@@ -380,7 +360,8 @@
         "date-max": "所选日期晚于当前日期。交易将新增为待办",
         "date-after-account-creation": "无法创建早于账户创建日期的交易",
         "negative-transfer": "转账数额不应为负数",
-        "transfer-between-same-accounts": "来源于目标账户不应相同"
+        "transfer-between-same-accounts": "来源于目标账户不应相同",
+        "category-required": "保存前请选择一个类别"
       },
       "title": "交易标题",
       "title.short": "标题",

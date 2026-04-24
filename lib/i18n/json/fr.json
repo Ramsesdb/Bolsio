@@ -165,26 +165,6 @@
       "max_number": "Doit être inférieur à {{x}}"
     }
   },
-  "INTRO": {
-    "start": "Commencer",
-    "skip": "Ignorer",
-    "next": "Suivant",
-    "select-your-currency": "Sélectionnez votre devise",
-    "welcome.subtitle": "Votre gestionnaire de finances personnelles",
-    "welcome.subtitle2": "100 % open, 100 % gratuit",
-    "welcome.footer": "En vous connectant, vous acceptez la <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>politique de confidentialité</a> et les <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>conditions d'utilisation</a> de l'application",
-    "offline.descr.title": "COMPTE HORS LIGNE :",
-    "offline.descr": "Vos données ne seront stockées que sur votre appareil, et seront en sécurité tant que vous ne désinstallez pas l'application ou ne changez pas de téléphone. Pour éviter toute perte de données, il est recommandé de réaliser régulièrement une sauvegarde depuis les paramètres de l'application.",
-    "offline.start": "Démarrer une session hors ligne",
-    "sl1Title": "Choisissez votre devise",
-    "sl1Descr": "Votre devise par défaut sera utilisée dans les rapports et graphiques généraux. Vous pourrez changer la devise et la langue de l'application plus tard à tout moment dans les paramètres.",
-    "sl2Title": "Sûr, privé et fiable",
-    "sl2Descr": "Vos données n'appartiennent qu'à vous. Nous stockons les informations directement sur votre appareil, sans passer par des serveurs externes. Cela permet d'utiliser l'application même sans Internet.",
-    "sl2Descr2": "De plus, le code source de l'application est public ; tout le monde peut y collaborer et voir comment elle fonctionne.",
-    "lastSlideTitle": "Tout est prêt",
-    "lastSlideDescr": "Avec Monekin, vous pouvez enfin atteindre l'indépendance financière que vous désirez tant. Vous disposerez de graphiques, budgets, conseils, statistiques et bien plus encore sur votre argent.",
-    "lastSlideDescr2": "Nous espérons que vous apprécierez votre expérience ! N'hésitez pas à nous contacter en cas de doutes, de suggestions..."
-  },
   "HOME": {
     "title": "Tableau de bord",
     "filter-transactions": "Filtrer les transactions",
@@ -380,7 +360,8 @@
         "date-max": "La date sélectionnée est postérieure à la date actuelle. La transaction sera ajoutée comme en attente",
         "date-after-account-creation": "Vous ne pouvez pas créer une transaction dont la date est antérieure à la date de création du compte auquel elle appartient",
         "negative-transfer": "Le montant d'un virement ne peut pas être négatif",
-        "transfer-between-same-accounts": "Le compte d'origine et le compte de destination ne peuvent pas être identiques"
+        "transfer-between-same-accounts": "Le compte d'origine et le compte de destination ne peuvent pas être identiques",
+        "category-required": "Sélectionnez une catégorie avant d'enregistrer"
       },
       "title": "Titre de la transaction",
       "title.short": "Titre",

@@ -40,7 +40,6 @@ class TranslationsUk extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsUk ui_actions = _TranslationsUiActionsUk._(_root);
 	@override late final _TranslationsGeneralUk general = _TranslationsGeneralUk._(_root);
-	@override late final _TranslationsIntroUk intro = _TranslationsIntroUk._(_root);
 	@override late final _TranslationsHomeUk home = _TranslationsHomeUk._(_root);
 	@override late final _TranslationsFinancialHealthUk financial_health = _TranslationsFinancialHealthUk._(_root);
 	@override late final _TranslationsStatsUk stats = _TranslationsStatsUk._(_root);
@@ -137,33 +136,6 @@ class _TranslationsGeneralUk extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeUk time = _TranslationsGeneralTimeUk._(_root);
 	@override late final _TranslationsGeneralTransactionOrderUk transaction_order = _TranslationsGeneralTransactionOrderUk._(_root);
 	@override late final _TranslationsGeneralValidationsUk validations = _TranslationsGeneralValidationsUk._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroUk extends TranslationsIntroEn {
-	_TranslationsIntroUk._(TranslationsUk root) : this._root = root, super.internal(root);
-
-	final TranslationsUk _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => 'Початок';
-	@override String get skip => 'Пропустити';
-	@override String get next => 'Далі';
-	@override String get select_your_currency => 'Виберіть вашу валюту';
-	@override String get welcome_subtitle => 'Ваш особистий фінансовий менеджер';
-	@override String get welcome_subtitle2 => '100% відкритий, 100% безкоштовний';
-	@override String get welcome_footer => 'Увійшовши в систему, ви погоджуєтеся з <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Політикою конфіденційності</a> та <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Умовами використання</a> додатка';
-	@override String get offline_descr_title => 'ОФЛАЙН-РЕЖИМ:';
-	@override String get offline_descr => 'Ваші дані будуть збережені тільки на вашому пристрої, поки ви не видалите програму або не зміните телефон. Щоб запобігти втраті даних, рекомендується регулярно робити резервні копії з налаштувань програми.';
-	@override String get offline_start => 'Почати сеанс офлайн';
-	@override String get sl1_title => 'Виберіть вашу валюту';
-	@override String get sl1_descr => 'Ваша основна валюта буде використовуватися в звітах та загальних діаграмах. Ви зможете змінити валюту та мову програми пізніше в будь-який час у налаштуваннях додатка';
-	@override String get sl2_title => 'Безпечно, приватно і надійно';
-	@override String get sl2_descr => 'Ваші дані належать тільки вам. Інформація зберігається безпосередньо на вашому пристрої, без пропуску через зовнішні сервери. Це дозволяє використовувати додаток навіть без Інтернету';
-	@override String get sl2_descr2 => 'Крім того, вихідний код програми є відкритим, будь-хто може вносити свої правки та переглядати, як він працює';
-	@override String get last_slide_title => 'Все готово';
-	@override String get last_slide_descr => 'З Monekin ви нарешті можете досягти фінансової незалежності, яку так багато хочете. У вас будуть графіки, бюджети, поради, статистика та багато іншого про ваші фінанси.';
-	@override String get last_slide_descr2 => 'Сподіваємося, вам сподобається користуватись додатком! Не соромтеся зв\'язатися з нами у разі сумнівів або пропозицій...';
 }
 
 // Path: home
@@ -1633,6 +1605,7 @@ class _TranslationsTransactionFormValidatorsUk extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
 	@override String get negative_transfer => 'Монетарна вартість переказу не може бути від\'ємною';
 	@override String get transfer_between_same_accounts => 'Облікові записи джерела та призначення не збігаються';
+	@override String get category_required => 'Виберіть категорію перед збереженням';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2161,24 +2134,6 @@ extension on TranslationsUk {
 		map['general.validations.positive'] = 'Повинно бути позитивним';
 		map['general.validations.min_number'] = ({required Object x}) => 'Повинно бути більшим, ніж ${x}';
 		map['general.validations.max_number'] = ({required Object x}) => 'Повинно бути меншим, ніж ${x}';
-		map['intro.start'] = 'Початок';
-		map['intro.skip'] = 'Пропустити';
-		map['intro.next'] = 'Далі';
-		map['intro.select_your_currency'] = 'Виберіть вашу валюту';
-		map['intro.welcome_subtitle'] = 'Ваш особистий фінансовий менеджер';
-		map['intro.welcome_subtitle2'] = '100% відкритий, 100% безкоштовний';
-		map['intro.welcome_footer'] = 'Увійшовши в систему, ви погоджуєтеся з <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Політикою конфіденційності</a> та <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Умовами використання</a> додатка';
-		map['intro.offline_descr_title'] = 'ОФЛАЙН-РЕЖИМ:';
-		map['intro.offline_descr'] = 'Ваші дані будуть збережені тільки на вашому пристрої, поки ви не видалите програму або не зміните телефон. Щоб запобігти втраті даних, рекомендується регулярно робити резервні копії з налаштувань програми.';
-		map['intro.offline_start'] = 'Почати сеанс офлайн';
-		map['intro.sl1_title'] = 'Виберіть вашу валюту';
-		map['intro.sl1_descr'] = 'Ваша основна валюта буде використовуватися в звітах та загальних діаграмах. Ви зможете змінити валюту та мову програми пізніше в будь-який час у налаштуваннях додатка';
-		map['intro.sl2_title'] = 'Безпечно, приватно і надійно';
-		map['intro.sl2_descr'] = 'Ваші дані належать тільки вам. Інформація зберігається безпосередньо на вашому пристрої, без пропуску через зовнішні сервери. Це дозволяє використовувати додаток навіть без Інтернету';
-		map['intro.sl2_descr2'] = 'Крім того, вихідний код програми є відкритим, будь-хто може вносити свої правки та переглядати, як він працює';
-		map['intro.last_slide_title'] = 'Все готово';
-		map['intro.last_slide_descr'] = 'З Monekin ви нарешті можете досягти фінансової незалежності, яку так багато хочете. У вас будуть графіки, бюджети, поради, статистика та багато іншого про ваші фінанси.';
-		map['intro.last_slide_descr2'] = 'Сподіваємося, вам сподобається користуватись додатком! Не соромтеся зв\'язатися з нами у разі сумнівів або пропозицій...';
 		map['home.title'] = 'Панель керування';
 		map['home.filter_transactions'] = 'Фільтрувати транзакції';
 		map['home.hello_day'] = 'Доброго ранку,';
@@ -2372,6 +2327,7 @@ extension on TranslationsUk {
 		map['transaction.form.validators.date_after_account_creation'] = 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
 		map['transaction.form.validators.negative_transfer'] = 'Монетарна вартість переказу не може бути від\'ємною';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'Облікові записи джерела та призначення не збігаються';
+		map['transaction.form.validators.category_required'] = 'Виберіть категорію перед збереженням';
 		map['transaction.form.title'] = 'Назва транзакції';
 		map['transaction.form.title_short'] = 'Назва';
 		map['transaction.form.value'] = 'Сума транзакції';
