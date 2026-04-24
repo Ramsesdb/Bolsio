@@ -1,62 +1,64 @@
 # Tasks: onboarding-v2-auto-import
 
+> Audit reconciliation 2026-04-24: Fases 1–4 marked ✅ based on commit `d5d9663`. Fase 5 (controller rewrite) is the blocker for Fase 7. See note under 6.1 for a hidden i18n migration prerequisite.
+
 ## Fase 1 — Infraestructura (pubspec, manifest, assets, directorios)
 
-- [ ] 1.1 En `pubspec.yaml`: añadir `google_fonts`, `flutter_animate`, `installed_apps` bajo `dependencies`
-- [ ] 1.2 En `pubspec.yaml`: eliminar la entrada `assets/icons/app_onboarding/` de la sección `flutter.assets`
-- [ ] 1.3 Eliminar los cuatro SVGs huérfanos: `assets/icons/app_onboarding/first.svg`, `security.svg`, `upload.svg`, `wallet.svg`
+- [x] 1.1 En `pubspec.yaml`: añadir `google_fonts`, `flutter_animate`, `installed_apps` bajo `dependencies`
+- [x] 1.2 En `pubspec.yaml`: eliminar la entrada `assets/icons/app_onboarding/` de la sección `flutter.assets`
+- [x] 1.3 Eliminar los cuatro SVGs huérfanos: `assets/icons/app_onboarding/first.svg`, `security.svg`, `upload.svg`, `wallet.svg`
       — ejecutar primero `grep -r "app_onboarding" lib/` para confirmar cero referencias
-- [ ] 1.4 En `android/app/src/main/AndroidManifest.xml`: añadir `<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>` con comentario `<!-- TODO: split Play Store flavor (foss vs play) to omit QUERY_ALL_PACKAGES -->`
-- [ ] 1.5 Crear los directorios vacíos: `lib/app/onboarding/slides/`, `lib/app/onboarding/widgets/`, `lib/app/onboarding/theme/`, `lib/core/services/bank_detection/`
-- [ ] 1.6 Ejecutar `flutter pub get` para validar resolución de los tres paquetes nuevos
+- [x] 1.4 En `android/app/src/main/AndroidManifest.xml`: añadir `<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>` con comentario `<!-- TODO: split Play Store flavor (foss vs play) to omit QUERY_ALL_PACKAGES -->`
+- [x] 1.5 Crear los directorios vacíos: `lib/app/onboarding/slides/`, `lib/app/onboarding/widgets/`, `lib/app/onboarding/theme/`, `lib/core/services/bank_detection/`
+- [x] 1.6 Ejecutar `flutter pub get` para validar resolución de los tres paquetes nuevos
 
 ## Fase 2 — Servicios core
 
-- [ ] 2.1 En `lib/core/database/services/user-setting/user_setting_service.dart`: añadir `onboardingGoals` al enum `SettingKey` con docstring que indique «JSON-encoded `List<String>`; `null` se interpreta como lista vacía»
-- [ ] 2.2 En `lib/core/database/sql/initial/seed.dart`: añadir la fila `('${SettingKey.onboardingGoals.name}', '[]')` en `settingsInitialSeedSQL()` (sin tocar `schemaVersion`)
-- [ ] 2.3 Crear `lib/core/services/bank_detection/bank_detection_service.dart`:
+- [x] 2.1 En `lib/core/database/services/user-setting/user_setting_service.dart`: añadir `onboardingGoals` al enum `SettingKey` con docstring que indique «JSON-encoded `List<String>`; `null` se interpreta como lista vacía»
+- [x] 2.2 En `lib/core/database/sql/initial/seed.dart`: añadir la fila `('${SettingKey.onboardingGoals.name}', '[]')` en `settingsInitialSeedSQL()` (sin tocar `schemaVersion`)
+- [x] 2.3 Crear `lib/core/services/bank_detection/bank_detection_service.dart`:
       - método `Future<List<String>> getInstalledBankIds()` — retorna `const []` en no-Android; en Android llama a `InstalledApps.getInstalledApps(true, true)` y cruza package names con un `const Map<String, String> _kPackageToProfileId` (p.ej. `'com.bbva.bbvacontigo': 'provincial_notif'`); captura excepciones y retorna `const []`
-- [ ] 2.4 En `lib/core/services/auto_import/capture/device_quirks_service.dart`: añadir `Future<void> openNotificationListenerSettings()` que invoca la operación `'openNotificationListenerSettings'` por el canal `com.wallex.capture/quirks` sin capturar la excepción (el caller en slide 7 la maneja)
-- [ ] 2.5 En el handler Kotlin del canal `com.wallex.capture/quirks` (localizar en `android/app/src/main/kotlin/`): añadir el case `'openNotificationListenerSettings'` que dispara `startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })`
+- [x] 2.4 En `lib/core/services/auto_import/capture/device_quirks_service.dart`: añadir `Future<void> openNotificationListenerSettings()` que invoca la operación `'openNotificationListenerSettings'` por el canal `com.wallex.capture/quirks` sin capturar la excepción (el caller en slide 7 la maneja)
+- [x] 2.5 En el handler Kotlin del canal `com.wallex.capture/quirks` (localizar en `android/app/src/main/kotlin/`): añadir el case `'openNotificationListenerSettings'` que dispara `startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })`
 
 ## Fase 3 — Tokens y widgets atómicos
 
-- [ ] 3.1 Crear `lib/app/onboarding/theme/v3_tokens.dart`:
+- [x] 3.1 Crear `lib/app/onboarding/theme/v3_tokens.dart`:
       accent `const Color _kAccent = Color(0xFFC8B560)`, spacing map `{8,10,12,14,16,22,24,26}`, radii `{pill:999, lg:22, md:14, sm:10}`, duraciones `{notifIn:600ms, cardIn:300ms, pulse:2400ms}`
-- [ ] 3.2 Crear `lib/app/onboarding/widgets/v3_progress_bar.dart`: barra segmentada de 3px a `top:52`, un segmento por slide activo, color accent para completados
-- [ ] 3.3 Crear `lib/app/onboarding/widgets/v3_slide_template.dart`: scaffold que aplica padding, expone `child`, `primaryCta` y `secondaryCta` opcionales; el primaryCta recibe `enabled` para el estado deshabilitado
-- [ ] 3.4 Crear `lib/app/onboarding/widgets/v3_goal_chip.dart`: chip seleccionable con `label`, `selected`, `onTap`
-- [ ] 3.5 Crear `lib/app/onboarding/widgets/v3_currency_tile.dart`: tile radio con `currencyCode`, `selected`, `onTap`
-- [ ] 3.6 Crear `lib/app/onboarding/widgets/v3_rate_tile.dart`: tile radio con `label`, `subtitle`, `selected`, `onTap`
-- [ ] 3.7 Crear `lib/app/onboarding/widgets/v3_bank_tile.dart`: placeholder geométrico con color de marca, nombre, y `Switch` para el toggle de perfil; recibe `enabled`, `onChanged`
-- [ ] 3.8 Crear `lib/app/onboarding/widgets/v3_notification_card.dart`: card estática animada con `v3-notif-in` (stagger 0.6s vía `flutter_animate`)
-- [ ] 3.9 Crear `lib/app/onboarding/widgets/v3_seeding_overlay.dart`: overlay con logo + texto + `CircularProgressIndicator` compacto
+- [x] 3.2 Crear `lib/app/onboarding/widgets/v3_progress_bar.dart`: barra segmentada de 3px a `top:52`, un segmento por slide activo, color accent para completados
+- [x] 3.3 Crear `lib/app/onboarding/widgets/v3_slide_template.dart`: scaffold que aplica padding, expone `child`, `primaryCta` y `secondaryCta` opcionales; el primaryCta recibe `enabled` para el estado deshabilitado
+- [x] 3.4 Crear `lib/app/onboarding/widgets/v3_goal_chip.dart`: chip seleccionable con `label`, `selected`, `onTap`
+- [x] 3.5 Crear `lib/app/onboarding/widgets/v3_currency_tile.dart`: tile radio con `currencyCode`, `selected`, `onTap`
+- [x] 3.6 Crear `lib/app/onboarding/widgets/v3_rate_tile.dart`: tile radio con `label`, `subtitle`, `selected`, `onTap`
+- [x] 3.7 Crear `lib/app/onboarding/widgets/v3_bank_tile.dart`: placeholder geométrico con color de marca, nombre, y `Switch` para el toggle de perfil; recibe `enabled`, `onChanged`
+- [x] 3.8 Crear `lib/app/onboarding/widgets/v3_notification_card.dart`: card estática animada con `v3-notif-in` (stagger 0.6s vía `flutter_animate`)
+- [x] 3.9 Crear `lib/app/onboarding/widgets/v3_seeding_overlay.dart`: overlay con logo + texto + `CircularProgressIndicator` compacto
 
 ## Fase 4 — Slides
 
-- [ ] 4.1 Crear `lib/app/onboarding/slides/s01_goals.dart` — `StatelessWidget`; recibe `Set<String> selectedGoals`, `void Function(String) onToggle`; renderiza chips para los 5 objetivos (`track_expenses, save_usd, reduce_debt, budget, analyze`); CTA siempre habilitado
-- [ ] 4.2 Crear `lib/app/onboarding/slides/s02_currency.dart` — recibe `String selectedCurrency`, `void Function(String) onSelect`; tiles para `USD`, `VES`, `DUAL`; CTA siempre habilitado
-- [ ] 4.3 Crear `lib/app/onboarding/slides/s03_rate_source.dart` — recibe `String selectedRateSource`, `void Function(String) onSelect`; tiles para `bcv` y `paralelo` con descripción; CTA siempre habilitado
-- [ ] 4.4 Crear `lib/app/onboarding/slides/s04_initial_accounts.dart` — recibe `Set<String> selectedBankIds`, `void Function(String) onToggleBank`; renderiza grid de `_kBanks` como `v3_bank_tile` sin toggle (solo selección); CTA siempre habilitado
-- [ ] 4.5 Crear `lib/app/onboarding/slides/s05_autoimport_sell.dart` — sin estado; monta `v3_notification_card` con `v3-notif-in` en `initState`; CTA siempre habilitado
-- [ ] 4.6 Crear `lib/app/onboarding/slides/s06_privacy.dart` — sin estado; bullets de privacidad en texto; CTA siempre habilitado
-- [ ] 4.7 Crear `lib/app/onboarding/slides/s07_activate_listener.dart`:
+- [x] 4.1 Crear `lib/app/onboarding/slides/s01_goals.dart` — `StatelessWidget`; recibe `Set<String> selectedGoals`, `void Function(String) onToggle`; renderiza chips para los 5 objetivos (`track_expenses, save_usd, reduce_debt, budget, analyze`); CTA siempre habilitado
+- [x] 4.2 Crear `lib/app/onboarding/slides/s02_currency.dart` — recibe `String selectedCurrency`, `void Function(String) onSelect`; tiles para `USD`, `VES`, `DUAL`; CTA siempre habilitado
+- [x] 4.3 Crear `lib/app/onboarding/slides/s03_rate_source.dart` — recibe `String selectedRateSource`, `void Function(String) onSelect`; tiles para `bcv` y `paralelo` con descripción; CTA siempre habilitado
+- [x] 4.4 Crear `lib/app/onboarding/slides/s04_initial_accounts.dart` — recibe `Set<String> selectedBankIds`, `void Function(String) onToggleBank`; renderiza grid de `_kBanks` como `v3_bank_tile` sin toggle (solo selección); CTA siempre habilitado
+- [x] 4.5 Crear `lib/app/onboarding/slides/s05_autoimport_sell.dart` — sin estado; monta `v3_notification_card` con `v3-notif-in` en `initState`; CTA siempre habilitado
+- [x] 4.6 Crear `lib/app/onboarding/slides/s06_privacy.dart` — sin estado; bullets de privacidad en texto; CTA siempre habilitado
+- [x] 4.7 Crear `lib/app/onboarding/slides/s07_activate_listener.dart`:
       - `StatefulWidget`; implementa `WidgetsBindingObserver`
       - en `didChangeAppLifecycleState(resumed)`: llama `PermissionCoordinator.check()` y actualiza `_granted`
       - detecta quirk MIUI/HyperOS via `DeviceQuirksService.detect()` al montar; muestra instrucciones OEM inline si aplica
       - botón "Activar ahora": invoca `DeviceQuirksService.openNotificationListenerSettings()`; en excepción llama `openAppDetails()` + toast
       - botón "Omitir por ahora": persiste `notifListenerEnabled = '0'` y llama `onSkip`
       - CTA principal ("Siguiente") habilitado solo cuando `_granted == true`
-- [ ] 4.8 Crear `lib/app/onboarding/slides/s08_apps_included.dart`:
+- [x] 4.8 Crear `lib/app/onboarding/slides/s08_apps_included.dart`:
       - `StatefulWidget`; en `initState` llama `BankDetectionService().getInstalledBankIds()`; si vacío o excepción usa `_kBanks` completo como fallback
       - renderiza `v3_bank_tile` con toggle para cada banco detectado
       - cada toggle llama `UserSettingService.instance.setItem(SettingKey.{profile}Enabled, value)` de inmediato
       - CTA siempre habilitado
-- [ ] 4.9 Crear `lib/app/onboarding/slides/s09_seeding_overlay.dart`:
+- [x] 4.9 Crear `lib/app/onboarding/slides/s09_seeding_overlay.dart`:
       - `StatefulWidget`; en `initState` ejecuta `Future.wait([_doSeed(), Future.delayed(const Duration(milliseconds: 500))])` y llama `onDone` al completar
       - `_doSeed()` llama `PersonalVESeeder.seedAll(selectedBankIds: bankIds)`
       - renderiza `v3_seeding_overlay`; sin botones
-- [ ] 4.10 Crear `lib/app/onboarding/slides/s10_ready.dart` — sin estado; CTA llama `onFinish`; lista de criterios de éxito (feature highlights)
+- [x] 4.10 Crear `lib/app/onboarding/slides/s10_ready.dart` — sin estado; CTA llama `onFinish`; lista de criterios de éxito (feature highlights)
 
 ## Fase 5 — Controller (reescritura de onboarding.dart)
 
@@ -72,6 +74,7 @@
 
 - [ ] 6.1 En los 10 ficheros `lib/i18n/json/*.json`: eliminar el bloque `"INTRO": { … }` completo
       — ejecutar antes `grep -r "t\.INTRO" lib/` para confirmar cero consumidores
+      - **Precondition (found during audit 2026-04-24):** three callers still consume `t.INTRO.*` and must be migrated first — `lib/main.dart`, `lib/core/database/app_db.g.dart`, `lib/app/settings/about.page.dart`. Do this migration as step 6.1.a before the deletion.
 - [ ] 6.2 En `lib/i18n/json/es.json`: añadir bloque `"intro"` snake_case con todas las claves necesarias para los 10 slides (títulos, subtítulos, CTAs, labels de chips/tiles, mensajes de estado del listener, bullets de privacidad, texto de seeding)
 - [ ] 6.3 En `lib/i18n/json/en.json`: replicar el bloque `"intro"` completo en inglés
 - [ ] 6.4 En los otros 8 JSON (`de, fr, hu, it, tr, uk, zh-CN, zh-TW`): no añadir claves `intro` — el fallback a `en` via `fallback_strategy: base_locale` cubre estas locales
