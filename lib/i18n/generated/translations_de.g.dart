@@ -40,7 +40,6 @@ class TranslationsDe extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsDe ui_actions = _TranslationsUiActionsDe._(_root);
 	@override late final _TranslationsGeneralDe general = _TranslationsGeneralDe._(_root);
-	@override late final _TranslationsIntroDe intro = _TranslationsIntroDe._(_root);
 	@override late final _TranslationsHomeDe home = _TranslationsHomeDe._(_root);
 	@override late final _TranslationsFinancialHealthDe financial_health = _TranslationsFinancialHealthDe._(_root);
 	@override late final _TranslationsStatsDe stats = _TranslationsStatsDe._(_root);
@@ -138,33 +137,6 @@ class _TranslationsGeneralDe extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeDe time = _TranslationsGeneralTimeDe._(_root);
 	@override late final _TranslationsGeneralTransactionOrderDe transaction_order = _TranslationsGeneralTransactionOrderDe._(_root);
 	@override late final _TranslationsGeneralValidationsDe validations = _TranslationsGeneralValidationsDe._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroDe extends TranslationsIntroEn {
-	_TranslationsIntroDe._(TranslationsDe root) : this._root = root, super.internal(root);
-
-	final TranslationsDe _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => 'Start';
-	@override String get skip => 'Überspringen';
-	@override String get next => 'Nächste';
-	@override String get select_your_currency => 'Wähle Deine Währung aus';
-	@override String get welcome_subtitle => 'Dein persönlicher Finanzmanager';
-	@override String get welcome_subtitle2 => '100 % geöffnet, 100 % kostenlos';
-	@override String get welcome_footer => 'Mit der Anmeldung stimmst Du der <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Datenschutzrichtlinie</a> und den <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Nutzungsbedingungen</a> der App zu';
-	@override String get offline_descr_title => 'OFFLINE-KONTO:';
-	@override String get offline_descr => 'Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ';
-	@override String get offline_start => 'Sitzung offline starten';
-	@override String get sl1_title => 'Wähle Deine Währung aus';
-	@override String get sl1_descr => 'Deine Standardwährung wird in Berichten und allgemeinen Diagrammen verwendet. ';
-	@override String get sl2_title => 'Sicher, privat und zuverlässig';
-	@override String get sl2_descr => 'Deine Daten gehören nur Dir. ';
-	@override String get sl2_descr2 => 'Außerdem ist der Quellcode der Anwendung öffentlich, jeder kann daran mitarbeiten und sehen, wie es funktioniert';
-	@override String get last_slide_title => 'Alles bereit';
-	@override String get last_slide_descr => 'Mit Monekin kannst Du endlich die finanzielle Unabhängigkeit erreichen, die Du dir so sehr wünschst. ';
-	@override String get last_slide_descr2 => 'Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren...';
 }
 
 // Path: home
@@ -1672,6 +1644,7 @@ class _TranslationsTransactionFormValidatorsDe extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';
 	@override String get negative_transfer => 'Der Geldwert einer Überweisung darf nicht negativ sein';
 	@override String get transfer_between_same_accounts => 'Das Ursprungs- und das Zielkonto dürfen nicht identisch sein';
+	@override String get category_required => 'Wähle eine Kategorie, bevor du speicherst';
 }
 
 // Path: transaction.receipt_import.error
@@ -2229,24 +2202,6 @@ extension on TranslationsDe {
 		map['general.validations.positive'] = 'Sollte positiv sein';
 		map['general.validations.min_number'] = ({required Object x}) => 'Sollte größer sein als ${x}';
 		map['general.validations.max_number'] = ({required Object x}) => 'Sollte kleiner sein als ${x}';
-		map['intro.start'] = 'Start';
-		map['intro.skip'] = 'Überspringen';
-		map['intro.next'] = 'Nächste';
-		map['intro.select_your_currency'] = 'Wähle Deine Währung aus';
-		map['intro.welcome_subtitle'] = 'Dein persönlicher Finanzmanager';
-		map['intro.welcome_subtitle2'] = '100 % geöffnet, 100 % kostenlos';
-		map['intro.welcome_footer'] = 'Mit der Anmeldung stimmst Du der <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Datenschutzrichtlinie</a> und den <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Nutzungsbedingungen</a> der App zu';
-		map['intro.offline_descr_title'] = 'OFFLINE-KONTO:';
-		map['intro.offline_descr'] = 'Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ';
-		map['intro.offline_start'] = 'Sitzung offline starten';
-		map['intro.sl1_title'] = 'Wähle Deine Währung aus';
-		map['intro.sl1_descr'] = 'Deine Standardwährung wird in Berichten und allgemeinen Diagrammen verwendet. ';
-		map['intro.sl2_title'] = 'Sicher, privat und zuverlässig';
-		map['intro.sl2_descr'] = 'Deine Daten gehören nur Dir. ';
-		map['intro.sl2_descr2'] = 'Außerdem ist der Quellcode der Anwendung öffentlich, jeder kann daran mitarbeiten und sehen, wie es funktioniert';
-		map['intro.last_slide_title'] = 'Alles bereit';
-		map['intro.last_slide_descr'] = 'Mit Monekin kannst Du endlich die finanzielle Unabhängigkeit erreichen, die Du dir so sehr wünschst. ';
-		map['intro.last_slide_descr2'] = 'Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren...';
 		map['home.title'] = 'Übersicht';
 		map['home.filter_transactions'] = 'Transaktionen filtern';
 		map['home.hello_day'] = 'Guten Morgen,';
@@ -2440,6 +2395,7 @@ extension on TranslationsDe {
 		map['transaction.form.validators.date_after_account_creation'] = 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';
 		map['transaction.form.validators.negative_transfer'] = 'Der Geldwert einer Überweisung darf nicht negativ sein';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'Das Ursprungs- und das Zielkonto dürfen nicht identisch sein';
+		map['transaction.form.validators.category_required'] = 'Wähle eine Kategorie, bevor du speicherst';
 		map['transaction.form.title'] = 'Transaktionstitel';
 		map['transaction.form.title_short'] = 'Titel';
 		map['transaction.form.value'] = 'Wert der Transaktion';

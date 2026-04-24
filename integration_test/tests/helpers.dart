@@ -26,7 +26,11 @@ Future<void> startMonekin(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.byType(WallexAppEntryPoint), findsOneWidget);
 
-  await tester.tap(find.text(t.intro.offline_start));
+  // Legacy Monekin onboarding button — no longer present in the v3 onboarding
+  // flow. The INTRO i18n namespace was removed 2026-04-24 (onboarding-v2-auto-import
+  // Fase 6). This test helper is broken against v3; left as a literal so the file
+  // compiles until the integration tests are rewired for v3 slides.
+  await tester.tap(find.text('Start session offline'));
 
   await tester.pumpAndSettle();
   expect(find.byType(OnboardingPage), findsOneWidget);

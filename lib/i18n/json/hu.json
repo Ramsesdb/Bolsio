@@ -165,26 +165,6 @@
       "max_number": "Kevesebbnek kell lennie, mint {{x}}"
     }
   },
-  "INTRO": {
-    "start": "Kezdés",
-    "skip": "Kihagyás",
-    "next": "Tovább",
-    "select-your-currency": "Válassza ki a pénznemet",
-    "welcome.subtitle": "Az Ön személyes pénzügyi menedzsere",
-    "welcome.subtitle2": "100% -ban nyitott, és 100% -ban ingyenes",
-    "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
-    "offline.descr.title": "OFFLINE SZÁMLA:",
-    "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",
-    "offline.start": "Offline munkamenet indítása",
-    "sl1Title": "Válassza ki a pénznemet",
-    "sl1Descr": "Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.",
-    "sl2Title": "Biztonságos, privát és megbízható",
-    "sl2Descr": "Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.",
-    "sl2Descr2": "Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.",
-    "lastSlideTitle": "Minden kész",
-    "lastSlideDescr": "A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.",
-    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak..."
-  },
   "HOME": {
     "title": "Kezdőlap",
     "filter-transactions": "Tranzakciók szűrése",
@@ -380,7 +360,8 @@
         "date-max": "A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.",
         "date-after-account-creation": "Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.",
         "negative-transfer": "Az átutalás pénzbeli értéke nem lehet negatív.",
-        "transfer-between-same-accounts": "A kiindulási és a célszámla nem lehet ugyanaz."
+        "transfer-between-same-accounts": "A kiindulási és a célszámla nem lehet ugyanaz.",
+        "category-required": "Válassz kategóriát a mentés előtt"
       },
       "title": "Tranzakció megnevezése",
       "title.short": "Cím",

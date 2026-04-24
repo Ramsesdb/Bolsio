@@ -40,7 +40,6 @@ class TranslationsZhTw extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsZhTw ui_actions = _TranslationsUiActionsZhTw._(_root);
 	@override late final _TranslationsGeneralZhTw general = _TranslationsGeneralZhTw._(_root);
-	@override late final _TranslationsIntroZhTw intro = _TranslationsIntroZhTw._(_root);
 	@override late final _TranslationsHomeZhTw home = _TranslationsHomeZhTw._(_root);
 	@override late final _TranslationsFinancialHealthZhTw financial_health = _TranslationsFinancialHealthZhTw._(_root);
 	@override late final _TranslationsStatsZhTw stats = _TranslationsStatsZhTw._(_root);
@@ -137,33 +136,6 @@ class _TranslationsGeneralZhTw extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeZhTw time = _TranslationsGeneralTimeZhTw._(_root);
 	@override late final _TranslationsGeneralTransactionOrderZhTw transaction_order = _TranslationsGeneralTransactionOrderZhTw._(_root);
 	@override late final _TranslationsGeneralValidationsZhTw validations = _TranslationsGeneralValidationsZhTw._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroZhTw extends TranslationsIntroEn {
-	_TranslationsIntroZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
-
-	final TranslationsZhTw _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => '開始';
-	@override String get skip => '跳過';
-	@override String get next => '下一個';
-	@override String get select_your_currency => '選擇您的貨幣';
-	@override String get welcome_subtitle => '您的個人財務管家';
-	@override String get welcome_subtitle2 => '100% 開放，100% 免費';
-	@override String get welcome_footer => '登入即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隱私權政策</a>和<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>應用程式的使用條款</a>';
-	@override String get offline_descr_title => '離線帳戶：';
-	@override String get offline_descr => '您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。';
-	@override String get offline_start => '離線啟動會話';
-	@override String get sl1_title => '選擇您的貨幣';
-	@override String get sl1_descr => '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言';
-	@override String get sl2_title => '安全、隱私、可靠';
-	@override String get sl2_descr => '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式';
-	@override String get sl2_descr2 => '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的';
-	@override String get last_slide_title => '一切準備就緒';
-	@override String get last_slide_descr => '有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。';
-	@override String get last_slide_descr2 => '我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......';
 }
 
 // Path: home
@@ -1633,6 +1605,7 @@ class _TranslationsTransactionFormValidatorsZhTw extends TranslationsTransaction
 	@override String get date_after_account_creation => '您無法建立日期早於所屬帳戶建立日期的交易';
 	@override String get negative_transfer => '轉帳的貨幣價值不能為負數';
 	@override String get transfer_between_same_accounts => '來源帳號與目標帳號不能符合';
+	@override String get category_required => '儲存前請先選擇一個類別';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2161,24 +2134,6 @@ extension on TranslationsZhTw {
 		map['general.validations.positive'] = '應該是積極的';
 		map['general.validations.min_number'] = ({required Object x}) => '應該大於${x}';
 		map['general.validations.max_number'] = ({required Object x}) => '應小於${x}';
-		map['intro.start'] = '開始';
-		map['intro.skip'] = '跳過';
-		map['intro.next'] = '下一個';
-		map['intro.select_your_currency'] = '選擇您的貨幣';
-		map['intro.welcome_subtitle'] = '您的個人財務管家';
-		map['intro.welcome_subtitle2'] = '100% 開放，100% 免費';
-		map['intro.welcome_footer'] = '登入即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隱私權政策</a>和<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>應用程式的使用條款</a>';
-		map['intro.offline_descr_title'] = '離線帳戶：';
-		map['intro.offline_descr'] = '您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。';
-		map['intro.offline_start'] = '離線啟動會話';
-		map['intro.sl1_title'] = '選擇您的貨幣';
-		map['intro.sl1_descr'] = '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言';
-		map['intro.sl2_title'] = '安全、隱私、可靠';
-		map['intro.sl2_descr'] = '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式';
-		map['intro.sl2_descr2'] = '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的';
-		map['intro.last_slide_title'] = '一切準備就緒';
-		map['intro.last_slide_descr'] = '有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。';
-		map['intro.last_slide_descr2'] = '我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......';
 		map['home.title'] = '儀表板';
 		map['home.filter_transactions'] = '過濾交易';
 		map['home.hello_day'] = '早安，';
@@ -2372,6 +2327,7 @@ extension on TranslationsZhTw {
 		map['transaction.form.validators.date_after_account_creation'] = '您無法建立日期早於所屬帳戶建立日期的交易';
 		map['transaction.form.validators.negative_transfer'] = '轉帳的貨幣價值不能為負數';
 		map['transaction.form.validators.transfer_between_same_accounts'] = '來源帳號與目標帳號不能符合';
+		map['transaction.form.validators.category_required'] = '儲存前請先選擇一個類別';
 		map['transaction.form.title'] = '交易標題';
 		map['transaction.form.title_short'] = '資質';
 		map['transaction.form.value'] = '交易價值';

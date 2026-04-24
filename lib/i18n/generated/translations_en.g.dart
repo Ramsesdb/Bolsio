@@ -41,7 +41,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final TranslationsUiActionsEn ui_actions = TranslationsUiActionsEn.internal(_root);
 	late final TranslationsGeneralEn general = TranslationsGeneralEn.internal(_root);
-	late final TranslationsIntroEn intro = TranslationsIntroEn.internal(_root);
+	late final TranslationsSharedEn shared = TranslationsSharedEn.internal(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn.internal(_root);
 	late final TranslationsFinancialHealthEn financial_health = TranslationsFinancialHealthEn.internal(_root);
 	late final TranslationsStatsEn stats = TranslationsStatsEn.internal(_root);
@@ -255,67 +255,16 @@ class TranslationsGeneralEn {
 	late final TranslationsGeneralValidationsEn validations = TranslationsGeneralValidationsEn.internal(_root);
 }
 
-// Path: intro
-class TranslationsIntroEn {
-	TranslationsIntroEn.internal(this._root);
+// Path: shared
+class TranslationsSharedEn {
+	TranslationsSharedEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Start'
-	String get start => 'Start';
-
-	/// en: 'Skip'
-	String get skip => 'Skip';
-
-	/// en: 'Next'
-	String get next => 'Next';
-
-	/// en: 'Select your currency'
-	String get select_your_currency => 'Select your currency';
-
-	/// en: 'Your personal finance manager'
-	String get welcome_subtitle => 'Your personal finance manager';
-
 	/// en: '100% open, 100% free'
-	String get welcome_subtitle2 => '100% open, 100% free';
-
-	/// en: 'By logging in you agree to the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Privacy Policy</a> and the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Terms of Use</a> of the application'
-	String get welcome_footer => 'By logging in you agree to the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Privacy Policy</a> and the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Terms of Use</a> of the application';
-
-	/// en: 'OFFLINE ACCOUNT:'
-	String get offline_descr_title => 'OFFLINE ACCOUNT:';
-
-	/// en: 'Your data will only be stored on your device, and will be safe as long as you don't uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.'
-	String get offline_descr => 'Your data will only be stored on your device, and will be safe as long as you don\'t uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.';
-
-	/// en: 'Start session offline'
-	String get offline_start => 'Start session offline';
-
-	/// en: 'Select your currency'
-	String get sl1_title => 'Select your currency';
-
-	/// en: 'Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings'
-	String get sl1_descr => 'Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings';
-
-	/// en: 'Safe, private and reliable'
-	String get sl2_title => 'Safe, private and reliable';
-
-	/// en: 'Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet'
-	String get sl2_descr => 'Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet';
-
-	/// en: 'Also, the source code of the application is public, anyone can collaborate on it and see how it works'
-	String get sl2_descr2 => 'Also, the source code of the application is public, anyone can collaborate on it and see how it works';
-
-	/// en: 'All ready'
-	String get last_slide_title => 'All ready';
-
-	/// en: 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.'
-	String get last_slide_descr => 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.';
-
-	/// en: 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...'
-	String get last_slide_descr2 => 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...';
+	String get app_tagline => '100% open, 100% free';
 }
 
 // Path: home
@@ -3575,6 +3524,9 @@ class TranslationsTransactionFormValidatorsEn {
 
 	/// en: 'The origin and the destination account cannot be the same'
 	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
+
+	/// en: 'Select a category before saving'
+	String get category_required => 'Select a category before saving';
 }
 
 // Path: transaction.receipt_import.error
@@ -4432,24 +4384,7 @@ extension on Translations {
 		map['general.validations.positive'] = 'Should be positive';
 		map['general.validations.min_number'] = ({required Object x}) => 'Should be greater than ${x}';
 		map['general.validations.max_number'] = ({required Object x}) => 'Should be less than ${x}';
-		map['intro.start'] = 'Start';
-		map['intro.skip'] = 'Skip';
-		map['intro.next'] = 'Next';
-		map['intro.select_your_currency'] = 'Select your currency';
-		map['intro.welcome_subtitle'] = 'Your personal finance manager';
-		map['intro.welcome_subtitle2'] = '100% open, 100% free';
-		map['intro.welcome_footer'] = 'By logging in you agree to the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Privacy Policy</a> and the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Terms of Use</a> of the application';
-		map['intro.offline_descr_title'] = 'OFFLINE ACCOUNT:';
-		map['intro.offline_descr'] = 'Your data will only be stored on your device, and will be safe as long as you don\'t uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.';
-		map['intro.offline_start'] = 'Start session offline';
-		map['intro.sl1_title'] = 'Select your currency';
-		map['intro.sl1_descr'] = 'Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings';
-		map['intro.sl2_title'] = 'Safe, private and reliable';
-		map['intro.sl2_descr'] = 'Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet';
-		map['intro.sl2_descr2'] = 'Also, the source code of the application is public, anyone can collaborate on it and see how it works';
-		map['intro.last_slide_title'] = 'All ready';
-		map['intro.last_slide_descr'] = 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.';
-		map['intro.last_slide_descr2'] = 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...';
+		map['shared.app_tagline'] = '100% open, 100% free';
 		map['home.title'] = 'Dashboard';
 		map['home.filter_transactions'] = 'Filter transactions';
 		map['home.hello_day'] = 'Good morning,';
@@ -4645,6 +4580,7 @@ extension on Translations {
 		map['transaction.form.validators.date_after_account_creation'] = 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
 		map['transaction.form.validators.negative_transfer'] = 'The monetary value of a transfer cannot be negative';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'The origin and the destination account cannot be the same';
+		map['transaction.form.validators.category_required'] = 'Select a category before saving';
 		map['transaction.form.title'] = 'Transaction title';
 		map['transaction.form.title_short'] = 'Title';
 		map['transaction.form.value'] = 'Value of the transaction';

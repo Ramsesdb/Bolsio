@@ -40,7 +40,6 @@ class TranslationsHu extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsHu ui_actions = _TranslationsUiActionsHu._(_root);
 	@override late final _TranslationsGeneralHu general = _TranslationsGeneralHu._(_root);
-	@override late final _TranslationsIntroHu intro = _TranslationsIntroHu._(_root);
 	@override late final _TranslationsHomeHu home = _TranslationsHomeHu._(_root);
 	@override late final _TranslationsFinancialHealthHu financial_health = _TranslationsFinancialHealthHu._(_root);
 	@override late final _TranslationsStatsHu stats = _TranslationsStatsHu._(_root);
@@ -137,33 +136,6 @@ class _TranslationsGeneralHu extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeHu time = _TranslationsGeneralTimeHu._(_root);
 	@override late final _TranslationsGeneralTransactionOrderHu transaction_order = _TranslationsGeneralTransactionOrderHu._(_root);
 	@override late final _TranslationsGeneralValidationsHu validations = _TranslationsGeneralValidationsHu._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroHu extends TranslationsIntroEn {
-	_TranslationsIntroHu._(TranslationsHu root) : this._root = root, super.internal(root);
-
-	final TranslationsHu _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => 'Kezdés';
-	@override String get skip => 'Kihagyás';
-	@override String get next => 'Tovább';
-	@override String get select_your_currency => 'Válassza ki a pénznemet';
-	@override String get welcome_subtitle => 'Az Ön személyes pénzügyi menedzsere';
-	@override String get welcome_subtitle2 => '100% -ban nyitott, és 100% -ban ingyenes';
-	@override String get welcome_footer => 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>';
-	@override String get offline_descr_title => 'OFFLINE SZÁMLA:';
-	@override String get offline_descr => 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.';
-	@override String get offline_start => 'Offline munkamenet indítása';
-	@override String get sl1_title => 'Válassza ki a pénznemet';
-	@override String get sl1_descr => 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.';
-	@override String get sl2_title => 'Biztonságos, privát és megbízható';
-	@override String get sl2_descr => 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.';
-	@override String get sl2_descr2 => 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.';
-	@override String get last_slide_title => 'Minden kész';
-	@override String get last_slide_descr => 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.';
-	@override String get last_slide_descr2 => 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...';
 }
 
 // Path: home
@@ -1633,6 +1605,7 @@ class _TranslationsTransactionFormValidatorsHu extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';
 	@override String get negative_transfer => 'Az átutalás pénzbeli értéke nem lehet negatív.';
 	@override String get transfer_between_same_accounts => 'A kiindulási és a célszámla nem lehet ugyanaz.';
+	@override String get category_required => 'Válassz kategóriát a mentés előtt';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2161,24 +2134,6 @@ extension on TranslationsHu {
 		map['general.validations.positive'] = 'Pozitívnak kell lennie';
 		map['general.validations.min_number'] = ({required Object x}) => 'Nagyobbnak kell lennie, mint ${x}';
 		map['general.validations.max_number'] = ({required Object x}) => 'Kevesebbnek kell lennie, mint ${x}';
-		map['intro.start'] = 'Kezdés';
-		map['intro.skip'] = 'Kihagyás';
-		map['intro.next'] = 'Tovább';
-		map['intro.select_your_currency'] = 'Válassza ki a pénznemet';
-		map['intro.welcome_subtitle'] = 'Az Ön személyes pénzügyi menedzsere';
-		map['intro.welcome_subtitle2'] = '100% -ban nyitott, és 100% -ban ingyenes';
-		map['intro.welcome_footer'] = 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>';
-		map['intro.offline_descr_title'] = 'OFFLINE SZÁMLA:';
-		map['intro.offline_descr'] = 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.';
-		map['intro.offline_start'] = 'Offline munkamenet indítása';
-		map['intro.sl1_title'] = 'Válassza ki a pénznemet';
-		map['intro.sl1_descr'] = 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.';
-		map['intro.sl2_title'] = 'Biztonságos, privát és megbízható';
-		map['intro.sl2_descr'] = 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.';
-		map['intro.sl2_descr2'] = 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.';
-		map['intro.last_slide_title'] = 'Minden kész';
-		map['intro.last_slide_descr'] = 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.';
-		map['intro.last_slide_descr2'] = 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...';
 		map['home.title'] = 'Kezdőlap';
 		map['home.filter_transactions'] = 'Tranzakciók szűrése';
 		map['home.hello_day'] = 'Jó reggelt,';
@@ -2372,6 +2327,7 @@ extension on TranslationsHu {
 		map['transaction.form.validators.date_after_account_creation'] = 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';
 		map['transaction.form.validators.negative_transfer'] = 'Az átutalás pénzbeli értéke nem lehet negatív.';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'A kiindulási és a célszámla nem lehet ugyanaz.';
+		map['transaction.form.validators.category_required'] = 'Válassz kategóriát a mentés előtt';
 		map['transaction.form.title'] = 'Tranzakció megnevezése';
 		map['transaction.form.title_short'] = 'Cím';
 		map['transaction.form.value'] = 'A tranzakció értéke';

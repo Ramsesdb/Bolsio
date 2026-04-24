@@ -79,7 +79,7 @@ class _AboutPageState extends State<AboutPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              t.intro.welcome_subtitle2,
+                              t.shared.app_tagline,
                               style: Theme.of(context).textTheme.labelSmall!
                                   .copyWith(
                                     color: Theme.of(

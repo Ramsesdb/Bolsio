@@ -40,7 +40,6 @@ class TranslationsFr extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsFr ui_actions = _TranslationsUiActionsFr._(_root);
 	@override late final _TranslationsGeneralFr general = _TranslationsGeneralFr._(_root);
-	@override late final _TranslationsIntroFr intro = _TranslationsIntroFr._(_root);
 	@override late final _TranslationsHomeFr home = _TranslationsHomeFr._(_root);
 	@override late final _TranslationsFinancialHealthFr financial_health = _TranslationsFinancialHealthFr._(_root);
 	@override late final _TranslationsStatsFr stats = _TranslationsStatsFr._(_root);
@@ -137,33 +136,6 @@ class _TranslationsGeneralFr extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeFr time = _TranslationsGeneralTimeFr._(_root);
 	@override late final _TranslationsGeneralTransactionOrderFr transaction_order = _TranslationsGeneralTransactionOrderFr._(_root);
 	@override late final _TranslationsGeneralValidationsFr validations = _TranslationsGeneralValidationsFr._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroFr extends TranslationsIntroEn {
-	_TranslationsIntroFr._(TranslationsFr root) : this._root = root, super.internal(root);
-
-	final TranslationsFr _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => 'Commencer';
-	@override String get skip => 'Ignorer';
-	@override String get next => 'Suivant';
-	@override String get select_your_currency => 'Sélectionnez votre devise';
-	@override String get welcome_subtitle => 'Votre gestionnaire de finances personnelles';
-	@override String get welcome_subtitle2 => '100 % open, 100 % gratuit';
-	@override String get welcome_footer => 'En vous connectant, vous acceptez la <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>politique de confidentialité</a> et les <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>conditions d\'utilisation</a> de l\'application';
-	@override String get offline_descr_title => 'COMPTE HORS LIGNE :';
-	@override String get offline_descr => 'Vos données ne seront stockées que sur votre appareil, et seront en sécurité tant que vous ne désinstallez pas l\'application ou ne changez pas de téléphone. Pour éviter toute perte de données, il est recommandé de réaliser régulièrement une sauvegarde depuis les paramètres de l\'application.';
-	@override String get offline_start => 'Démarrer une session hors ligne';
-	@override String get sl1_title => 'Choisissez votre devise';
-	@override String get sl1_descr => 'Votre devise par défaut sera utilisée dans les rapports et graphiques généraux. Vous pourrez changer la devise et la langue de l\'application plus tard à tout moment dans les paramètres.';
-	@override String get sl2_title => 'Sûr, privé et fiable';
-	@override String get sl2_descr => 'Vos données n\'appartiennent qu\'à vous. Nous stockons les informations directement sur votre appareil, sans passer par des serveurs externes. Cela permet d\'utiliser l\'application même sans Internet.';
-	@override String get sl2_descr2 => 'De plus, le code source de l\'application est public ; tout le monde peut y collaborer et voir comment elle fonctionne.';
-	@override String get last_slide_title => 'Tout est prêt';
-	@override String get last_slide_descr => 'Avec Monekin, vous pouvez enfin atteindre l\'indépendance financière que vous désirez tant. Vous disposerez de graphiques, budgets, conseils, statistiques et bien plus encore sur votre argent.';
-	@override String get last_slide_descr2 => 'Nous espérons que vous apprécierez votre expérience ! N\'hésitez pas à nous contacter en cas de doutes, de suggestions...';
 }
 
 // Path: home
@@ -1631,6 +1603,7 @@ class _TranslationsTransactionFormValidatorsFr extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Vous ne pouvez pas créer une transaction dont la date est antérieure à la date de création du compte auquel elle appartient';
 	@override String get negative_transfer => 'Le montant d\'un virement ne peut pas être négatif';
 	@override String get transfer_between_same_accounts => 'Le compte d\'origine et le compte de destination ne peuvent pas être identiques';
+	@override String get category_required => 'Sélectionnez une catégorie avant d\'enregistrer';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2159,24 +2132,6 @@ extension on TranslationsFr {
 		map['general.validations.positive'] = 'Doit être positif';
 		map['general.validations.min_number'] = ({required Object x}) => 'Doit être supérieur à ${x}';
 		map['general.validations.max_number'] = ({required Object x}) => 'Doit être inférieur à ${x}';
-		map['intro.start'] = 'Commencer';
-		map['intro.skip'] = 'Ignorer';
-		map['intro.next'] = 'Suivant';
-		map['intro.select_your_currency'] = 'Sélectionnez votre devise';
-		map['intro.welcome_subtitle'] = 'Votre gestionnaire de finances personnelles';
-		map['intro.welcome_subtitle2'] = '100 % open, 100 % gratuit';
-		map['intro.welcome_footer'] = 'En vous connectant, vous acceptez la <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>politique de confidentialité</a> et les <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>conditions d\'utilisation</a> de l\'application';
-		map['intro.offline_descr_title'] = 'COMPTE HORS LIGNE :';
-		map['intro.offline_descr'] = 'Vos données ne seront stockées que sur votre appareil, et seront en sécurité tant que vous ne désinstallez pas l\'application ou ne changez pas de téléphone. Pour éviter toute perte de données, il est recommandé de réaliser régulièrement une sauvegarde depuis les paramètres de l\'application.';
-		map['intro.offline_start'] = 'Démarrer une session hors ligne';
-		map['intro.sl1_title'] = 'Choisissez votre devise';
-		map['intro.sl1_descr'] = 'Votre devise par défaut sera utilisée dans les rapports et graphiques généraux. Vous pourrez changer la devise et la langue de l\'application plus tard à tout moment dans les paramètres.';
-		map['intro.sl2_title'] = 'Sûr, privé et fiable';
-		map['intro.sl2_descr'] = 'Vos données n\'appartiennent qu\'à vous. Nous stockons les informations directement sur votre appareil, sans passer par des serveurs externes. Cela permet d\'utiliser l\'application même sans Internet.';
-		map['intro.sl2_descr2'] = 'De plus, le code source de l\'application est public ; tout le monde peut y collaborer et voir comment elle fonctionne.';
-		map['intro.last_slide_title'] = 'Tout est prêt';
-		map['intro.last_slide_descr'] = 'Avec Monekin, vous pouvez enfin atteindre l\'indépendance financière que vous désirez tant. Vous disposerez de graphiques, budgets, conseils, statistiques et bien plus encore sur votre argent.';
-		map['intro.last_slide_descr2'] = 'Nous espérons que vous apprécierez votre expérience ! N\'hésitez pas à nous contacter en cas de doutes, de suggestions...';
 		map['home.title'] = 'Tableau de bord';
 		map['home.filter_transactions'] = 'Filtrer les transactions';
 		map['home.hello_day'] = 'Bonjour,';
@@ -2370,6 +2325,7 @@ extension on TranslationsFr {
 		map['transaction.form.validators.date_after_account_creation'] = 'Vous ne pouvez pas créer une transaction dont la date est antérieure à la date de création du compte auquel elle appartient';
 		map['transaction.form.validators.negative_transfer'] = 'Le montant d\'un virement ne peut pas être négatif';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'Le compte d\'origine et le compte de destination ne peuvent pas être identiques';
+		map['transaction.form.validators.category_required'] = 'Sélectionnez une catégorie avant d\'enregistrer';
 		map['transaction.form.title'] = 'Titre de la transaction';
 		map['transaction.form.title_short'] = 'Titre';
 		map['transaction.form.value'] = 'Montant de la transaction';

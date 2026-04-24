@@ -40,7 +40,6 @@ class TranslationsTr extends Translations {
 	// Translations
 	@override late final _TranslationsUiActionsTr ui_actions = _TranslationsUiActionsTr._(_root);
 	@override late final _TranslationsGeneralTr general = _TranslationsGeneralTr._(_root);
-	@override late final _TranslationsIntroTr intro = _TranslationsIntroTr._(_root);
 	@override late final _TranslationsHomeTr home = _TranslationsHomeTr._(_root);
 	@override late final _TranslationsFinancialHealthTr financial_health = _TranslationsFinancialHealthTr._(_root);
 	@override late final _TranslationsStatsTr stats = _TranslationsStatsTr._(_root);
@@ -137,33 +136,6 @@ class _TranslationsGeneralTr extends TranslationsGeneralEn {
 	@override late final _TranslationsGeneralTimeTr time = _TranslationsGeneralTimeTr._(_root);
 	@override late final _TranslationsGeneralTransactionOrderTr transaction_order = _TranslationsGeneralTransactionOrderTr._(_root);
 	@override late final _TranslationsGeneralValidationsTr validations = _TranslationsGeneralValidationsTr._(_root);
-}
-
-// Path: intro
-class _TranslationsIntroTr extends TranslationsIntroEn {
-	_TranslationsIntroTr._(TranslationsTr root) : this._root = root, super.internal(root);
-
-	final TranslationsTr _root; // ignore: unused_field
-
-	// Translations
-	@override String get start => 'Başla';
-	@override String get skip => 'Atla';
-	@override String get next => 'İleri';
-	@override String get select_your_currency => 'Para birimini seçin';
-	@override String get welcome_subtitle => 'Kişisel finans yöneticiniz';
-	@override String get welcome_subtitle2 => '%100 açık, %100 ücretsiz';
-	@override String get welcome_footer => 'Giriş yaparak, uygulamanın <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Gizlilik Politikası</a> ve <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Kullanım Şartları</a>\'nı kabul etmiş olursunuz';
-	@override String get offline_descr_title => 'ÇEVRİMDIŞI HESAP:';
-	@override String get offline_descr => 'Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.';
-	@override String get offline_start => 'Çevrimdışı oturum başlat';
-	@override String get sl1_title => 'Para birimini seçin';
-	@override String get sl1_descr => 'Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz';
-	@override String get sl2_title => 'Güvenli, gizli ve güvenilir';
-	@override String get sl2_descr => 'Verileriniz yalnızca size aittir. Bilgileri harici sunuculara gitmeden doğrudan cihazınızda saklarız. Bu, uygulamayı internet olmadan bile kullanmayı mümkün kılar';
-	@override String get sl2_descr2 => 'Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir';
-	@override String get last_slide_title => 'Her şey hazır';
-	@override String get last_slide_descr => 'Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.';
-	@override String get last_slide_descr2 => 'Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...';
 }
 
 // Path: home
@@ -1633,6 +1605,7 @@ class _TranslationsTransactionFormValidatorsTr extends TranslationsTransactionFo
 	@override String get date_after_account_creation => 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz';
 	@override String get negative_transfer => 'Bir transferin parasal değeri negatif olamaz';
 	@override String get transfer_between_same_accounts => 'Kaynak ve hedef hesap aynı olamaz';
+	@override String get category_required => 'Kaydetmeden önce bir kategori seçin';
 }
 
 // Path: transfer.form.value_in_destiny
@@ -2161,24 +2134,6 @@ extension on TranslationsTr {
 		map['general.validations.positive'] = 'Pozitif olmalı';
 		map['general.validations.min_number'] = ({required Object x}) => '${x} değerinden büyük olmalı';
 		map['general.validations.max_number'] = ({required Object x}) => '${x} değerinden küçük olmalı';
-		map['intro.start'] = 'Başla';
-		map['intro.skip'] = 'Atla';
-		map['intro.next'] = 'İleri';
-		map['intro.select_your_currency'] = 'Para birimini seçin';
-		map['intro.welcome_subtitle'] = 'Kişisel finans yöneticiniz';
-		map['intro.welcome_subtitle2'] = '%100 açık, %100 ücretsiz';
-		map['intro.welcome_footer'] = 'Giriş yaparak, uygulamanın <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Gizlilik Politikası</a> ve <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Kullanım Şartları</a>\'nı kabul etmiş olursunuz';
-		map['intro.offline_descr_title'] = 'ÇEVRİMDIŞI HESAP:';
-		map['intro.offline_descr'] = 'Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.';
-		map['intro.offline_start'] = 'Çevrimdışı oturum başlat';
-		map['intro.sl1_title'] = 'Para birimini seçin';
-		map['intro.sl1_descr'] = 'Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz';
-		map['intro.sl2_title'] = 'Güvenli, gizli ve güvenilir';
-		map['intro.sl2_descr'] = 'Verileriniz yalnızca size aittir. Bilgileri harici sunuculara gitmeden doğrudan cihazınızda saklarız. Bu, uygulamayı internet olmadan bile kullanmayı mümkün kılar';
-		map['intro.sl2_descr2'] = 'Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir';
-		map['intro.last_slide_title'] = 'Her şey hazır';
-		map['intro.last_slide_descr'] = 'Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.';
-		map['intro.last_slide_descr2'] = 'Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...';
 		map['home.title'] = 'Gösterge Paneli';
 		map['home.filter_transactions'] = 'İşlemleri filtrele';
 		map['home.hello_day'] = 'Günaydın,';
@@ -2372,6 +2327,7 @@ extension on TranslationsTr {
 		map['transaction.form.validators.date_after_account_creation'] = 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz';
 		map['transaction.form.validators.negative_transfer'] = 'Bir transferin parasal değeri negatif olamaz';
 		map['transaction.form.validators.transfer_between_same_accounts'] = 'Kaynak ve hedef hesap aynı olamaz';
+		map['transaction.form.validators.category_required'] = 'Kaydetmeden önce bir kategori seçin';
 		map['transaction.form.title'] = 'İşlem başlığı';
 		map['transaction.form.title_short'] = 'Başlık';
 		map['transaction.form.value'] = 'İşlem değeri';
