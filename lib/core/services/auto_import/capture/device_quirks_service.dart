@@ -164,6 +164,18 @@ class DeviceQuirksService {
     }
   }
 
+  /// Opens the system "Notification access" listeners screen
+  /// (`Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS`). No-op on non-Android.
+  ///
+  /// Unlike the other operations in this service, this method **propagates**
+  /// any [PlatformException] thrown by the intent so the caller can decide
+  /// on a fallback (e.g. fall back to [openAppDetails] on a device that
+  /// blocks the direct intent).
+  Future<void> openNotificationListenerSettings() async {
+    if (!Platform.isAndroid) return;
+    await _channel.invokeMethod<void>('openNotificationListenerSettings');
+  }
+
   /// Extra manual steps for the detected OEM. Returns an empty list for
   /// [OemQuirk.none] so callers can short-circuit.
   List<QuirkInstruction> instructionsFor(OemQuirk quirk) {

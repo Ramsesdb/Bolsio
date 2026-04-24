@@ -23,6 +23,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <!-- Required for BankDetectionService to enumerate installed apps (onboarding-v2-auto-import) -->
+    <!-- TODO: split Play Store flavor (foss vs play) to omit QUERY_ALL_PACKAGES -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission"/>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />

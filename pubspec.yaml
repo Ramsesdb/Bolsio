@@ -95,6 +95,9 @@ dependencies:
   speech_to_text: ^7.3.0
   pdfx: ^2.9.0
   exif: ^3.3.0
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.2
+  installed_apps: ^1.6.0
 
 dev_dependencies:
   flutter_test:
@@ -128,7 +131,6 @@ flutter:
 
   assets:
     - assets/resources/
-    - assets/icons/app_onboarding/
     - assets/icons/avatars/
     - assets/icons/currency_flags/
     - assets/icons/page_states/

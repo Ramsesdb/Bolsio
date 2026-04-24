@@ -136,6 +136,11 @@ enum SettingKey {
   /// [nexusAiEnabled] is '1') exposes the FAB mic action + chat mic button.
   /// Requires BOTH [nexusAiEnabled] AND this flag to be '1'.
   aiVoiceEnabled,
+
+  /// Goals the user selected during onboarding slide 1. Stored as a
+  /// JSON-encoded `List<String>` (e.g. `["save_usd","reduce_debt"]`).
+  /// `null` or missing row is interpreted as empty list.
+  onboardingGoals,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

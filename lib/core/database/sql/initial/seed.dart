@@ -32,6 +32,7 @@ Future<String> settingsInitialSeedSQL() async {
   ('${SettingKey.transactionTileShowTags.name}', '1'),
   ('${SettingKey.transactionTileShowTime.name}', '1'),
   ('${SettingKey.receiptAiEnabled.name}', '1'),
-  ('${SettingKey.preferredCurrency.name}', '$preferredCurrency')
+  ('${SettingKey.preferredCurrency.name}', '$preferredCurrency'),
+  ('${SettingKey.onboardingGoals.name}', '[]')
 """;
 }

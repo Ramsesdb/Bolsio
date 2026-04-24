@@ -45,6 +45,10 @@ object DeviceQuirksChannel {
                         val opened = openAppDetails(context)
                         result.success(opened)
                     }
+                    "openNotificationListenerSettings" -> {
+                        openNotificationListenerSettings(context)
+                        result.success(null)
+                    }
                     else -> result.notImplemented()
                 }
             } catch (e: Exception) {
@@ -86,6 +90,17 @@ object DeviceQuirksChannel {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         return tryStart(context, intent)
+    }
+
+    /**
+     * Opens the system "Notification access" screen where the user can
+     * enable Wallex as a notification listener. Throws on failure so the
+     * Dart side can fall back to [openAppDetails] with a toast instruction.
+     */
+    private fun openNotificationListenerSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     /**
