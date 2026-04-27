@@ -14,14 +14,26 @@ class ParseResult {
   final TransactionProposal? transaction;
   final String? failureReason;
 
+  /// Bank name extracted by the LLM fallback parser, if applicable.
+  /// Used by the orchestrator to resolve the account when no profile matched.
+  final String? resolvedBankName;
+
   const ParseResult._({
     required this.success,
     this.transaction,
     this.failureReason,
+    this.resolvedBankName,
   });
 
-  factory ParseResult.parsed(TransactionProposal proposal) =>
-      ParseResult._(success: true, transaction: proposal);
+  factory ParseResult.parsed(
+    TransactionProposal proposal, {
+    String? resolvedBankName,
+  }) =>
+      ParseResult._(
+        success: true,
+        transaction: proposal,
+        resolvedBankName: resolvedBankName,
+      );
 
   factory ParseResult.failed(String reason) =>
       ParseResult._(success: false, failureReason: reason);
@@ -71,7 +83,7 @@ abstract class BankProfile {
   ///
   /// Returns `null` if the event does not match any known transaction pattern
   /// (e.g. OTP codes, verification messages).
-  TransactionProposal? tryParse(
+  Future<TransactionProposal?> tryParse(
     RawCaptureEvent event, {
     required String? accountId,
   });
@@ -82,11 +94,11 @@ abstract class BankProfile {
   /// Profiles that want to expose granular diagnostics should override this.
   /// The default implementation just delegates to [tryParse] and reports a
   /// generic failure reason — which keeps existing profiles functional.
-  ParseResult tryParseWithDetails(
+  Future<ParseResult> tryParseWithDetails(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
-    final proposal = tryParse(event, accountId: accountId);
+  }) async {
+    final proposal = await tryParse(event, accountId: accountId);
     if (proposal != null) {
       return ParseResult.parsed(proposal);
     }

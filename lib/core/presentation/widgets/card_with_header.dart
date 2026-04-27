@@ -69,7 +69,7 @@ class CardWithHeader extends StatelessWidget {
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Padding(padding: bodyPadding, child: body),
         ),
-        if (footer != null) footer!,
+        ?footer,
       ],
     );
 

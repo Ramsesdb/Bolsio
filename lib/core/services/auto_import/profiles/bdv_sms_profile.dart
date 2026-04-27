@@ -52,18 +52,18 @@ class BdvSmsProfile implements BankProfile {
   // TODO: agregar "consumo TDC/TDD" cuando se capturen fixtures reales
 
   @override
-  TransactionProposal? tryParse(
+  Future<TransactionProposal?> tryParse(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
-    return tryParseWithDetails(event, accountId: accountId).transaction;
+  }) async {
+    return (await tryParseWithDetails(event, accountId: accountId)).transaction;
   }
 
   @override
-  ParseResult tryParseWithDetails(
+  Future<ParseResult> tryParseWithDetails(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
+  }) async {
     // Try pagomovil recibido
     final match = _pagomovilRecibidoRegex.firstMatch(event.rawText);
     if (match != null) {

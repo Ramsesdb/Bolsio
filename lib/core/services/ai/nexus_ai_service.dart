@@ -4,10 +4,37 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallex/core/services/ai/ai_completion_result.dart';
-import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
+import 'package:wallex/core/services/ai/ai_credentials_store.dart';
+import 'package:wallex/core/services/ai/ai_provider_type.dart';
 
 typedef LoadSecret = Future<String?> Function();
 
+/// Default Nexus credentials reader backed by the new BYOK store.
+/// Returns the stored API key for the Nexus provider, or `null` when the
+/// user has not configured Nexus credentials.
+@Deprecated('Use AiService.instance instead')
+Future<String?> _defaultNexusApiKeyLoader() async {
+  final creds = await AiCredentialsStore.instance
+      .loadCredentials(AiProviderType.nexus);
+  return creds?.apiKey;
+}
+
+/// Default Nexus model reader backed by the new BYOK store. Falls back to
+/// the legacy multimodal default (`openai/gpt-4.1-mini`) when nothing is
+/// stored — preserving the pre-BYOK behaviour for the multimodal/tools
+/// codepaths that still live on this service.
+@Deprecated('Use AiService.instance instead')
+Future<String?> _defaultNexusModelLoader() async {
+  final creds = await AiCredentialsStore.instance
+      .loadCredentials(AiProviderType.nexus);
+  final model = creds?.model;
+  if (model == null || model.trim().isEmpty) {
+    return 'openai/gpt-4.1-mini';
+  }
+  return model;
+}
+
+@Deprecated('Use AiService.instance instead')
 class NexusAiService {
   static final instance = NexusAiService._();
   NexusAiService._({
@@ -16,8 +43,8 @@ class NexusAiService {
     LoadSecret? loadModel,
     Duration requestTimeout = const Duration(seconds: 15),
   })  : _client = client ?? http.Client(),
-        _loadApiKey = loadApiKey ?? NexusCredentialsStore.instance.loadApiKey,
-        _loadModel = loadModel ?? NexusCredentialsStore.instance.loadModel,
+        _loadApiKey = loadApiKey ?? _defaultNexusApiKeyLoader,
+        _loadModel = loadModel ?? _defaultNexusModelLoader,
         _requestTimeout = requestTimeout;
 
   factory NexusAiService.forTesting({
@@ -453,18 +480,64 @@ class NexusAiService {
     }
   }
 
-  Stream<String> streamComplete({
-    required List<Map<String, String>> messages,
-    double temperature = 0.7,
-    int maxTokens = 4096,
-  }) async* {
+  /// Streaming chat completion with tool-calling support — single-roundtrip.
+  ///
+  /// Sends ONE POST with `stream: true` + `tools` enabled. As SSE chunks arrive
+  /// it dispatches them to the right callback at runtime:
+  ///
+  ///  - `onTextChunk(delta)` — fired for every non-empty `delta.content` piece
+  ///    so the UI can render token-by-token.
+  ///  - `onToolCalls(calls)` — fired exactly once when the stream closes with
+  ///    `finish_reason: "tool_calls"`. The accumulator merges fragmented
+  ///    `delta.tool_calls` entries by index (first chunk carries id/name,
+  ///    subsequent chunks append `function.arguments`).
+  ///
+  /// The future resolves with an [AiCompletionResult] whose [finishReason] is
+  /// either [AiCompletionFinishReason.stop] (plain text reply, fully streamed
+  /// via `onTextChunk`) or [AiCompletionFinishReason.toolCalls] (tools were
+  /// emitted; caller must dispatch and re-invoke the loop).
+  ///
+  /// This replaces the old two-call flow (`completeWithTools` non-streaming +
+  /// a separate `streamComplete` for the final text) with a single API call.
+  Future<AiCompletionResult> streamWithTools({
+    required List<Map<String, dynamic>> messages,
+    required List<Map<String, dynamic>> tools,
+    Object toolChoice = 'auto',
+    String? model,
+    double temperature = 0.2,
+    int maxTokens = 2048,
+    void Function(String chunk)? onTextChunk,
+    void Function(List<AiToolCall> calls)? onToolCalls,
+    Duration timeout = const Duration(seconds: 60),
+  }) async {
     final apiKey = await _loadApiKey();
     if (apiKey == null || apiKey.isEmpty) {
-      debugPrint('NexusAiService.streamComplete ABORT: no API key configured');
-      return;
+      debugPrint(
+        'NexusAiService.streamWithTools ABORT: no API key configured',
+      );
+      return const AiCompletionResult(
+        finishReason: AiCompletionFinishReason.unavailable,
+        error: 'missing_api_key',
+      );
     }
 
+    final resolvedModel = (model?.trim().isNotEmpty ?? false)
+        ? model!.trim()
+        : ((await _loadModel())?.trim().isNotEmpty ?? false
+            ? (await _loadModel())!.trim()
+            : _defaultMultimodalModel);
+
     final startedAt = DateTime.now();
+
+    final body = <String, dynamic>{
+      'model': resolvedModel,
+      'stream': true,
+      'temperature': temperature,
+      'max_tokens': maxTokens,
+      'messages': messages,
+      'tools': tools,
+      'tool_choice': toolChoice,
+    };
 
     try {
       final request = http.Request('POST', Uri.parse('$_baseUrl$_endpoint'));
@@ -472,56 +545,183 @@ class NexusAiService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $apiKey',
       });
-      request.body = jsonEncode({
-        'stream': true,
-        'temperature': temperature,
-        'max_tokens': maxTokens,
-        'messages': messages,
-        'tool_choice': 'none',
-      });
+      request.body = jsonEncode(body);
 
-        final response = await _client
-          .send(request)
-          .timeout(const Duration(seconds: 60));
+      final response = await _client.send(request).timeout(timeout);
 
       final latencyMs = DateTime.now().difference(startedAt).inMilliseconds;
-      debugPrint('NexusAiService.streamComplete status=${response.statusCode} latencyMs=$latencyMs');
+      debugPrint(
+        'NexusAiService.streamWithTools status=${response.statusCode} latencyMs=$latencyMs',
+      );
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        debugPrint('NexusAiService.streamComplete ABORT: HTTP ${response.statusCode}');
-        return;
+        // Drain the body for a small preview so the UI/logs know what failed.
+        String preview = '';
+        try {
+          final bytes = await response.stream.toBytes();
+          final raw = utf8.decode(bytes, allowMalformed: true);
+          preview = raw.length > 200 ? '${raw.substring(0, 200)}…' : raw;
+        } catch (_) {}
+        debugPrint(
+          'NexusAiService.streamWithTools non-2xx body=$preview',
+        );
+        final code = response.statusCode;
+        final errorTag = _isRetryableGatewayError(code)
+            ? 'gateway_unavailable'
+            : 'http_$code';
+        return AiCompletionResult(
+          finishReason: AiCompletionFinishReason.error,
+          error: errorTag,
+          messages: messages,
+        );
       }
 
-      String pendingBuffer = '';
+      // Accumulators.
+      final contentBuffer = StringBuffer();
+      final toolAcc = <int, _ToolCallAccumulator>{};
+      String? finishReason;
+      String pending = '';
 
-      await for (final chunk in response.stream.transform(utf8.decoder)) {
-        pendingBuffer += chunk;
-        final lines = pendingBuffer.split('\n');
-        pendingBuffer = lines.removeLast();
+      void handleSseLine(String rawLine) {
+        final payload = _extractSseContent(rawLine);
+        if (payload == null) return;
+        if (payload == '[DONE]') {
+          finishReason ??= 'stop';
+          return;
+        }
 
-        for (final rawLine in lines) {
-          final parsed = _extractSseContent(rawLine);
-          if (parsed == null) continue;
-          if (parsed == '[DONE]') return;
+        final Map<String, dynamic>? data;
+        try {
+          final decoded = jsonDecode(payload);
+          data = decoded is Map<String, dynamic> ? decoded : null;
+        } catch (_) {
+          return;
+        }
+        if (data == null) return;
 
-          final piece = _extractDeltaContent(parsed);
-          if (piece != null && piece.isNotEmpty) {
-            yield piece;
+        final choices = data['choices'];
+        if (choices is! List || choices.isEmpty) return;
+        final first = choices.first;
+        if (first is! Map<String, dynamic>) return;
+
+        final fr = first['finish_reason'];
+        if (fr is String && fr.isNotEmpty) {
+          finishReason = fr;
+        }
+
+        final delta = first['delta'];
+        if (delta is! Map<String, dynamic>) return;
+
+        final contentPiece = delta['content'];
+        if (contentPiece is String && contentPiece.isNotEmpty) {
+          contentBuffer.write(contentPiece);
+          if (onTextChunk != null) onTextChunk(contentPiece);
+        }
+
+        final tcDeltas = delta['tool_calls'];
+        if (tcDeltas is List) {
+          for (final entry in tcDeltas) {
+            if (entry is! Map) continue;
+            final idx = entry['index'];
+            if (idx is! int) continue;
+            final acc = toolAcc.putIfAbsent(
+              idx,
+              () => _ToolCallAccumulator(),
+            );
+
+            final id = entry['id'];
+            if (id is String && id.isNotEmpty) acc.id = id;
+
+            final fn = entry['function'];
+            if (fn is Map) {
+              final name = fn['name'];
+              if (name is String && name.isNotEmpty) acc.name = name;
+              final args = fn['arguments'];
+              if (args is String && args.isNotEmpty) {
+                acc.argumentsBuffer.write(args);
+              }
+            }
           }
         }
       }
 
-      final trailing = _extractSseContent(pendingBuffer);
-      if (trailing != null && trailing != '[DONE]') {
-        final piece = _extractDeltaContent(trailing);
-        if (piece != null && piece.isNotEmpty) {
-          yield piece;
+      await for (final chunk in response.stream.transform(utf8.decoder)) {
+        pending += chunk;
+        final lines = pending.split('\n');
+        pending = lines.removeLast();
+        for (final line in lines) {
+          handleSseLine(line);
         }
       }
+      if (pending.isNotEmpty) {
+        handleSseLine(pending);
+      }
+
+      // Build the tool-call list ordered by index.
+      final orderedIndexes = toolAcc.keys.toList()..sort();
+      final toolCalls = <AiToolCall>[];
+      for (final idx in orderedIndexes) {
+        final acc = toolAcc[idx]!;
+        final name = acc.name;
+        if (name == null || name.isEmpty) continue;
+        final id = (acc.id != null && acc.id!.isNotEmpty)
+            ? acc.id!
+            : 'call_${DateTime.now().microsecondsSinceEpoch}_$idx';
+        final argsJson = acc.argumentsBuffer.toString();
+        final isValid = acc.finalizeIsValid();
+        if (!isValid) {
+          debugPrint(
+            'NexusAiService.streamWithTools tool="$name" '
+            'invalid_arguments_json bufferLen=${argsJson.length}',
+          );
+        }
+        toolCalls.add(AiToolCall(
+          id: id,
+          name: name,
+          argumentsJson: argsJson.isEmpty ? '{}' : argsJson,
+          hasInvalidArguments: !isValid,
+        ));
+      }
+
+      // Decide finish reason.
+      // Some providers omit finish_reason but emit tool_calls — detect by
+      // presence of accumulated calls. Likewise, treat absent finish_reason
+      // with content as a normal stop.
+      final isToolCalls = (finishReason == 'tool_calls') ||
+          (finishReason == null && toolCalls.isNotEmpty);
+
+      if (isToolCalls) {
+        if (onToolCalls != null && toolCalls.isNotEmpty) {
+          onToolCalls(toolCalls);
+        }
+        return AiCompletionResult(
+          content: contentBuffer.isEmpty ? null : contentBuffer.toString(),
+          toolCalls: toolCalls,
+          finishReason: AiCompletionFinishReason.toolCalls,
+          messages: messages,
+        );
+      }
+
+      final finalText = contentBuffer.toString();
+      return AiCompletionResult(
+        content: finalText.trim().isEmpty ? null : finalText,
+        finishReason: AiCompletionFinishReason.stop,
+        messages: messages,
+      );
+    } on TimeoutException {
+      return AiCompletionResult(
+        finishReason: AiCompletionFinishReason.error,
+        error: 'timeout',
+        messages: messages,
+      );
     } catch (e, st) {
-      debugPrint('NexusAiService.streamComplete ERROR: $e');
+      debugPrint('NexusAiService.streamWithTools ERROR: $e');
       debugPrint('$st');
-      return;
+      return AiCompletionResult(
+        finishReason: AiCompletionFinishReason.error,
+        error: '$e',
+        messages: messages,
+      );
     }
   }
 
@@ -542,25 +742,26 @@ class NexusAiService {
     if (data.isEmpty) return null;
     return data;
   }
+}
 
-  String? _extractDeltaContent(String jsonPayload) {
+/// Internal mutable accumulator for one streamed `tool_call` indexed slot.
+class _ToolCallAccumulator {
+  String? id;
+  String? name;
+  final StringBuffer argumentsBuffer = StringBuffer();
+
+  /// Validates the accumulated arguments buffer once the stream closes.
+  /// An empty buffer is treated as a valid `{}` (some providers omit
+  /// `arguments` for parameterless tools). A non-empty buffer that fails
+  /// `jsonDecode` is flagged so callers can surface the error.
+  bool finalizeIsValid() {
+    final raw = argumentsBuffer.toString();
+    if (raw.isEmpty) return true;
     try {
-      final data = jsonDecode(jsonPayload);
-      if (data is! Map<String, dynamic>) return null;
-
-      final choices = data['choices'];
-      if (choices is! List || choices.isEmpty) return null;
-
-      final firstChoice = choices.first;
-      if (firstChoice is! Map<String, dynamic>) return null;
-
-      final delta = firstChoice['delta'];
-      if (delta is! Map<String, dynamic>) return null;
-
-      final content = delta['content'];
-      return content is String ? content : null;
+      jsonDecode(raw);
+      return true;
     } catch (_) {
-      return null;
+      return false;
     }
   }
 }

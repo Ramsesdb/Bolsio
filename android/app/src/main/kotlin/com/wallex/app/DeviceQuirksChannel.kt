@@ -68,19 +68,16 @@ object DeviceQuirksChannel {
     }
 
     private fun openBatteryOptimization(context: Context): Boolean {
-        // Preferred: whitelist panel. User must tap app -> "Don't optimize".
-        val generic = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        if (tryStart(context, generic)) return true
-
-        // Fallback: direct request dialog with our package URI.
         val direct = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
             data = Uri.parse("package:${context.packageName}")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         if (tryStart(context, direct)) return true
 
-        // Last-resort fallback: app details settings.
+        val generic = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (tryStart(context, generic)) return true
+
         return openAppDetails(context)
     }
 
@@ -96,8 +93,34 @@ object DeviceQuirksChannel {
      * Opens the system "Notification access" screen where the user can
      * enable Wallex as a notification listener. Throws on failure so the
      * Dart side can fall back to [openAppDetails] with a toast instruction.
+     *
+     * On Android 11+ (API 30+) we use ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS
+     * with the Wallex listener component so the user lands directly on our
+     * app's toggle instead of the generic list of all installed apps.
+     * The listener is provided by the `notification_listener_service` plugin
+     * and registered in AndroidManifest.xml as
+     * `notification.listener.service.NotificationListener`.
      */
     private fun openNotificationListenerSettings(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val component = ComponentName(
+                    context.packageName,
+                    "notification.listener.service.NotificationListener",
+                )
+                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS)
+                    .putExtra(
+                        Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
+                        component.flattenToString(),
+                    )
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+                return
+            } catch (_: Exception) {
+                // Fallback to generic intent below if detail settings is not
+                // available on this device.
+            }
+        }
         val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
@@ -171,6 +194,22 @@ object DeviceQuirksChannel {
             val intent = Intent().apply {
                 this.component = component
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                when (quirk.lowercase()) {
+                    "miui", "hyperos" -> {
+                        putExtra("package_name", context.packageName)
+                        putExtra("packageName", context.packageName)
+                    }
+                    "huawei" -> {
+                        putExtra("packageName", context.packageName)
+                    }
+                    "samsung" -> {
+                        putExtra("extra_pkgname", context.packageName)
+                    }
+                    "oppo", "realme", "vivo" -> {
+                        putExtra("package_name", context.packageName)
+                        putExtra("packageName", context.packageName)
+                    }
+                }
             }
             if (tryStart(context, intent)) return true
         }

@@ -23,7 +23,6 @@ import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/services/ai/agents/agent_run_result.dart';
 import 'package:wallex/core/services/ai/agents/wallex_ai_agent.dart';
-import 'package:wallex/core/services/ai/nexus_ai_service.dart';
 import 'package:wallex/core/services/voice/voice_permission_dialog.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
@@ -137,7 +136,10 @@ class _WallexChatPageState extends State<WallexChatPage> {
           .map((m) => <String, dynamic>{'role': m.role, 'content': m.text})
           .toList();
 
-      final result = await _agent.run(history: history);
+      final result = await _agent.run(
+        history: history,
+        onTextChunk: _appendChunkToLastAssistant,
+      );
 
       await _handleAgentResult(result);
     } catch (_) {
@@ -153,21 +155,48 @@ class _WallexChatPageState extends State<WallexChatPage> {
     }
   }
 
+  /// Live token-by-token append for the last assistant bubble. Wired into
+  /// the agent's `onTextChunk` so the UI renders the model's reply as it
+  /// arrives — no second HTTP roundtrip needed.
+  void _appendChunkToLastAssistant(String chunk) {
+    if (!mounted || chunk.isEmpty) return;
+    setState(() {
+      if (_messages.isEmpty || _messages.last.role != 'assistant') {
+        _messages.add(_ChatMessage(role: 'assistant', text: chunk));
+        return;
+      }
+      final last = _messages.removeLast();
+      _messages.add(_ChatMessage(
+        role: last.role,
+        text: '${last.text}$chunk',
+        kind: last.kind,
+        card: last.card,
+      ));
+    });
+    _scrollToBottom();
+  }
+
   Future<void> _handleAgentResult(AgentRunResult result) async {
     if (!mounted) return;
     final t = Translations.of(context).wallex_ai;
 
     switch (result.status) {
-      case AgentRunStatus.streamFinalText:
-        // Preserve byte-for-byte streaming UX for the plain text-only path.
-        await _streamFinalText(result.messages);
-        await _maybeAppendCardFromMessages(result.messages);
       case AgentRunStatus.finalText:
-        _replaceLastAssistant(
-          result.finalText?.isNotEmpty == true
-              ? result.finalText!
-              : t.chat_error_generic,
-        );
+        // The text was streamed live via `onTextChunk` while the request was
+        // in flight. The placeholder bubble already holds the full answer; we
+        // just need to (a) cover the edge case where the model returned no
+        // content, and (b) try to append a structured card if a tool ran in
+        // a previous loop iteration.
+        final liveText =
+            (_messages.isNotEmpty && _messages.last.role == 'assistant')
+                ? _messages.last.text
+                : '';
+        final fallbackText = result.finalText?.isNotEmpty == true
+            ? result.finalText!
+            : t.chat_error_generic;
+        if (liveText.isEmpty) {
+          _replaceLastAssistant(fallbackText);
+        }
         await _maybeAppendCardFromMessages(result.messages);
       case AgentRunStatus.needsApproval:
         await _handleApprovals(result);
@@ -180,7 +209,48 @@ class _WallexChatPageState extends State<WallexChatPage> {
               : t.voice_save_success_manual,
         );
       case AgentRunStatus.error:
-        _replaceLastAssistantWithError();
+        // Log the diagnostic code so we can correlate stuck-bubble reports
+        // with provider hiccups (invalid tool args, dispatch crash, empty
+        // stream) without surfacing the raw code to the user.
+        debugPrint(
+          '[WALLEX_CHAT] agent run returned error code='
+          '${result.error ?? 'unknown'}',
+        );
+        // If the placeholder bubble was never filled by streaming, either
+        // replace it (if it exists and is empty) or insert a fresh bubble so
+        // the user always sees something instead of a muted screen.
+        final hasEmptyAssistantBubble = _messages.isNotEmpty &&
+            _messages.last.role == 'assistant' &&
+            _messages.last.text.isEmpty;
+        final hasFilledAssistantBubble = _messages.isNotEmpty &&
+            _messages.last.role == 'assistant' &&
+            _messages.last.text.isNotEmpty;
+        if (hasFilledAssistantBubble) {
+          // Partial text leaked before the error — keep it and append a new
+          // assistant bubble with the error so context isn't lost.
+          if (mounted) {
+            setState(() {
+              _messages.add(_ChatMessage(
+                role: 'assistant',
+                text: t.chat_error_generic,
+              ));
+            });
+            _scrollToBottom();
+          }
+        } else if (hasEmptyAssistantBubble) {
+          _replaceLastAssistantWithError();
+        } else {
+          // Defensive fallback: no assistant bubble exists at all.
+          if (mounted) {
+            setState(() {
+              _messages.add(_ChatMessage(
+                role: 'assistant',
+                text: t.chat_error_generic,
+              ));
+            });
+            _scrollToBottom();
+          }
+        }
     }
   }
 
@@ -330,38 +400,6 @@ class _WallexChatPageState extends State<WallexChatPage> {
     };
   }
 
-  Future<void> _streamFinalText(List<Map<String, dynamic>> messages) async {
-    final streamMessages = messages
-        .map((m) => <String, String>{
-              'role': (m['role'] ?? '').toString(),
-              'content': (m['content'] ?? '').toString(),
-            })
-        .where((m) => m['role']!.isNotEmpty)
-        .toList();
-
-    final stream = NexusAiService.instance.streamComplete(
-      temperature: 0.3,
-      maxTokens: 4096,
-      messages: streamMessages,
-    );
-
-    var receivedAnyChunk = false;
-    await for (final chunk in stream) {
-      if (!mounted) return;
-      setState(() {
-        final last = _messages.removeLast();
-        final newText = receivedAnyChunk ? '${last.text}$chunk' : chunk;
-        _messages.add(_ChatMessage(role: last.role, text: newText));
-      });
-      receivedAnyChunk = true;
-      _scrollToBottom();
-    }
-
-    if (!receivedAnyChunk && mounted) {
-      _replaceLastAssistantWithError();
-    }
-  }
-
   Future<void> _handleApprovals(AgentRunResult result) async {
     // Render the "consultando tus datos" indicator while tools are pending.
     if (mounted) setState(() => _isUsingTools = true);
@@ -406,7 +444,21 @@ class _WallexChatPageState extends State<WallexChatPage> {
     }
 
     if (!mounted) return;
-    final resumed = await _agent.resume(messages: messages);
+    // Make sure there's a placeholder bubble for the post-approval reply so
+    // the live token stream has a target to append into.
+    if (_messages.isEmpty || _messages.last.role != 'assistant') {
+      setState(() {
+        _messages.add(const _ChatMessage(role: 'assistant', text: ''));
+      });
+    } else if (_messages.last.text.isNotEmpty) {
+      setState(() {
+        _messages.add(const _ChatMessage(role: 'assistant', text: ''));
+      });
+    }
+    final resumed = await _agent.resume(
+      messages: messages,
+      onTextChunk: _appendChunkToLastAssistant,
+    );
     await _handleAgentResult(resumed);
   }
 

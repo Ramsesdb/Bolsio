@@ -181,7 +181,63 @@
     "no-accounts.descr": "Empieza a usar toda la magia de Monekin. Crea al menos una cuenta para empezar a añadir tranacciones",
     "last-transactions": "Últimas transacciones",
     "should-create-account.header": "Ops!",
-    "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones"
+    "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones",
+    "dashboard-widgets": {
+      "edit-banner": "Mantén presionado para reordenar · X para quitar · + para agregar",
+      "exit-edit-mode": "Salir de edición",
+      "edit-dashboard": "Editar dashboard",
+      "remove-widget-title": "Quitar widget",
+      "remove-widget-message": "¿Quitar \"{name}\" del dashboard?",
+      "add-widget": "Agregar widget",
+      "recommended-badge": "Recomendado",
+      "reset-to-goals-action": "Restablecer según mis objetivos",
+      "reset-to-goals-confirm-title": "¿Restablecer dashboard?",
+      "reset-to-goals-confirm-message": "Reemplaza el dashboard actual por el sugerido a partir de tus objetivos del onboarding.",
+      "drag-handle-tooltip": "Mantén presionado para reordenar",
+      "configure-tooltip": "Configurar",
+      "remove-tooltip": "Quitar",
+      "total-balance-summary": {
+        "name": "Saldo total",
+        "description": "Tu saldo total convertido a tu moneda preferida."
+      },
+      "account-carousel": {
+        "name": "Mis cuentas",
+        "description": "Acceso rápido a cada una de tus cuentas."
+      },
+      "income-expense-period": {
+        "name": "Ingresos y gastos",
+        "description": "Ingresos y gastos del período activo."
+      },
+      "recent-transactions": {
+        "name": "Movimientos recientes",
+        "description": "Los últimos movimientos de tus cuentas."
+      },
+      "exchange-rate-card": {
+        "name": "Tasas de cambio",
+        "description": "Tasas USD ↔ VES del BCV y Paralelo."
+      },
+      "quick-use": {
+        "name": "Atajos rápidos",
+        "description": "Atajos de un toque que tú eliges."
+      },
+      "pending-imports-alert": {
+        "name": "Movimientos por revisar",
+        "description": "Movimientos pendientes de revisión."
+      }
+    },
+    "quick-actions": {
+      "toggle-private-mode": "Modo privado",
+      "toggle-hidden-mode": "Modo oculto",
+      "toggle-preferred-currency": "Moneda",
+      "go-to-settings": "Ajustes",
+      "new-expense-transaction": "Nuevo gasto",
+      "new-income-transaction": "Nuevo ingreso",
+      "new-transfer-transaction": "Transferir",
+      "go-to-budgets": "Presupuestos",
+      "go-to-reports": "Reportes",
+      "open-transactions": "Transacciones",
+      "open-exchange-rates": "Tasas de cambio"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",

@@ -253,7 +253,8 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (_) => AmountSelector(
+      useRootNavigator: true,
+      builder: (sheetCtx) => AmountSelector(
         title: t.chat_tool_field_amount,
         initialAmount: _amount,
         enableSignToggleButton: _type.isIncomeOrExpense,
@@ -262,7 +263,11 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
           if (mounted) {
             setState(() => _amount = value.abs());
           }
-          RouteUtils.popRoute();
+          // Use the sheet's own context so we pop the navigator that hosts
+          // this modal (root navigator, since useRootNavigator: true above).
+          // RouteUtils.popRoute always targets the inner navigatorKey and
+          // would silently miss this root-mounted sheet.
+          Navigator.of(sheetCtx).pop();
         },
       ),
     );
@@ -272,6 +277,7 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
     _pauseAutoConfirm();
     final picked = await showCategoryPickerModal(
       context,
+      useRootNavigator: true,
       modal: CategoryPicker(
         selectedCategory: _category,
         categoryType: _type == TransactionType.income
@@ -948,8 +954,17 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
                                   ? () {}
                                   : () =>
                                       Navigator.of(context).maybePop(),
-                              onSend:
-                                  _isSaving ? null : () => _save(),
+                              onSend: _isSaving
+                                  ? null
+                                  : () async {
+                                      try {
+                                        await _save();
+                                      } catch (e, st) {
+                                        debugPrint(
+                                          'VoiceReviewSheet._save failed: $e\n$st',
+                                        );
+                                      }
+                                    },
                               sendLabel: t.voice_review_save,
                               isSending: _isSaving,
                             ),

@@ -23,7 +23,7 @@ Future<String> settingsInitialSeedSQL() async {
   ('${SettingKey.appLanguage.name}', null),
   ('${SettingKey.privateModeAtLaunch.name}', '0'),
   ('${SettingKey.accentColor.name}', 'auto'),
-  ('${SettingKey.amoledMode.name}', '0'),
+  ('${SettingKey.amoledMode.name}', '1'),
   ('${SettingKey.themeMode.name}', 'system'),
   ('${SettingKey.defaultTransactionType.name}', 'E'),
   ('${SettingKey.transactionSwipeLeftAction.name}', null),
@@ -33,6 +33,7 @@ Future<String> settingsInitialSeedSQL() async {
   ('${SettingKey.transactionTileShowTime.name}', '1'),
   ('${SettingKey.receiptAiEnabled.name}', '1'),
   ('${SettingKey.preferredCurrency.name}', '$preferredCurrency'),
-  ('${SettingKey.onboardingGoals.name}', '[]')
+  ('${SettingKey.onboardingGoals.name}', '[]'),
+  ('${SettingKey.dashboardLayout.name}', '[]')
 """;
 }

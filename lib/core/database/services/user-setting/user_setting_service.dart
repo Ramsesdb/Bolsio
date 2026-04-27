@@ -89,6 +89,11 @@ enum SettingKey {
   /// Whether the Binance API bank profile is active. '1' (default) = enabled, '0' = disabled.
   binanceApiProfileEnabled,
 
+  /// Whether the generic LLM fallback parser is active. '1' (default) = enabled, '0' = disabled.
+  /// When enabled, notifications from known bank senders that no regex profile can parse
+  /// are forwarded to the AI for extraction.
+  genericLlmParserEnabled,
+
   /// Last poll timestamp (ms since epoch) for SMS capture. '0' or null = never polled.
   autoImportLastPollSms,
 
@@ -119,6 +124,12 @@ enum SettingKey {
   /// Defaults to enabled ('1') when unset.
   receiptAiEnabled,
 
+  /// Active AI provider id used by [AiService] dispatcher.
+  /// Stored as the [AiProviderType.storageId] string (e.g. 'nexus',
+  /// 'openai', 'anthropic', 'gemini'). Defaults to 'nexus' when unset
+  /// to preserve the pre-BYOK behaviour for existing users.
+  activeAiProvider,
+
   /// Preferred exchange rate source for currency conversions.
   /// Values: 'bcv', 'paralelo'. Defaults to 'bcv' when null.
   preferredRateSource,
@@ -141,6 +152,27 @@ enum SettingKey {
   /// JSON-encoded `List<String>` (e.g. `["save_usd","reduce_debt"]`).
   /// `null` or missing row is interpreted as empty list.
   onboardingGoals,
+
+  /// Serialized [DashboardLayout] used by the dynamic dashboard renderer.
+  /// Stored as a JSON-encoded `String` with shape:
+  ///
+  /// ```json
+  /// {
+  ///   "schemaVersion": 1,
+  ///   "widgets": [
+  ///     {"instanceId": "<uuid>", "type": "...", "size": "...", "config": {...}}
+  ///   ]
+  /// }
+  /// ```
+  ///
+  /// `null` or missing row is interpreted as empty layout. The renderer
+  /// applies a fallback layout when the value is empty AND
+  /// `AppDataKey.introSeen == '1'`. See
+  /// `lib/app/home/dashboard_widgets/services/dashboard_layout_service.dart`.
+  ///
+  /// MUST sync via `firebase_sync_service` (NOT in
+  /// `_userSettingsSyncExclusions`).
+  dashboardLayout,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};
@@ -191,6 +223,9 @@ class UserSettingService
         break;
       case 'zinli_notif':
         key = SettingKey.zinliNotifProfileEnabled;
+        break;
+      case 'generic_llm':
+        key = SettingKey.genericLlmParserEnabled;
         break;
       default:
         key = null;

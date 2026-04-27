@@ -181,7 +181,63 @@
     "no-accounts.descr": "Start using all the magic of Monekin. Create at least one account to start adding transactions",
     "last-transactions": "Last transactions",
     "should-create-account.header": "Oops!",
-    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions"
+    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions",
+    "dashboard-widgets": {
+      "edit-banner": "Long-press to reorder · X to remove · + to add",
+      "exit-edit-mode": "Exit edit mode",
+      "edit-dashboard": "Edit dashboard",
+      "remove-widget-title": "Remove widget",
+      "remove-widget-message": "Remove \"{name}\" from your dashboard?",
+      "add-widget": "Add widget",
+      "recommended-badge": "Recommended",
+      "reset-to-goals-action": "Reset to my goals",
+      "reset-to-goals-confirm-title": "Reset dashboard?",
+      "reset-to-goals-confirm-message": "Replace your current dashboard with the layout suggested by your onboarding goals.",
+      "drag-handle-tooltip": "Long-press to reorder",
+      "configure-tooltip": "Configure",
+      "remove-tooltip": "Remove",
+      "total-balance-summary": {
+        "name": "Total balance",
+        "description": "Your overall balance with currency conversion."
+      },
+      "account-carousel": {
+        "name": "My accounts",
+        "description": "Quick access to each of your accounts."
+      },
+      "income-expense-period": {
+        "name": "Income & expenses",
+        "description": "Net income and expenses for the active period."
+      },
+      "recent-transactions": {
+        "name": "Recent transactions",
+        "description": "The latest movements across your accounts."
+      },
+      "exchange-rate-card": {
+        "name": "Exchange rates",
+        "description": "USD ↔ VES rates from BCV and Paralelo."
+      },
+      "quick-use": {
+        "name": "Quick actions",
+        "description": "One-tap shortcuts you choose."
+      },
+      "pending-imports-alert": {
+        "name": "Pending imports",
+        "description": "Movements waiting for your review."
+      }
+    },
+    "quick-actions": {
+      "toggle-private-mode": "Private mode",
+      "toggle-hidden-mode": "Hidden mode",
+      "toggle-preferred-currency": "Currency",
+      "go-to-settings": "Settings",
+      "new-expense-transaction": "New expense",
+      "new-income-transaction": "New income",
+      "new-transfer-transaction": "Transfer",
+      "go-to-budgets": "Budgets",
+      "go-to-reports": "Reports",
+      "open-transactions": "Transactions",
+      "open-exchange-rates": "Exchange rates"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "Financial health",

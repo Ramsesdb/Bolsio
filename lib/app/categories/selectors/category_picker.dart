@@ -15,17 +15,18 @@ import 'package:wallex/core/presentation/theme.dart';
 import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
 import 'package:wallex/core/presentation/widgets/modal_container.dart';
 import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 Future<Category?> showCategoryPickerModal(
   BuildContext context, {
   required CategoryPicker modal,
+  bool useRootNavigator = false,
 }) {
   return showModalBottomSheet<Category>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
+    useRootNavigator: useRootNavigator,
     builder: (context) {
       return modal;
     },
@@ -192,7 +193,16 @@ class _CategoryPickerState extends State<CategoryPicker>
                 onSaved: selectedCategory == null
                     ? null
                     : () {
-                        RouteUtils.popRoute(selectedCategory);
+                        // Use Navigator.of(context).pop instead of
+                        // RouteUtils.popRoute: the picker may be mounted on
+                        // the root navigator (when opened with
+                        // useRootNavigator: true, e.g. from the voice review
+                        // sheet). RouteUtils.popRoute always targets the
+                        // inner navigatorKey, so it would silently fail to
+                        // close the picker in that case. Navigator.of(context)
+                        // resolves to whichever navigator actually hosts this
+                        // modal — correct in both root and inner cases.
+                        Navigator.of(context).pop(selectedCategory);
                       },
               ),
             ],

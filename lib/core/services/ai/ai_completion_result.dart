@@ -4,15 +4,23 @@ class AiToolCall {
   final String name;
   final String argumentsJson;
 
+  /// True when [argumentsJson] failed to parse as JSON during stream
+  /// accumulation (e.g. truncated stream, strict-mode hiccup, malformed delta).
+  /// Defensive flag so the agent runner can surface a visible error instead of
+  /// silently swallowing the call.
+  final bool hasInvalidArguments;
+
   const AiToolCall({
     required this.id,
     required this.name,
     required this.argumentsJson,
+    this.hasInvalidArguments = false,
   });
 
   @override
   String toString() =>
-      'AiToolCall(id: $id, name: $name, argumentsJson: $argumentsJson)';
+      'AiToolCall(id: $id, name: $name, argumentsJson: $argumentsJson, '
+      'hasInvalidArguments: $hasInvalidArguments)';
 }
 
 /// Reason the tool loop terminated.
@@ -49,8 +57,7 @@ class AiCompletionResult {
   final AiCompletionFinishReason finishReason;
 
   /// Full running message history including any tool messages appended by the
-  /// loop. Callers that want to stream a final turn (chat UI) re-use this
-  /// verbatim as the input to `streamComplete`.
+  /// loop. Carried so callers can persist or replay the conversation context.
   final List<Map<String, dynamic>> messages;
 
   /// Error details when [finishReason] is [AiCompletionFinishReason.error] or

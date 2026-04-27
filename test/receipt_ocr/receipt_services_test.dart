@@ -69,10 +69,10 @@ class _CountingProfile extends BankProfile {
   int get profileVersion => 1;
 
   @override
-  TransactionProposal? tryParse(
+  Future<TransactionProposal?> tryParse(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
+  }) async {
     calls++;
     return result;
   }
@@ -111,12 +111,12 @@ void main() {
     }
   });
 
-  test('2.6 extractor parses BDV OCR text with amount, bankRef, date and type', () {
+  test('2.6 extractor parses BDV OCR text with amount, bankRef, date and type', () async {
     const ocrText =
         'PagomovilBDV recibido\n'
         'Recibiste un PagomovilBDV por Bs.100,00 del 0412-7171711 Ref: 184891460184 en fecha 16-04-26 hora: 10:17.';
 
-    final result = extractor.extractFromOcrText(
+    final result = await extractor.extractFromOcrText(
       ocrText,
       accountId: 'acc-bdv-001',
       preferredCurrency: 'USD',
@@ -134,21 +134,21 @@ void main() {
     expect(proposal.channel, CaptureChannel.receiptImage);
   });
 
-  test('2.7 extractor returns empty when OCR text is empty', () {
-    final result = extractor.extractFromOcrText('   ');
+  test('2.7 extractor returns empty when OCR text is empty', () async {
+    final result = await extractor.extractFromOcrText('   ');
 
     expect(result.outcome, ExtractionOutcome.empty);
     expect(result.errorKey, 'error.ocr_empty');
     expect(result.proposal, isNull);
   });
 
-  test('2.8 extractor returns noAmount when amount cannot be extracted', () {
+  test('2.8 extractor returns noAmount when amount cannot be extracted', () async {
     const ocrText =
         'Comprobante\n'
         'Transferencia recibida\n'
         'Operacion completada sin monto visible';
 
-    final result = extractor.extractFromOcrText(ocrText);
+    final result = await extractor.extractFromOcrText(ocrText);
 
     expect(result.outcome, ExtractionOutcome.noAmount);
     expect(result.errorKey, 'error.no_amount');

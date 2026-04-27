@@ -300,7 +300,7 @@ class ReceiptExtractorService {
       'ReceiptExtractor: Falling back to BdvNotifProfile regex '
       '(timeout=$fallbackFromTimeout aiEnabled=$aiEnabled)',
     );
-    final fallback = extractFromOcrText(
+    final fallback = await extractFromOcrText(
       normalized,
       sender: sender,
       accountId: accountId,
@@ -325,13 +325,13 @@ class ReceiptExtractorService {
     );
   }
 
-  ExtractionResult extractFromOcrText(
+  Future<ExtractionResult> extractFromOcrText(
     String ocrText, {
     String sender = 'com.bancodevenezuela.bdvdigital',
     String? accountId,
     String? preferredCurrency,
     bool forceFallbackConfidence = false,
-  }) {
+  }) async {
     final normalized = ocrText.trim();
     if (normalized.isEmpty) {
       return ExtractionResult.empty(ocrText);
@@ -344,7 +344,7 @@ class ReceiptExtractorService {
       channel: CaptureChannel.receiptImage,
     );
 
-    final parsed = _profile.tryParse(event, accountId: accountId);
+    final parsed = await _profile.tryParse(event, accountId: accountId);
     if (parsed == null) {
       return ExtractionResult.noAmount(normalized);
     }

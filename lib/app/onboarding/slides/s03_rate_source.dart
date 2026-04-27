@@ -9,17 +9,20 @@ class Slide03RateSource extends StatelessWidget {
     required this.selected,
     required this.onSelect,
     required this.onNext,
+    this.onSkip,
   });
 
   final String selected;
   final void Function(String source) onSelect;
   final VoidCallback onNext;
+  final VoidCallback? onSkip;
 
   @override
   Widget build(BuildContext context) {
     return V3SlideTemplate(
       primaryLabel: 'Siguiente',
       onPrimary: onNext,
+      onSecondary: onSkip,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

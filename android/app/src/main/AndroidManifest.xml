@@ -41,7 +41,6 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -142,5 +141,60 @@
         <intent>
             <action android:name="android.speech.RecognitionService"/>
         </intent>
+        <!-- Explicit package visibility for BankDetectionService.
+             QUERY_ALL_PACKAGES is declared above, but HyperOS / MIUI may
+             restrict it at the OEM level. Listing each supported bank app
+             (current + legacy packages) guarantees minimum visibility so
+             onboarding-v2-auto-import detects installed apps reliably.
+             Includes apps without a parser yet ("Próximamente") so the
+             user still sees them as detected during onboarding. -->
+        <!-- Banca venezolana — con parser -->
+        <package android:name="com.bancodevenezuela.bdvdigital" />
+        <package android:name="com.tralix.bdvmovil" />
+        <package android:name="com.zinli.app" />
+        <package android:name="com.zinli.wallet" />
+        <!-- Crypto / API -->
+        <package android:name="com.binance.dev" />
+        <!-- Banca venezolana — sin parser todavía -->
+        <package android:name="com.banesco.samfbancamovilunificada" />
+        <package android:name="com.mercantilbanco.mercantilmovil" />
+        <package android:name="com.mercantilbanco.mme.mercantilmovil" />
+        <package android:name="com.totaltexto.bancamovil" />
+        <package android:name="com.dinerorapido.bancamovil" />
+        <package android:name="bnc.bncnet.mobile2" />
+        <package android:name="com.asociadosgerenciales.banpluspay" />
+        <package android:name="com.unidigital.bicentenario.p2p" />
+        <package android:name="com.bancamiga" />
+        <package android:name="com.bancamiga.bapos" />
+        <package android:name="bancaribe.miconexion" />
+        <package android:name="bancaribe.mipago" />
+        <package android:name="com.bancoplaza.app" />
+        <package android:name="com.bancoexterior" />
+        <package android:name="com.bancoexterior.nexomobile2" />
+        <package android:name="activodigital.bancoactivo.com" />
+        <package android:name="com.otronodo.btmovil" />
+        <package android:name="com.ionicframework.st201716" />
+        <package android:name="com.click.caroni.normal.app.click" />
+        <package android:name="com.ionicframework.bc938299" />
+        <package android:name="com.venezolano.vol_app" />
+        <package android:name="com.bfcmobile.app" />
+        <!-- Pagos digitales — sin parser todavía -->
+        <package android:name="com.google.android.apps.walletnfcrel" />
+        <package android:name="com.mercadolibre" />
+        <package android:name="com.mercadopago.wallet" />
+        <package android:name="com.paypal.android.p2pmobile" />
+        <!-- Fintech globales — sin parser todavía -->
+        <package android:name="com.nu.production" />
+        <package android:name="com.transferwise.android" />
+        <package android:name="com.revolut.revolut" />
+        <package android:name="com.venmo" />
+        <package android:name="com.squareup.cash" />
+        <package android:name="de.number26.android" />
+        <package android:name="com.coinbase.android" />
+        <package android:name="co.mona.android" />
+        <package android:name="com.defi.wallet" />
+        <package android:name="com.westernunion.android.mtapp" />
+        <package android:name="com.remitly.androidapp" />
+        <package android:name="com.moneybookers.skrillpayments" />
     </queries>
 </manifest>

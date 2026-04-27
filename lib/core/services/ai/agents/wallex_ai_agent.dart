@@ -21,9 +21,9 @@ import 'package:wallex/core/services/ai/tools/impl/list_transactions_tool.dart';
 ///    `create_transfer`.
 ///  - `requiresApproval` gates `create_transaction` and `create_transfer` —
 ///    chat UI renders an approval bubble; read-only tools bypass.
-///  - On a first-iteration stop with no tool_calls, the runner surfaces
-///    [AgentRunStatus.streamFinalText] so the chat page can call
-///    `streamComplete(messages)` for byte-for-byte token streaming UX.
+///  - The runner streams text chunks live via the `onTextChunk` callback the
+///    chat page wires up, so plain-text replies render token-by-token without
+///    a second roundtrip to the gateway.
 class WallexAiAgent {
   final AgentProfile profile;
   final AgentRunner _runner;
@@ -47,7 +47,7 @@ class WallexAiAgent {
     ]);
     final profile = AgentProfile(
       name: 'wallexAssistant',
-      systemPrompt: _systemPrompt,
+      systemPrompt: '',
       toolRegistry: registry,
       toolChoice: 'auto',
       maxLoops: 3,
@@ -64,27 +64,31 @@ class WallexAiAgent {
     );
   }
 
-  /// Run the chat agent with the current message history. If [history] is
-  /// empty (plain new prompt) the runner may return [AgentRunStatus.streamFinalText]
-  /// so the chat UI reuses `streamComplete` for the first no-tool reply.
+  /// Run the chat agent with the current message history.
   ///
   /// [history] must already contain any prior user/assistant turns but must
   /// NOT include the system prompt — the agent prepends that.
+  ///
+  /// Pass [onTextChunk] to receive streamed text deltas live (token-by-token
+  /// UX). The same callback is invoked across every iteration of the tool
+  /// loop, so the UI sees the model's textual reply as soon as it starts
+  /// arriving — no second gateway roundtrip required.
   Future<AgentRunResult> run({
     required List<Map<String, dynamic>> history,
+    void Function(String chunk)? onTextChunk,
   }) async {
     final ctx = await FinancialContextBuilder.instance.buildContext();
     final messages = <Map<String, dynamic>>[
       {
         'role': 'system',
-        'content': '${profile.systemPrompt}\n\n$ctx',
+        'content': '${_buildSystemPrompt(DateTime.now())}\n\n$ctx',
       },
       ...history,
     ];
     return _runner.run(
       profile: profile,
       initialMessages: messages,
-      streamFinalWhenNoToolsFirstTurn: true,
+      onTextChunk: onTextChunk,
     );
   }
 
@@ -94,47 +98,117 @@ class WallexAiAgent {
   /// each tool call that was gated.
   Future<AgentRunResult> resume({
     required List<Map<String, dynamic>> messages,
+    void Function(String chunk)? onTextChunk,
   }) async {
     return _runner.run(
       profile: profile,
       initialMessages: messages,
+      onTextChunk: onTextChunk,
     );
   }
 
-  static const String _systemPrompt =
-      'Eres Wallex AI, asistente financiero personal. Respondes SIEMPRE en '
-      'espanol (dialecto venezolano).\n\n'
-      'REGLAS CRITICAS DE USO DE TOOLS (zero excepciones):\n'
-      '- Para CUALQUIER pregunta sobre saldos, totales de cuentas, cuanto dinero '
-      'tiene el usuario, o "cuanto tengo" → SIEMPRE llama get_balance primero. '
-      'Nunca inventes ni estimes saldos.\n'
-      '- Para CUALQUIER pregunta sobre gastos, ingresos, desglose de gastos, '
-      '"en que gaste", "como van mis gastos" o "donde se fue mi dinero" → '
-      'SIEMPRE llama get_stats_by_category. Nunca escribas tablas markdown '
-      'de categorias de tu cosecha.\n'
-      '- Para CUALQUIER pregunta sobre transacciones especificas o historial → '
-      'SIEMPRE llama list_transactions.\n'
-      '- Para CUALQUIER pregunta sobre presupuestos → SIEMPRE llama get_budgets.\n'
-      '- Para mutaciones (create_transaction, create_transfer) llama la tool; '
-      'la UI pedira confirmacion.\n'
-      '- Resuelve las fechas con el contexto temporal del usuario. Si no tienes '
-      'un periodo explicito, usa el mes en curso.\n\n'
-      'PROHIBIDO ABSOLUTAMENTE:\n'
-      '- Fabricar cifras financieras, nombres de categorias, montos, totales, '
-      'fechas o cualquier dato numerico.\n'
-      '- Responder con tablas markdown (lineas con `|` y `|---|`), listas '
-      'largas con montos (\$...) o desgloses por categoria cuando NO llamaste '
-      'una tool en este mismo turno.\n'
-      '- Si una tool devuelve vacio: responde UNA sola frase breve (ej. "No '
-      'encontre movimientos en ese periodo") sin tabla vacia.\n\n'
-      'FORMATO DE RESPUESTA TRAS LLAMAR UNA TOOL DE LECTURA '
-      '(get_balance / get_stats_by_category / list_transactions / get_budgets):\n'
-      '- La UI ya renderiza una tarjeta con los datos.\n'
-      '- Tu respuesta textual debe ser 1 sola frase corta de contexto '
-      '(<=200 caracteres), o vacia. Nada de repetir cifras.\n'
-      '- NUNCA generes tablas markdown ni listas largas con los datos de la tool.\n\n'
-      'PARA PREGUNTAS NO FINANCIERAS (uso de la app, ayuda general, saludos '
-      'como "hola"/"gracias"): responde en prosa breve sin llamar tools.\n\n'
-      'Estilo: negritas para montos (**\$432.50**), cursivas para porcentajes '
-      '(*12% menos*), 2 decimales.';
+  static String _buildSystemPrompt(DateTime now) {
+    final fecha = _formatFechaLarga(now);
+    final mesActual = _nombreMes(now.month);
+    final anio = now.year;
+    return 'Eres Wallex AI, asistente financiero personal. Respondes SIEMPRE en '
+        'espanol (dialecto venezolano).\n\n'
+        'CONTEXTO TEMPORAL (autoridad maxima sobre fechas):\n'
+        '- Hoy es $fecha.\n'
+        '- "este mes" = del 1 de $mesActual de $anio hasta hoy.\n'
+        '- "mes pasado" = el mes calendario anterior completo.\n'
+        '- "este ano" = del 1 de enero de $anio hasta hoy.\n'
+        '- Cuando llames a herramientas con fromDate/toDate, calcula esas '
+        'fechas a partir de hoy. NUNCA uses fechas anteriores a 2024 salvo '
+        'que el usuario las pida explicitamente.\n\n'
+        'REGLAS CRITICAS DE USO DE TOOLS (zero excepciones):\n'
+        '- Para CUALQUIER pregunta sobre saldos, totales de cuentas, cuanto dinero '
+        'tiene el usuario, o "cuanto tengo" → SIEMPRE llama get_balance primero. '
+        'Nunca inventes ni estimes saldos.\n'
+        '- Para CUALQUIER pregunta sobre gastos, ingresos, desglose de gastos, '
+        '"en que gaste", "como van mis gastos" o "donde se fue mi dinero" → '
+        'SIEMPRE llama get_stats_by_category. Nunca escribas tablas markdown '
+        'de categorias de tu cosecha.\n'
+        '- Para CUALQUIER pregunta sobre transacciones especificas o historial → '
+        'SIEMPRE llama list_transactions.\n'
+        '- Para CUALQUIER pregunta sobre presupuestos → SIEMPRE llama get_budgets.\n'
+        '- Para mutaciones (create_transaction, create_transfer) llama la tool; '
+        'la UI pedira confirmacion.\n'
+        '- Resuelve las fechas con el contexto temporal del usuario. Si no tienes '
+        'un periodo explicito, usa el mes en curso.\n\n'
+        'PROHIBIDO ABSOLUTAMENTE:\n'
+        '- Fabricar cifras financieras, nombres de categorias, montos, totales, '
+        'fechas o cualquier dato numerico.\n'
+        '- Responder con tablas markdown (lineas con `|` y `|---|`), listas '
+        'largas con montos (\$...) o desgloses por categoria cuando NO llamaste '
+        'una tool en este mismo turno.\n'
+        '- Si una tool devuelve vacio: responde UNA sola frase breve (ej. "No '
+        'encontre movimientos en ese periodo") sin tabla vacia.\n\n'
+        'FORMATO DE RESPUESTA TRAS LLAMAR UNA TOOL DE LECTURA '
+        '(get_balance / get_stats_by_category / list_transactions / get_budgets):\n'
+        '- La UI ya renderiza una tarjeta con los datos.\n'
+        '- Tu respuesta textual debe ser 1 sola frase corta de contexto '
+        '(<=200 caracteres), o vacia. Nada de repetir cifras.\n'
+        '- NUNCA generes tablas markdown ni listas largas con los datos de la tool.\n\n'
+        'PARA PREGUNTAS NO FINANCIERAS (uso de la app, ayuda general, saludos '
+        'como "hola"/"gracias"): responde en prosa breve sin llamar tools.\n\n'
+        'Estilo: negritas para montos (**\$432.50**), cursivas para porcentajes '
+        '(*12% menos*), 2 decimales.';
+  }
+
+  static String _formatFechaLarga(DateTime d) {
+    return '${_nombreDia(d.weekday)} ${d.day} de ${_nombreMes(d.month)} de ${d.year}';
+  }
+
+  static String _nombreDia(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'lunes';
+      case DateTime.tuesday:
+        return 'martes';
+      case DateTime.wednesday:
+        return 'miercoles';
+      case DateTime.thursday:
+        return 'jueves';
+      case DateTime.friday:
+        return 'viernes';
+      case DateTime.saturday:
+        return 'sabado';
+      case DateTime.sunday:
+        return 'domingo';
+      default:
+        return '';
+    }
+  }
+
+  static String _nombreMes(int month) {
+    switch (month) {
+      case 1:
+        return 'enero';
+      case 2:
+        return 'febrero';
+      case 3:
+        return 'marzo';
+      case 4:
+        return 'abril';
+      case 5:
+        return 'mayo';
+      case 6:
+        return 'junio';
+      case 7:
+        return 'julio';
+      case 8:
+        return 'agosto';
+      case 9:
+        return 'septiembre';
+      case 10:
+        return 'octubre';
+      case 11:
+        return 'noviembre';
+      case 12:
+        return 'diciembre';
+      default:
+        return '';
+    }
+  }
 }

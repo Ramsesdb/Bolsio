@@ -2,8 +2,7 @@ import 'package:wallex/core/database/services/user-setting/user_setting_service.
 import 'package:wallex/core/models/budget/budget.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/services/ai/nexus_ai_service.dart';
-import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
+import 'package:wallex/core/services/ai/ai_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
 
 class BudgetPredictionResult {
@@ -38,7 +37,7 @@ class BudgetPredictionService {
     final featureEnabled = appStateSettings[SettingKey.aiBudgetPredictionEnabled] == '1';
     if (!aiEnabled || !featureEnabled) return null;
 
-    final hasKey = await NexusCredentialsStore.instance.hasApiKey();
+    final hasKey = await AiService.instance.isConfigured();
     if (!hasKey) return null;
 
     final now = DateTime.now();
@@ -99,7 +98,7 @@ class BudgetPredictionService {
       return fallback;
     }
 
-    final response = await NexusAiService.instance.complete(
+    final response = await AiService.instance.complete(
       temperature: 0.3,
       messages: [
         {

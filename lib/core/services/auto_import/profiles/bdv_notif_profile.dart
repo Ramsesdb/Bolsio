@@ -112,19 +112,19 @@ class BdvNotifProfile implements BankProfile {
   );
 
   @override
-  TransactionProposal? tryParse(
+  Future<TransactionProposal?> tryParse(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
-    final result = tryParseWithDetails(event, accountId: accountId);
+  }) async {
+    final result = await tryParseWithDetails(event, accountId: accountId);
     return result.transaction;
   }
 
   @override
-  ParseResult tryParseWithDetails(
+  Future<ParseResult> tryParseWithDetails(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
+  }) async {
     final rawText = event.rawText;
     final newlineIdx = rawText.indexOf('\n');
     if (newlineIdx < 0) {

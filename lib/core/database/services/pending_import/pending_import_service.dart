@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
 
@@ -18,8 +19,29 @@ class PendingImportService {
   PendingImportService.forTesting(this.db);
 
   /// Insert a new pending import row. Returns the auto-generated rowid.
-  Future<int> insertPendingImport(PendingImportsCompanion companion) {
-    return db.into(db.pendingImports).insert(companion);
+  Future<int> insertPendingImport(PendingImportsCompanion companion) async {
+    final bankRefVal = companion.bankRef.present ? companion.bankRef.value : '<absent>';
+    final idVal = companion.id.present ? companion.id.value : '<absent>';
+    final accountIdVal =
+        companion.accountId.present ? companion.accountId.value : '<absent>';
+    debugPrint(
+      '[DEDUPE-DBG] PendingImportService.insertPendingImport BEGIN '
+      'id=$idVal bankRef=$bankRefVal accountId=$accountIdVal',
+    );
+    try {
+      final rowId = await db.into(db.pendingImports).insert(companion);
+      debugPrint(
+        '[DEDUPE-DBG] PendingImportService.insertPendingImport SUCCESS '
+        'rowId=$rowId id=$idVal bankRef=$bankRefVal',
+      );
+      return rowId;
+    } catch (e, st) {
+      debugPrint(
+        '[DEDUPE-DBG] PendingImportService.insertPendingImport THREW '
+        'id=$idVal bankRef=$bankRefVal error=$e\n$st',
+      );
+      rethrow;
+    }
   }
 
   /// Watch all pending imports, optionally filtered by [status].
@@ -83,12 +105,22 @@ class PendingImportService {
   ///
   /// Used for cross-channel deduplication (e.g. same BDV event arriving
   /// via both SMS and push notification).
-  Future<PendingImportInDB?> findByBankRef(String bankRef) {
+  Future<PendingImportInDB?> findByBankRef(String bankRef) async {
+    debugPrint(
+      '[DEDUPE-DBG] PendingImportService.findByBankRef '
+      'bankRef="$bankRef" (len=${bankRef.length}, '
+      'codeUnits=${bankRef.codeUnits.take(40).toList()})',
+    );
     final query = db.select(db.pendingImports)
       ..where((t) => t.bankRef.equals(bankRef))
       ..limit(1);
 
-    return query.getSingleOrNull();
+    final result = await query.getSingleOrNull();
+    debugPrint(
+      '[DEDUPE-DBG] PendingImportService.findByBankRef result: '
+      '${result == null ? "NULL" : "FOUND id=${result.id} bankRef=\"${result.bankRef}\" status=${result.status}"}',
+    );
+    return result;
   }
 
   /// Delete rejected pending imports older than [olderThan].

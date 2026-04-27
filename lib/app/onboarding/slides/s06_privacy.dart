@@ -3,15 +3,21 @@ import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
 import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
 
 class Slide06Privacy extends StatelessWidget {
-  const Slide06Privacy({super.key, required this.onNext});
+  const Slide06Privacy({
+    super.key,
+    required this.onNext,
+    this.onSkip,
+  });
 
   final VoidCallback onNext;
+  final VoidCallback? onSkip;
 
   @override
   Widget build(BuildContext context) {
     return V3SlideTemplate(
       primaryLabel: 'Siguiente',
       onPrimary: onNext,
+      onSecondary: onSkip,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -15,19 +15,22 @@ import 'package:wallex/core/database/services/category/category_service.dart';
 import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:wallex/core/database/services/transaction/transaction_service.dart';
 import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:wallex/core/database/services/shared/key_value_service.dart'
+    show onGlobalAppStateRefresh;
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
+import 'package:wallex/core/services/ai/ai_credentials.dart';
+import 'package:wallex/core/services/ai/ai_credentials_store.dart';
+import 'package:wallex/core/services/ai/ai_provider_type.dart';
 import 'package:wallex/core/services/attachments/attachment_model.dart';
 import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
 import 'package:wallex/core/services/firebase_credentials_cipher.dart';
 import 'package:wallex/core/utils/logger.dart';
 import 'package:wallex/core/utils/uuid.dart';
-import 'package:wallex/main.dart' show appStateKey;
 
 /// Service that syncs local data to Firestore for multi-device sharing.
 ///
@@ -410,7 +413,7 @@ class FirebaseSyncService {
     // One-shot rebuild after all settings are applied — avoids N setState
     // calls while still making theme/accent/etc. take effect without restart.
     if (writeCount > 0) {
-      appStateKey.currentState?.refreshAppState();
+      onGlobalAppStateRefresh?.call();
     }
 
     Logger.printDebug(
@@ -546,8 +549,8 @@ class FirebaseSyncService {
         'data': encoded,
         'mimeType': mimeType,
         'size': bytes.length,
-        if (width != null) 'width': width,
-        if (height != null) 'height': height,
+        'width': ?width,
+        'height': ?height,
         'updatedAt': FieldValue.serverTimestamp(),
         'updatedBy': currentUserEmail,
       });
@@ -1548,16 +1551,28 @@ class FirebaseSyncService {
       final cipher = FirebaseCredentialsCipher.instance;
       final payload = <String, dynamic>{};
 
-      final nexusKey = await NexusCredentialsStore.instance.loadApiKey();
-      if (nexusKey != null && nexusKey.isNotEmpty) {
-        payload['nexusApiKey'] = await cipher.encryptForUser(nexusKey, uid);
-      }
-
-      // Model is not really a secret, but living in the same store is
-      // cheap to sync and keeps Nexus configuration in one place.
-      final nexusModel = await NexusCredentialsStore.instance.loadModel();
-      if (nexusModel.isNotEmpty) {
-        payload['nexusModel'] = await cipher.encryptForUser(nexusModel, uid);
+      // Push every configured BYOK provider. Each provider keeps its own
+      // payload field so users can keep multiple keys in sync (one per
+      // provider). The active-provider id is non-secret and rides along in
+      // user_settings via the standard settings sync path.
+      for (final providerType in AiProviderType.values) {
+        final creds = await AiCredentialsStore.instance
+            .loadCredentials(providerType);
+        if (creds == null) continue;
+        if (creds.apiKey.isNotEmpty) {
+          payload['ai_${providerType.storageId}_apiKey'] =
+              await cipher.encryptForUser(creds.apiKey, uid);
+        }
+        final model = creds.model;
+        if (model != null && model.isNotEmpty) {
+          payload['ai_${providerType.storageId}_model'] =
+              await cipher.encryptForUser(model, uid);
+        }
+        final baseUrl = creds.baseUrl;
+        if (baseUrl != null && baseUrl.isNotEmpty) {
+          payload['ai_${providerType.storageId}_baseUrl'] =
+              await cipher.encryptForUser(baseUrl, uid);
+        }
       }
 
       final binance = await BinanceCredentialsStore.instance.load();
@@ -1642,15 +1657,42 @@ class FirebaseSyncService {
 
       int written = 0;
 
-      final nexusApiKey = await decryptField('nexusApiKey');
-      if (nexusApiKey != null) {
-        await NexusCredentialsStore.instance.saveApiKey(nexusApiKey);
+      // Pull every BYOK provider. Each entry is restored independently so a
+      // single decryption failure for one provider does not block the rest.
+      for (final providerType in AiProviderType.values) {
+        final apiKey =
+            await decryptField('ai_${providerType.storageId}_apiKey');
+        if (apiKey == null || apiKey.isEmpty) continue;
+        final model = await decryptField('ai_${providerType.storageId}_model');
+        final baseUrl =
+            await decryptField('ai_${providerType.storageId}_baseUrl');
+        await AiCredentialsStore.instance.saveCredentials(AiCredentials(
+          providerType: providerType,
+          apiKey: apiKey,
+          model: (model != null && model.isNotEmpty) ? model : null,
+          baseUrl: (baseUrl != null && baseUrl.isNotEmpty) ? baseUrl : null,
+        ));
         written++;
       }
-      final nexusModel = await decryptField('nexusModel');
-      if (nexusModel != null) {
-        await NexusCredentialsStore.instance.saveModel(nexusModel);
-        written++;
+
+      // Backwards-compatibility: legacy docs only carried `nexusApiKey` /
+      // `nexusModel`. Honour them when present and the new shape did not
+      // already restore Nexus credentials.
+      final legacyNexusApiKey = await decryptField('nexusApiKey');
+      if (legacyNexusApiKey != null && legacyNexusApiKey.isNotEmpty) {
+        final existing = await AiCredentialsStore.instance
+            .loadCredentials(AiProviderType.nexus);
+        if (existing == null) {
+          final legacyModel = await decryptField('nexusModel');
+          await AiCredentialsStore.instance.saveCredentials(AiCredentials(
+            providerType: AiProviderType.nexus,
+            apiKey: legacyNexusApiKey,
+            model: (legacyModel != null && legacyModel.isNotEmpty)
+                ? legacyModel
+                : null,
+          ));
+          written++;
+        }
       }
 
       final binanceApiKey = await decryptField('binanceApiKey');

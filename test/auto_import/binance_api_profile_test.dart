@@ -51,7 +51,7 @@ void main() {
   });
 
   group('C2C P2P', () {
-    test('COMPLETED SELL → expense', () {
+    test('COMPLETED SELL → expense', () async {
       final json = {
         'orderNumber': '20250401001234567890',
         'tradeType': 'SELL',
@@ -66,7 +66,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:c2c_p2p');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 150.0);
@@ -79,7 +79,7 @@ void main() {
       expect(proposal.accountId, 'acc-binance');
     });
 
-    test('COMPLETED BUY → income', () {
+    test('COMPLETED BUY → income', () async {
       final json = {
         'orderNumber': '20250401009876543210',
         'tradeType': 'BUY',
@@ -94,7 +94,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:c2c_p2p');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 200.0);
@@ -105,7 +105,7 @@ void main() {
       expect(proposal.confidence, 0.95);
     });
 
-    test('PENDING status → null (ignored)', () {
+    test('PENDING status → null (ignored)', () async {
       final json = {
         'orderNumber': '20250401005555555555',
         'tradeType': 'BUY',
@@ -120,12 +120,12 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:c2c_p2p');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
 
-    test('CANCELLED status → null (ignored)', () {
+    test('CANCELLED status → null (ignored)', () async {
       final json = {
         'orderNumber': '20250401006666666666',
         'tradeType': 'SELL',
@@ -140,14 +140,14 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:c2c_p2p');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
   });
 
   group('Fiat Order', () {
-    test('Successful deposit → income', () {
+    test('Successful deposit → income', () async {
       final json = {
         'orderNo': 'FO20250402001122334455',
         'fiatCurrency': 'USD',
@@ -161,7 +161,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:fiat_order_deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 500.0);
@@ -172,7 +172,7 @@ void main() {
       expect(proposal.confidence, 0.95);
     });
 
-    test('Successful withdrawal → expense', () {
+    test('Successful withdrawal → expense', () async {
       final json = {
         'orderNo': 'FO20250402002233445566',
         'fiatCurrency': 'USD',
@@ -186,13 +186,13 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:fiat_order_withdraw');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.type, TransactionType.expense);
     });
 
-    test('Failed status → null (ignored)', () {
+    test('Failed status → null (ignored)', () async {
       final json = {
         'orderNo': 'FO20250402009999999999',
         'fiatCurrency': 'USD',
@@ -206,14 +206,14 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:fiat_order_deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
   });
 
   group('Fiat Payment', () {
-    test('Completed card purchase → income (crypto enters wallet)', () {
+    test('Completed card purchase → income (crypto enters wallet)', () async {
       final json = {
         'orderNo': 'FP20250403001234',
         'sourceAmount': '100.00',
@@ -226,7 +226,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:fiat_payment');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 99.5);
@@ -237,7 +237,7 @@ void main() {
       expect(proposal.confidence, 0.90);
     });
 
-    test('Non-stablecoin crypto purchase uses coin as currencyId', () {
+    test('Non-stablecoin crypto purchase uses coin as currencyId', () async {
       final json = {
         'orderNo': 'FP20250403005678',
         'sourceAmount': '100.00',
@@ -250,7 +250,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:fiat_payment');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.currencyId, 'BTC');
@@ -258,7 +258,7 @@ void main() {
   });
 
   group('Pay Transaction', () {
-    test('SUCCESS PAY → expense', () {
+    test('SUCCESS PAY → expense', () async {
       final json = {
         'orderType': 'PAY',
         'transactionId': 'PAY20250404001122',
@@ -275,7 +275,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:pay');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 25.0);
@@ -286,7 +286,7 @@ void main() {
       expect(proposal.confidence, 0.90);
     });
 
-    test('SUCCESS RECEIVE → income', () {
+    test('SUCCESS RECEIVE → income', () async {
       final json = {
         'orderType': 'C2C',
         'transactionId': 'PAY20250404003344',
@@ -303,14 +303,14 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:pay');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.type, TransactionType.income);
       expect(proposal.counterpartyName, 'Friend_Send');
     });
 
-    test('PENDING status → null (ignored)', () {
+    test('PENDING status → null (ignored)', () async {
       final json = {
         'orderType': 'PAY',
         'transactionId': 'PAY20250404009999',
@@ -323,14 +323,14 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:pay');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
   });
 
   group('Capital Deposit', () {
-    test('status=1, USDT → income, currencyId=USD, confidence=0.90', () {
+    test('status=1, USDT → income, currencyId=USD, confidence=0.90', () async {
       final json = {
         'id': 'dep_001',
         'amount': '300.00',
@@ -343,7 +343,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 300.0);
@@ -355,7 +355,7 @@ void main() {
       expect(proposal.confidence, 0.90);
     });
 
-    test('status=1, BTC → income, currencyId=BTC, confidence=0.60', () {
+    test('status=1, BTC → income, currencyId=BTC, confidence=0.60', () async {
       final json = {
         'id': 'dep_002',
         'amount': '0.01500000',
@@ -368,7 +368,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 0.015);
@@ -377,7 +377,7 @@ void main() {
       expect(proposal.confidence, 0.60);
     });
 
-    test('status=0 (pending) → null (ignored)', () {
+    test('status=0 (pending) → null (ignored)', () async {
       final json = {
         'id': 'dep_003',
         'amount': '100.00',
@@ -390,14 +390,14 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
   });
 
   group('Capital Withdrawal', () {
-    test('status=6, USDT → expense, currencyId=USD, confidence=0.90', () {
+    test('status=6, USDT → expense, currencyId=USD, confidence=0.90', () async {
       final json = {
         'id': 'wdr_001',
         'amount': '50.00',
@@ -410,7 +410,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:withdraw');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 50.0);
@@ -422,7 +422,7 @@ void main() {
       expect(proposal.confidence, 0.90);
     });
 
-    test('status=2 (processing) → null (ignored)', () {
+    test('status=2 (processing) → null (ignored)', () async {
       final json = {
         'id': 'wdr_002',
         'amount': '25.00',
@@ -435,22 +435,22 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:withdraw');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
   });
 
   group('Edge cases', () {
-    test('unknown sender → null', () {
+    test('unknown sender → null', () async {
       final json = {'some': 'data'};
       final event = makeEvent(json, 'binance:unknown_endpoint');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNull);
     });
 
-    test('malformed JSON rawText → null (does not throw)', () {
+    test('malformed JSON rawText → null (does not throw)', () async {
       final event = RawCaptureEvent(
         rawText: 'not valid json {{{',
         sender: 'binance:c2c_p2p',
@@ -458,11 +458,11 @@ void main() {
         channel: CaptureChannel.api,
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
       expect(proposal, isNull);
     });
 
-    test('FDUSD stablecoin → currencyId=USD', () {
+    test('FDUSD stablecoin → currencyId=USD', () async {
       final json = {
         'id': 'dep_fdusd',
         'amount': '100.00',
@@ -475,13 +475,13 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.currencyId, 'USD');
     });
 
-    test('USDC stablecoin → currencyId=USD', () {
+    test('USDC stablecoin → currencyId=USD', () async {
       final json = {
         'id': 'dep_usdc',
         'amount': '250.00',
@@ -494,7 +494,7 @@ void main() {
       };
 
       final event = makeEvent(json, 'binance:deposit');
-      final proposal = profile.tryParse(event, accountId: 'acc-binance');
+      final proposal = await profile.tryParse(event, accountId: 'acc-binance');
 
       expect(proposal, isNotNull);
       expect(proposal!.currencyId, 'USD');

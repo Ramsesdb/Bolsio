@@ -24,6 +24,8 @@ import 'package:wallex/core/services/auto_import/dedupe/fingerprint_registry.dar
 import 'package:wallex/core/services/auto_import/dedupe/notif_fingerprint.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
 import 'package:wallex/core/services/auto_import/profiles/bank_profiles_registry.dart';
+import 'package:wallex/core/services/auto_import/profiles/generic_llm_profile.dart';
+import 'package:wallex/core/services/bank_detection/bank_detection_service.dart';
 import 'package:wallex/core/services/ai/auto_categorization_service.dart';
 
 /// Central orchestrator that manages capture sources and dispatches events
@@ -52,6 +54,10 @@ class CaptureOrchestrator {
 
   final List<CaptureSource> _sources = [];
   StreamSubscription<RawCaptureEvent>? _subscription;
+
+  /// LLM fallback parser — called when no regex profile matched a notification
+  /// from a known bank sender.
+  final _genericLlmFallback = const GenericLlmProfile();
 
   /// Callback invoked after each successful INSERT of a pending import with
   /// status 'pending' (not duplicate). The int argument is the current count
@@ -438,7 +444,7 @@ class CaptureOrchestrator {
       try {
         // Parse first so we can resolve account by bank name + proposal currency.
         final parseResult =
-            profile.tryParseWithDetails(event, accountId: null);
+            await profile.tryParseWithDetails(event, accountId: null);
 
         if (!parseResult.success || parseResult.transaction == null) {
           debugPrint(
@@ -466,9 +472,59 @@ class CaptureOrchestrator {
 
         final proposal = parsedProposal.copyWith(accountId: resolvedAccountId);
 
-        // AI auto-categorization (Feature 1)
+        // [DEDUPE-DBG] Capture point: proposal ready, about to dedupe.
+        debugPrint(
+          '[DEDUPE-DBG] orchestrator: NEW PROPOSAL '
+          'profile=${profile.bankName} channel=${event.channel.dbValue} '
+          'sender=${event.sender} bankRef=${proposal.bankRef} '
+          'accountId=${proposal.accountId} amount=${proposal.amount} '
+          'currency=${proposal.currencyId} date=${proposal.date.toIso8601String()}',
+        );
+
+        // Run deduplication check FIRST — before any AI call. This avoids
+        // burning AI quota on events that are already known duplicates
+        // (e.g. Binance polling re-reporting the same transactions every
+        // few minutes).
+        final isDuplicate = await dedupeChecker.check(proposal);
+        debugPrint(
+          '[DEDUPE-DBG] orchestrator: dedupe.check returned $isDuplicate '
+          'for bankRef=${proposal.bankRef}',
+        );
+
+        if (isDuplicate) {
+          debugPrint(
+            'CaptureOrchestrator: Skipping duplicate proposal: '
+            '${proposal.bankRef ?? 'no-ref'} (${proposal.amount} ${proposal.currencyId})',
+          );
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.duplicate,
+            reason: proposal.bankRef != null && proposal.bankRef!.isNotEmpty
+                ? 'Duplicado por bankRef=${proposal.bankRef}'
+                : 'Duplicado (coincidencia con transacción existente)',
+            matchedProfile: profile.bankName,
+            parsedAmount: proposal.amount,
+            parsedCurrency: proposal.currencyId,
+          ));
+          continue;
+        }
+
+        // Run the Binance double-count protection BEFORE the AI call. If the
+        // proposal would be skipped anyway, we don't want to spend AI quota
+        // on it. Each Binance poll (every ~5 min) re-reports the same
+        // transactions, so calling the IA classifier on every poll for a
+        // proposal that ends up being silently skipped is pure waste.
+        final shouldAutoSkip =
+            await _shouldSkipBinanceProposalToAvoidDoubleCount(proposal);
+
+        // AI auto-categorization (Feature 1) — only after we know this is
+        // not a duplicate AND not going to be auto-skipped, so we never spend
+        // AI quota on redundant events.
         var enhancedProposal = proposal;
-        if (proposal.proposedCategoryId == null) {
+        if (!shouldAutoSkip && proposal.proposedCategoryId == null) {
+          debugPrint(
+            '[DEDUPE-DBG] CALLING AI classifier for bankRef=${proposal.bankRef}',
+          );
           final aiResult = await AutoCategorizationService.instance
               .suggest(proposal: proposal)
               .timeout(const Duration(seconds: 2), onTimeout: () => null)
@@ -481,29 +537,20 @@ class CaptureOrchestrator {
           }
         }
 
-        // Run deduplication check
-        final isDuplicate = await dedupeChecker.check(enhancedProposal);
+        // Persist the proposal. When the double-count protection fires, we
+        // store the row with status=duplicate so the dedupe check on the
+        // next poll finds it via findByBankRef and short-circuits BEFORE
+        // hitting the IA classifier again.
+        final status = shouldAutoSkip
+            ? TransactionProposalStatus.duplicate
+            : TransactionProposalStatus.pending;
 
-        if (isDuplicate) {
+        if (shouldAutoSkip) {
           debugPrint(
-            'CaptureOrchestrator: Skipping duplicate proposal: '
-            '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
+            '[DEDUPE-DBG] orchestrator: SKIP via double-count protection '
+            'bankRef=${proposal.bankRef} amount=${proposal.amount} '
+            '— persisting as auto-dismissed',
           );
-          _logDiagnostic(diagnosticBase.copyWith(
-            id: generateUUID(),
-            status: CaptureEventStatus.duplicate,
-            reason: enhancedProposal.bankRef != null &&
-                    enhancedProposal.bankRef!.isNotEmpty
-                ? 'Duplicado por bankRef=${enhancedProposal.bankRef}'
-                : 'Duplicado (coincidencia con transacción existente)',
-            matchedProfile: profile.bankName,
-            parsedAmount: enhancedProposal.amount,
-            parsedCurrency: enhancedProposal.currencyId,
-          ));
-          continue;
-        }
-
-        if (await _shouldSkipBinanceProposalToAvoidDoubleCount(enhancedProposal)) {
           debugPrint(
             'CaptureOrchestrator: Skipping Binance proposal to avoid double count: '
             '${enhancedProposal.bankRef ?? 'no-ref'} (${enhancedProposal.amount} ${enhancedProposal.currencyId})',
@@ -517,14 +564,43 @@ class CaptureOrchestrator {
             parsedAmount: enhancedProposal.amount,
             parsedCurrency: enhancedProposal.currencyId,
           ));
-          continue;
         }
 
-        // Persist the proposal
-        final status = TransactionProposalStatus.pending;
+        debugPrint(
+          '[DEDUPE-DBG] orchestrator: INSERT_PATH — about to insertPendingImport '
+          'id=${enhancedProposal.id} bankRef=${enhancedProposal.bankRef} '
+          'accountId=${enhancedProposal.accountId} amount=${enhancedProposal.amount} '
+          'currency=${enhancedProposal.currencyId} status=$status',
+        );
 
-        await pendingImportService
-            .insertPendingImport(enhancedProposal.toCompanion(status: status));
+        try {
+          final insertedRowId = await pendingImportService
+              .insertPendingImport(enhancedProposal.toCompanion(status: status));
+          debugPrint(
+            '[DEDUPE-DBG] orchestrator: insertPendingImport SUCCESS '
+            'rowId=$insertedRowId id=${enhancedProposal.id} bankRef=${enhancedProposal.bankRef}',
+          );
+          if (shouldAutoSkip) {
+            debugPrint(
+              '[DEDUPE-DBG] orchestrator: auto-dismissed pending_import inserted '
+              'bankRef=${enhancedProposal.bankRef}',
+            );
+          }
+        } catch (e, st) {
+          debugPrint(
+            '[DEDUPE-DBG] orchestrator: insertPendingImport THREW '
+            'id=${enhancedProposal.id} bankRef=${enhancedProposal.bankRef} '
+            'error=$e\n$st',
+          );
+          rethrow;
+        }
+
+        // For auto-skipped rows we already emitted a `duplicate` diagnostic
+        // above; skip the success path bookkeeping (createdTransactionId,
+        // parsedSuccess diagnostic, health signal, pending-count notification).
+        if (shouldAutoSkip) {
+          continue;
+        }
 
         // Remember the first successfully-persisted tx id so we can link it
         // to the notification fingerprint once the loop is done.
@@ -581,6 +657,130 @@ class CaptureOrchestrator {
       }
     }
 
+    // ── LLM fallback ──────────────────────────────────────────────────────────
+    // If no regex profile produced a successful result, and the sender is a
+    // known bank (even without a dedicated parser), ask the LLM to extract the
+    // transaction data. Only fires for notification events — SMS events from
+    // unknown senders are not sent to the LLM.
+    final anyProfileSucceeded = createdTransactionId != null;
+    if (!anyProfileSucceeded &&
+        event.channel == CaptureChannel.notification &&
+        _isKnownBankSender(event.sender) &&
+        UserSettingService.instance.isProfileEnabled('generic_llm')) {
+      try {
+        final llmResult = await _genericLlmFallback.tryParseWithDetails(
+          event,
+          accountId: null,
+        );
+
+        if (llmResult.success && llmResult.transaction != null) {
+          final parsedProposal = llmResult.transaction!;
+          final bankNameHint = llmResult.resolvedBankName ?? '';
+
+          final resolvedAccountId = await _resolveAccountId(
+            bankNameHint,
+            currencyCode: parsedProposal.currencyId,
+          );
+
+          final proposal = parsedProposal.copyWith(accountId: resolvedAccountId);
+
+          debugPrint(
+            '[LLM-FALLBACK] orchestrator: proposal from LLM '
+            'bank=$bankNameHint bankRef=${proposal.bankRef} '
+            'amount=${proposal.amount} currency=${proposal.currencyId}',
+          );
+
+          final isDuplicate = await dedupeChecker.check(proposal);
+          if (isDuplicate) {
+            debugPrint(
+              '[LLM-FALLBACK] orchestrator: duplicate — skipping',
+            );
+            _logDiagnostic(diagnosticBase.copyWith(
+              id: generateUUID(),
+              status: CaptureEventStatus.duplicate,
+              reason: proposal.bankRef != null && proposal.bankRef!.isNotEmpty
+                  ? 'Duplicado por bankRef=${proposal.bankRef} (LLM fallback)'
+                  : 'Duplicado (LLM fallback)',
+              matchedProfile: _genericLlmFallback.bankName,
+              parsedAmount: proposal.amount,
+              parsedCurrency: proposal.currencyId,
+            ));
+          } else {
+            // AI auto-categorization for LLM-parsed proposals
+            var enhancedProposal = proposal;
+            if (proposal.proposedCategoryId == null) {
+              final aiResult = await AutoCategorizationService.instance
+                  .suggest(proposal: proposal)
+                  .timeout(const Duration(seconds: 2), onTimeout: () => null)
+                  .catchError((_) => null);
+              if (aiResult != null) {
+                enhancedProposal = proposal.copyWith(
+                  proposedCategoryId: aiResult.categoryId,
+                );
+              }
+            }
+
+            await pendingImportService.insertPendingImport(
+              enhancedProposal.toCompanion(
+                status: TransactionProposalStatus.pending,
+              ),
+            );
+
+            createdTransactionId = enhancedProposal.id;
+
+            _logDiagnostic(diagnosticBase.copyWith(
+              id: generateUUID(),
+              status: CaptureEventStatus.parsedSuccess,
+              reason: resolvedAccountId == null
+                  ? 'Parseada por IA — sin cuenta asociada'
+                  : 'Parseada por IA — propuesta creada',
+              matchedProfile: bankNameHint.isNotEmpty
+                  ? bankNameHint
+                  : _genericLlmFallback.bankName,
+              parsedAmount: enhancedProposal.amount,
+              parsedCurrency: enhancedProposal.currencyId,
+            ));
+
+            try {
+              CaptureHealthMonitor.instance.markSuccess();
+            } catch (_) {}
+
+            if (onNewPendingImport != null) {
+              try {
+                final countStream =
+                    pendingImportService.watchPendingCount();
+                final currentCount = await countStream.first
+                    .timeout(const Duration(seconds: 2));
+                await onNewPendingImport!(currentCount);
+              } catch (e) {
+                debugPrint(
+                  'CaptureOrchestrator: Error invoking onNewPendingImport (LLM fallback): $e',
+                );
+              }
+            }
+          }
+        } else {
+          _logDiagnostic(diagnosticBase.copyWith(
+            id: generateUUID(),
+            status: CaptureEventStatus.parsedFailed,
+            reason:
+                'LLM fallback: ${llmResult.failureReason ?? 'no se pudo extraer transacción'}',
+            matchedProfile: _genericLlmFallback.bankName,
+          ));
+        }
+      } catch (e, stackTrace) {
+        debugPrint(
+          'CaptureOrchestrator: LLM fallback error: $e\n$stackTrace',
+        );
+        _logDiagnostic(diagnosticBase.copyWith(
+          id: generateUUID(),
+          status: CaptureEventStatus.parsedFailed,
+          reason: 'Excepción en LLM fallback: $e',
+          matchedProfile: _genericLlmFallback.bankName,
+        ));
+      }
+    }
+
     // Register the notification fingerprint after the loop. This runs even
     // when parsing failed or was deduped — so a later repost with the same
     // content is caught by the early-exit in this same method.
@@ -594,6 +794,14 @@ class CaptureOrchestrator {
         debugPrint('CaptureOrchestrator: markSeen error: $e');
       }
     }
+  }
+
+  /// Returns `true` when [sender] is a package name registered in
+  /// [BankDetectionService.kPackageToProfileId], i.e. a known bank app — even
+  /// if no regex profile has been implemented for it yet.
+  bool _isKnownBankSender(String? sender) {
+    if (sender == null || sender.isEmpty) return false;
+    return BankDetectionService.kPackageToProfileId.containsKey(sender);
   }
 
   /// Build the baseline diagnostic record for [event] with status `received`.

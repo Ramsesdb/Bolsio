@@ -24,7 +24,7 @@ class HexTile extends StatelessWidget {
             clipper: _HexagonClipper(),
             child: Container(width: size, height: size, color: fill),
           ),
-          if (child != null) child!,
+          ?child,
         ],
       ),
     );

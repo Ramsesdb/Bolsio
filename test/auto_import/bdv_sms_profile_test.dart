@@ -44,12 +44,12 @@ void main() {
   });
 
   group('BdvSmsProfile — Pagomovil recibido (positive tests)', () {
-    test('Fixture 1: Bs.12.000,00 sin espacio tras Bs.', () {
+    test('Fixture 1: Bs.12.000,00 sin espacio tras Bs.', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs.12.000,00 del 0412-7635070 Ref: 108834202054 en fecha: 29-03-26 hora: 18:01.',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 12000.0);
@@ -67,12 +67,12 @@ void main() {
       );
     });
 
-    test('Fixture 2: Bs. 210,00 con espacio tras Bs., fecha 2023', () {
+    test('Fixture 2: Bs. 210,00 con espacio tras Bs., fecha 2023', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs. 210,00 del 0412-6638500 Ref: 000390572967 en fecha: 30-10-23 hora: 12:35',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 210.0);
@@ -84,12 +84,12 @@ void main() {
       expect(proposal.confidence, greaterThanOrEqualTo(0.9));
     });
 
-    test('Fixture 3: Bs. 900,00 con espacio, fecha 2025', () {
+    test('Fixture 3: Bs. 900,00 con espacio, fecha 2025', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs. 900,00 del 0412-7635070 Ref: 002103869591 en fecha: 25-01-25 hora: 21:26',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 900.0);
@@ -103,13 +103,13 @@ void main() {
   });
 
   group('BdvSmsProfile — 2662 positivos (Pagomovil recibido)', () {
-    test('Fixture 2662-1: Bs. 30,00 con espacio, fecha con ":"', () {
+    test('Fixture 2662-1: Bs. 30,00 con espacio, fecha con ":"', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs. 30,00 del 0412-6638500 Ref: 000379526101 en fecha: 22-10-23 hora: 19:16',
         sender: '2662',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 30.0);
@@ -122,13 +122,13 @@ void main() {
       expect(proposal.channel, CaptureChannel.sms);
     });
 
-    test('Fixture 2662-2: Bs.10.620,00 sin espacio, fecha SIN ":"', () {
+    test('Fixture 2662-2: Bs.10.620,00 sin espacio, fecha SIN ":"', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs.10.620,00 del 0412-7635070 Ref: 108639858076 en fecha 27-03-26 hora: 21:31.',
         sender: '2662',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 10620.0);
@@ -141,13 +141,13 @@ void main() {
       expect(proposal.channel, CaptureChannel.sms);
     });
 
-    test('Fixture 2662-3: Bs.29.428,10 sin espacio, fecha SIN ":"', () {
+    test('Fixture 2662-3: Bs.29.428,10 sin espacio, fecha SIN ":"', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs.29.428,10 del 0424-6218586 Ref: 108639894484 en fecha 27-03-26 hora: 21:47.',
         sender: '2662',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 29428.10);
@@ -160,13 +160,13 @@ void main() {
       expect(proposal.channel, CaptureChannel.sms);
     });
 
-    test('Fixture 2662-4: Bs.5.953,10 sin espacio, fecha SIN ":"', () {
+    test('Fixture 2662-4: Bs.5.953,10 sin espacio, fecha SIN ":"', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs.5.953,10 del 0424-6125380 Ref: 000717467994 en fecha 27-03-26 hora: 22:25.',
         sender: '2662',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 5953.10);
@@ -181,34 +181,34 @@ void main() {
   });
 
   group('BdvSmsProfile — Negative tests (should return null)', () {
-    test('OTP clave de pago (1)', () {
+    test('OTP clave de pago (1)', () async {
       final event = makeEvent(
         'BDV: La clave de pago para procesar tu operacion es 67928761',
       );
 
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('OTP clave de pago (2)', () {
+    test('OTP clave de pago (2)', () async {
       final event = makeEvent(
         'BDV: La clave de pago para procesar tu operacion es 68010677',
       );
 
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Codigo de vinculacion', () {
+    test('Codigo de vinculacion', () async {
       final event = makeEvent(
         'Tu codigo para proceder con la vinculacion de Ami Ven es 2256800 emr2y27v6wc',
       );
 
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Random unrelated message', () {
+    test('Random unrelated message', () async {
       final event = makeEvent('Mensaje random cualquiera');
 
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
   });
 
@@ -239,12 +239,12 @@ void main() {
   });
 
   group('BdvSmsProfile — accountId passthrough', () {
-    test('null accountId is preserved in proposal', () {
+    test('null accountId is preserved in proposal', () async {
       final event = makeEvent(
         'Recibiste un PagomovilBDV por Bs. 900,00 del 0412-7635070 Ref: 002103869591 en fecha: 25-01-25 hora: 21:26',
       );
 
-      final proposal = profile.tryParse(event, accountId: null);
+      final proposal = await profile.tryParse(event, accountId: null);
       expect(proposal, isNotNull);
       expect(proposal!.accountId, isNull);
     });

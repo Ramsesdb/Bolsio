@@ -7,8 +7,7 @@ import 'package:wallex/core/database/services/user-setting/user_setting_service.
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/services/ai/nexus_credentials_store.dart';
-import 'package:wallex/core/services/ai/nexus_ai_service.dart';
+import 'package:wallex/core/services/ai/ai_service.dart';
 
 class SpendingInsightsResult {
   final String text;
@@ -37,7 +36,7 @@ class SpendingInsightsService {
         return completer.future;
       }
 
-      final hasKey = await NexusCredentialsStore.instance.hasApiKey();
+      final hasKey = await AiService.instance.isConfigured();
       if (!hasKey) {
         completer.complete(null);
         return completer.future;
@@ -111,7 +110,7 @@ class SpendingInsightsService {
       final formatter = DateFormat('dd/MM/yyyy');
       final payload = top5.map((d) => '- ${d.label}').join('\n');
 
-      final response = await NexusAiService.instance.complete(
+      final response = await AiService.instance.complete(
         temperature: 0.5,
         messages: [
           {

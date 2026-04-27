@@ -128,7 +128,7 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (headerWidget != null) headerWidget!,
+              ?headerWidget,
               ...items.map((item) => _radioTile(context, item)),
             ],
           ),

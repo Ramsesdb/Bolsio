@@ -105,6 +105,11 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # Used by `test/dashboard_widgets/dashboard_layout_service_test.dart` to
+  # exercise the layout service's debouncer with virtual time. fake_async
+  # is already a transitive dep of flutter_test; declared here so the
+  # `depend_on_referenced_packages` lint is satisfied.
+  fake_async: ^1.3.3
 
   # Generators:
   build_runner: 2.12.1

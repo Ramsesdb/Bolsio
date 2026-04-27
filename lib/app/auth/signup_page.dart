@@ -71,12 +71,8 @@ class _SignupPageState extends State<SignupPage> {
 
       Logger.printDebug('User created: ${credential.user?.uid}');
 
-      // Update app state
-      await AppDataService.instance.setItem(
-        AppDataKey.introSeen,
-        '1',
-        updateGlobalState: true,
-      );
+      // Update app state (only `onboarded`; `introSeen` is flipped at the end
+      // of OnboardingPage so the 10-slide intro still shows on fresh installs).
       await AppDataService.instance.setItem(
         AppDataKey.onboarded,
         '1',
@@ -181,12 +177,8 @@ class _SignupPageState extends State<SignupPage> {
         ''');
       }
 
-      // Update app state
-      await AppDataService.instance.setItem(
-        AppDataKey.introSeen,
-        '1',
-        updateGlobalState: true,
-      );
+      // Update app state (only `onboarded`; `introSeen` is flipped at the end
+      // of OnboardingPage so the 10-slide intro still shows on fresh installs).
       await AppDataService.instance.setItem(
         AppDataKey.onboarded,
         '1',

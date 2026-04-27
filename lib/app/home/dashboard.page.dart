@@ -1,14 +1,21 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:wallex/app/common/widgets/user_avatar_display.dart';
-import 'package:wallex/app/home/widgets/balance_delta_pill.dart';
-import 'package:wallex/app/home/widgets/click_tracker.dart';
-import 'package:wallex/app/home/widgets/dashboard_cards.dart';
-import 'package:wallex/app/home/widgets/horizontal_scrollable_account_list.dart';
+import 'package:wallex/app/home/dashboard_widgets/dashboard_layout_body.dart';
+import 'package:wallex/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:wallex/app/home/dashboard_widgets/defaults.dart';
+import 'package:wallex/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
+import 'package:wallex/app/home/dashboard_widgets/edit/editable_widget_frame.dart';
+import 'package:wallex/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:wallex/app/home/dashboard_widgets/registry.dart';
+import 'package:wallex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:wallex/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
 import 'package:wallex/app/home/widgets/income_or_expense_card.dart';
 import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
 
@@ -16,28 +23,22 @@ import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
 import 'package:wallex/app/settings/widgets/pin_modal.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:wallex/core/services/dolar_api_service.dart';
+import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/account/account.dart';
 import 'package:wallex/core/models/date-utils/date_period.dart';
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
 import 'package:wallex/core/models/date-utils/period_type.dart';
 import 'package:wallex/core/presentation/debug_page.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/presentation/theme.dart';
 import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -49,159 +50,215 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPage>
+    with WidgetsBindingObserver {
   DatePeriodState dateRangeService = const DatePeriodState();
   final ScrollController _scrollController = ScrollController();
   bool _glassReady = false;
 
-  late Stream<double> _balanceVariationStream;
-  late Stream<double> _totalBalanceStream;
+  /// Toggle local de edit mode. Cuando es `true`, el body se reemplaza por
+  /// un `ReorderableListView` con los widgets envueltos en
+  /// `EditableWidgetFrame`. Spec `dashboard-edit-mode` § Toggle.
+  bool _editing = false;
 
   String _rateSource = 'bcv';
-  late Stream<double> _totalBalanceInVesStream;
+
+  /// Counter incremented on pull-to-refresh so descendant widgets that cache
+  /// streams in `initState` (`TotalBalanceSummaryWidget`, etc.) see a changed
+  /// prop in `didUpdateWidget` and re-subscribe.
+  int _refreshTick = 0;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) setState(() => _glassReady = true);
     });
 
-    _balanceVariationStream = _getBalanceVariationStream();
+    // Initialize the rate source from the persisted setting so multiple
+    // tabs / sessions agree on the same value.
+    final persisted = appStateSettings[SettingKey.preferredRateSource];
+    if (persisted == 'bcv' || persisted == 'paralelo') {
+      _rateSource = persisted!;
+    }
 
-    _totalBalanceStream = _getTotalBalanceStream();
-    _totalBalanceInVesStream = _getTotalBalanceInVesStream();
+    // Kick off the layout load + fallback gate. This is fire-and-forget —
+    // the StreamBuilder downstream observes the BehaviorSubject directly,
+    // so the first frame renders an empty list and the second one renders
+    // the loaded layout (or the fallback when the gate triggers).
+    unawaited(_initLayout());
+  }
+
+  Future<void> _initLayout() async {
+    final service = DashboardLayoutService.instance;
+    await service.load();
+
+    if (!mounted) return;
+
+    // Spec `dashboard-layout` § Fallback (Scenario "Returning user sin
+    // layout en Firebase"): when the persisted layout is empty AND the
+    // user already finished onboarding, apply the fallback layout and
+    // persist it so subsequent boots don't redo the work.
+    //
+    // The introSeen=='0' path leaves the layout empty by design — the
+    // onboarding `_applyChoices()` will write the goals-derived layout
+    // before the dashboard ever mounts.
+    if (service.current.isEmpty &&
+        appStateData[AppDataKey.introSeen] == '1' &&
+        !service.isFutureVersion) {
+      service.save(DashboardLayoutDefaults.fallback());
+      await service.flush();
+    }
   }
 
   @override
   void dispose() {
+    // Persist any pending layout edits before tearing down — covers the
+    // case where the user backgrounds the app mid-edit. The service is a
+    // singleton so this `flush()` is safe to call at every page dispose.
+    unawaited(DashboardLayoutService.instance.flush());
+    WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     super.dispose();
   }
 
-  /// Combines the base account stream with [HiddenModeService.visibleAccountIdsStream]
-  /// so every derived balance on the dashboard silently excludes saving
-  /// accounts while Hidden Mode is locked. When the feature is disabled the
-  /// visibility stream emits every id, so the filter is a no-op.
-  Stream<List<Account>> _visibleAccountsStream() {
-    return Rx.combineLatest2<List<Account>, List<String>, List<Account>>(
-      AccountService.instance.getAccounts(
-        predicate: (acc, curr) => acc.closingDate.isNull(),
-      ),
-      HiddenModeService.instance.visibleAccountIdsStream,
-      (accounts, visibleIds) {
-        final visibleSet = visibleIds.toSet();
-        return accounts
-            .where((a) => visibleSet.contains(a.id))
-            .toList(growable: false);
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Spec `dashboard-edit-mode` § Persistencia (Scenario "App backgrounded
+    // durante edición pendiente"): forzar el flush al pausar la app
+    // garantiza que ediciones dentro de la ventana de 300 ms del debouncer
+    // queden persistidas antes de que el SO mate el proceso.
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      unawaited(DashboardLayoutService.instance.flush());
+    }
+  }
+
+  /// Toggle del edit mode. Al salir, fuerza un `flush()` para escribir las
+  /// últimas mutaciones del debouncer antes de cambiar de pantalla.
+  Future<void> _toggleEditing() async {
+    if (_editing) {
+      // Saliendo: persiste cualquier cambio pendiente.
+      await DashboardLayoutService.instance.flush();
+    }
+    if (!mounted) return;
+    setState(() => _editing = !_editing);
+  }
+
+  /// Spec Wave 4 task 4.3: "Restablecer según mis objetivos" — reads the
+  /// onboarding goals from `appStateSettings`, materializes the
+  /// `DashboardLayoutDefaults.fromGoals` layout and replaces the live
+  /// service value (debounced + flushed).
+  Future<void> _confirmAndResetLayoutToGoals(BuildContext context) async {
+    final t = Translations.of(context).home.dashboard_widgets;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(t.reset_to_goals_confirm_title),
+          content: Text(t.reset_to_goals_confirm_message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(Translations.of(ctx).ui_actions.cancel),
+            ),
+            FilledButton.tonal(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(t.reset_to_goals_action),
+            ),
+          ],
+        );
       },
     );
-  }
+    if (confirmed != true) return;
 
-  Stream<double> _getBalanceVariationStream() {
-    return _visibleAccountsStream()
-        .switchMap(
-          (accounts) => AccountService.instance.getAccountsMoneyVariation(
-            accounts: accounts,
-            startDate: dateRangeService.startDate,
-            endDate: dateRangeService.endDate,
-            convertToPreferredCurrency: true,
-          ),
-        )
-        .shareValue();
-  }
-
-  /// Builds a per-account stream that emits the account's balance converted
-  /// to [toCurrencyCode]. Balance and exchange-rate are combined with
-  /// `combineLatest2` (orthogonal dimensions). Crucially, the rate stream is
-  /// subscribed to **once** per account for the lifetime of the outer
-  /// subscription — we do NOT regenerate it on every balance tick, which was
-  /// the cascade that pegged the CPU at cold start (rates write → watches
-  /// emit → switchMap re-created conversion streams → more watches → loop).
-  Stream<double> _perAccountConvertedStream(
-    Account account,
-    String toCurrencyCode,
-  ) {
-    final balanceStream = AccountService.instance.getAccountMoney(
-      account: account,
-      convertToPreferredCurrency: false,
-    );
-
-    if (account.currency.code == toCurrencyCode) {
-      return balanceStream;
+    final rawGoals = appStateSettings[SettingKey.onboardingGoals];
+    Set<String> goals = const <String>{};
+    if (rawGoals != null && rawGoals.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(rawGoals);
+        if (decoded is List) {
+          goals = decoded.whereType<String>().toSet();
+        }
+      } on FormatException {
+        // Treat malformed goals as empty — `fromGoals({})` falls back to the
+        // canonical layout, which is the safest behaviour for this action.
+      }
     }
 
-    // amount: 1 → pure rate stream, stable across balance changes.
-    final rateStream = ExchangeRateService.instance.calculateExchangeRate(
-      fromCurrency: account.currency.code,
-      toCurrency: toCurrencyCode,
-      source: _rateSource,
-    );
-
-    return Rx.combineLatest2<double, double?, double>(
-      balanceStream,
-      rateStream,
-      (balance, rate) => balance * (rate ?? 1),
-    );
+    final layout = DashboardLayoutDefaults.fromGoals(goals);
+    DashboardLayoutService.instance.resetToFallback(layout);
+    await DashboardLayoutService.instance.flush();
   }
 
-  Stream<double> _getTotalBalanceStream() {
-    final preferredCurrencyCode =
-        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
-
-    return _visibleAccountsStream().switchMap<double>((accounts) {
-          if (accounts.isEmpty) return Stream<double>.value(0);
-
-          final perAccountStreams = accounts
-              .map((a) => _perAccountConvertedStream(a, preferredCurrencyCode))
-              .toList();
-
-          return Rx.combineLatestList<double>(perAccountStreams).map((values) {
-            final total = values.fold<double>(0, (sum, value) => sum + value);
-
-            if (kDebugMode) {
-              final details = List.generate(accounts.length, (i) {
-                final account = accounts[i];
-                final converted = i < values.length ? values[i] : 0.0;
-                return '${account.name} -> ${converted.toStringAsFixed(2)} $preferredCurrencyCode';
-              }).join(' | ');
-
-              debugPrint(
-                'Dashboard total debug -> total=${total.toStringAsFixed(2)} $preferredCurrencyCode | $details',
-              );
-            }
-
-            return total;
-          });
-        }).asBroadcastStream();
+  Future<void> _confirmAndRemove(WidgetDescriptor descriptor) async {
+    final spec = DashboardWidgetRegistry.instance.get(descriptor.type);
+    final name = spec?.displayName(context) ?? descriptor.type.name;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        final t = Translations.of(ctx).home.dashboard_widgets;
+        final ui = Translations.of(ctx).ui_actions;
+        return AlertDialog(
+          title: Text(t.remove_widget_title),
+          content: Text(
+            t.remove_widget_message.replaceAll('{name}', name),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(ui.cancel),
+            ),
+            FilledButton.tonal(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(t.remove_tooltip),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed == true) {
+      DashboardLayoutService.instance.removeByInstanceId(descriptor.instanceId);
+    }
   }
 
-  Stream<double> _getTotalBalanceInVesStream() {
-    return _visibleAccountsStream().switchMap<double>((accounts) {
-          if (accounts.isEmpty) return Stream<double>.value(0);
-
-          final perAccountStreams = accounts
-              .map((a) => _perAccountConvertedStream(a, 'VES'))
-              .toList();
-
-          return Rx.combineLatestList<double>(
-            perAccountStreams,
-          ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
-        }).asBroadcastStream();
+  void _openConfigEditor(WidgetDescriptor descriptor) {
+    final spec = DashboardWidgetRegistry.instance.get(descriptor.type);
+    final editor = spec?.configEditor;
+    if (editor == null) return;
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: false,
+      builder: (ctx) => editor(ctx, descriptor),
+    );
   }
 
   bool _isIncomeExpenseAtSameLevel(BuildContext context) {
     return BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.sm);
   }
 
-  /// Refresh data streams when user pulls down
+  /// Refresh streams downstream when the user pulls the dashboard.
   Future<void> _refreshData() async {
     setState(() {
-      _balanceVariationStream = _getBalanceVariationStream();
-      _totalBalanceStream = _getTotalBalanceStream();
-      _totalBalanceInVesStream = _getTotalBalanceInVesStream();
+      _refreshTick++;
     });
     await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  /// Persiste el cambio de fuente de tasas y propaga el nuevo valor a los
+  /// widgets dinámicos vía el [DashboardScope]. Equivale al `setState` que
+  /// tenía el viejo `_buildRateChip`.
+  void _onRateSourceChanged(String source) {
+    if (_rateSource == source) return;
+    unawaited(
+      UserSettingService.instance.setItem(
+        SettingKey.preferredRateSource,
+        source,
+      ),
+    );
+    setState(() => _rateSource = source);
   }
 
   @override
@@ -221,55 +278,90 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButtonLocation: ExpandableFab.location,
       body: RefreshIndicator(
         onRefresh: _refreshData,
-        // Single top-level subscription to the (now shared) visible-account-ids
-        // stream. Consumers below (header income/expense block, carousel,
-        // DashboardCards) receive `visibleIds` as a parameter instead of each
-        // subscribing independently — which previously caused 3+ parallel
-        // account queries on home dashboard cold start.
+        // Single top-level subscription to the (already shared) visible
+        // account ids stream — descendants receive `visibleIds` via the
+        // [DashboardScope] instead of subscribing independently.
         child: StreamBuilder<List<String>>(
           stream: HiddenModeService.instance.visibleAccountIdsStream,
           builder: (context, snapshot) {
             final visibleIds = snapshot.data;
-            return SingleChildScrollView(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(bottom: 80),
-              child: Column(
-                children: [
-                  // ── Big header (scrolls away naturally) ──
-                  buildDashboadHeader(context, accountService, visibleIds),
+            return DashboardScope(
+              dateRangeService: dateRangeService,
+              rateSource: _rateSource,
+              onRateSourceChanged: _onRateSourceChanged,
+              refreshTick: _refreshTick,
+              visibleAccountIds: visibleIds,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 80),
+                child: Column(
+                  children: [
+                    // ── Big header (scrolls away naturally) ──
+                    buildDashboadHeader(context, accountService, visibleIds),
 
-                  // Visibility-aware carousel: when Hidden Mode is locked the
-                  // upstream stream omits savings account ids, so the carousel
-                  // hides them without having to know anything about the feature.
-                  HorizontalScrollableAccountList(
-                    dateRangeService: dateRangeService,
-                    visibleAccountIds: visibleIds,
-                  ),
-
-                  // ── Exchange Rates Card ──
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
-                    child: _buildRatesCard(context),
-                  ),
-
-                  // ── Stats Cards ──
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: DashboardCards(
-                      dateRangeService: dateRangeService,
-                      visibleIds: visibleIds,
+                    // ── Edit mode banner (instrucciones cortas) ──
+                    // Spec Wave 4 task 4.4: smooth fade for the banner so it
+                    // doesn't pop in/out abruptly when toggling edit mode.
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 250),
+                      transitionBuilder: (child, anim) =>
+                          FadeTransition(opacity: anim, child: child),
+                      child: _editing
+                          ? KeyedSubtree(
+                              key: const ValueKey<String>('edit-banner'),
+                              child: _buildEditBanner(context),
+                            )
+                          : const SizedBox.shrink(
+                              key: ValueKey<String>('edit-banner-empty'),
+                            ),
                     ),
-                  ),
 
-                  if (kDebugMode)
-                    TextButton(
-                      onPressed: () {
-                        RouteUtils.pushRoute(const DebugPage());
+                    // ── Body dinámico desde DashboardLayoutService ──
+                    StreamBuilder<DashboardLayout>(
+                      stream: DashboardLayoutService.instance.stream,
+                      initialData: DashboardLayoutService.instance.current,
+                      builder: (context, layoutSnapshot) {
+                        final layout =
+                            layoutSnapshot.data ?? DashboardLayout.empty();
+                        // Spec Wave 4 task 4.4: animate the view ↔ edit
+                        // body transition so widgets fade between the two
+                        // renderers (300 ms is the same duration used by
+                        // Material's default page transitions).
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, anim) =>
+                              FadeTransition(opacity: anim, child: child),
+                          child: _editing
+                              ? KeyedSubtree(
+                                  key: const ValueKey<String>(
+                                    'dashboard-body-edit',
+                                  ),
+                                  child: _DashboardEditBody(
+                                    layout: layout,
+                                    onDelete: _confirmAndRemove,
+                                    onConfigure: _openConfigEditor,
+                                  ),
+                                )
+                              : KeyedSubtree(
+                                  key: const ValueKey<String>(
+                                    'dashboard-body-view',
+                                  ),
+                                  child: DashboardLayoutBody(layout: layout),
+                                ),
+                        );
                       },
-                      child: const Text('DEBUG PAGE'),
                     ),
-                ],
+
+                    if (kDebugMode)
+                      TextButton(
+                        onPressed: () {
+                          RouteUtils.pushRoute(const DebugPage());
+                        },
+                        child: const Text('DEBUG PAGE'),
+                      ),
+                  ],
+                ),
               ),
             );
           },
@@ -357,7 +449,60 @@ class _DashboardPageState extends State<DashboardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(child: buildWelcomeMsgAndAvatar(context)),
-                    buildDatePeriodSelector(context),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        buildDatePeriodSelector(context),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          tooltip: _editing
+                              ? Translations.of(
+                                  context,
+                                ).home.dashboard_widgets.exit_edit_mode
+                              : Translations.of(
+                                  context,
+                                ).home.dashboard_widgets.edit_dashboard,
+                          icon: Icon(
+                            _editing
+                                ? Icons.check_rounded
+                                : Icons.edit_outlined,
+                            color: Colors.white.withValues(alpha: 0.85),
+                            size: 20,
+                          ),
+                          onPressed: () => unawaited(_toggleEditing()),
+                        ),
+                        // Overflow menu — solo en modo view. Spec
+                        // `dashboard-edit-mode` § "Restablecer según mis
+                        // objetivos" (Wave 4 task 4.3).
+                        if (!_editing)
+                          PopupMenuButton<String>(
+                            tooltip: '',
+                            icon: Icon(
+                              Icons.more_vert_rounded,
+                              color: Colors.white.withValues(alpha: 0.85),
+                              size: 20,
+                            ),
+                            onSelected: (value) {
+                              if (value == 'reset_to_goals') {
+                                unawaited(
+                                  _confirmAndResetLayoutToGoals(context),
+                                );
+                              }
+                            },
+                            itemBuilder: (ctx) {
+                              final t = Translations.of(
+                                ctx,
+                              ).home.dashboard_widgets;
+                              return <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  value: 'reset_to_goals',
+                                  child: Text(t.reset_to_goals_action),
+                                ),
+                              ];
+                            },
+                          ),
+                      ],
+                    ),
                   ],
                 ),
                 Divider(
@@ -398,12 +543,20 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ];
 
+                    final totalBalance = TotalBalanceSummaryWidget(
+                      dateRangeService: dateRangeService,
+                      rateSource: _rateSource,
+                      refreshTick: _refreshTick,
+                      alignStart: _isIncomeExpenseAtSameLevel(context),
+                      onRateSourceChanged: _onRateSourceChanged,
+                    );
+
                     if (_isIncomeExpenseAtSameLevel(context)) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         spacing: 16,
                         children: [
-                          totalBalanceIndicator(context),
+                          totalBalance,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: incomeAndExpenseCards,
@@ -415,7 +568,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     return Column(
                       spacing: 24,
                       children: [
-                        totalBalanceIndicator(context),
+                        totalBalance,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: incomeAndExpenseCards,
@@ -468,7 +621,6 @@ class _DashboardPageState extends State<DashboardPage> {
               periodModifier: 0,
               datePeriod: const DatePeriod(periodType: PeriodType.cycle),
             );
-            _balanceVariationStream = _getBalanceVariationStream();
           });
         }
 
@@ -486,8 +638,6 @@ class _DashboardPageState extends State<DashboardPage> {
               periodModifier: 0,
               datePeriod: value,
             );
-
-            _balanceVariationStream = _getBalanceVariationStream();
           });
         });
       },
@@ -562,76 +712,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget buildSmallHeader(BuildContext context) {
-    const smallHeaderRadius = BorderRadius.only(
-      bottomLeft: Radius.circular(16),
-      bottomRight: Radius.circular(16),
-    );
-
-    return SkeletonizerConfig(
-      data: _getSkeletonizerConfig(context),
-      child: _headerContainer(
-        borderRadius: smallHeaderRadius,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    t.home.total_balance,
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: Colors.white.withValues(alpha: 0.7),
-                    ),
-                  ),
-                  StreamBuilder(
-                    stream: _totalBalanceStream,
-                    builder: (context, snapshot) {
-                      return Skeletonizer(
-                        enabled: !snapshot.hasData,
-                        child: Builder(
-                          builder: (context) {
-                            if (!snapshot.hasData) {
-                              return Text(
-                                '9999',
-                                style: TextStyle(fontSize: 22),
-                              );
-                            }
-
-                            return CurrencyDisplayer(
-                              amountToConvert: snapshot.data!,
-                              integerStyle: TextStyle(
-                                fontSize:
-                                    snapshot.data! >= 10000000 &&
-                                        BreakPoint.of(
-                                          context,
-                                        ).isSmallerOrEqualTo(BreakpointID.xs)
-                                    ? 22
-                                    : 28,
-                                fontWeight: FontWeight.w200,
-                                letterSpacing: -0.5,
-                                color: Colors.white,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(width: 12),
-              Flexible(child: buildDatePeriodSelector(context)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   /// Secret 6-tap handler wired to the avatar. Silently no-ops when Hidden
   /// Mode is disabled or already unlocked so users who don't have the
   /// feature never see the PIN modal.
@@ -653,381 +733,6 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  Future<void> _togglePrivateModeValue({bool showSnackbar = false}) async {
-    final privateMode =
-        await PrivateModeService.instance.privateModeStream.first;
-
-    await PrivateModeService.instance.setPrivateMode(!privateMode);
-
-    await HapticFeedback.lightImpact();
-
-    if (showSnackbar) {
-      WallexSnackbar.success(
-        SnackbarParams(
-          !privateMode
-              ? t.settings.security.private_mode_activated
-              : t.settings.security.private_mode_deactivated,
-        ),
-      );
-    }
-  }
-
-  Widget totalBalanceIndicator(BuildContext context) {
-    final t = Translations.of(context);
-
-    return SuccessiveTapDetector(
-      delayTrackingAfterGoal: 4000,
-      onClickGoalReached: () => _togglePrivateModeValue(showSnackbar: true),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: _isIncomeExpenseAtSameLevel(context)
-            ? CrossAxisAlignment.start
-            : CrossAxisAlignment.center,
-        spacing: 2,
-        children: [
-          Row(
-            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.center,
-            spacing: 4,
-            children: [
-              Text(
-                t.home.total_balance,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.7),
-                ),
-              ),
-              Tappable(
-                bgColor: Colors.transparent,
-                shape: const CircleBorder(),
-                onTap: () => _togglePrivateModeValue(),
-                child: Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: StreamBuilder(
-                    stream: PrivateModeService.instance.privateModeStream,
-                    initialData: false,
-                    builder: (context, snapshot) {
-                      return Icon(
-                        snapshot.data!
-                            ? Icons.visibility_off_rounded
-                            : Icons.visibility_rounded,
-                        size: 16,
-                        color: Colors.white.withValues(alpha: 0.7),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          // ----- RATE SOURCE SELECTOR (BCV / Paralelo) -----
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.center,
-            children: [
-              _buildRateChip(context, 'bcv', 'BCV'),
-              const SizedBox(width: 4),
-              _buildRateChip(context, 'paralelo', 'Par'),
-            ],
-          ),
-
-          // ----- PRIMARY BALANCE (USD) -----
-          const SizedBox(height: 2),
-          StreamBuilder(
-            stream: _totalBalanceStream,
-            builder: (context, snapshot) {
-              return Skeletonizer(
-                enabled: !snapshot.hasData,
-                child: !snapshot.hasData
-                    ? Bone(width: 90, height: 40)
-                    : Builder(
-                        builder: (context) {
-                          final double integerFontSize =
-                              snapshot.data! >= 100000000 &&
-                                  BreakPoint.of(
-                                    context,
-                                  ).isSmallerOrEqualTo(BreakpointID.xs)
-                              ? 32
-                              : 42;
-                          return CurrencyDisplayer(
-                            amountToConvert: snapshot.data!,
-                            integerStyle: TextStyle(
-                              fontSize: integerFontSize,
-                              fontWeight: FontWeight.w200,
-                              letterSpacing: -0.5,
-                              color: Colors.white,
-                            ),
-                            currencyStyle: TextStyle(
-                              fontSize: integerFontSize,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 4,
-                            ),
-                          );
-                        },
-                      ),
-              );
-            },
-          ),
-
-          // ----- SECONDARY EQUIVALENT (VES) -----
-          const SizedBox(height: 2),
-          StreamBuilder(
-            stream: _totalBalanceInVesStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const SizedBox.shrink();
-              final formatted = snapshot.data!
-                  .toStringAsFixed(2)
-                  .replaceAllMapped(
-                    RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-                    (m) => '${m[1]}.',
-                  );
-              return BlurBasedOnPrivateMode(
-                child: Text(
-                  '= $formatted Bs',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.4),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              );
-            },
-          ),
-
-          //  ----- BALANCE TRENDING VALUE DURING THE SELECTED PERIOD -----
-          if (dateRangeService.startDate != null &&
-              dateRangeService.endDate != null)
-            StreamBuilder(
-              stream: _balanceVariationStream,
-              builder: (context, snapshot) {
-                return Skeletonizer(
-                  enabled: !snapshot.hasData,
-                  child: BalanceDeltaPill(percentage: snapshot.data ?? 0),
-                );
-              },
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRateChip(BuildContext context, String source, String label) {
-    final isSelected = _rateSource == source;
-    return GestureDetector(
-      onTap: () {
-        if (_rateSource == source) return;
-        // Persist globally so transaction-service streams (used by Gasto/
-        // Ingreso cards) requery with the new rate source. setItem updates
-        // appStateSettings synchronously, so the following setState rebuild
-        // picks up the new value when recreating the StreamBuilders.
-        UserSettingService.instance.setItem(
-          SettingKey.preferredRateSource,
-          source,
-        );
-        setState(() {
-          _rateSource = source;
-          _totalBalanceStream = _getTotalBalanceStream();
-          _totalBalanceInVesStream = _getTotalBalanceInVesStream();
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.white.withValues(alpha: 0.15)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: isSelected ? 0.4 : 0.15),
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: Colors.white.withValues(alpha: isSelected ? 0.9 : 0.5),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Fetches rates from DolarApiService (API call with cache)
-  /// and displays them in a table. Falls back to DB rates if API fails.
-  Widget _buildRatesCard(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final primary = Theme.of(context).colorScheme.primary;
-
-    final cardContent = Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.currency_exchange, size: 18, color: primary),
-              const SizedBox(width: 8),
-              Text(
-                'Tasas de cambio',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          FutureBuilder(
-            future: _fetchRatesForDisplay(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                );
-              }
-
-              final data = snapshot.data;
-              final usdBcv = data?['usdBcv'];
-              final usdPar = data?['usdPar'];
-              final eurBcv = data?['eurBcv'];
-              final eurPar = data?['eurPar'];
-
-              final usdAvg = (usdBcv != null && usdPar != null)
-                  ? (usdBcv + usdPar) / 2
-                  : null;
-              final eurAvg = (eurBcv != null && eurPar != null)
-                  ? (eurBcv + eurPar) / 2
-                  : null;
-
-              return Table(
-                columnWidths: const {
-                  0: FlexColumnWidth(1.2),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                  3: FlexColumnWidth(1),
-                },
-                children: [
-                  _rateTableHeader(context),
-                  _rateTableRow(context, '\$ USD', usdBcv, usdPar, usdAvg),
-                  _rateTableRow(context, '€ EUR', eurBcv, eurPar, eurAvg),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-
-    if (isDark) {
-      return Padding(
-        padding: const EdgeInsets.all(4),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: primary.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: primary.withValues(alpha: 0.1),
-              width: 0.5,
-            ),
-          ),
-          child: cardContent,
-        ),
-      );
-    } else {
-      return Card(child: cardContent);
-    }
-  }
-
-  Future<Map<String, double?>> _fetchRatesForDisplay() async {
-    final api = DolarApiService.instance;
-
-    // Use cached values if fresh, otherwise fetch
-    if (api.isStale) {
-      await api.fetchAll();
-    }
-
-    // EUR rates may fail due to API rate-limiting after multiple calls.
-    // Retry EUR specifically if missing.
-    if (api.eurOficialRate == null || api.eurParaleloRate == null) {
-      await api.fetchAllEurRates();
-    }
-
-    return {
-      'usdBcv': api.oficialRate?.promedio,
-      'usdPar': api.paraleloRate?.promedio,
-      'eurBcv': api.eurOficialRate?.promedio,
-      'eurPar': api.eurParaleloRate?.promedio,
-    };
-  }
-
-  TableRow _rateTableHeader(BuildContext context) {
-    final style = Theme.of(context).textTheme.labelSmall!.copyWith(
-      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
-    );
-    return TableRow(
-      children: [
-        const SizedBox(height: 24),
-        Center(child: Text('BCV', style: style)),
-        Center(child: Text('Paralelo', style: style)),
-        Center(child: Text('Promedio', style: style)),
-      ],
-    );
-  }
-
-  TableRow _rateTableRow(
-    BuildContext context,
-    String label,
-    double? bcv,
-    double? paralelo,
-    double? avg,
-  ) {
-    final labelStyle = Theme.of(
-      context,
-    ).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w600);
-    final valueStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
-      fontFeatures: [const FontFeature.tabularFigures()],
-    );
-
-    String fmt(double? v) => v != null ? v.toStringAsFixed(2) : '--';
-
-    return TableRow(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Text(label, style: labelStyle),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(fmt(bcv), style: valueStyle),
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(fmt(paralelo), style: valueStyle),
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(
-              fmt(avg),
-              style: valueStyle.copyWith(fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   SkeletonizerConfigData _getSkeletonizerConfig(BuildContext context) {
     return SkeletonizerConfigData(
       effect: ShimmerEffect(
@@ -1037,7 +742,128 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+
+  /// Banner de instrucciones que aparece debajo del header solo en edit
+  /// mode. Texto en español; Wave 4 lo migra a slang.
+  Widget _buildEditBanner(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: cs.primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: cs.primary.withValues(alpha: 0.18),
+            width: 0.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.touch_app_rounded, size: 18, color: cs.primary),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                Translations.of(
+                  context,
+                ).home.dashboard_widgets.edit_banner,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 Color onHeaderSmallTextColor(BuildContext context) =>
     Colors.white.withValues(alpha: 0.7);
+
+/// Renderer del body cuando `_editing == true`. Spec
+/// `dashboard-edit-mode`. Forza todos los items a `fullWidth` (ADR-5),
+/// envuelve cada uno en `EditableWidgetFrame` y los coloca dentro de un
+/// `ReorderableListView.builder`. Al final agrega un botón "+ Agregar
+/// widget" que abre el `AddWidgetSheet`.
+class _DashboardEditBody extends StatelessWidget {
+  const _DashboardEditBody({
+    required this.layout,
+    required this.onDelete,
+    required this.onConfigure,
+  });
+
+  final DashboardLayout layout;
+  final void Function(WidgetDescriptor descriptor) onDelete;
+  final void Function(WidgetDescriptor descriptor) onConfigure;
+
+  @override
+  Widget build(BuildContext context) {
+    final registry = DashboardWidgetRegistry.instance;
+    final descriptors = layout.widgets
+        .where((d) => registry.get(d.type) != null)
+        .toList(growable: false);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      child: Column(
+        children: [
+          // ReorderableListView necesita `shrinkWrap: true` y
+          // `physics: NeverScrollable` para vivir dentro de un
+          // SingleChildScrollView (el dashboard ya scrollea por su cuenta).
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            buildDefaultDragHandles: false,
+            proxyDecorator: (child, index, animation) =>
+                Material(type: MaterialType.transparency, child: child),
+            itemCount: descriptors.length,
+            onReorder: (from, to) {
+              DashboardLayoutService.instance.reorder(from, to);
+            },
+            itemBuilder: (context, index) {
+              final descriptor = descriptors[index];
+              final spec = registry.get(descriptor.type)!;
+              final built = spec.builder(
+                context,
+                descriptor,
+                editing: true,
+              );
+              return ReorderableDelayedDragStartListener(
+                key: ValueKey<String>('edit-${descriptor.instanceId}'),
+                index: index,
+                child: EditableWidgetFrame(
+                  descriptor: descriptor,
+                  spec: spec,
+                  onDelete: () => onDelete(descriptor),
+                  onConfigure: spec.configEditor != null
+                      ? () => onConfigure(descriptor)
+                      : null,
+                  child: built,
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => unawaited(showAddWidgetSheet(context)),
+                icon: const Icon(Icons.add_rounded),
+                label: const Text('Agregar widget'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:wallex/app/onboarding/bank_options.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/account/account_service.dart';
 import 'package:wallex/core/database/services/category/category_service.dart';
@@ -18,9 +20,18 @@ class PersonalVESeeder {
   /// Accounts for "Efectivo Bs" and "Efectivo USD" are always created.
   /// Pass an empty list to create only the always-on accounts.
   ///
+  /// [alsoUsdForBank] (key = bank id) marks banks for which the user — in
+  /// DUAL currency mode — also wants a second USD account in addition to
+  /// the native VES one. Only honoured for banks with `supportsBoth =
+  /// true`. Ignored for non-VES banks and for keys not in
+  /// [selectedBankIds].
+  ///
   /// Safe to call multiple times — if accounts already exist the method
   /// returns immediately without inserting anything.
-  static Future<void> seedAll({List<String> selectedBankIds = const []}) async {
+  static Future<void> seedAll({
+    List<String> selectedBankIds = const [],
+    Map<String, bool> alsoUsdForBank = const <String, bool>{},
+  }) async {
     final db = AppDB.instance;
 
     // ── Idempotency guard ───────────────────────────────────────────────
@@ -35,7 +46,10 @@ class PersonalVESeeder {
 
     Logger.printDebug('[PersonalVESeeder] Starting personal VE seed...');
 
-    await _seedAccounts(selectedBankIds: selectedBankIds);
+    await _seedAccounts(
+      selectedBankIds: selectedBankIds,
+      alsoUsdForBank: alsoUsdForBank,
+    );
     await _seedCategories();
     await _seedTags();
 
@@ -87,219 +101,251 @@ class PersonalVESeeder {
   // Accounts
   // ====================================================================
 
-  // Maps onboarding bank IDs to their seeded AccountInDB definitions.
-  // Only banks in [selectedBankIds] will be created (plus always-on accounts).
+  /// Legacy account names kept for the `seedAllWithBalances` path so that
+  /// `_ramseBalances` keeps matching by name. These bank IDs override the
+  /// generic naming convention and emit fixed names.
+  static const Map<String, List<_LegacyAccountSpec>> _legacyAccountSpecs = {
+    'bdv': [
+      _LegacyAccountSpec(
+        name: 'Banco de Venezuela',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '1A237E',
+        order: 1,
+      ),
+    ],
+    'banesco': [
+      _LegacyAccountSpec(
+        name: 'Banesco',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '003087',
+        order: 3,
+      ),
+    ],
+    'mercantil': [
+      _LegacyAccountSpec(
+        name: 'Mercantil',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: 'B71C1C',
+        order: 4,
+      ),
+    ],
+    'provincial': [
+      _LegacyAccountSpec(
+        name: 'Provincial',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '2E7D32',
+        order: 5,
+      ),
+    ],
+    // BNC historically seeded two VES accounts (#1, #2). Preserve that for
+    // the balance-restoration path; the alsoUsd flag still adds a third
+    // USD account on top when DUAL.
+    'bnc': [
+      _LegacyAccountSpec(
+        name: 'Banco Nacional de Credito #1',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '00838F',
+        order: 6,
+      ),
+      _LegacyAccountSpec(
+        name: 'Banco Nacional de Credito #2',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '00695C',
+        order: 7,
+      ),
+    ],
+    'banplus': [
+      _LegacyAccountSpec(
+        name: 'Banplus',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: 'EF6C00',
+        order: 8,
+      ),
+    ],
+    'bicentenario': [
+      _LegacyAccountSpec(
+        name: 'Bicentenario',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: 'C62828',
+        order: 9,
+      ),
+    ],
+    'bancamiga': [
+      _LegacyAccountSpec(
+        name: 'Bancamiga',
+        currencyId: 'VES',
+        iconId: 'account_balance',
+        color: '6A1B9A',
+        order: 10,
+      ),
+    ],
+    'binance': [
+      _LegacyAccountSpec(
+        name: 'Binance',
+        currencyId: 'USD',
+        iconId: 'universal_currency_alt',
+        color: 'F3BA2F',
+        order: 11,
+      ),
+    ],
+    'zinli': [
+      _LegacyAccountSpec(
+        name: 'Zinli',
+        currencyId: 'USD',
+        iconId: 'credit_card',
+        color: '6A1B9A',
+        order: 12,
+      ),
+    ],
+    'reserve': [
+      _LegacyAccountSpec(
+        name: 'Reserve',
+        currencyId: 'USD',
+        iconId: 'wallet',
+        color: '1565C0',
+        order: 13,
+      ),
+    ],
+    'paypal': [
+      _LegacyAccountSpec(
+        name: 'PayPal',
+        currencyId: 'USD',
+        iconId: 'payment',
+        color: '003087',
+        order: 14,
+      ),
+    ],
+  };
+
+  /// Build the optional bank accounts for the given selection. Banks are
+  /// resolved against [_legacyAccountSpecs] first (preserving legacy names
+  /// for the balance-restoration path); banks without a legacy spec fall
+  /// back to a generic 1-account-per-bank scheme using `BankOption.name`,
+  /// `defaultCurrency`, color and icon.
+  ///
+  /// When [alsoUsdForBank] marks a VES bank with `supportsBoth = true`, a
+  /// second USD account named "${bank.name} USD" is created. When that
+  /// happens, the primary VES account is renamed to "${bank.name} Bs" to
+  /// avoid ambiguity. Bank icons are kept lowercase Material names.
   static Future<void> _seedAccounts({
     required List<String> selectedBankIds,
+    required Map<String, bool> alsoUsdForBank,
   }) async {
     final now = DateTime.now();
     final selected = selectedBankIds.toSet();
+    int displayOrderCounter = 100; // generic banks start after legacy slots
 
-    // ── Optional bank accounts (created only if their ID is selected) ───
-
-    /// Helper to conditionally add a bank account.
     final optionalAccounts = <AccountInDB>[];
 
-    void addIfSelected(String id, AccountInDB account) {
-      if (selected.contains(id)) optionalAccounts.add(account);
-    }
+    for (final bank in kBanks) {
+      if (!selected.contains(bank.id)) continue;
 
-    addIfSelected(
-      'bdv',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banco de Venezuela',
-        displayOrder: 1,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '1A237E',
-      ),
-    );
-    addIfSelected(
-      'bdv',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banco de Venezuela USD',
-        displayOrder: 2,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '1A237E',
-      ),
-    );
-    addIfSelected(
-      'banesco',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banesco',
-        displayOrder: 3,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '003087',
-      ),
-    );
-    addIfSelected(
-      'mercantil',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Mercantil',
-        displayOrder: 4,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: 'B71C1C',
-      ),
-    );
-    addIfSelected(
-      'provincial',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Provincial',
-        displayOrder: 5,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '2E7D32',
-      ),
-    );
-    addIfSelected(
-      'bnc',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banco Nacional de Credito #1',
-        displayOrder: 6,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '00838F',
-      ),
-    );
-    addIfSelected(
-      'bnc',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banco Nacional de Credito #2',
-        displayOrder: 7,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '00695C',
-      ),
-    );
-    addIfSelected(
-      'banplus',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Banplus',
-        displayOrder: 8,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: 'EF6C00',
-      ),
-    );
-    addIfSelected(
-      'bicentenario',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Bicentenario',
-        displayOrder: 9,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: 'C62828',
-      ),
-    );
-    addIfSelected(
-      'bancamiga',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Bancamiga',
-        displayOrder: 10,
-        type: AccountType.normal,
-        currencyId: 'VES',
-        iniValue: 0,
-        date: now,
-        iconId: 'account_balance',
-        color: '6A1B9A',
-      ),
-    );
-    addIfSelected(
-      'binance',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Binance',
-        displayOrder: 11,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'universal_currency_alt',
-        color: 'F3BA2F',
-      ),
-    );
-    addIfSelected(
-      'zinli',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Zinli',
-        displayOrder: 12,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'credit_card',
-        color: '6A1B9A',
-      ),
-    );
-    addIfSelected(
-      'reserve',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'Reserve',
-        displayOrder: 13,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'wallet',
-        color: '1565C0',
-      ),
-    );
-    addIfSelected(
-      'paypal',
-      AccountInDB(
-        id: generateUUID(),
-        name: 'PayPal',
-        displayOrder: 14,
-        type: AccountType.normal,
-        currencyId: 'USD',
-        iniValue: 0,
-        date: now,
-        iconId: 'payment',
-        color: '003087',
-      ),
-    );
+      final wantsAlsoUsd = bank.supportsBoth &&
+          (alsoUsdForBank[bank.id] ?? false) &&
+          bank.defaultCurrency == 'VES';
+
+      final legacySpecs = _legacyAccountSpecs[bank.id];
+      if (legacySpecs != null) {
+        // Legacy path: emit each pre-defined spec verbatim, keeping the
+        // historical names and orders so `_ramseBalances` keeps matching.
+        // BDV historically also emitted a "Banco de Venezuela USD" tile;
+        // we now drive that off `wantsAlsoUsd`.
+        for (final spec in legacySpecs) {
+          optionalAccounts.add(
+            AccountInDB(
+              id: generateUUID(),
+              name: spec.name,
+              displayOrder: spec.order,
+              type: AccountType.normal,
+              currencyId: spec.currencyId,
+              iniValue: 0,
+              date: now,
+              iconId: spec.iconId,
+              color: spec.color,
+            ),
+          );
+        }
+        if (wantsAlsoUsd) {
+          // The legacy USD twin uses the bank's display name + " USD".
+          // The first legacy spec drives the icon/color so the twin looks
+          // like the primary tile.
+          final primary = legacySpecs.first;
+          optionalAccounts.add(
+            AccountInDB(
+              id: generateUUID(),
+              name: '${bank.name} USD',
+              displayOrder: primary.order + 1,
+              type: AccountType.normal,
+              currencyId: 'USD',
+              iniValue: 0,
+              date: now,
+              iconId: primary.iconId,
+              color: primary.color,
+            ),
+          );
+        }
+        continue;
+      }
+
+      // Generic path: one account in the bank's native currency. If the
+      // user asked for both currencies, suffix the VES account with " Bs"
+      // and add a second " USD" account.
+      final colorHex = _hexFromColor(bank.color);
+      final iconId = _iconIdFromBank(bank);
+      final baseOrder = displayOrderCounter;
+      displayOrderCounter += 2;
+
+      if (wantsAlsoUsd) {
+        optionalAccounts.add(
+          AccountInDB(
+            id: generateUUID(),
+            name: '${bank.name} Bs',
+            displayOrder: baseOrder,
+            type: AccountType.normal,
+            currencyId: 'VES',
+            iniValue: 0,
+            date: now,
+            iconId: iconId,
+            color: colorHex,
+          ),
+        );
+        optionalAccounts.add(
+          AccountInDB(
+            id: generateUUID(),
+            name: '${bank.name} USD',
+            displayOrder: baseOrder + 1,
+            type: AccountType.normal,
+            currencyId: 'USD',
+            iniValue: 0,
+            date: now,
+            iconId: iconId,
+            color: colorHex,
+          ),
+        );
+      } else {
+        optionalAccounts.add(
+          AccountInDB(
+            id: generateUUID(),
+            name: bank.name,
+            displayOrder: baseOrder,
+            type: AccountType.normal,
+            currencyId: bank.defaultCurrency,
+            iniValue: 0,
+            date: now,
+            iconId: iconId,
+            color: colorHex,
+          ),
+        );
+      }
+    }
 
     // ── Always-on accounts ──────────────────────────────────────────────
     final alwaysOnAccounts = <AccountInDB>[
@@ -336,6 +382,25 @@ class PersonalVESeeder {
     Logger.printDebug(
       '[PersonalVESeeder] Inserted ${accounts.length} accounts.',
     );
+  }
+
+  /// Convert a Flutter [Color] to the 6-character hex string the DB stores
+  /// (no leading `#`, no alpha component).
+  static String _hexFromColor(Color color) {
+    // Use the deprecated-free 8-bit channel accessors; mask out alpha.
+    final int rgb = color.toARGB32() & 0x00FFFFFF;
+    return rgb.toRadixString(16).padLeft(6, '0').toUpperCase();
+  }
+
+  /// Map a [BankOption.icon] to the lowercase Material icon name the DB
+  /// stores. Falls back to `'account_balance'` for unrecognised icons.
+  static String _iconIdFromBank(BankOption bank) {
+    final icon = bank.icon;
+    if (icon == Icons.wallet) return 'wallet';
+    if (icon == Icons.payment) return 'payment';
+    if (icon == Icons.currency_bitcoin) return 'universal_currency_alt';
+    if (icon == Icons.account_balance_wallet) return 'wallet';
+    return 'account_balance';
   }
 
   // ====================================================================
@@ -774,5 +839,25 @@ class _SeedCategory {
     this.type,
     required this.order,
     this.children,
+  });
+}
+
+/// Snapshot of the historical hardcoded account definitions for banks whose
+/// names must be preserved verbatim (so [PersonalVESeeder.seedAllWithBalances]
+/// can continue to match by name in `_ramseBalances`). New banks added to
+/// [kBanks] without a legacy spec fall back to the generic naming scheme.
+class _LegacyAccountSpec {
+  final String name;
+  final String currencyId;
+  final String iconId;
+  final String color;
+  final int order;
+
+  const _LegacyAccountSpec({
+    required this.name,
+    required this.currencyId,
+    required this.iconId,
+    required this.color,
+    required this.order,
   });
 }

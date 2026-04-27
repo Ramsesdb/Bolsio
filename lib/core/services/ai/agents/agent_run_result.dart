@@ -5,12 +5,10 @@ import 'package:wallex/core/services/ai/ai_completion_result.dart';
 /// Outcome of one agent run.
 enum AgentRunStatus {
   /// The model returned a final textual answer — ready to show the user.
+  /// When the caller supplied an `onTextChunk` callback, the text was already
+  /// streamed token-by-token to the UI during the call; [AgentRunResult.finalText]
+  /// holds the full accumulated string for redundancy / persistence.
   finalText,
-
-  /// The model wants to stream a plain-text reply (no tool_calls on first
-  /// iteration). Caller should re-invoke `NexusAiService.streamComplete` with
-  /// [AgentRunResult.messages] to preserve byte-for-byte streaming UX.
-  streamFinalText,
 
   /// One or more tool calls need user approval before execution. Consume
   /// [AgentRunResult.pendingApprovals], surface the UI, then re-run the agent
@@ -33,19 +31,21 @@ enum AgentRunStatus {
 ///
 /// The runner returns this instead of streaming events so the UI layer can
 /// decide whether to:
-///  - render [finalText] directly,
-///  - re-call `streamComplete(messages)` for byte-for-byte streaming,
+///  - render [finalText] directly (or rely on the `onTextChunk` callback if it
+///    already painted the answer mid-call),
 ///  - show approval UI from [pendingApprovals],
 ///  - hand [proposals] to the review sheet.
 class AgentRunResult {
   final AgentRunStatus status;
 
   /// Final textual answer (when [status] is [AgentRunStatus.finalText]).
+  /// When the caller supplied an `onTextChunk` callback, the same text was
+  /// already streamed to the UI live; this field is the full accumulated
+  /// string for completeness.
   final String? finalText;
 
   /// Running message history, including any tool messages appended during the
-  /// loop. Callers that want to stream the final turn pass this back to
-  /// `streamComplete` so the UX mirrors the pre-tool era.
+  /// loop.
   final List<Map<String, dynamic>> messages;
 
   /// Tool calls that need user approval (for `wallexAssistant`).

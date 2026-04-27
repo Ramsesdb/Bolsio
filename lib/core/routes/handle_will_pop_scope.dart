@@ -21,6 +21,14 @@ class _HandleWillPopScopeState extends State<HandleWillPopScope> {
 
   bool get _nestedCanPop => navigatorKey.currentState?.canPop() ?? false;
 
+  /// True when a route is mounted on the OUTER root navigator above the
+  /// app's home (e.g. a modal opened with `useRootNavigator: true`, like the
+  /// voice review sheet or any picker spawned from it). Those routes are
+  /// invisible to the inner [navigatorKey], so the default back-button
+  /// handling below would skip past them and pop a tab page underneath
+  /// instead. We must dismiss them first.
+  bool get _rootCanPop => rootNavigatorKey.currentState?.canPop() ?? false;
+
   AppMenuDestinationsID? get _selectedDestination =>
       tabsPageKey.currentState?.selectedDestination;
 
@@ -53,6 +61,17 @@ class _HandleWillPopScopeState extends State<HandleWillPopScope> {
         if (didPop) return;
 
         final destinationBefore = _selectedDestination;
+
+        // Root-navigator-mounted routes (modals/dialogs/sheets opened with
+        // useRootNavigator: true) live ABOVE the inner navigator and must
+        // be popped first. Otherwise back would silently pop something
+        // underneath them on the inner stack while the modal stays on
+        // screen — exactly the "back button does nothing" symptom seen
+        // with the voice review sheet's category picker.
+        if (_rootCanPop) {
+          await rootNavigatorKey.currentState!.maybePop();
+          return;
+        }
 
         if (_nestedCanPop) {
           await navigatorKey.currentState!.maybePop();

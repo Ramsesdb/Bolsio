@@ -5,6 +5,10 @@ import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
 /// Animated notification card used in slide 5 (auto-import sell).
 /// Entrance animation: `v3-notif-in` — fade + slide from top-right over
 /// [V3Tokens.notifInStagger], with a per-card [delay] for staggering.
+///
+/// When [highlighted] is true the card renders with an accent border and a
+/// 3px accent halo (alpha 0.10) — used for the Wallex-categorised notif so
+/// it visually stands out against the source-bank notif.
 class V3NotificationCard extends StatelessWidget {
   const V3NotificationCard({
     super.key,
@@ -15,6 +19,7 @@ class V3NotificationCard extends StatelessWidget {
     required this.brandColor,
     required this.icon,
     this.delay = Duration.zero,
+    this.highlighted = false,
   });
 
   final String appName;
@@ -24,6 +29,7 @@ class V3NotificationCard extends StatelessWidget {
   final Color brandColor;
   final IconData icon;
   final Duration delay;
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,16 @@ class V3NotificationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(V3Tokens.radiusMd),
+        border: highlighted
+            ? Border.all(color: V3Tokens.accent, width: 1)
+            : null,
         boxShadow: [
+          if (highlighted)
+            BoxShadow(
+              color: V3Tokens.accent.withValues(alpha: 0.10),
+              blurRadius: 0,
+              spreadRadius: 3,
+            ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
@@ -101,12 +116,18 @@ class V3NotificationCard extends StatelessWidget {
       ),
     )
         .animate(delay: delay)
-        .fadeIn(duration: V3Tokens.notifInStagger, curve: Curves.easeOut)
+        // v3 spec easing: cubic-bezier(0.2, 0.9, 0.3, 1) for the 600ms in
+        // entrance — same curve for fade and slide so the motion feels
+        // unified.
+        .fadeIn(
+          duration: V3Tokens.notifInStagger,
+          curve: const Cubic(0.2, 0.9, 0.3, 1),
+        )
         .slideX(
           begin: 0.25,
           end: 0,
           duration: V3Tokens.notifInStagger,
-          curve: Curves.easeOutCubic,
+          curve: const Cubic(0.2, 0.9, 0.3, 1),
         );
   }
 }

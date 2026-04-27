@@ -40,11 +40,11 @@ class BinanceApiProfile implements BankProfile {
   int get profileVersion => 1;
 
   @override
-  ParseResult tryParseWithDetails(
+  Future<ParseResult> tryParseWithDetails(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
-    final proposal = tryParse(event, accountId: accountId);
+  }) async {
+    final proposal = await tryParse(event, accountId: accountId);
     if (proposal != null) return ParseResult.parsed(proposal);
     return ParseResult.failed(
       'Payload de Binance no reconocido o estado no completado',
@@ -52,10 +52,10 @@ class BinanceApiProfile implements BankProfile {
   }
 
   @override
-  TransactionProposal? tryParse(
+  Future<TransactionProposal?> tryParse(
     RawCaptureEvent event, {
     required String? accountId,
-  }) {
+  }) async {
     try {
       final item = jsonDecode(event.rawText) as Map<String, dynamic>;
 

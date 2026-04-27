@@ -2,16 +2,14 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:wallex/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
 import 'package:wallex/app/stats/stats_page.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
 import 'package:wallex/app/stats/widgets/balance_bar_chart.dart';
 import 'package:wallex/app/stats/widgets/fund_evolution_info.dart';
 import 'package:wallex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:wallex/core/models/date-utils/date_period_state.dart';
 import 'package:wallex/core/presentation/responsive/breakpoints.dart';
 import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
 import 'package:wallex/core/presentation/widgets/card_with_header.dart';
 import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:wallex/core/routes/route_utils.dart';
@@ -52,100 +50,10 @@ class _DashboardCardsState extends State<DashboardCards> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Auto-import pending card (visible only if count > 0)
-        StreamBuilder<int>(
-          stream: PendingImportService.instance.watchPendingCount(),
-          initialData: 0,
-          builder: (context, snapshot) {
-            final count = snapshot.data ?? 0;
-            if (count == 0) return const SizedBox.shrink();
-
-            final primary = Theme.of(context).colorScheme.primary;
-            final onSurface = Theme.of(context).colorScheme.onSurface;
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      primary.withValues(alpha: 0.10),
-                      primary.withValues(alpha: 0.03),
-                    ],
-                  ),
-                  border: Border.all(
-                    color: primary.withValues(alpha: 0.20),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: () => RouteUtils.pushRoute(
-                      const PendingImportsPage(),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconDisplayer(
-                            icon: Icons.priority_high_rounded,
-                            mainColor: Theme.of(context).colorScheme.onPrimary,
-                            secondaryColor: primary,
-                            displayMode: IconDisplayMode.polygon,
-                            size: 18,
-                            padding: 9,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  '$count movimiento${count == 1 ? '' : 's'} por revisar',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w800,
-                                    color: onSurface,
-                                    letterSpacing: -0.1,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'Capturado por voz · toca para confirmar',
-                                  style: TextStyle(
-                                    fontSize: 10.5,
-                                    fontWeight: FontWeight.w400,
-                                    color: onSurface.withValues(alpha: 0.55),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            Icons.chevron_right,
-                            size: 14,
-                            color: onSurface.withValues(alpha: 0.55),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
+        // Auto-import pending banner — extraído como widget público en
+        // Wave 1B; el componente decide si renderizar o devolver
+        // SizedBox.shrink() según el conteo en streaming.
+        const PendingImportsAlertWidget(),
 
 
         ResponsiveRowColumn.withSymetricSpacing(

@@ -45,6 +45,16 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
     super.initState();
     _loadSettings();
     _checkPermissions();
+    // Defensive: kick the health monitor so the UI status is fresh when the
+    // user opens this page (covers cold-start races where the monitor was
+    // not yet running).
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await CaptureHealthMonitor.instance.forceCheck();
+      } catch (e) {
+        debugPrint('CaptureHealthMonitor.forceCheck error: $e');
+      }
+    });
   }
 
   void _loadSettings() {

@@ -9,16 +9,25 @@ class V3ProgressBar extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.totalSlides,
+    this.flush = false,
   });
 
   final int currentIndex;
   final int totalSlides;
 
+  /// When `true` the bar renders flush against its parent (no horizontal
+  /// padding). Used when the caller already applies its own outer padding
+  /// — e.g. when the progress bar lives inside a header Row alongside the
+  /// back pill.
+  final bool flush;
+
   @override
   Widget build(BuildContext context) {
     final inactive = Theme.of(context).colorScheme.surfaceContainerHighest;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: V3Tokens.space24),
+      padding: flush
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(horizontal: V3Tokens.space24),
       child: Row(
         children: List.generate(totalSlides, (i) {
           final filled = i <= currentIndex;

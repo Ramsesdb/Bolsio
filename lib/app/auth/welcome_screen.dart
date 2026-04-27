@@ -1,20 +1,33 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wallex/app/layout/page_switcher.dart';
+import 'package:wallex/app/auth/returning_user_flow.dart';
+import 'package:wallex/app/onboarding/onboarding.dart';
+import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
+import 'package:wallex/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:wallex/app/onboarding/widgets/v3_secondary_button.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// First-run welcome screen. Offers two paths:
 /// 1. "Iniciar con Google" (primary) — signs in, pulls Firebase data, seeds if empty.
 /// 2. "Continuar sin cuenta" (secondary) — fully local, no auth required.
+///
+/// Both paths set `AppDataKey.onboarded = '1'` and then navigate to the
+/// 10-slide [OnboardingPage]. The router (`InitialPageRouteNavigator` in
+/// `lib/main.dart`) flips `AppDataKey.introSeen` only at the end of the
+/// onboarding, so the intro is preserved on fresh installs.
+///
+/// Layout (v3 hero):
+/// - Background: pure AMOLED black (#000000) on dark, #FAFAF7 on light.
+/// - Top-left: small "Wallex" wordmark.
+/// - Middle: large display title left-aligned ("Tu dinero en bolívares y
+///   dólares, al día.") using Gabarito 900 (clamped to fit the viewport).
+/// - Bottom: full-width primary + secondary pill buttons.
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -27,62 +40,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String? _errorMessage;
 
   Future<void> _continueWithoutAccount() async {
-    // Ask whether to preload personal VE accounts & categories
-    final shouldSeed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Precargar tus cuentas?'),
-        content: const Text(
-          'Wallex puede crear automaticamente tus cuentas bancarias '
-          '(BDV, BNC, Banplus, Provincial, Binance, Zinli, etc.), '
-          'categorias de ingreso/gasto y tags utiles.\n\n'
-          'Puedes editarlos o eliminarlos despues.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('No, empezar vacio'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Si, precargar'),
-          ),
-        ],
-      ),
-    );
-
-    if (!mounted) return;
+    // No pre-seed dialog: the v3 onboarding flow's slide 4 lets the user pick
+    // their banks/wallets and slide 9 runs `PersonalVESeeder.seedAll` with
+    // those selections. Pre-seeding here would create the always-on cash
+    // accounts and trip the seeder's idempotency guard, silently dropping
+    // every BankOption the user toggles in slide 4.
     setState(() => _isLoading = true);
 
     try {
-      if (shouldSeed == true) {
-        Logger.printDebug('WelcomeScreen: user accepted personal VE seed');
-        // Show loading overlay while seeding (fire-and-forget; popped below)
-        unawaited(showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => const Center(child: CircularProgressIndicator()),
-        ));
-
-        try {
-          await PersonalVESeeder.seedAll();
-        } catch (e) {
-          Logger.printDebug('WelcomeScreen: seeding error: $e');
-        }
-
-        if (mounted) {
-          Navigator.of(context).pop(); // dismiss loading overlay
-        }
-      }
-
-      // Mark onboarding as completed
+      // Mark onboarding as completed (only `onboarded`; `introSeen` flips at
+      // the end of the 10-slide OnboardingPage). Setting both here would skip
+      // the intro entirely on fresh installs.
       await AppDataService.instance.setItem(
         AppDataKey.onboarded,
-        '1',
-        updateGlobalState: true,
-      );
-      await AppDataService.instance.setItem(
-        AppDataKey.introSeen,
         '1',
         updateGlobalState: true,
       );
@@ -90,10 +60,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Logger.printDebug('WelcomeScreen: continuing without account');
 
       if (mounted) {
-        // Navigate to the main page, replacing the current route
+        // Navigate to the 10-slide onboarding (NOT PageSwitcher) so users
+        // still see the intro on first launch.
         await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (_) => PageSwitcher(key: tabsPageKey),
+            builder: (_) => const OnboardingPage(),
           ),
           (route) => false,
         );
@@ -148,13 +119,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ''');
       }
 
-      // Enable sync + mark onboarded
+      // Enable sync + mark onboarded (NOT introSeen — that flips at end of
+      // OnboardingPage so users still see the 10-slide intro on fresh install).
       await FirebaseSyncService.instance.setSyncEnabled(true);
       await AppDataService.instance.setItem(
         AppDataKey.onboarded, '1', updateGlobalState: true,
-      );
-      await AppDataService.instance.setItem(
-        AppDataKey.introSeen, '1', updateGlobalState: true,
       );
 
       if (user?.displayName != null) {
@@ -164,29 +133,58 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
 
       // --- Pull Firebase data → conditional seed → push ---
+      // Stamp the pull timestamp BEFORE issuing the network request so the
+      // post-frame pull guard in `InitialPageRouteNavigator` (main.dart) can
+      // skip its duplicate `pullAllData()` when this welcome flow already
+      // covered it. See Fix 2 (Opción A) in the auth flow notes.
+      await AppDataService.instance.setItem(
+        AppDataKey.lastPullAt,
+        DateTime.now().millisecondsSinceEpoch.toString(),
+        updateGlobalState: true,
+      );
+
       Logger.printDebug('WelcomeScreen: pulling Firebase data...');
       final pullResult = await FirebaseSyncService.instance.pullAllData();
       final pulledAccounts = (pullResult['accounts'] as int?) ?? 0;
 
-      if (pulledAccounts > 0) {
+      // Returning user (data already in Firebase) → mini "welcome back" flow.
+      // First-time Google user (Firebase empty) → continue with the full
+      // 10-slide intro after seeding locally and pushing to Firebase.
+      final bool isReturningUser = pulledAccounts > 0;
+
+      if (isReturningUser) {
         Logger.printDebug(
-          'WelcomeScreen: $pulledAccounts accounts restored from Firebase',
+          'WelcomeScreen: $pulledAccounts accounts restored from Firebase '
+          '— routing to ReturningUserFlow',
         );
       } else {
-        // Firebase was empty — seed locally then push to Firebase
+        // Firebase was empty. The seeder must NOT run here for ordinary new
+        // users: slide 9 of the v3 onboarding owns seeding and depends on the
+        // user's slide-4 bank picks. Pre-seeding now would create the
+        // always-on cash accounts and trip the seeder's idempotency guard,
+        // silently dropping every BankOption the user toggles.
+        //
+        // The only exception is the dev/owner email, which uses
+        // `seedAllWithBalances` to restore real balances under a known set of
+        // accounts. That flow is intentional and bypasses slide 4.
         final email = user?.email ?? '';
         Logger.printDebug(
-          'WelcomeScreen: Firebase empty, seeding (email=$email)',
+          'WelcomeScreen: Firebase empty (email=$email)',
         );
 
         if (email == 'ramsesdavidba@gmail.com') {
           await PersonalVESeeder.seedAllWithBalances();
+          Logger.printDebug(
+            'WelcomeScreen: pushing seeded data to Firebase...',
+          );
+          await FirebaseSyncService.instance.pushAllData();
         } else {
-          await PersonalVESeeder.seedAll();
+          // Defer seeding to slide 9. Push will run on the next sync trigger
+          // once the user reaches the home screen.
+          Logger.printDebug(
+            'WelcomeScreen: deferring seed to onboarding slide 9',
+          );
         }
-
-        Logger.printDebug('WelcomeScreen: pushing seeded data to Firebase...');
-        await FirebaseSyncService.instance.pushAllData();
       }
 
       if (mounted) {
@@ -198,12 +196,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         );
 
-        await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => PageSwitcher(key: tabsPageKey),
-          ),
-          (route) => false,
-        );
+        if (isReturningUser) {
+          // Skip the 10-slide onboarding — the user already knows the app.
+          // Mini-flow: welcome back + activate listener (compact).
+          await Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (_) => ReturningUserFlow(
+                displayName: user?.displayName,
+              ),
+            ),
+            (route) => false,
+          );
+        } else {
+          // Navigate to the 10-slide onboarding (NOT PageSwitcher) so new
+          // users still see the intro on first launch.
+          await Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (_) => const OnboardingPage(),
+            ),
+            (route) => false,
+          );
+        }
       }
     } catch (e) {
       Logger.printDebug('WelcomeScreen: Google Sign-In error: $e');
@@ -220,43 +233,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    final Color fg = isDark ? Colors.white : const Color(0xFF141414);
+    final Color brandFg = isDark
+        ? Colors.white.withValues(alpha: 0.85)
+        : const Color(0xFF141414).withValues(alpha: 0.85);
+
+    // Clamp display size to viewport: 38–56pt, ~12% of viewport height.
+    final double viewportHeight = MediaQuery.of(context).size.height;
+    final double displaySize = viewportHeight * 0.085;
+    final double displaySizeClamped =
+        displaySize.clamp(38.0, 56.0).toDouble();
+
     return Scaffold(
       body: Stack(
         children: [
-          // Background decorations
+          // Decorative accent circle — kept for v3 brand continuity but
+          // dimmed so the display copy stays the hero.
           Positioned(
-            top: -100,
-            right: -100,
+            top: -120,
+            right: -120,
             child: Container(
-              width: 300,
-              height: 300,
+              width: 280,
+              height: 280,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: colorScheme.primary.withValues(alpha: 0.12),
-                boxShadow: [
+                color: V3Tokens.accent.withValues(alpha: 0.10),
+                boxShadow: const [
                   BoxShadow(
-                    color: colorScheme.primary.withValues(alpha: 0.12),
-                    blurRadius: 100,
-                    spreadRadius: 20,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -60,
-            left: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colorScheme.secondary.withValues(alpha: 0.12),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.secondary.withValues(alpha: 0.12),
+                    color: V3Tokens.pulseHalo,
                     blurRadius: 80,
-                    spreadRadius: 20,
+                    spreadRadius: 10,
                   ),
                 ],
               ),
@@ -265,41 +273,68 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.fromLTRB(
+                V3Tokens.space24,
+                V3Tokens.space24,
+                V3Tokens.space24,
+                V3Tokens.space24,
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Top: minimal Wallex wordmark, left-aligned.
+                  Row(
+                    children: [
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: V3Tokens.accent.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: const Icon(
+                          Icons.account_balance_wallet,
+                          color: V3Tokens.accent,
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(width: V3Tokens.spaceXs),
+                      Text(
+                        'Wallex',
+                        style: V3Tokens.uiStyle(
+                          size: 14,
+                          weight: FontWeight.w700,
+                          color: brandFg,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const Spacer(flex: 2),
 
-                  // Logo / Icon
-                  Icon(
-                    Icons.account_balance_wallet,
-                    size: 80,
-                    color: colorScheme.primary,
-                  ),
-                  const SizedBox(height: 16),
+                  // Hero display copy — left-aligned, large, tight tracking.
                   Text(
-                    'Wallex',
-                    style: theme.textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    'Tu dinero en bolívares y dólares, al día.',
+                    style: V3Tokens.displayStyle(
+                      size: displaySizeClamped,
+                      letterSpacing: -2.5,
+                      color: fg,
+                      height: 1.02,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Finanzas personales multi-moneda',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                    textAlign: TextAlign.left,
                   ),
 
                   const Spacer(flex: 3),
 
-                  // Error message
+                  // Error banner.
                   if (_errorMessage != null) ...[
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(V3Tokens.spaceMd),
                       decoration: BoxDecoration(
                         color: colorScheme.errorContainer.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(V3Tokens.radiusMd),
                         border: Border.all(
                           color: colorScheme.error.withValues(alpha: 0.5),
                         ),
@@ -308,7 +343,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         children: [
                           Icon(Icons.error,
                               color: colorScheme.onErrorContainer, size: 20),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: V3Tokens.spaceXs),
                           Expanded(
                             child: Text(
                               _errorMessage!,
@@ -321,74 +356,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: V3Tokens.space16),
                   ],
 
-                  // Primary CTA: Sign in with Google
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _isLoading ? null : _signInWithGoogle,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: _isLoading
-                          ? SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                color: colorScheme.onPrimary,
-                                strokeWidth: 2.5,
-                              ),
-                            )
-                          : const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.login, size: 20),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Iniciar con Google',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
+                  // Primary CTA — full width via stretch crossAxisAlignment.
+                  V3PrimaryButton(
+                    label: 'Iniciar con Google',
+                    onPressed: _isLoading ? null : _signInWithGoogle,
+                    trailingIcon: Icons.arrow_forward,
+                    loading: _isLoading,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: V3Tokens.spaceMd),
 
-                  // Secondary CTA: Continue without account
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: _isLoading ? null : _continueWithoutAccount,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        side: BorderSide(
-                          color: colorScheme.outline.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Text(
-                        'Continuar sin cuenta',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
+                  // Secondary CTA.
+                  V3SecondaryButton(
+                    label: 'Continuar sin cuenta',
+                    onPressed: _isLoading ? null : _continueWithoutAccount,
                   ),
-
-                  const SizedBox(height: 24),
                 ],
               ),
             ),

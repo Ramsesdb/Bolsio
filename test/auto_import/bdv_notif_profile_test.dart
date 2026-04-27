@@ -45,13 +45,13 @@ void main() {
   });
 
   group('BdvNotifProfile — Transferencia BDV recibida (income VES)', () {
-    test('Fixture: Transferencia recibida por Bs.277.000,00', () {
+    test('Fixture: Transferencia recibida por Bs.277.000,00', () async {
       const title = 'Transferencia BDV recibida';
       const body =
           '"Recibiste una transferencia BDV de JOINER ALEXANDER ROVARIO SAAVEDRA por Bs.277.000,00 bajo el número de operación 059135723999"';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 277000.00);
@@ -68,13 +68,13 @@ void main() {
   });
 
   group('BdvNotifProfile — PagomóvilBDV recibido Format A (income VES)', () {
-    test('Fixture: Pagomovil recibido with accent on title', () {
+    test('Fixture: Pagomovil recibido with accent on title', () async {
       const title = 'PagomóvilBDV recibido'; // WITH accent
       const body =
           'Recibiste un PagomovilBDV de ROBERTO CARLO PALMAR MOLERO por Bs.50,00 bajo el numero de operacion 005703907569';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 50.00);
@@ -89,13 +89,13 @@ void main() {
     });
 
     test('Fixture: Pagomovil recibido WITHOUT accent on title (Format A body)',
-        () {
+        () async {
       const title = 'PagomovilBDV recibido'; // WITHOUT accent
       const body =
           'Recibiste un PagomovilBDV de ROBERTO CARLO PALMAR MOLERO por Bs.50,00 bajo el numero de operacion 005703907569';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 50.00);
@@ -106,13 +106,13 @@ void main() {
   });
 
   group('BdvNotifProfile — PagomovilBDV recibido Format B (income VES)', () {
-    test('Fixture: Pagomovil recibido SMS-style with phone number', () {
+    test('Fixture: Pagomovil recibido SMS-style with phone number', () async {
       const title = 'PagomovilBDV recibido'; // WITHOUT accent
       const body =
           'Recibiste un PagomovilBDV por Bs.100,00 del 0412-7171711 Ref: 184891460184 en fecha 16-04-26 hora: 10:17.';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 100.00);
@@ -127,13 +127,13 @@ void main() {
       expect(proposal.parsedBySender, 'bdv_notif_v2_dynamic');
     });
 
-    test('Fixture: Format B with accented title', () {
+    test('Fixture: Format B with accented title', () async {
       const title = 'PagomóvilBDV recibido'; // WITH accent
       const body =
           'Recibiste un PagomovilBDV por Bs.10.620,00 del 0412-7635070 Ref: 108639858076 en fecha 27-03-26 hora: 21:31.';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 10620.00);
@@ -145,13 +145,13 @@ void main() {
   });
 
   group('BdvNotifProfile — BiopagoBDV sin contacto (expense VES)', () {
-    test('Fixture: Pago sin contacto por Bs. 5.910,00', () {
+    test('Fixture: Pago sin contacto por Bs. 5.910,00', () async {
       const title = 'Operaciones por Punto de venta / BiopagoBDV';
       const body =
           'Pago sin contacto realizado en punto de venta por Bs. 5.910,00, bajo el #2977, disp. 366.258,19 el 15-04-26 a las 17:46.';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 5910.00);
@@ -168,13 +168,13 @@ void main() {
   });
 
   group('BdvNotifProfile — Tarjeta Internacional USD (expense USD)', () {
-    test('Fixture: Pago con tarjeta internacional por \$.300,00', () {
+    test('Fixture: Pago con tarjeta internacional por \$.300,00', () async {
       const title = 'Pago en linea con tu Tarjeta Internacional';
       const body =
           'Operacion en linea con tu Tarjeta Internacional #4325 por \$.300,00 el 15-04-26 a las 14:04. Inf. 0500-6425283';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 300.00);
@@ -192,45 +192,45 @@ void main() {
   });
 
   group('BdvNotifProfile — Negative tests (should return null)', () {
-    test('Unknown title with no amount returns null', () {
+    test('Unknown title with no amount returns null', () async {
       final event = makeEvent(
         'Promoción BDV\nTenemos una oferta para ti...',
       );
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Known title but body has no amount returns null', () {
+    test('Known title but body has no amount returns null', () async {
       final event = makeEvent(
         'Transferencia BDV recibida\nMensaje corrupto',
       );
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Empty string returns null', () {
+    test('Empty string returns null', () async {
       final event = makeEvent('');
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Only title, no newline returns null', () {
+    test('Only title, no newline returns null', () async {
       final event = makeEvent('Transferencia BDV recibida');
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
 
-    test('Title with empty body returns null', () {
+    test('Title with empty body returns null', () async {
       final event = makeEvent('Transferencia BDV recibida\n');
-      expect(profile.tryParse(event, accountId: 'acc-bdv'), isNull);
+      expect(await profile.tryParse(event, accountId: 'acc-bdv'), isNull);
     });
   });
 
   group('BdvNotifProfile — Dynamic parser: unknown titles with amounts', () {
-    test('New notification format with amount is still parsed', () {
+    test('New notification format with amount is still parsed', () async {
       // A hypothetical new BDV notification format we haven't seen before
       final event = makeEvent(
         'Nuevo tipo de operación\n'
         'Se realizó un débito por Bs. 1.500,00 en tu cuenta.',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       // Should NOT be null — amount was found
       expect(proposal, isNotNull);
@@ -248,13 +248,13 @@ void main() {
     });
 
     test('Unknown title with income keyword and amount is parsed as income',
-        () {
+        () async {
       final event = makeEvent(
         'Alerta BDV\n'
         'Has recibido un abono por Bs. 200,00.',
       );
 
-      final proposal = profile.tryParse(event, accountId: 'acc-bdv');
+      final proposal = await profile.tryParse(event, accountId: 'acc-bdv');
 
       expect(proposal, isNotNull);
       expect(proposal!.amount, 200.00);
@@ -267,13 +267,13 @@ void main() {
   });
 
   group('BdvNotifProfile — accountId passthrough', () {
-    test('null accountId is preserved in proposal', () {
+    test('null accountId is preserved in proposal', () async {
       const title = 'Transferencia BDV recibida';
       const body =
           '"Recibiste una transferencia BDV de JOINER ALEXANDER ROVARIO SAAVEDRA por Bs.277.000,00 bajo el número de operación 059135723999"';
       final event = makeEvent('$title\n$body');
 
-      final proposal = profile.tryParse(event, accountId: null);
+      final proposal = await profile.tryParse(event, accountId: null);
       expect(proposal, isNotNull);
       expect(proposal!.accountId, isNull);
     });

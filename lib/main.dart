@@ -10,11 +10,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:wallex/app/auth/biometric_lock_screen.dart';
 import 'package:wallex/app/auth/welcome_screen.dart';
+import 'package:wallex/app/home/dashboard_widgets/registry_bootstrap.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:wallex/app/layout/window_bar.dart';
 import 'package:wallex/app/onboarding/onboarding.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
+import 'package:wallex/core/database/services/shared/key_value_service.dart';
 import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
@@ -25,6 +27,7 @@ import 'package:wallex/core/routes/handle_will_pop_scope.dart';
 import 'package:wallex/core/routes/root_navigator_observer.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:wallex/core/services/ai/ai_credentials_store.dart';
 import 'package:wallex/core/services/attachments/attachments_service.dart';
 import 'package:wallex/core/utils/app_utils.dart';
 import 'package:wallex/core/utils/keyboard_intents.dart';
@@ -35,6 +38,7 @@ import 'package:wallex/i18n/generated/translations.g.dart';
 import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
 import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
 import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:wallex/core/models/auto_import/capture_channel.dart';
 import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
 import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
@@ -53,14 +57,36 @@ void main() async {
   // This only runs on cold start — warm/hot restarts do not re-enter main().
   WidgetsBinding.instance.deferFirstFrame();
 
+  // Wire the KeyValueService refresh hook to the live root state. The base
+  // service avoids importing main.dart (so unit tests for any subclass can
+  // run without pulling the full app graph); we install the callback here
+  // before the first setItem can fire from app startup code.
+  onGlobalAppStateRefresh = () {
+    appStateKey.currentState?.refreshAppState();
+  };
+
   // Initialize settings first so we can check the sync flag
   await UserSettingService.instance.initializeGlobalStateMap();
   await AppDataService.instance.initializeGlobalStateMap();
+
+  // One-time migration: move pre-BYOK Nexus credentials into the new
+  // per-provider store. Idempotent — subsequent runs no-op.
+  unawaited(
+    AiCredentialsStore.instance.migrateFromLegacyStore().catchError((e) {
+      debugPrint('AiCredentialsStore.migrateFromLegacyStore error: $e');
+      return false;
+    }),
+  );
 
   // Must complete BEFORE runApp: visibleAccountIdsStream seeds from the
   // locked state, and a late init lets the dashboard render with
   // `visibleIds == null` for the first frame — leaking saving accounts.
   await HiddenModeService.instance.init();
+
+  // Populate the dashboard widget registry BEFORE runApp so the dashboard
+  // renderer always observes a fully populated registry on its first frame
+  // (see dashboard-widgets spec § DashboardWidgetRegistry).
+  registerDashboardWidgets();
 
   // Always initialize Firebase — sync is always available.
   // If Firebase init fails (offline, misconfigured), the app works offline.
@@ -157,6 +183,19 @@ void main() async {
                       await LocalNotificationService.instance
                           .showNewPendingNotification(count);
                     };
+
+                // The notification EventChannel is bound to the main FlutterEngine,
+                // so the background isolate excludes it — the main isolate must
+                // own the notification capture source and its health monitor.
+                unawaited(
+                  CaptureOrchestrator.instance
+                      .applySettings(channels: {CaptureChannel.notification})
+                      .catchError((e) {
+                        debugPrint(
+                          'CaptureOrchestrator.applySettings (main isolate) error: $e',
+                        );
+                      }),
+                );
 
                 // Start the background service — it handles ALL capture sources
                 // (SMS, notifications, Binance API) and keeps capture alive when
@@ -538,11 +577,37 @@ class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
     // Fire background Firebase sync ONCE per session, after first frame.
     // Previously this was called from build() on a StatelessWidget, which
     // fired 2–3× due to locale/translation stream rebuilds.
+    //
+    // Pull guard (Fix 2 Opción A): if WelcomeScreen already issued a pull
+    // within the last 60s (it stamps `AppDataKey.lastPullAt` before its
+    // own pullAllData), skip this one. Cold-start with an existing session
+    // does NOT pass through WelcomeScreen, so `lastPullAt` is either absent
+    // or stale and this branch still runs as before.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final onboarded = appStateData[AppDataKey.onboarded] == '1';
-      if (onboarded && FirebaseSyncService.instance.isFirebaseAvailable) {
-        FirebaseSyncService.instance.pullAllData();
+      if (!onboarded || !FirebaseSyncService.instance.isFirebaseAvailable) {
+        return;
       }
+
+      final lastPullAtRaw = appStateData[AppDataKey.lastPullAt];
+      final lastPullAt = int.tryParse(lastPullAtRaw ?? '');
+      if (lastPullAt != null) {
+        final ageMs = DateTime.now().millisecondsSinceEpoch - lastPullAt;
+        if (ageMs < 60 * 1000) {
+          Logger.printDebug(
+            'InitialPageRouteNavigator: skipping pullAllData '
+            '(last pull ${ageMs}ms ago, < 60s window)',
+          );
+          return;
+        }
+      }
+
+      FirebaseSyncService.instance.pullAllData();
+      // Stamp so subsequent rebuilds within this session also short-circuit.
+      AppDataService.instance.setItem(
+        AppDataKey.lastPullAt,
+        DateTime.now().millisecondsSinceEpoch.toString(),
+      );
     });
 
     // Purge statement import batches older than 7 days on each session start.

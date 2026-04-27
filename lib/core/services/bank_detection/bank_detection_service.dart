@@ -2,6 +2,8 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:wallex/core/services/auto_import/supported_banks.dart'
+    as supported_banks;
 
 /// Detects which banking / fintech apps relevant to Wallex auto-import
 /// are installed on the device. Wraps the `installed_apps` package so
@@ -12,28 +14,28 @@ import 'package:installed_apps/installed_apps.dart';
 /// `binance_api`) matching [BankProfile.profileId] values. On non-Android
 /// platforms or on any error, returns `const []`.
 class BankDetectionService {
-  /// Maps Android package names to the bank profile id Wallex uses to
-  /// toggle per-bank auto-import settings.
+  /// Public read-only view of the package-name → profile-id map.
   ///
-  /// Only profiles with a matching [BankProfile] implementation and
-  /// [SettingKey] toggle are listed here. Detection of an app that has
-  /// no profile yet is dropped silently.
-  static const Map<String, String> _kPackageToProfileId = {
-    // Banco de Venezuela (SMS + notifications share the same app).
-    'com.tralix.bdvmovil': 'bdv_notif',
-    // Zinli.
-    'com.zinli.wallet': 'zinli_notif',
-    // Binance.
-    'com.binance.dev': 'binance_api',
-  };
+  /// Used by [CaptureOrchestrator] to determine whether a notification sender
+  /// is a known bank (even if no regex profile exists for it yet), so the
+  /// LLM fallback can be triggered selectively.
+  ///
+  /// The single source of truth lives in
+  /// `lib/core/services/auto_import/supported_banks.dart` —
+  /// edit [supported_banks.kSupportedBanks] to add a new bank, then update
+  /// AndroidManifest.xml `<queries>` (the `supported_banks_manifest_sync`
+  /// test will tell you which packages are missing).
+  static Map<String, String> get kPackageToProfileId =>
+      supported_banks.kPackageToProfileId;
 
   Future<List<String>> getInstalledBankIds() async {
     if (!Platform.isAndroid) return const [];
     try {
       final apps = await InstalledApps.getInstalledApps(true, false);
       final detected = <String>{};
+      final map = supported_banks.kPackageToProfileId;
       for (final app in apps) {
-        final profileId = _kPackageToProfileId[app.packageName];
+        final profileId = map[app.packageName];
         if (profileId != null) detected.add(profileId);
       }
       return detected.toList();

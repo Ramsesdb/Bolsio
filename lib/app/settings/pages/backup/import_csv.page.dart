@@ -488,7 +488,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                       allowMultiSelection: false,
                       filterSavingAccounts: true,
                       selectedAccounts: [
-                        if (defaultAccount != null) defaultAccount!,
+                        ?defaultAccount,
                       ],
                     ),
                   );

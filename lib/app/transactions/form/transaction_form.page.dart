@@ -623,7 +623,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         allowMultiSelection: false,
         filterSavingAccounts: transactionType.isIncomeOrExpense,
         includeArchivedAccounts: false,
-        selectedAccounts: [if (account != null) account],
+        selectedAccounts: [?account],
       ),
     );
   }

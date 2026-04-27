@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
 import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
 
-class Slide10Ready extends StatelessWidget {
-  const Slide10Ready({
+class Slide11Ready extends StatelessWidget {
+  const Slide11Ready({
     super.key,
     required this.onFinish,
     required this.isFinishing,
@@ -15,6 +15,12 @@ class Slide10Ready extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+
+    // Clamp hero size for narrow phones. Default target = 80 from spec.
+    final double width = MediaQuery.of(context).size.width;
+    final double computed = width * 0.18;
+    final double heroSize = computed.clamp(56.0, 80.0).toDouble();
+
     return V3SlideTemplate(
       primaryLabel: isFinishing ? 'Un momento…' : 'Empezar',
       onPrimary: onFinish,
@@ -22,37 +28,33 @@ class Slide10Ready extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                color: V3Tokens.accent.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: const Icon(
-                Icons.check_rounded,
-                color: V3Tokens.accent,
-                size: 48,
-              ),
+          const SizedBox(height: V3Tokens.space16),
+          Text(
+            'Todo\nlisto',
+            style: V3Tokens.displayStyle(
+              size: heroSize,
+              letterSpacing: -3.5,
+              height: 0.95,
+              color: scheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: V3Tokens.space16),
+          Container(
+            width: 64,
+            height: 3,
+            decoration: BoxDecoration(
+              color: V3Tokens.accent,
+              borderRadius: BorderRadius.circular(999),
             ),
           ),
           const SizedBox(height: V3Tokens.space24),
           Text(
-            '¡Todo listo!',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: V3Tokens.spaceMd),
-          Text(
             'Wallex ya está configurado a tu medida. Empieza a controlar tus finanzas.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-            textAlign: TextAlign.center,
+            style: V3Tokens.uiStyle(
+              size: 14,
+              weight: FontWeight.w500,
+              color: scheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: V3Tokens.space24),
           const _Feature(
