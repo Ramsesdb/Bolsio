@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
+import 'package:wallex/app/onboarding/widgets/v3_mini_phone_frame.dart';
 import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
 import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
 
@@ -45,19 +46,25 @@ class _Slide07PostNotificationsState extends State<Slide07PostNotifications>
   }
 
   Future<void> _bootstrap() async {
-    final result = await PermissionCoordinator.instance.check();
-    if (!mounted) return;
-    if (result.postNotifications) {
-      widget.onNext();
-      return;
+    try {
+      final result = await PermissionCoordinator.instance.check();
+      if (!mounted) return;
+      if (result.postNotifications) {
+        widget.onNext();
+        return;
+      }
+      final status = await Permission.notification.status;
+      if (!mounted) return;
+      setState(() {
+        _granted = false;
+        _deniedPermanently = status.isPermanentlyDenied;
+        _checked = true;
+      });
+    } catch (e, st) {
+      debugPrint('S07 _bootstrap error: $e\n$st');
+      if (!mounted) return;
+      setState(() => _checked = true);
     }
-    final status = await Permission.notification.status;
-    if (!mounted) return;
-    setState(() {
-      _granted = false;
-      _deniedPermanently = status.isPermanentlyDenied;
-      _checked = true;
-    });
   }
 
   Future<void> _refreshAndMaybeAdvance() async {
@@ -127,7 +134,13 @@ class _Slide07PostNotificationsState extends State<Slide07PostNotifications>
                 ),
           ),
           const SizedBox(height: V3Tokens.space24),
-          _NotifPreview(granted: _granted),
+          Align(
+            alignment: Alignment.topCenter,
+            child: V3MiniPhoneFrame(
+              height: 180,
+              child: _NotifPreview(granted: _granted),
+            ),
+          ),
           if (_deniedPermanently) ...[
             const SizedBox(height: V3Tokens.space16),
             Container(

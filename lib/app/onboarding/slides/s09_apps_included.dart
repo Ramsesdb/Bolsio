@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallex/app/onboarding/bank_options.dart';
 import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
 import 'package:wallex/app/onboarding/widgets/v3_bank_tile.dart';
@@ -56,42 +57,53 @@ class _Slide09AppsIncludedState extends State<Slide09AppsIncluded> {
   }
 
   Future<void> _loadDetected() async {
-    final ids = await BankDetectionService().getInstalledBankIds();
-    final tiles = <BankOption>[];
-    if (ids.isEmpty) {
-      // Fallback: show only banks with a working parser so the user can
-      // still configure auto-import even when detection returns nothing.
-      // Banks without a parser ("Próximamente") only appear when actually
-      // detected on-device — no point showing a disabled tile otherwise.
-      tiles.addAll(
-        kBanks.where(
-          (b) => b.profileId != null && b.autoImportSupported,
-        ),
-      );
-    } else {
-      // Dedupe profileIds (BDV/Zinli have legacy package aliases).
-      final seen = <String>{};
-      for (final profileId in ids) {
-        if (!seen.add(profileId)) continue;
-        final match = bankOptionByProfileId(profileId);
-        if (match != null) tiles.add(match);
+    try {
+      final ids = await BankDetectionService().getInstalledBankIds();
+      final tiles = <BankOption>[];
+      if (ids.isEmpty) {
+        // Fallback: show all banks that have a profileId so the user can
+        // still configure auto-import even when detection returns nothing.
+        // All apps are now supported (dedicated parser or AI fallback).
+        tiles.addAll(
+          kBanks.where((b) => b.profileId != null),
+        );
+      } else {
+        // Dedupe profileIds (BDV/Zinli have legacy package aliases).
+        final seen = <String>{};
+        for (final profileId in ids) {
+          if (!seen.add(profileId)) continue;
+          final match = bankOptionByProfileId(profileId);
+          if (match != null) tiles.add(match);
+        }
       }
+      // Load toggle state: dedicated-parser profiles use SettingKey (DB),
+      // AI-fallback profiles use SharedPreferences with key
+      // 'autoImport_profile_<profileId>' (default ON when key absent).
+      final prefs = await SharedPreferences.getInstance();
+      final toggles = <String, bool>{
+        for (final t in tiles)
+          t.profileId!: _settingKeyFor(t.profileId!) != null
+              ? UserSettingService.instance.isProfileEnabled(t.profileId!)
+              : (prefs.getBool(_prefsKeyFor(t.profileId!)) ?? true),
+      };
+      if (!mounted) return;
+      setState(() {
+        _tiles = tiles;
+        _toggleState
+          ..clear()
+          ..addAll(toggles);
+        _loading = false;
+      });
+    } catch (e, st) {
+      debugPrint('S09 _loadDetected error: $e\n$st');
+      if (!mounted) return;
+      setState(() => _loading = false);
     }
-    final toggles = <String, bool>{
-      for (final t in tiles)
-        t.profileId!:
-            UserSettingService.instance.isProfileEnabled(t.profileId!),
-    };
-    if (!mounted) return;
-    setState(() {
-      _tiles = tiles;
-      _toggleState
-        ..clear()
-        ..addAll(toggles);
-      _loading = false;
-    });
   }
 
+  /// Returns the [SettingKey] for profiles with a dedicated parser (BDV, Zinli,
+  /// Binance). Returns `null` for AI-fallback profiles — those use
+  /// [_prefsKeyFor] + SharedPreferences instead.
   SettingKey? _settingKeyFor(String profileId) {
     switch (profileId) {
       case 'bdv_sms':
@@ -106,25 +118,33 @@ class _Slide09AppsIncludedState extends State<Slide09AppsIncluded> {
     return null;
   }
 
+  /// SharedPreferences key for AI-fallback profiles (those without a
+  /// dedicated [SettingKey]). Format: `autoImport_profile_<profileId>`.
+  String _prefsKeyFor(String profileId) => 'autoImport_profile_$profileId';
+
   Future<void> _onToggle(String profileId, bool value) async {
     final key = _settingKeyFor(profileId);
-    // No SettingKey means this profile has no real parser yet ("Próximamente"
-    // tiles). We still update the in-memory toggle state for visual
-    // consistency, but skip persistence — there's nothing to enable.
     if (key != null) {
+      // Dedicated-parser profile: persist to DB via SettingKey.
       await UserSettingService.instance.setItem(key, value ? '1' : '0');
+    } else {
+      // AI-fallback profile: persist to SharedPreferences.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_prefsKeyFor(profileId), value);
     }
     if (!mounted) return;
     setState(() => _toggleState[profileId] = value);
   }
 
-  /// Visual-only "remove" affordance: drops the tile from the visible list.
-  /// For tiles with a real parser, also turns the persisted toggle OFF so
-  /// the user's intent is reflected in settings.
+  /// Visual-only "remove" affordance: drops the tile from the visible list
+  /// and persists the OFF state so the user's intent survives a restart.
   Future<void> _onRemove(String profileId) async {
     final key = _settingKeyFor(profileId);
     if (key != null) {
       await UserSettingService.instance.setItem(key, '0');
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_prefsKeyFor(profileId), false);
     }
     if (!mounted) return;
     setState(() {

@@ -162,18 +162,28 @@ class _CornerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Wrap in a GestureDetector with an opaque hit-test behaviour and a
+    // minimum 44×44 touch target (Material spec). The visible circle stays
+    // the same size; only the tappable area grows. Using GestureDetector
+    // instead of InkWell prevents the surrounding drag listener from
+    // absorbing pointer-down events before the button sees them.
     return Tooltip(
       message: tooltip,
-      child: Material(
-        color: background,
-        shape: const CircleBorder(),
-        elevation: 1.5,
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(6),
-            child: Icon(icon, size: 16, color: foreground),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+          child: Center(
+            child: Material(
+              color: background,
+              shape: const CircleBorder(),
+              elevation: 1.5,
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(icon, size: 16, color: foreground),
+              ),
+            ),
           ),
         ),
       ),

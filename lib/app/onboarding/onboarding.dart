@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wallex/app/auth/welcome_screen.dart';
 import 'package:wallex/app/home/dashboard_widgets/defaults.dart';
 import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/onboarding/slides/s01_goals.dart';
@@ -98,6 +99,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
       duration: const Duration(milliseconds: 260),
       curve: Curves.easeInOut,
     );
+  }
+
+  /// Escape hatch on slide 0: resets the onboarded flag and navigates back
+  /// to [WelcomeScreen], replacing the current route so the user cannot
+  /// press the system back button to re-enter a half-completed onboarding.
+  Future<void> _exitOnboarding() async {
+    await AppDataService.instance.setItem(
+      AppDataKey.onboarded,
+      null,
+      updateGlobalState: true,
+    );
+    if (!mounted) return;
+    unawaited(Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+      (route) => false,
+    ));
   }
 
   /// Skip the current slide without committing any selection. Used by the
@@ -404,9 +421,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   ),
                                   child: _BackPill(onTap: _previous),
                                 )
-                              : const SizedBox.shrink(
-                                  key: ValueKey('no-back'),
-                                ),
+                              : _currentIndex == 0
+                                  ? Padding(
+                                      key: const ValueKey('close-pill'),
+                                      padding: const EdgeInsets.only(
+                                        right: V3Tokens.spaceMd,
+                                      ),
+                                      child: _BackPill(
+                                        onTap: _exitOnboarding,
+                                        icon: Icons.close,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(
+                                      key: ValueKey('no-back'),
+                                    ),
                         ),
                         Expanded(
                           // The header Row owns the horizontal padding, so
@@ -457,9 +485,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
 class _BackPill extends StatelessWidget {
   const _BackPill({
     required this.onTap,
+    this.icon = Icons.arrow_back_ios_new,
   });
 
   final VoidCallback? onTap;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -478,7 +508,7 @@ class _BackPill extends StatelessWidget {
           onTap: onTap,
           child: Center(
             child: Icon(
-              Icons.arrow_back_ios_new,
+              icon,
               size: 14,
               color: fg,
             ),

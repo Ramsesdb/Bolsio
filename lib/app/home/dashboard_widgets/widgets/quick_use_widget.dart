@@ -1,12 +1,12 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:wallex/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart';
 import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
 import 'package:wallex/app/home/dashboard_widgets/registry.dart';
 import 'package:wallex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
 import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 /// Builder mutable usado por el spec del `quickUse` para abrir su
@@ -35,29 +35,42 @@ const List<QuickActionId> kQuickUseDefaultChips = <QuickActionId>[
   QuickActionId.goToReports,
 ];
 
-/// Widget público que renderiza una grilla de chips circulares para las
-/// quick actions seleccionadas por el usuario.
+/// Tamaño visual de los avatares de quick action. Constantes compartidas
+/// con `edit/quick_use_config_sheet.dart` para mantener la coherencia
+/// estilo "Rial" entre la vista y el editor.
+const double kQuickUseAvatarSize = 56;
+const double kQuickUseAvatarIconSize = 26;
+const double kQuickUseSlotWidth = 72;
+
+/// Widget público que renderiza una fila horizontal scrolleable de avatares
+/// circulares grandes para las quick actions seleccionadas por el usuario.
 ///
 /// Lee `descriptor.config['chips']` (lista de strings con
 /// `QuickActionId.name`); si está vacío usa [kQuickUseDefaultChips]. Cada
-/// chip resuelve su [QuickAction] via [QuickActionDispatcher] y al pulsarlo
-/// invoca el callback registrado.
+/// avatar resuelve su [QuickAction] via [QuickActionDispatcher] y al
+/// pulsarlo invoca el callback registrado.
+///
+/// En modo view añade al final un slot circular con borde punteado (`+`)
+/// que abre el [QuickUseConfigSheet] — mismo flujo que el botón ⚙ del
+/// edit-frame, pero accesible sin entrar a edit mode. En edit mode no se
+/// pinta el slot extra (el frame ya provee su propio botón ⚙ — duplicarlo
+/// confunde).
 ///
 /// Es reactivo a [PrivateModeService.privateModeStream] y al stream de
-/// `isLockedStream` para que los chips de toggle muestren el estado actual
-/// (label dinámico). El stream de `preferredCurrency` no tiene un service
-/// reactivo dedicado en wallex; el chip `togglePreferredCurrency` se
-/// reconstruye con el `appStateSettings` global cuando el descriptor
-/// recibe nuevos chips o cuando el padre re-emite (después de un toggle el
-/// dispatcher hace `setItem(updateGlobalState: true)` y el host del
-/// dashboard rebuildea por el stream del layout).
+/// `isLockedStream` para que los avatares de toggle muestren el estado
+/// actual (label dinámico).
 class QuickUseWidget extends StatelessWidget {
   const QuickUseWidget({
     super.key,
     required this.descriptor,
+    this.editing = false,
   });
 
   final WidgetDescriptor descriptor;
+
+  /// `true` cuando el dashboard está en modo edición. En ese caso el slot
+  /// del "+" no se pinta (el edit-frame ya provee un botón de configurar).
+  final bool editing;
 
   /// Resuelve la lista de [QuickActionId] activos a partir del config del
   /// descriptor. Filtra ids desconocidos (downgrade-safe) y, si el resultado
@@ -79,46 +92,48 @@ class QuickUseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chips = _activeChips;
-    final theme = Theme.of(context);
-    final isWide = BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.primary.withValues(alpha: 0.06),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: theme.colorScheme.primary.withValues(alpha: 0.10),
-            width: 0.5,
-          ),
+    final children = <Widget>[
+      for (final id in chips)
+        SizedBox(
+          width: kQuickUseSlotWidth,
+          child: _QuickUseChip(id: id),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          child: Wrap(
-            alignment: WrapAlignment.spaceEvenly,
-            runSpacing: 14,
-            spacing: 14,
-            children: chips
-                .map(
-                  (id) => SizedBox(
-                    width: isWide ? 92 : 64,
-                    child: _QuickUseChip(id: id),
-                  ),
-                )
-                .toList(growable: false),
-          ),
+      if (!editing)
+        SizedBox(
+          width: kQuickUseSlotWidth,
+          child: _AddMoreSlot(descriptor: descriptor),
+        ),
+    ];
+
+    // Fila horizontal scrolleable. Sin tarjeta interna ni padding pesado:
+    // el widget vive directamente sobre el fondo del dashboard, igual que
+    // la pantalla de inicio de "Rial".
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            for (int i = 0; i < children.length; i++) ...[
+              if (i > 0) const SizedBox(width: 4),
+              children[i],
+            ],
+          ],
         ),
       ),
     );
   }
 }
 
-/// Botón circular con ícono + label. Se suscribe a los streams reactivos
-/// solo cuando el chip pertenece al subconjunto que cambia con ellos
-/// (`togglePrivateMode` → privateModeStream; `toggleHiddenMode` →
-/// isLockedStream). Para los demás chips el `StreamBuilder` se omite y la
-/// reconstrucción es trivial.
+/// Avatar reactivo: se suscribe a streams solo cuando el chip pertenece al
+/// subconjunto que cambia con ellos (`togglePrivateMode` → privateModeStream;
+/// `toggleHiddenMode` → isLockedStream). Para los demás avatares el
+/// `StreamBuilder` se omite y la reconstrucción es trivial.
 class _QuickUseChip extends StatelessWidget {
   const _QuickUseChip({required this.id});
 
@@ -136,7 +151,7 @@ class _QuickUseChip extends StatelessWidget {
           initialData: appStateSettings[SettingKey.privateMode] == '1',
           builder: (context, snapshot) {
             final on = snapshot.data ?? false;
-            return _ChipButton(
+            return QuickUseAvatar(
               icon: on
                   ? Icons.visibility_off_rounded
                   : Icons.visibility_rounded,
@@ -152,7 +167,7 @@ class _QuickUseChip extends StatelessWidget {
           initialData: HiddenModeService.instance.isLocked,
           builder: (context, snapshot) {
             final locked = snapshot.data ?? true;
-            return _ChipButton(
+            return QuickUseAvatar(
               icon: locked ? Icons.lock_rounded : Icons.lock_open_rounded,
               label: action.label(context),
               highlighted: locked,
@@ -161,7 +176,7 @@ class _QuickUseChip extends StatelessWidget {
           },
         );
       default:
-        return _ChipButton(
+        return QuickUseAvatar(
           icon: action.icon,
           label: action.label(context),
           onTap: () => action.action(context),
@@ -170,52 +185,145 @@ class _QuickUseChip extends StatelessWidget {
   }
 }
 
-class _ChipButton extends StatelessWidget {
-  const _ChipButton({
+/// Avatar circular grande con label debajo. Reutilizado por el config sheet
+/// para mantener la consistencia visual entre vista y editor.
+///
+/// - Tamaño: [kQuickUseAvatarSize] (56) con icono [kQuickUseAvatarIconSize].
+/// - Colores: tinte derivado de `primaryContainer` por defecto;
+///   `primary` lleno cuando [highlighted] es `true` (toggle activo).
+/// - Label: 1 línea, ellipsis, centrado, ancho fijo del slot.
+class QuickUseAvatar extends StatelessWidget {
+  const QuickUseAvatar({
+    super.key,
     required this.icon,
     required this.label,
-    required this.onTap,
+    this.onTap,
     this.highlighted = false,
   });
 
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final base = highlighted ? cs.primary : cs.onSurface;
-    return Tappable(
-      onTap: onTap,
-      bgColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              backgroundColor: base.withValues(alpha: 0.12),
-              radius: 22,
-              child: Icon(icon, size: 22, color: base),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: base.withValues(alpha: 0.85),
-                fontWeight: FontWeight.w500,
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    final Color bg;
+    final Color fg;
+    if (highlighted) {
+      bg = cs.primary;
+      fg = cs.onPrimary;
+    } else {
+      bg = cs.primaryContainer;
+      fg = cs.onPrimaryContainer;
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Material(
+          color: bg,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: SizedBox(
+              width: kQuickUseAvatarSize,
+              height: kQuickUseAvatarSize,
+              child: Center(
+                child: Icon(icon, size: kQuickUseAvatarIconSize, color: fg),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: cs.onSurface.withValues(alpha: 0.85),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Slot de "agregar más" — círculo con borde punteado y un `+` central.
+/// Se muestra solo en modo view (no editing) y abre el [QuickUseConfigSheet]
+/// — mismo flujo que invocaría el ⚙ del edit-frame, pero accesible sin
+/// entrar a edit mode. Inspirado en la home de "Rial".
+class _AddMoreSlot extends StatelessWidget {
+  const _AddMoreSlot({required this.descriptor});
+
+  final WidgetDescriptor descriptor;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final border = cs.onSurface.withValues(alpha: 0.35);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        // El borde punteado se pinta con `dotted_border` (ya en pubspec —
+        // ver import_csv.page.dart). Usar `CircularDottedBorderOptions`
+        // mantiene el look exacto de Rial sin tener que escribir un
+        // CustomPainter ad-hoc.
+        DottedBorder(
+          options: CircularDottedBorderOptions(
+            color: border,
+            strokeWidth: 1.4,
+            dashPattern: const <double>[4, 4],
+            strokeCap: StrokeCap.round,
+            padding: EdgeInsets.zero,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            shape: const CircleBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => showQuickUseConfigSheet(
+                context,
+                descriptor: descriptor,
+              ),
+              child: SizedBox(
+                width: kQuickUseAvatarSize,
+                height: kQuickUseAvatarSize,
+                child: Center(
+                  child: Icon(
+                    Icons.add_rounded,
+                    size: kQuickUseAvatarIconSize,
+                    color: cs.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Más',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: cs.onSurface.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -252,7 +360,7 @@ void registerQuickUseWidget() {
       builder: (context, descriptor, {required editing}) {
         return KeyedSubtree(
           key: ValueKey('${descriptor.type.name}-${descriptor.instanceId}'),
-          child: QuickUseWidget(descriptor: descriptor),
+          child: QuickUseWidget(descriptor: descriptor, editing: editing),
         );
       },
       configEditor: (context, descriptor) {

@@ -3,7 +3,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:wallex/app/layout/page_context.dart';
 import 'package:wallex/app/layout/page_framework.dart';
@@ -157,7 +156,7 @@ class TransactionsPageState extends State<TransactionsPage> {
         floatingActionButton: ifIsInTabs(context)
             ? null
             : NewTransactionButton(scrollController: listScrollController),
-        floatingActionButtonLocation: ExpandableFab.location,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Column(
           children: [
             AnimatedExpanded(

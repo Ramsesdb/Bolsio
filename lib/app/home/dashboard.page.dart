@@ -803,9 +803,27 @@ class _DashboardEditBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registry = DashboardWidgetRegistry.instance;
+    // Only include descriptors whose type is registered. Unregistered types
+    // (e.g. stale data from a future schema or a removed widget) must be
+    // filtered out in BOTH view mode (DashboardLayoutBody) and edit mode so
+    // they never appear as empty ghost frames.
     final descriptors = layout.widgets
         .where((d) => registry.get(d.type) != null)
         .toList(growable: false);
+
+    // Pre-compute the mapping from filtered-list index → full-list index so
+    // that reorder operations are applied to the correct positions in the
+    // underlying layout (which may contain unregistered descriptors that are
+    // invisible in the edit list but still occupy slots in the service list).
+    final fullWidgets = layout.widgets;
+    final indexMap = <int, int>{};
+    var filteredIdx = 0;
+    for (var i = 0; i < fullWidgets.length; i++) {
+      if (registry.get(fullWidgets[i].type) != null) {
+        indexMap[filteredIdx] = i;
+        filteredIdx++;
+      }
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
@@ -822,7 +840,28 @@ class _DashboardEditBody extends StatelessWidget {
                 Material(type: MaterialType.transparency, child: child),
             itemCount: descriptors.length,
             onReorder: (from, to) {
-              DashboardLayoutService.instance.reorder(from, to);
+              // Translate the filtered-list indices to full-list indices before
+              // delegating to the service, which operates on layout.widgets
+              // (unfiltered). Without this translation, unregistered widgets
+              // silently shift the target positions and corrupt the order.
+              final fullFrom = indexMap[from];
+              if (fullFrom == null) return;
+
+              // `to` in ReorderableListView semantics is the desired position
+              // AFTER the removal of `from`. Map both boundary indices: the
+              // "before-first" boundary (to == 0) stays 0; the "after-last"
+              // boundary maps to fullWidgets.length. Interior positions map to
+              // the full-list index of the filtered item at that slot.
+              final int fullTo;
+              if (to == 0) {
+                fullTo = 0;
+              } else if (to >= descriptors.length) {
+                fullTo = fullWidgets.length;
+              } else {
+                fullTo = indexMap[to] ?? fullWidgets.length;
+              }
+
+              DashboardLayoutService.instance.reorder(fullFrom, fullTo);
             },
             itemBuilder: (context, index) {
               final descriptor = descriptors[index];

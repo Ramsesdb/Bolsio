@@ -104,10 +104,16 @@ class DashboardLayoutDefaults {
     // el set de goals está vacío de mappings conocidos lo añadimos a mano.
     final withQuickUse = _ensureQuickUseFirst(ordered);
 
-    // Cap a 8.
-    final capped = withQuickUse.length > _maxWidgets
-        ? withQuickUse.sublist(0, _maxWidgets)
-        : withQuickUse;
+    // accountCarousel es core: SIEMPRE entra justo después de quickUse,
+    // independientemente de los goals. Si ya estaba en la lista (e.g.
+    // save_usd / reduce_debt), se reposiciona — no se duplica.
+    final withCore = _ensureAccountCarouselSecond(withQuickUse);
+
+    // Cap a 8 — si los goals ya llenaban 8 sin accountCarousel, el último
+    // widget goal-driven cae para preservar el core.
+    final capped = withCore.length > _maxWidgets
+        ? withCore.sublist(0, _maxWidgets)
+        : withCore;
 
     return DashboardLayout(
       schemaVersion: DashboardLayout.currentSchemaVersion,
@@ -151,6 +157,43 @@ class DashboardLayoutDefaults {
       if (t != WidgetType.quickUse) out.add(t);
     }
     return out;
+  }
+
+  /// Asume que [input] ya tiene `quickUse` en posición 0. Inserta
+  /// `accountCarousel` en posición 1 si no estaba presente, o lo reposiciona
+  /// si ya aparecía más adelante. No duplica.
+  static List<WidgetType> _ensureAccountCarouselSecond(List<WidgetType> input) {
+    final out = <WidgetType>[];
+    var inserted = false;
+    for (var i = 0; i < input.length; i++) {
+      final t = input[i];
+      out.add(t);
+      if (i == 0 && t == WidgetType.quickUse) {
+        out.add(WidgetType.accountCarousel);
+        inserted = true;
+      }
+    }
+    if (!inserted) {
+      // Caso defensivo: input no empezaba con quickUse (no debería ocurrir
+      // porque _ensureQuickUseFirst corre antes). Aún así, garantizamos el
+      // core insertándolo al final si falta.
+      if (!out.contains(WidgetType.accountCarousel)) {
+        out.add(WidgetType.accountCarousel);
+      }
+      return out;
+    }
+    // Eliminar duplicados posteriores de accountCarousel preservando el de
+    // posición 1.
+    final deduped = <WidgetType>[];
+    var seenAccountCarousel = false;
+    for (final t in out) {
+      if (t == WidgetType.accountCarousel) {
+        if (seenAccountCarousel) continue;
+        seenAccountCarousel = true;
+      }
+      deduped.add(t);
+    }
+    return deduped;
   }
 
   static List<WidgetDescriptor> _buildDescriptors(List<WidgetType> types) {

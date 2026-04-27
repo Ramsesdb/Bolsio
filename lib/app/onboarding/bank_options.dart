@@ -10,7 +10,7 @@ class BankOption {
     required this.color,
     required this.icon,
     this.profileId,
-    this.autoImportSupported = false,
+    this.autoImportSupported = true,
     this.defaultCurrency = 'VES',
     this.supportsBoth = false,
   });
@@ -26,13 +26,14 @@ class BankOption {
   /// profile. Null for banks not yet supported by auto-import.
   final String? profileId;
 
-  /// Whether this bank/app has a real auto-import parser implemented today.
-  /// When false, the bank is detected and listed in onboarding for the
-  /// user's awareness, but its tile is rendered with a "Próximamente"
-  /// badge and the toggle is disabled (no parser yet means flipping the
-  /// switch would have no effect).
+  /// Whether this bank/app has a dedicated regex/API parser implemented.
+  /// When `true`, a specific [BankProfile] handles parsing directly.
+  /// When `false`, the generic LLM fallback ([GenericLlmProfile]) is used
+  /// instead — all apps are effectively supported, just with different parsers.
   ///
-  /// Only BDV, Zinli and Binance are `true` today.
+  /// BDV, Zinli and Binance have `true` (dedicated parsers); all others
+  /// rely on the AI fallback and also have `true` now that [GenericLlmProfile]
+  /// is production-ready.
   final bool autoImportSupported;
 
   /// Native currency for the bank/wallet. Used by the seeder to decide the
