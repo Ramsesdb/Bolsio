@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wallex/app/calculator/calculator.page.dart';
 import 'package:wallex/app/currencies/edit_currency_page.dart';
 import 'package:wallex/app/currencies/exchange_rate_details.dart';
 import 'package:wallex/app/currencies/exchange_rate_form.dart';
@@ -95,6 +96,13 @@ class CurrencyManagerPage extends StatelessWidget {
     return PageFramework(
       title: Translations.of(context).currencies.currency_manager,
       appBarActions: [
+        // Entry point a la Calculadora FX (calculadora-fx Tanda 1, task 1.6).
+        // Solo navegación; no modifica el resto de la página.
+        IconButton(
+          icon: const Icon(Icons.calculate_outlined),
+          tooltip: t.home.quick_actions.go_to_calculator,
+          onPressed: () => RouteUtils.pushRoute(const CalculatorPage()),
+        ),
         IconButton(
           icon: const Icon(Icons.refresh_rounded),
           tooltip: 'Refrescar tasas',

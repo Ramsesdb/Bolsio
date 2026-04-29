@@ -236,7 +236,67 @@
       "go-to-budgets": "Budgets",
       "go-to-reports": "Reports",
       "open-transactions": "Transactions",
-      "open-exchange-rates": "Exchange rates"
+      "open-exchange-rates": "Exchange rates",
+      "go-to-calculator": "Calculator"
+    }
+  },
+  "CALCULATOR": {
+    "title": "Calculator",
+    "settings_subtitle": "Quick converter USD/EUR/USDT to VES",
+    "swap": {
+      "a11y": "Invert conversion"
+    },
+    "keypad": {
+      "a11y": {
+        "digit_n": "Digit {{n}}",
+        "decimal": "Decimal separator",
+        "backspace": "Delete",
+        "clear": "Clear",
+        "plus": "Add",
+        "minus": "Subtract",
+        "equals": "Equals"
+      }
+    },
+    "source": {
+      "bcv": "BCV",
+      "paralelo": "Parallel",
+      "promedio": "Average",
+      "manual": "Manual",
+      "usdt_label": "Parallel (USDT)",
+      "updated_ago": "{{minutes}} min ago",
+      "updated_just_now": "just now",
+      "updated_unknown": "—",
+      "a11y_label": "Rate source: {{source}}, updated {{age}}"
+    },
+    "manual": {
+      "field_hint": "Rate per 1 {{currency}}",
+      "field_label": "Manual rate",
+      "field_invalid": "Enter a value greater than 0",
+      "save_link": "Save as manual rate"
+    },
+    "warn": {
+      "no_rate": "No cached rate. Use manual mode or connect to the internet."
+    },
+    "refresh": {
+      "a11y": "Refresh rates",
+      "error": "Could not update rates. Showing cached values."
+    },
+    "share": {
+      "action_a11y": "Share conversion",
+      "footer": "Generated with Wallex",
+      "subject": "FX conversion",
+      "equals_separator": "="
+    },
+    "rate_explicit": {
+      "format": "{{from}} 1 = {{to}} {{amount}}",
+      "timestamp_long": "Updated {{date}}",
+      "timestamp_unknown": "No rate available",
+      "timestamp_manual": "Manual rate"
+    },
+    "copy": {
+      "tooltip": "Copy",
+      "a11y": "Copy amount",
+      "snackbar": "{{value}} copied"
     }
   },
   "FINANCIAL-HEALTH": {

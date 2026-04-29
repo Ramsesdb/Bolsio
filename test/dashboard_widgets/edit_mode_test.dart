@@ -8,37 +8,42 @@ import 'package:wallex/app/home/dashboard_widgets/registry.dart';
 ///
 /// Spec: `dashboard-edit-mode` § Toggle, § Edit frame.
 ///
-/// **Scope note**: the live edit-mode toggle (lápiz → check) lives inside
-/// `_DashboardPageState._editing` and can only be exercised by pumping the
-/// full `DashboardPage`, which pulls heavy DB-bound dependencies (DateRange
-/// service, AccountService, FAB, etc.). To keep the suite hermetic we test
-/// the **observable contract** of edit mode at the frame level:
+/// **Scope note**: el toggle real (lápiz → check) vive en
+/// `_DashboardPageState._editing` y solo se exercita pumpando todo el
+/// `DashboardPage`, que tira dependencias pesadas (DateRange, AccountService,
+/// FAB...). Para mantener la suite hermética testeamos el contrato
+/// observable a nivel de frame:
 ///
-///   - The frame renders the X (delete) button.
-///   - The frame renders a config (⚙) button when both `onConfigure` and
-///     `spec.configEditor` are non-null.
-///   - Internal gestures of the wrapped child are blocked
-///     (`IgnorePointer(true)`).
-///
-/// A full E2E pass over the toggle is captured in the manual checklist
-/// (Phase 3 task 3.11).
+///   - El frame renderiza el botón X (delete) y dispara `onDelete` al tap.
+///   - El frame renderiza el botón ⚙ cuando el spec tiene `configEditor`
+///     y se pasa `onConfigure`.
+///   - Los gestos internos del child se bloquean (`IgnorePointer(true)`).
+///   - El header con `displayName` aparece siempre y NUNCA anota
+///     "(oculto)" — el estado oculto se comunica solo en el placeholder.
+///   - Cuando `showEmptyPlaceholder == true`, el body se reemplaza por el
+///     placeholder con el mensaje específico de
+///     `spec.hiddenPlaceholderMessage` o, si es `null`, un fallback
+///     genérico.
 DashboardWidgetSpec _stubSpec({
   Widget Function(BuildContext, WidgetDescriptor)? configEditor,
+  String label = 'Stub',
+  String Function(BuildContext)? hiddenPlaceholderMessage,
 }) {
   return DashboardWidgetSpec(
     type: WidgetType.quickUse,
-    displayName: (_) => 'Stub',
+    displayName: (_) => label,
     icon: Icons.widgets_outlined,
     defaultSize: WidgetSize.fullWidth,
     allowedSizes: const <WidgetSize>{WidgetSize.fullWidth},
     builder: (_, _, {required editing}) => const SizedBox.shrink(),
     configEditor: configEditor,
+    hiddenPlaceholderMessage: hiddenPlaceholderMessage,
   );
 }
 
 void main() {
-  testWidgets('EditableWidgetFrame renders the X (delete) button',
-      (tester) async {
+  testWidgets('EditableWidgetFrame X (delete) button is tappable and fires '
+      'onDelete', (tester) async {
     var deleteCalled = false;
     final descriptor = WidgetDescriptor(
       instanceId: 'abc',
@@ -48,18 +53,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          // Add top padding so the negative-positioned X button has room to
-          // be hit-tested above the frame.
-          body: Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: SizedBox(
-              width: 400,
-              child: EditableWidgetFrame(
-                descriptor: descriptor,
-                spec: _stubSpec(),
-                onDelete: () => deleteCalled = true,
-                child: const SizedBox(height: 50, key: Key('child-content')),
-              ),
+          body: SizedBox(
+            width: 400,
+            child: EditableWidgetFrame(
+              descriptor: descriptor,
+              spec: _stubSpec(),
+              onDelete: () => deleteCalled = true,
+              child: const SizedBox(height: 50, key: Key('child-content')),
             ),
           ),
         ),
@@ -69,25 +69,17 @@ void main() {
     expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     expect(find.byIcon(Icons.tune_rounded), findsNothing);
 
-    // Tap by tooltip — the InkWell wrapping the X button is reachable via
-    // its parent Tooltip which has zero offset.
-    // The X button uses `Positioned(top: -22)` so it lives outside the
-    // Stack's bounding box. We invoke its onTap callback directly through
-    // the widget tree to verify the wiring without fighting Flutter's
-    // hit-test rules. Tap-through-offset is verified manually (see Phase 3
-    // task 3.11 manual checklist).
-    final closeButton = tester.widget<InkWell>(
-      find.descendant(
-        of: find.byTooltip('Quitar'),
-        matching: find.byType(InkWell),
-      ),
-    );
-    closeButton.onTap?.call();
+    // Bug 1 — Wave 5: el X vivía en `Positioned(top: -22)`, fuera del
+    // bounding-box del Stack, y nunca recibía hit-test. Ahora vive dentro
+    // del frame; un tap real (no invocando `onTap` manualmente) tiene que
+    // disparar el callback.
+    await tester.tap(find.byTooltip('Quitar'));
+    await tester.pumpAndSettle();
     expect(deleteCalled, isTrue);
   });
 
   testWidgets('shows the ⚙ button when spec has configEditor and '
-      'onConfigure is provided', (tester) async {
+      'onConfigure is provided, and ⚙ tap fires onConfigure', (tester) async {
     var configureCalled = false;
     final descriptor = WidgetDescriptor(
       instanceId: 'abc',
@@ -97,19 +89,16 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: SizedBox(
-              width: 400,
-              child: EditableWidgetFrame(
-                descriptor: descriptor,
-                spec: _stubSpec(
-                  configEditor: (_, _) => const SizedBox.shrink(),
-                ),
-                onDelete: () {},
-                onConfigure: () => configureCalled = true,
-                child: const SizedBox(height: 50),
+          body: SizedBox(
+            width: 400,
+            child: EditableWidgetFrame(
+              descriptor: descriptor,
+              spec: _stubSpec(
+                configEditor: (_, _) => const SizedBox.shrink(),
               ),
+              onDelete: () {},
+              onConfigure: () => configureCalled = true,
+              child: const SizedBox(height: 50),
             ),
           ),
         ),
@@ -119,13 +108,8 @@ void main() {
     expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
     expect(find.byIcon(Icons.close_rounded), findsOneWidget);
 
-    final configButton = tester.widget<InkWell>(
-      find.descendant(
-        of: find.byTooltip('Configurar'),
-        matching: find.byType(InkWell),
-      ),
-    );
-    configButton.onTap?.call();
+    await tester.tap(find.byTooltip('Configurar'));
+    await tester.pumpAndSettle();
     expect(configureCalled, isTrue);
   });
 
@@ -189,15 +173,123 @@ void main() {
       ),
     );
 
-    // Tap on the inner child. Because the frame wraps it in
-    // IgnorePointer(ignoring: true), the gesture must NOT reach the inner
-    // GestureDetector.
+    // Tap on the inner child. Como el frame lo envuelve en
+    // `IgnorePointer(ignoring: true)`, el gesto NO debe llegar al
+    // GestureDetector interno.
     await tester.tap(
       find.byKey(const Key('inner-tappable')),
       warnIfMissed: false,
     );
     await tester.pumpAndSettle();
-    expect(childTapCount, 0,
-        reason: 'IgnorePointer must swallow taps on the wrapped child');
+    expect(
+      childTapCount,
+      0,
+      reason: 'IgnorePointer must swallow taps on the wrapped child',
+    );
+  });
+
+  testWidgets('renders the displayName header always', (tester) async {
+    final descriptor = WidgetDescriptor(
+      instanceId: 'abc',
+      type: WidgetType.quickUse,
+      size: WidgetSize.fullWidth,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 400,
+            child: EditableWidgetFrame(
+              descriptor: descriptor,
+              spec: _stubSpec(label: 'Mi widget'),
+              onDelete: () {},
+              child: const SizedBox(height: 50),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Mi widget'), findsOneWidget);
+  });
+
+  testWidgets('renders empty placeholder with spec-provided message and '
+      'keeps header clean (no "(oculto)" suffix) when showEmptyPlaceholder '
+      'is true', (tester) async {
+    final descriptor = WidgetDescriptor(
+      instanceId: 'abc',
+      type: WidgetType.quickUse,
+      size: WidgetSize.fullWidth,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 400,
+            child: EditableWidgetFrame(
+              descriptor: descriptor,
+              spec: _stubSpec(
+                label: 'Pendientes',
+                hiddenPlaceholderMessage: (_) =>
+                    'Aparecerá cuando tengas movimientos por revisar',
+              ),
+              onDelete: () {},
+              showEmptyPlaceholder: true,
+              child: const SizedBox(
+                key: Key('real-body'),
+                height: 200,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Header: nombre limpio, sin sufijo "(oculto)".
+    expect(find.text('Pendientes'), findsOneWidget);
+    expect(find.text('Pendientes (oculto)'), findsNothing);
+    // Body: mensaje específico del spec + ícono de "oculto".
+    expect(
+      find.text('Aparecerá cuando tengas movimientos por revisar'),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
+    // El copy genérico viejo no debe aparecer ya en ningún lado.
+    expect(find.text('Sin contenido por ahora'), findsNothing);
+    // Real child no debe aparecer cuando showEmptyPlaceholder está activo.
+    expect(find.byKey(const Key('real-body')), findsNothing);
+  });
+
+  testWidgets('falls back to a generic message when the spec does NOT '
+      'provide hiddenPlaceholderMessage', (tester) async {
+    final descriptor = WidgetDescriptor(
+      instanceId: 'abc',
+      type: WidgetType.quickUse,
+      size: WidgetSize.fullWidth,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 400,
+            child: EditableWidgetFrame(
+              descriptor: descriptor,
+              // Sin hiddenPlaceholderMessage → debe usar el fallback.
+              spec: _stubSpec(label: 'Genérico'),
+              onDelete: () {},
+              showEmptyPlaceholder: true,
+              child: const SizedBox(height: 50),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Genérico'), findsOneWidget);
+    expect(
+      find.text('Este widget aparecerá cuando tenga datos'),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
   });
 }

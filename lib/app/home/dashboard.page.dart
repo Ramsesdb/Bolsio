@@ -866,17 +866,24 @@ class _DashboardEditBody extends StatelessWidget {
             itemBuilder: (context, index) {
               final descriptor = descriptors[index];
               final spec = registry.get(descriptor.type)!;
-              final built = spec.builder(
-                context,
-                descriptor,
-                editing: true,
-              );
+              // Si el widget tiene `shouldRender == false` ahora mismo, en
+              // edit mode mostramos el frame con un placeholder en lugar
+              // del builder real — el spec se reserva el derecho de
+              // devolver `SizedBox.shrink()` cuando no tiene datos, pero
+              // en edit mode el usuario necesita ver el slot para poder
+              // quitarlo.
+              final shouldRenderBody =
+                  spec.shouldRender?.call(descriptor) ?? true;
+              final built = shouldRenderBody
+                  ? spec.builder(context, descriptor, editing: true)
+                  : const SizedBox.shrink();
               return ReorderableDelayedDragStartListener(
                 key: ValueKey<String>('edit-${descriptor.instanceId}'),
                 index: index,
                 child: EditableWidgetFrame(
                   descriptor: descriptor,
                   spec: spec,
+                  showEmptyPlaceholder: !shouldRenderBody,
                   onDelete: () => onDelete(descriptor),
                   onConfigure: spec.configEditor != null
                       ? () => onConfigure(descriptor)

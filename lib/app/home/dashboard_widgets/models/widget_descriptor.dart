@@ -64,7 +64,11 @@ enum QuickActionId {
   goToBudgets,
   goToReports,
   openTransactions,
-  openExchangeRates;
+  openExchangeRates,
+  // NEW (calculadora-fx Tanda 1, task 1.4): SIEMPRE al final del enum.
+  // El `name` se persiste en el layout JSON del dashboard, así que cualquier
+  // reordenamiento rompería los chips guardados de los usuarios existentes.
+  goToCalculator;
 
   /// Best-effort decoder. Returns `null` when [raw] is `null` or unknown.
   static QuickActionId? tryParse(String? raw) {

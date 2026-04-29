@@ -130,6 +130,20 @@ void registerPendingImportsAlertWidget() {
       allowedSizes: const <WidgetSize>{WidgetSize.fullWidth},
       defaultConfig: const <String, dynamic>{},
       recommendedFor: const <String>{},
+      // Auto-hide en modo view cuando no hay pendientes. El renderer del
+      // dashboard salta el slot completo (sin tarjeta vacía) si este
+      // predicado devuelve `false`. En edit mode el predicado se ignora
+      // y el frame se muestra con un placeholder específico — para que
+      // el usuario pueda quitar el widget sin tener que esperar a que
+      // aparezcan pendientes.
+      shouldRender: (_) =>
+          PendingImportService.instance.currentPendingCount > 0,
+      // Copy específico del placeholder en edit mode. Hardcoded en
+      // español por consistencia con el resto del cuerpo del widget
+      // (líneas 79/89), que también vive sin slang. Si en el futuro se
+      // i18n-iza el body, mover esto al mismo bundle.
+      hiddenPlaceholderMessage: (_) =>
+          'Aparecerá cuando tengas movimientos por revisar',
       builder: (context, descriptor, {required editing}) {
         return KeyedSubtree(
           key: ValueKey('${descriptor.type.name}-${descriptor.instanceId}'),

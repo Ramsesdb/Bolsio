@@ -11,7 +11,11 @@ import 'package:wallex/app/home/dashboard_widgets/registry.dart';
 ///
 /// Pumps [DashboardLayoutBody] (extracted from `dashboard.page.dart` so the
 /// test does NOT pull the heavy DB-bound dependencies of the real page).
-DashboardWidgetSpec _stubSpec(WidgetType type, String label) {
+DashboardWidgetSpec _stubSpec(
+  WidgetType type,
+  String label, {
+  bool Function(WidgetDescriptor)? shouldRender,
+}) {
   return DashboardWidgetSpec(
     type: type,
     displayName: (_) => label,
@@ -31,6 +35,7 @@ DashboardWidgetSpec _stubSpec(WidgetType type, String label) {
         child: Text('$label::${descriptor.instanceId}'),
       );
     },
+    shouldRender: shouldRender,
   );
 }
 
@@ -159,6 +164,81 @@ void main() {
     expect(
       find.byWidgetPredicate((w) => w is DashboardLayoutSlot),
       findsNothing,
+    );
+  });
+
+  testWidgets(
+      'descriptors with shouldRender == false are skipped in view mode',
+      (tester) async {
+    final registry = DashboardWidgetRegistry.instance;
+    // QU se muestra siempre (sin predicado), TBS está oculto por
+    // `shouldRender: false`.
+    registry.register(_stubSpec(WidgetType.quickUse, 'QU'));
+    registry.register(
+      _stubSpec(
+        WidgetType.totalBalanceSummary,
+        'TBS',
+        shouldRender: (_) => false,
+      ),
+    );
+
+    final layout = DashboardLayout(
+      schemaVersion: DashboardLayout.currentSchemaVersion,
+      widgets: <WidgetDescriptor>[
+        WidgetDescriptor(
+          instanceId: 'visible',
+          type: WidgetType.quickUse,
+          size: WidgetSize.fullWidth,
+        ),
+        WidgetDescriptor(
+          instanceId: 'hidden',
+          type: WidgetType.totalBalanceSummary,
+          size: WidgetSize.fullWidth,
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(_harness(DashboardLayoutBody(layout: layout)));
+
+    expect(
+      find.byKey(const ValueKey<String>('layout-slot-visible')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('layout-slot-hidden')),
+      findsNothing,
+      reason: 'view mode debe saltarse los slots cuyo shouldRender es false',
+    );
+  });
+
+  testWidgets(
+      'descriptors with shouldRender == true are rendered like normal',
+      (tester) async {
+    final registry = DashboardWidgetRegistry.instance;
+    registry.register(
+      _stubSpec(
+        WidgetType.quickUse,
+        'QU',
+        shouldRender: (_) => true,
+      ),
+    );
+
+    final layout = DashboardLayout(
+      schemaVersion: DashboardLayout.currentSchemaVersion,
+      widgets: <WidgetDescriptor>[
+        WidgetDescriptor(
+          instanceId: 'visible',
+          type: WidgetType.quickUse,
+          size: WidgetSize.fullWidth,
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(_harness(DashboardLayoutBody(layout: layout)));
+
+    expect(
+      find.byKey(const ValueKey<String>('layout-slot-visible')),
+      findsOneWidget,
     );
   });
 }

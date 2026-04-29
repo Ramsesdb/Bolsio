@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:wallex/app/calculator/calculator.page.dart';
 import 'package:wallex/app/layout/page_framework.dart';
 import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
 import 'package:wallex/app/settings/pages/ai/ai_settings.page.dart';
@@ -132,6 +133,16 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.visibility_off_outlined,
               onTap: () =>
                   RouteUtils.pushRoute(const HiddenModeSettingsPage()),
+            ),
+            const Divider(),
+
+            // ── Utilidades ────────────────────────────────────
+            // Entry point Calculadora FX (calculadora-fx Tanda 1, task 1.7).
+            _SettingRouteTile(
+              title: t.calculator.title,
+              subtitle: t.calculator.settings_subtitle,
+              icon: Icons.calculate_outlined,
+              onTap: () => RouteUtils.pushRoute(const CalculatorPage()),
             ),
             const Divider(),
 
