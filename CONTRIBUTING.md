@@ -6,7 +6,7 @@ Before you continue reading, we recommend you review our [Code of Conduct](https
 
 - [Report Issues and Request Features](#report-issues-and-request-features)
 - [Use the Forum](#use-the-forum)
-- [Be the Change: Build, Fix, or Design for Monekin](#be-the-change-build-fix-or-design-for-monekin)
+- [Be the Change: Build, Fix, or Design for Wallex](#be-the-change-build-fix-or-design-for-wallex)
 - [Support the Project 💖](#support-the-project-)
 
 ## Report issues and request features
@@ -51,7 +51,7 @@ The [Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions) is wh
 
 Your participation in the forum inspires the team and the community. Whether it’s sharing feedback, showcasing your work, or brainstorming ideas, your voice matters!
 
-## Be the Change: Build, Fix, or Design for Monekin
+## Be the Change: Build, Fix, or Design for Wallex
 
 Ready to take an active role in improving Monekin? Whether you’re a developer, designer, translator, or just someone with a creative eye, there are plenty of ways to leave your mark. Here’s how you can get started:
 

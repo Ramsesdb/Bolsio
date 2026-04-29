@@ -9,7 +9,6 @@ import 'package:wallex/app/onboarding/widgets/v3_secondary_button.dart';
 import 'package:wallex/core/database/app_db.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
 import 'package:wallex/core/services/firebase_sync_service.dart';
 import 'package:wallex/core/utils/logger.dart';
 
@@ -158,33 +157,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           '— routing to ReturningUserFlow',
         );
       } else {
-        // Firebase was empty. The seeder must NOT run here for ordinary new
-        // users: slide 9 of the v3 onboarding owns seeding and depends on the
-        // user's slide-4 bank picks. Pre-seeding now would create the
-        // always-on cash accounts and trip the seeder's idempotency guard,
-        // silently dropping every BankOption the user toggles.
+        // Firebase was empty. The seeder must NOT run here: slide 9 of the v3
+        // onboarding owns seeding and depends on the user's slide-4 bank
+        // picks. Pre-seeding now would create the always-on cash accounts
+        // and trip the seeder's idempotency guard, silently dropping every
+        // BankOption the user toggles.
         //
-        // The only exception is the dev/owner email, which uses
-        // `seedAllWithBalances` to restore real balances under a known set of
-        // accounts. That flow is intentional and bypasses slide 4.
-        final email = user?.email ?? '';
+        // Defer seeding to slide 9. Push will run on the next sync trigger
+        // once the user reaches the home screen.
         Logger.printDebug(
-          'WelcomeScreen: Firebase empty (email=$email)',
+          'WelcomeScreen: Firebase empty — deferring seed to onboarding slide 9',
         );
-
-        if (email == 'ramsesdavidba@gmail.com') {
-          await PersonalVESeeder.seedAllWithBalances();
-          Logger.printDebug(
-            'WelcomeScreen: pushing seeded data to Firebase...',
-          );
-          await FirebaseSyncService.instance.pushAllData();
-        } else {
-          // Defer seeding to slide 9. Push will run on the next sync trigger
-          // once the user reaches the home screen.
-          Logger.printDebug(
-            'WelcomeScreen: deferring seed to onboarding slide 9',
-          );
-        }
       }
 
       if (mounted) {

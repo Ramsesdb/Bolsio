@@ -1148,7 +1148,7 @@
         "section": "Idioma y textos",
         "title": "Idioma de la aplicación",
         "descr": "Idioma en el que se mostrarán los textos en la aplicación",
-        "help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>nuestra guía</a> "
+        "help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>nuestra guía</a> "
       },
       "LOCALE": {
         "title": "Región",
@@ -1374,6 +1374,22 @@
       "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
       "report": "Reporta errores, deja sugerencias...",
       "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
+    }
+  },
+  "onboarding": {
+    "restricted_settings": {
+      "title": "Permite la configuración restringida",
+      "subtitle": "Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.",
+      "step1": "Toca el menú ⋮ arriba a la derecha.",
+      "step2": "Selecciona \"Permitir configuración restringida\".",
+      "step3": "Activa el toggle y vuelve a Wallex.",
+      "step1_xiaomi": "Desliza hasta el final de la pantalla.",
+      "step2_xiaomi": "Activa el toggle \"Permitir ajustes restringidos\".",
+      "cta_primary": "Abrir información de la app",
+      "cta_skip": "Hacer esto más tarde",
+      "cta_done": "Listo, continuar",
+      "still_blocked_hint": "Si ya lo activaste, vuelve a abrir la información de la app.",
+      "success_toast": "Listo, configuración desbloqueada"
     }
   }
 }

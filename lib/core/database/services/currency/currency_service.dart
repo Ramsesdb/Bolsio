@@ -58,14 +58,29 @@ class CurrencyService {
         .watch();
   }
 
-  /// Get the preferred currency of the user. If not set, get the device default currency
+  /// Get the preferred currency of the user. If not set, get the device
+  /// default currency.
   ///
   /// If you want to just get the code of the preferred currency, use
   /// `appStateSettings[SettingKey.preferredCurrency]` instead.
+  ///
+  /// **Auto-heal**: if the stored value is `'DUAL'` (a UI-only label
+  /// accidentally persisted by a previous onboarding bug), it is silently
+  /// corrected to `'USD'` so the currency manager works again.
   Stream<Currency> ensureAndGetPreferredCurrency({
     bool listenToChanges = true,
   }) {
-    final currencyCode = appStateSettings[SettingKey.preferredCurrency];
+    var currencyCode = appStateSettings[SettingKey.preferredCurrency];
+
+    // ── Auto-heal legacy 'DUAL' value ──────────────────────────────
+    if (currencyCode == 'DUAL') {
+      currencyCode = 'USD';
+      // Fire-and-forget: fix the persisted value so this only runs once.
+      UserSettingService.instance.setItem(
+        SettingKey.preferredCurrency,
+        currencyCode,
+      );
+    }
 
     if (!listenToChanges && currencyCode != null) {
       return getCurrencyByCode(currencyCode).map((currency) => currency!);
@@ -76,8 +91,11 @@ class CurrencyService {
     return settingService
         .getSettingFromDB(SettingKey.preferredCurrency)
         .asyncMap((currencyCode) async {
-          if (currencyCode == null) {
-            currencyCode = await getDeviceDefaultCurrencyCode();
+          // Also heal inside the stream path (first emission).
+          if (currencyCode == null || currencyCode == 'DUAL') {
+            currencyCode = currencyCode == 'DUAL'
+                ? 'USD'
+                : await getDeviceDefaultCurrencyCode();
 
             await settingService.setItem(
               SettingKey.preferredCurrency,

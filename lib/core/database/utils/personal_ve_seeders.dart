@@ -26,11 +26,18 @@ class PersonalVESeeder {
   /// true`. Ignored for non-VES banks and for keys not in
   /// [selectedBankIds].
   ///
+  /// [currencyMode] is the raw s02 selection (`'USD'`, `'VES'` or
+  /// `'DUAL'`). When the user picked `'USD'` and the bank has
+  /// `supportsBoth = true`, both VES and USD accounts are created
+  /// automatically (in Venezuela a USD account requires the underlying
+  /// VES account).
+  ///
   /// Safe to call multiple times — if accounts already exist the method
   /// returns immediately without inserting anything.
   static Future<void> seedAll({
     List<String> selectedBankIds = const [],
     Map<String, bool> alsoUsdForBank = const <String, bool>{},
+    String currencyMode = 'USD',
   }) async {
     final db = AppDB.instance;
 
@@ -49,6 +56,7 @@ class PersonalVESeeder {
     await _seedAccounts(
       selectedBankIds: selectedBankIds,
       alsoUsdForBank: alsoUsdForBank,
+      currencyMode: currencyMode,
     );
     await _seedCategories();
     await _seedTags();
@@ -56,53 +64,11 @@ class PersonalVESeeder {
     Logger.printDebug('[PersonalVESeeder] Seed completed successfully.');
   }
 
-  /// Balances for ramsesdavidba@gmail.com — applied only for this account.
-  static const _ramseBalances = <String, double>{
-    'Banco de Venezuela': 359484.35,
-    'Banco de Venezuela USD': 46.21,
-    'Binance': 571.29,
-    'Banco Nacional de Credito #1': 0.61,
-    'Banco Nacional de Credito #2': 17600.71,
-    'Banplus': 3668.73,
-    'Zinli': 0.04,
-    'Efectivo USD': 55.0,
-    'Ahorro Efectivo USD': 5915.0,
-  };
-
-  /// Seed accounts + categories + tags, then apply Ramses's real balances.
-  /// Used after Google sign-in when email matches.
-  static Future<void> seedAllWithBalances() async {
-    // Seed all known accounts for the balance-restoration path.
-    await seedAll(
-      selectedBankIds: const [
-        'bdv',
-        'binance',
-        'bnc',
-        'banplus',
-        'provincial',
-        'zinli',
-      ],
-    );
-
-    final db = AppDB.instance;
-    for (final entry in _ramseBalances.entries) {
-      await db.customStatement(
-        'UPDATE accounts SET iniValue = ${entry.value} '
-        "WHERE name = '${entry.key}'",
-      );
-    }
-
-    Logger.printDebug(
-      '[PersonalVESeeder] Applied Ramses balances to ${_ramseBalances.length} accounts.',
-    );
-  }
-
   // ====================================================================
   // Accounts
   // ====================================================================
 
-  /// Legacy account names kept for the `seedAllWithBalances` path so that
-  /// `_ramseBalances` keeps matching by name. These bank IDs override the
+  /// Legacy account names preserved so that historical bank IDs override the
   /// generic naming convention and emit fixed names.
   static const Map<String, List<_LegacyAccountSpec>> _legacyAccountSpecs = {
     'bdv': [
@@ -235,9 +201,14 @@ class PersonalVESeeder {
   /// second USD account named "${bank.name} USD" is created. When that
   /// happens, the primary VES account is renamed to "${bank.name} Bs" to
   /// avoid ambiguity. Bank icons are kept lowercase Material names.
+  ///
+  /// When [currencyMode] is `'USD'` and the bank has `supportsBoth = true`,
+  /// both VES and USD accounts are created automatically — in Venezuelan
+  /// banking a USD account requires the underlying VES account.
   static Future<void> _seedAccounts({
     required List<String> selectedBankIds,
     required Map<String, bool> alsoUsdForBank,
+    required String currencyMode,
   }) async {
     final now = DateTime.now();
     final selected = selectedBankIds.toSet();
@@ -248,16 +219,21 @@ class PersonalVESeeder {
     for (final bank in kBanks) {
       if (!selected.contains(bank.id)) continue;
 
+      // Create both VES+USD when:
+      //  1. DUAL mode and user explicitly toggled "also USD", OR
+      //  2. USD mode and the bank supports both currencies (VE banks
+      //     require the VES account to hold a USD sub-account).
       final wantsAlsoUsd = bank.supportsBoth &&
-          (alsoUsdForBank[bank.id] ?? false) &&
-          bank.defaultCurrency == 'VES';
+          bank.defaultCurrency == 'VES' &&
+          ((alsoUsdForBank[bank.id] ?? false) ||
+              currencyMode == 'USD');
 
       final legacySpecs = _legacyAccountSpecs[bank.id];
       if (legacySpecs != null) {
         // Legacy path: emit each pre-defined spec verbatim, keeping the
-        // historical names and orders so `_ramseBalances` keeps matching.
-        // BDV historically also emitted a "Banco de Venezuela USD" tile;
-        // we now drive that off `wantsAlsoUsd`.
+        // historical names and orders. BDV historically also emitted a
+        // "Banco de Venezuela USD" tile; we now drive that off
+        // `wantsAlsoUsd`.
         for (final spec in legacySpecs) {
           optionalAccounts.add(
             AccountInDB(
@@ -843,9 +819,8 @@ class _SeedCategory {
 }
 
 /// Snapshot of the historical hardcoded account definitions for banks whose
-/// names must be preserved verbatim (so [PersonalVESeeder.seedAllWithBalances]
-/// can continue to match by name in `_ramseBalances`). New banks added to
-/// [kBanks] without a legacy spec fall back to the generic naming scheme.
+/// names must be preserved verbatim. New banks added to [kBanks] without a
+/// legacy spec fall back to the generic naming scheme.
 class _LegacyAccountSpec {
   final String name;
   final String currencyId;

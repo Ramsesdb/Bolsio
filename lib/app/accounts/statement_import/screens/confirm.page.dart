@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
 import 'package:wallex/app/accounts/statement_import/widgets/si_header.dart';
 import 'package:wallex/core/database/app_db.dart';
+import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:wallex/core/models/category/category.dart';
 import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
 import 'package:wallex/core/presentation/helpers/snackbar.dart';
@@ -21,6 +23,22 @@ class ConfirmPage extends StatefulWidget {
 class _ConfirmPageState extends State<ConfirmPage> {
   bool _committing = false;
 
+  /// Resolve a fallback category for the given transaction type.
+  /// The DB CHECK constraint requires exactly one of
+  /// `categoryID` / `receivingAccountID` to be non-null.
+  Future<Category?> _resolveCategoryForKind(String kind) async {
+    final isIncome = kind == 'income';
+    final types = isIncome
+        ? [CategoryType.I, CategoryType.B]
+        : [CategoryType.E, CategoryType.B];
+
+    final categories =
+        await CategoryService.instance.getCategories().first;
+    return categories
+        .where((c) => types.contains(c.type))
+        .firstOrNull;
+  }
+
   Future<void> _commit() async {
     if (_committing) return;
     final flow = StatementImportFlow.of(context);
@@ -30,6 +48,30 @@ class _ConfirmPageState extends State<ConfirmPage> {
 
     setState(() => _committing = true);
 
+    // Pre-resolve fallback categories so every transaction satisfies
+    // the XOR constraint (categoryID vs receivingAccountID).
+    final incomeCat = await _resolveCategoryForKind('income');
+    final expenseCat = await _resolveCategoryForKind('expense');
+
+    if (incomeCat == null || expenseCat == null) {
+      if (mounted) {
+        setState(() => _committing = false);
+        WallexSnackbar.error(
+          SnackbarParams(
+            Translations.of(context)
+                .statement_import
+                .confirm
+                .error,
+            message:
+                'No se encontró una categoría por defecto. '
+                'Crea al menos una categoría de ingreso y '
+                'una de gasto antes de importar.',
+          ),
+        );
+      }
+      return;
+    }
+
     final now = DateTime.now();
     final txs = <TransactionInDB>[];
 
@@ -37,6 +79,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
       final row = r.row;
       final isIncome = row.kind == 'income';
       final value = isIncome ? row.amount.abs() : -row.amount.abs();
+      final fallbackCategory = isIncome ? incomeCat : expenseCat;
       txs.add(
         TransactionInDB(
           id: generateUUID(),
@@ -44,9 +87,12 @@ class _ConfirmPageState extends State<ConfirmPage> {
           value: value,
           isHidden: false,
           accountID: account.id,
-          type: isIncome ? TransactionType.income : TransactionType.expense,
+          type: isIncome
+              ? TransactionType.income
+              : TransactionType.expense,
           status: TransactionStatus.reconciled,
           notes: row.description.isEmpty ? null : row.description,
+          categoryID: fallbackCategory.id,
           createdAt: now,
         ),
       );

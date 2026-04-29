@@ -1846,7 +1846,7 @@ class _TranslationsSettingsGeneralLanguageZhCn extends TranslationsSettingsGener
 	@override String get section => '语言和文字';
 	@override String get title => '语言/Language';
 	@override String get descr => '应用中显示文字的语言';
-	@override String get help => '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>';
+	@override String get help => '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>我们的指南</a>';
 }
 
 // Path: settings.general.locale
@@ -2619,7 +2619,7 @@ extension on TranslationsZhCn {
 			'settings.general.language.section' => '语言和文字',
 			'settings.general.language.title' => '语言/Language',
 			'settings.general.language.descr' => '应用中显示文字的语言',
-			'settings.general.language.help' => '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>',
+			'settings.general.language.help' => '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>我们的指南</a>',
 			'settings.general.locale.title' => '地区',
 			'settings.general.locale.auto' => '系统',
 			'settings.general.locale.descr' => '设置用于日期、数字的格式……',

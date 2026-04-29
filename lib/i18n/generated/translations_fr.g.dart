@@ -1844,7 +1844,7 @@ class _TranslationsSettingsGeneralLanguageFr extends TranslationsSettingsGeneral
 	@override String get section => 'Langue et textes';
 	@override String get title => 'Langue de l\'application';
 	@override String get descr => 'Langue dans laquelle les textes seront affichés dans l\'application';
-	@override String get help => 'Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>notre guide</a>';
+	@override String get help => 'Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>notre guide</a>';
 }
 
 // Path: settings.general.locale
@@ -2615,7 +2615,7 @@ extension on TranslationsFr {
 			'settings.general.language.section' => 'Langue et textes',
 			'settings.general.language.title' => 'Langue de l\'application',
 			'settings.general.language.descr' => 'Langue dans laquelle les textes seront affichés dans l\'application',
-			'settings.general.language.help' => 'Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>notre guide</a>',
+			'settings.general.language.help' => 'Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>notre guide</a>',
 			'settings.general.locale.title' => 'Région',
 			'settings.general.locale.auto' => 'Système',
 			'settings.general.locale.descr' => 'Définissez le format à utiliser pour les dates, les nombres...',

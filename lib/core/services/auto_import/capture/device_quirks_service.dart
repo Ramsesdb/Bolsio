@@ -176,6 +176,59 @@ class DeviceQuirksService {
     await _channel.invokeMethod<void>('openNotificationListenerSettings');
   }
 
+  /// Best-effort: is the OS willing to let us toggle the notification listener
+  /// for this app? Implemented natively as an **installer-source heuristic**
+  /// (not an AppOps query — see [DeviceQuirksChannel] kdoc and
+  /// `openspec/changes/restricted-settings-onboarding/design.md` for the
+  /// post-mortem on why AppOps is unviable for non-system apps).
+  ///
+  /// Returns `true` when:
+  /// - the platform is iOS (gate doesn't apply), or
+  /// - the device is pre-Android 13 (gate doesn't exist), or
+  /// - the app was installed by a trusted source (Play Store, vendor app
+  ///   stores) and therefore Android does NOT apply the restricted-settings
+  ///   gate.
+  ///
+  /// Returns `false` when the installer is null, unknown, or a sideload-style
+  /// source (`com.google.android.packageinstaller`, ADB, etc.). On platform
+  /// errors we keep the previous fail-open contract (`true`) at the Dart
+  /// boundary so the onboarding slide is never wedged by an unexpected
+  /// channel exception — the Kotlin side already returns the heuristic
+  /// answer in its own try/catch, so reaching here means the channel itself
+  /// blew up (extremely rare).
+  Future<bool> isRestrictedSettingsAllowed() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      final res =
+          await _channel.invokeMethod<bool>('isRestrictedSettingsAllowed');
+      final result = res ?? true;
+      // ignore: avoid_print
+      print('[DeviceQuirks] isRestrictedSettingsAllowed → $result');
+      return result;
+    } catch (e) {
+      debugPrint(
+        'DeviceQuirksService: isRestrictedSettingsAllowed error: $e',
+      );
+      return true;
+    }
+  }
+
+  /// Coarse OEM family bucket used to vary onboarding copy where the system
+  /// UI diverges meaningfully from stock Android. Returns `'xiaomi'` for
+  /// Xiaomi/Redmi/POCO devices (MIUI/HyperOS), `'stock'` otherwise. On iOS or
+  /// any platform/channel error this defaults to `'stock'` so the UI falls
+  /// back to the generic instructions.
+  Future<String> getDeviceVendor() async {
+    if (!Platform.isAndroid) return 'stock';
+    try {
+      final res = await _channel.invokeMethod<String>('getDeviceVendor');
+      return res ?? 'stock';
+    } catch (e) {
+      debugPrint('DeviceQuirksService: getDeviceVendor error: $e');
+      return 'stock';
+    }
+  }
+
   /// Extra manual steps for the detected OEM. Returns an empty list for
   /// [OemQuirk.none] so callers can short-circuit.
   List<QuirkInstruction> instructionsFor(OemQuirk quirk) {

@@ -1914,7 +1914,7 @@ class _TranslationsSettingsGeneralLanguageDe extends TranslationsSettingsGeneral
 	@override String get section => 'Sprache und Texte';
 	@override String get title => 'App-Sprache';
 	@override String get descr => 'Sprache, in der die Texte in der App angezeigt werden';
-	@override String get help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
+	@override String get help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
 }
 
 // Path: settings.general.locale
@@ -2715,7 +2715,7 @@ extension on TranslationsDe {
 			'settings.general.language.section' => 'Sprache und Texte',
 			'settings.general.language.title' => 'App-Sprache',
 			'settings.general.language.descr' => 'Sprache, in der die Texte in der App angezeigt werden',
-			'settings.general.language.help' => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden',
+			'settings.general.language.help' => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>unser Beschreibung</a> wenden',
 			'settings.general.locale.title' => 'Region',
 			'settings.general.locale.auto' => 'System',
 			'settings.general.locale.descr' => 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.',

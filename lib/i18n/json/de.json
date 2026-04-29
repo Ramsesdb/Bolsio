@@ -888,7 +888,7 @@
         "section": "Sprache und Texte",
         "title": "App-Sprache",
         "descr": "Sprache, in der die Texte in der App angezeigt werden",
-        "help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>unser Beschreibung</a> wenden"
+        "help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>unser Beschreibung</a> wenden"
       },
       "LOCALE": {
         "title": "Region",

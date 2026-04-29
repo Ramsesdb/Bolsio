@@ -852,7 +852,7 @@
         "section": "語言和文本",
         "title": "應用程式語言",
         "descr": "應用程式中顯示文字的語言",
-        "help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我們的指南</a>"
+        "help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>我們的指南</a>"
       },
       "LOCALE": {
         "title": "地區",

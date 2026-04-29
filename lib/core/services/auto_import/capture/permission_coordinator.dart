@@ -31,6 +31,13 @@ class CapturePermissionsState {
   /// Detected OEM — dictates which extra steps are shown to the user.
   final OemQuirk quirk;
 
+  /// Whether the OS-level "Allow restricted settings" AppOps gate is open.
+  /// On API 31+ sideloaded installs, Android grays out the notification
+  /// listener toggle until the user explicitly allows restricted settings
+  /// from the App Info kebab menu. `true` means the gate is open (or N/A:
+  /// non-Android, pre-API-31, or detection failed — fail-open).
+  final bool restrictedSettingsAllowed;
+
   const CapturePermissionsState({
     required this.notificationListener,
     required this.postNotifications,
@@ -38,6 +45,7 @@ class CapturePermissionsState {
     required this.autostartUserConfirmed,
     required this.oemBatteryUserConfirmed,
     required this.quirk,
+    this.restrictedSettingsAllowed = true,
   });
 
   factory CapturePermissionsState.initial() => const CapturePermissionsState(
@@ -47,6 +55,7 @@ class CapturePermissionsState {
         autostartUserConfirmed: null,
         oemBatteryUserConfirmed: null,
         quirk: OemQuirk.none,
+        restrictedSettingsAllowed: true,
       );
 
   /// The three permissions that must be granted for the capture pipeline to
@@ -70,6 +79,7 @@ class CapturePermissionsState {
     bool? autostartUserConfirmed,
     bool? oemBatteryUserConfirmed,
     OemQuirk? quirk,
+    bool? restrictedSettingsAllowed,
   }) {
     return CapturePermissionsState(
       notificationListener: notificationListener ?? this.notificationListener,
@@ -81,6 +91,8 @@ class CapturePermissionsState {
       oemBatteryUserConfirmed:
           oemBatteryUserConfirmed ?? this.oemBatteryUserConfirmed,
       quirk: quirk ?? this.quirk,
+      restrictedSettingsAllowed:
+          restrictedSettingsAllowed ?? this.restrictedSettingsAllowed,
     );
   }
 
@@ -93,7 +105,8 @@ class CapturePermissionsState {
         other.batteryOptimizationsIgnored == batteryOptimizationsIgnored &&
         other.autostartUserConfirmed == autostartUserConfirmed &&
         other.oemBatteryUserConfirmed == oemBatteryUserConfirmed &&
-        other.quirk == quirk;
+        other.quirk == quirk &&
+        other.restrictedSettingsAllowed == restrictedSettingsAllowed;
   }
 
   @override
@@ -104,6 +117,7 @@ class CapturePermissionsState {
         autostartUserConfirmed,
         oemBatteryUserConfirmed,
         quirk,
+        restrictedSettingsAllowed,
       );
 }
 
