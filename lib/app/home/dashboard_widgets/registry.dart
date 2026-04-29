@@ -72,6 +72,29 @@ class DashboardWidgetSpec {
   /// `null` for widgets without user-configurable settings.
   final DashboardWidgetConfigEditorBuilder? configEditor;
 
+  /// Predicado opcional que indica si el widget DEBE renderizarse en modo
+  /// view. `null` (default) significa "siempre se muestra".
+  ///
+  /// Casos de uso: widgets con auto-hide (p. ej. `pendingImportsAlert`
+  /// solo se ve si hay pendientes). En modo edit el predicado se ignora —
+  /// el frame siempre aparece para que el usuario pueda quitar el widget
+  /// aunque su body esté vacío en este momento.
+  ///
+  /// Debe ser sincrónico y barato (lectura de un getter cacheado o de un
+  /// `ValueNotifier`). El renderer lo evalúa una vez por frame, no se
+  /// suscribe a streams.
+  final bool Function(WidgetDescriptor descriptor)? shouldRender;
+
+  /// Mensaje específico mostrado en el placeholder de edit mode cuando
+  /// `shouldRender` devuelve `false`. Permite explicar al usuario, en
+  /// términos del dominio del widget, *cuándo* aparecerá automáticamente
+  /// (p. ej. "Aparecerá cuando tengas movimientos por revisar").
+  ///
+  /// Cuando es `null`, el frame usa un fallback genérico
+  /// ("Este widget aparecerá cuando tenga datos"). Solo aplica a widgets
+  /// que declaran `shouldRender`; los demás nunca muestran el placeholder.
+  final DashboardWidgetDisplayNameBuilder? hiddenPlaceholderMessage;
+
   const DashboardWidgetSpec({
     required this.type,
     required this.displayName,
@@ -84,6 +107,8 @@ class DashboardWidgetSpec {
     this.recommendedFor = const <String>{},
     this.unique = false,
     this.configEditor,
+    this.shouldRender,
+    this.hiddenPlaceholderMessage,
   });
 }
 

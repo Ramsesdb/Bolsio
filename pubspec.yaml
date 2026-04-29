@@ -98,6 +98,7 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.2
   installed_apps: ^1.6.0
+  animated_flip_counter: ^0.3.4
 
 dev_dependencies:
   flutter_test:

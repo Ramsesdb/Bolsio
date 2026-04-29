@@ -1,0 +1,57 @@
+<!--
+  Notification small icon for Wallex foreground capture service.
+
+  Overrides flutter_background_service's bundled ic_bg_service_small
+  by colliding on the resource name (Gradle merge prefers app res).
+
+  Spec: monochrome white silhouette on transparent (Android 5.0+
+  tints anything non-alpha as a flat block, so no fills/colors).
+  Shape: classic wallet — rounded body + folded flap + clasp dot.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFFFF">
+    <!--
+      Wallet body: rounded rectangle from (3,7) to (21,19),
+      with the clasp pocket cut out on the right side via
+      an even-odd hole around (17,13).
+    -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M5,6
+            C3.895,6 3,6.895 3,8
+            L3,18
+            C3,19.105 3.895,20 5,20
+            L19,20
+            C20.105,20 21,19.105 21,18
+            L21,15
+            L17,15
+            C15.895,15 15,14.105 15,13
+            C15,11.895 15.895,11 17,11
+            L21,11
+            L21,8
+            C21,6.895 20.105,6 19,6
+            L5,6 Z
+            M17,12.25
+            C16.586,12.25 16.25,12.586 16.25,13
+            C16.25,13.414 16.586,13.75 17,13.75
+            C17.414,13.75 17.75,13.414 17.75,13
+            C17.75,12.586 17.414,12.25 17,12.25 Z" />
+    <!--
+      Wallet flap: thin band sitting on top, from (5.5,4) to (17.5,6),
+      suggesting a folded leather flap above the main body.
+    -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M6.5,4
+            L16.5,4
+            C17.052,4 17.5,4.448 17.5,5
+            L17.5,6
+            L5.5,6
+            L5.5,5
+            C5.5,4.448 5.948,4 6.5,4 Z" />
+</vector>

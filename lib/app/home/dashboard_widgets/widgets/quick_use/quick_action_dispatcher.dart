@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wallex/app/budgets/budgets_page.dart';
+import 'package:wallex/app/calculator/calculator.page.dart';
 import 'package:wallex/app/currencies/currency_manager.dart';
 import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
 import 'package:wallex/app/settings/settings_page.dart';
@@ -12,8 +13,11 @@ import 'package:wallex/core/database/services/user-setting/hidden_mode_service.d
 import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:wallex/core/presentation/responsive/breakpoints.dart';
+import 'package:wallex/core/routes/destinations.dart';
 import 'package:wallex/core/routes/route_utils.dart';
 import 'package:wallex/core/utils/logger.dart';
+import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
 
 /// Categorías visuales del catálogo de quick actions. Usadas por
@@ -145,12 +149,34 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
   ),
 
   // ─────────── Navegación ───────────
+  //
+  // Bug-fix: las chips que apuntan a un destino que YA es un tab del bottom
+  // navigation deben cambiar el tab activo en lugar de hacer push de una
+  // pantalla nueva sobre el shell. Hacer push remontaba la pantalla y causaba
+  // un parpadeo del bottom nav durante la transición — además rompía el flow
+  // de tabs (el usuario quedaba en una página apilada con un back-button en
+  // vez de poder cambiar libremente con el bottom nav).
+  //
+  // Tabs móviles reales (mobile layout, ver `getDestinations` en
+  // `core/routes/destinations.dart` con filtro `isMobileMode`):
+  //   - dashboard      → Inicio
+  //   - transactions   → Transacciones
+  //   - stats          → Estadísticas
+  //   - settings       → Más (MoreActionsPage)
+  //
+  // Reglas de mapping aplicadas abajo:
+  //   - Hay tab directo  → `_NavigationStrategy.switchTab` (cambia el tab del
+  //     shell con `tabsPageKey.currentState?.changePage(...)`).
+  //   - No hay tab       → push tradicional (BudgetsPage, SettingsPage,
+  //     CurrencyManagerPage, CalculatorPage).
   QuickActionId.goToSettings: QuickAction(
     icon: Icons.settings_outlined,
     label: (ctx) => Translations.of(ctx).home.quick_actions.go_to_settings,
     category: QuickActionCategory.navigation,
     action: (ctx) {
-      RouteUtils.pushRoute(const SettingsPage());
+      // No hay tab dedicado a "Settings" — el tab "Más" abre MoreActionsPage,
+      // pantalla distinta de SettingsPage. Mantenemos push.
+      _QuickNav.push(const SettingsPage());
     },
   ),
   QuickActionId.goToBudgets: QuickAction(
@@ -158,7 +184,8 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
     label: (ctx) => Translations.of(ctx).home.quick_actions.go_to_budgets,
     category: QuickActionCategory.navigation,
     action: (ctx) {
-      RouteUtils.pushRoute(const BudgetsPage());
+      // Budgets no está en el bottom nav móvil (solo en sidebar desktop).
+      _QuickNav.push(const BudgetsPage());
     },
   ),
   QuickActionId.goToReports: QuickAction(
@@ -166,7 +193,12 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
     label: (ctx) => Translations.of(ctx).home.quick_actions.go_to_reports,
     category: QuickActionCategory.navigation,
     action: (ctx) {
-      RouteUtils.pushRoute(const StatsPage());
+      // Estadísticas SÍ es un tab → cambiar tab activo.
+      _QuickNav.switchTabOrPush(
+        AppMenuDestinationsID.stats,
+        const StatsPage(),
+        ctx,
+      );
     },
   ),
   QuickActionId.openTransactions: QuickAction(
@@ -174,7 +206,12 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
     label: (ctx) => Translations.of(ctx).home.quick_actions.open_transactions,
     category: QuickActionCategory.navigation,
     action: (ctx) {
-      RouteUtils.pushRoute(const TransactionsPage());
+      // Transacciones SÍ es un tab → cambiar tab activo.
+      _QuickNav.switchTabOrPush(
+        AppMenuDestinationsID.transactions,
+        const TransactionsPage(),
+        ctx,
+      );
     },
   ),
   QuickActionId.openExchangeRates: QuickAction(
@@ -187,7 +224,20 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
       // entrar al gestor de monedas, donde el usuario ve las tasas y puede
       // tocar una para abrir su detalle. Es el equivalente más cercano a
       // "abrir tasas" que pide el spec sin obligar a elegir divisa primero.
-      RouteUtils.pushRoute(const CurrencyManagerPage());
+      _QuickNav.push(const CurrencyManagerPage());
+    },
+  ),
+  QuickActionId.goToCalculator: QuickAction(
+    icon: Icons.calculate_outlined,
+    label: (ctx) =>
+        Translations.of(ctx).home.quick_actions.go_to_calculator,
+    category: QuickActionCategory.navigation,
+    action: (ctx) {
+      // Calculadora FX standalone (calculadora-fx Tanda 1, task 1.5).
+      // NOTA: este chip NO está en el default `quickUse` set — solo
+      // aparece en `QuickUseConfigSheet` para opt-in (per spec
+      // REQ-CALC-8 "Quick action wiring is opt-in").
+      _QuickNav.push(const CalculatorPage());
     },
   ),
 
@@ -258,4 +308,127 @@ class QuickActionDispatcher {
   /// catálogo (no debería ocurrir — todas las entradas del enum tienen su
   /// `QuickAction`).
   static QuickAction? get(QuickActionId id) => kQuickActions[id];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper interno de navegación.
+//
+// Encapsula la decisión "switch tab vs push" en un solo lugar y expone
+// hooks `@visibleForTesting` para que los tests puedan capturar invocaciones
+// sin montar el shell completo (PageSwitcher + Navigator raíz).
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Firma del switch-tab. Devuelve `true` si efectivamente cambió el tab,
+/// `false` si no hay shell montado (ej. lockscreen, tests sin pump del shell).
+typedef _TabSwitcher = bool Function(AppMenuDestinationsID id);
+
+/// Firma del fallback de push. La implementación real delega en
+/// [RouteUtils.pushRoute]; los tests inyectan un capturador.
+typedef _Pusher = void Function(Widget page);
+
+class _QuickNav {
+  const _QuickNav._();
+
+  /// Implementación por defecto: usa el `tabsPageKey` global del shell. Si
+  /// el shell no está montado (ej. unit tests sin pump del PageSwitcher),
+  /// retorna `false` para que el caller haga fallback a push.
+  static bool _defaultSwitchTab(AppMenuDestinationsID id) {
+    final state = tabsPageKey.currentState;
+    if (state == null) return false;
+    state.changePage(id);
+    return true;
+  }
+
+  static void _defaultPush(Widget page) {
+    RouteUtils.pushRoute(page);
+  }
+
+  /// Hook de tests: reemplazar para capturar el id del tab al que se
+  /// intenta cambiar. NO usar en producción.
+  @visibleForTesting
+  static _TabSwitcher tabSwitcher = _defaultSwitchTab;
+
+  /// Hook de tests: reemplazar para capturar la página que se empujaría.
+  /// NO usar en producción.
+  @visibleForTesting
+  static _Pusher pusher = _defaultPush;
+
+  /// Restaura los hooks a sus implementaciones reales. Llamar en
+  /// `tearDown` de los tests.
+  @visibleForTesting
+  static void resetForTesting() {
+    tabSwitcher = _defaultSwitchTab;
+    pusher = _defaultPush;
+  }
+
+  /// Cambia el tab activo del bottom navigation cuando estamos en layout
+  /// móvil y existe un tab para [id]; en cualquier otro caso (desktop, tab
+  /// no presente, shell no montado) hace push de [fallbackPage].
+  ///
+  /// El [BuildContext] se usa solo para detectar el breakpoint — no se
+  /// guarda referencia a él.
+  static void switchTabOrPush(
+    AppMenuDestinationsID id,
+    Widget fallbackPage,
+    BuildContext context,
+  ) {
+    if (_isTabAvailableForCurrentLayout(id, context)) {
+      final switched = tabSwitcher(id);
+      if (switched) return;
+      // El shell no estaba montado por algún motivo — degradamos a push.
+    }
+    pusher(fallbackPage);
+  }
+
+  /// Push directo. Centralizado aquí para que los tests puedan observar
+  /// las navegaciones que NO mapean a tab (Settings, Budgets, ExchangeRates,
+  /// Calculator) con el mismo seam.
+  static void push(Widget page) {
+    pusher(page);
+  }
+
+  /// Devuelve `true` si [id] es uno de los tabs visibles en el layout
+  /// actual. En desktop el bottom nav no se muestra (ver `PageSwitcher`),
+  /// así que preferimos push para mantener el comportamiento existente.
+  static bool _isTabAvailableForCurrentLayout(
+    AppMenuDestinationsID id,
+    BuildContext context,
+  ) {
+    final isMobile = BreakPoint.of(context).isSmallerThan(BreakpointID.md);
+    if (!isMobile) return false;
+    // Tabs reales del bottom nav en mobile (ver `getDestinations` con
+    // filtro `isMobileMode` en `core/routes/destinations.dart`).
+    const mobileTabs = <AppMenuDestinationsID>{
+      AppMenuDestinationsID.dashboard,
+      AppMenuDestinationsID.transactions,
+      AppMenuDestinationsID.stats,
+      AppMenuDestinationsID.settings,
+    };
+    return mobileTabs.contains(id);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Test hooks públicos.
+//
+// `_QuickNav` es privada al archivo (lleva guion bajo). Los tests viven en
+// otra librería — no pueden acceder a símbolos privados —, así que exponemos
+// los hooks vía esta fachada `@visibleForTesting`. El analyzer marcará una
+// advertencia si se invoca desde código de producción.
+// ─────────────────────────────────────────────────────────────────────────────
+@visibleForTesting
+class QuickActionDispatcherTestHooks {
+  const QuickActionDispatcherTestHooks._();
+
+  static void installTabSwitcher(bool Function(AppMenuDestinationsID) fn) {
+    _QuickNav.tabSwitcher = fn;
+  }
+
+  static void installPusher(void Function(Widget) fn) {
+    _QuickNav.pusher = fn;
+  }
+
+  static void resetHooks() {
+    _QuickNav.resetForTesting();
+  }
 }

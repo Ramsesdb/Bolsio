@@ -86,6 +86,19 @@ class PendingImportService {
     );
   }
 
+  /// Último valor emitido por [watchPendingCount]. Se cachea aquí porque
+  /// algunos consumidores (p. ej. el predicado `shouldRender` del registry
+  /// del dashboard) necesitan una lectura sincrónica sin suscribirse al
+  /// stream. Empieza en `0` (asume "nada pendiente" hasta que el primer
+  /// emit del watch pruebe lo contrario).
+  int _cachedPendingCount = 0;
+
+  /// Lectura sincrónica del último conteo conocido de pendientes. Es una
+  /// proyección barata sobre el stream interno y NO dispara una query —
+  /// simplemente devuelve el último valor cacheado por el listener de
+  /// [watchPendingCount].
+  int get currentPendingCount => _cachedPendingCount;
+
   /// Reactive stream of the count of pending imports with status 'pending'.
   ///
   /// Useful for the badge on the bottom navigation bar.
@@ -98,7 +111,14 @@ class PendingImportService {
         db.pendingImports.status.equals(TransactionProposalStatus.pending.dbValue),
       );
 
-    return query.map((row) => row.read(countExpr)!).watchSingle();
+    // `map().watchSingle()` emite cada vez que cambia el conteo. Usamos un
+    // efecto colateral en cada emisión para refrescar el cache sincrónico
+    // expuesto por [currentPendingCount]. El listener vive en el stream,
+    // así que solo se gasta CPU cuando algún consumidor está suscrito.
+    return query.map((row) => row.read(countExpr)!).watchSingle().map((value) {
+      _cachedPendingCount = value;
+      return value;
+    });
   }
 
   /// Find a pending import by its bank reference number.

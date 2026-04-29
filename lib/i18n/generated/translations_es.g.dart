@@ -43,6 +43,7 @@ class TranslationsEs extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsGeneralEs general = _TranslationsGeneralEs._(_root);
 	@override late final _TranslationsSharedEs shared = _TranslationsSharedEs._(_root);
 	@override late final _TranslationsHomeEs home = _TranslationsHomeEs._(_root);
+	@override late final _TranslationsCalculatorEs calculator = _TranslationsCalculatorEs._(_root);
 	@override late final _TranslationsFinancialHealthEs financial_health = _TranslationsFinancialHealthEs._(_root);
 	@override late final _TranslationsStatsEs stats = _TranslationsStatsEs._(_root);
 	@override late final _TranslationsIconSelectorEs icon_selector = _TranslationsIconSelectorEs._(_root);
@@ -175,6 +176,26 @@ class _TranslationsHomeEs extends TranslationsHomeEn {
 	@override String get should_create_account_message => 'Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones';
 	@override late final _TranslationsHomeDashboardWidgetsEs dashboard_widgets = _TranslationsHomeDashboardWidgetsEs._(_root);
 	@override late final _TranslationsHomeQuickActionsEs quick_actions = _TranslationsHomeQuickActionsEs._(_root);
+}
+
+// Path: calculator
+class _TranslationsCalculatorEs extends TranslationsCalculatorEn {
+	_TranslationsCalculatorEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Calculadora';
+	@override String get settings_subtitle => 'Conversor rápido USD/EUR/USDT a VES';
+	@override late final _TranslationsCalculatorSwapEs swap = _TranslationsCalculatorSwapEs._(_root);
+	@override late final _TranslationsCalculatorKeypadEs keypad = _TranslationsCalculatorKeypadEs._(_root);
+	@override late final _TranslationsCalculatorSourceEs source = _TranslationsCalculatorSourceEs._(_root);
+	@override late final _TranslationsCalculatorManualEs manual = _TranslationsCalculatorManualEs._(_root);
+	@override late final _TranslationsCalculatorWarnEs warn = _TranslationsCalculatorWarnEs._(_root);
+	@override late final _TranslationsCalculatorRefreshEs refresh = _TranslationsCalculatorRefreshEs._(_root);
+	@override late final _TranslationsCalculatorShareEs share = _TranslationsCalculatorShareEs._(_root);
+	@override late final _TranslationsCalculatorRateExplicitEs rate_explicit = _TranslationsCalculatorRateExplicitEs._(_root);
+	@override late final _TranslationsCalculatorCopyEs copy = _TranslationsCalculatorCopyEs._(_root);
 }
 
 // Path: financial_health
@@ -798,6 +819,117 @@ class _TranslationsHomeQuickActionsEs extends TranslationsHomeQuickActionsEn {
 	@override String get go_to_reports => 'Reportes';
 	@override String get open_transactions => 'Transacciones';
 	@override String get open_exchange_rates => 'Tasas de cambio';
+	@override String get go_to_calculator => 'Calculadora';
+}
+
+// Path: calculator.swap
+class _TranslationsCalculatorSwapEs extends TranslationsCalculatorSwapEn {
+	_TranslationsCalculatorSwapEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get a11y => 'Invertir conversión';
+}
+
+// Path: calculator.keypad
+class _TranslationsCalculatorKeypadEs extends TranslationsCalculatorKeypadEn {
+	_TranslationsCalculatorKeypadEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsCalculatorKeypadA11yEs a11y = _TranslationsCalculatorKeypadA11yEs._(_root);
+}
+
+// Path: calculator.source
+class _TranslationsCalculatorSourceEs extends TranslationsCalculatorSourceEn {
+	_TranslationsCalculatorSourceEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get bcv => 'BCV';
+	@override String get paralelo => 'Paralelo';
+	@override String get promedio => 'Promedio';
+	@override String get manual => 'Manual';
+	@override String get usdt_label => 'Paralelo (USDT)';
+	@override String updated_ago({required Object minutes}) => 'hace ${minutes} min';
+	@override String get updated_just_now => 'ahora';
+	@override String get updated_unknown => '—';
+	@override String a11y_label({required Object source, required Object age}) => 'Fuente de tasa: ${source}, actualizada ${age}';
+}
+
+// Path: calculator.manual
+class _TranslationsCalculatorManualEs extends TranslationsCalculatorManualEn {
+	_TranslationsCalculatorManualEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String field_hint({required Object currency}) => 'Tasa por 1 ${currency}';
+	@override String get field_label => 'Tasa manual';
+	@override String get field_invalid => 'Ingresá un valor mayor a 0';
+	@override String get save_link => 'Guardar como tasa manual';
+}
+
+// Path: calculator.warn
+class _TranslationsCalculatorWarnEs extends TranslationsCalculatorWarnEn {
+	_TranslationsCalculatorWarnEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_rate => 'Sin tasa en caché. Usá el modo Manual o conectate a internet.';
+}
+
+// Path: calculator.refresh
+class _TranslationsCalculatorRefreshEs extends TranslationsCalculatorRefreshEn {
+	_TranslationsCalculatorRefreshEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get a11y => 'Actualizar tasas';
+	@override String get error => 'No se pudieron actualizar las tasas. Mostrando valores en caché.';
+}
+
+// Path: calculator.share
+class _TranslationsCalculatorShareEs extends TranslationsCalculatorShareEn {
+	_TranslationsCalculatorShareEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get action_a11y => 'Compartir conversión';
+	@override String get footer => 'Generado con Wallex';
+	@override String get subject => 'Conversión cambiaria';
+	@override String get equals_separator => '=';
+}
+
+// Path: calculator.rate_explicit
+class _TranslationsCalculatorRateExplicitEs extends TranslationsCalculatorRateExplicitEn {
+	_TranslationsCalculatorRateExplicitEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String format({required Object from, required Object to, required Object amount}) => '${from} 1 = ${to} ${amount}';
+	@override String timestamp_long({required Object date}) => 'Actualizado ${date}';
+	@override String get timestamp_unknown => 'Sin tasa';
+	@override String get timestamp_manual => 'Tasa manual';
+}
+
+// Path: calculator.copy
+class _TranslationsCalculatorCopyEs extends TranslationsCalculatorCopyEn {
+	_TranslationsCalculatorCopyEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get tooltip => 'Copiar';
+	@override String get a11y => 'Copiar monto';
+	@override String snackbar({required Object value}) => '${value} copiado';
 }
 
 // Path: financial_health.review
@@ -1999,6 +2131,22 @@ class _TranslationsHomeDashboardWidgetsPendingImportsAlertEs extends Translation
 	@override String get description => 'Movimientos pendientes de revisión.';
 }
 
+// Path: calculator.keypad.a11y
+class _TranslationsCalculatorKeypadA11yEs extends TranslationsCalculatorKeypadA11yEn {
+	_TranslationsCalculatorKeypadA11yEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String digit_n({required Object n}) => 'Dígito ${n}';
+	@override String get decimal => 'Separador decimal';
+	@override String get backspace => 'Borrar';
+	@override String get clear => 'Limpiar';
+	@override String get plus => 'Sumar';
+	@override String get minus => 'Restar';
+	@override String get equals => 'Igual';
+}
+
 // Path: financial_health.review.descr
 class _TranslationsFinancialHealthReviewDescrEs extends TranslationsFinancialHealthReviewDescrEn {
 	_TranslationsFinancialHealthReviewDescrEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -2673,6 +2821,44 @@ extension on TranslationsEs {
 			'home.quick_actions.go_to_reports' => 'Reportes',
 			'home.quick_actions.open_transactions' => 'Transacciones',
 			'home.quick_actions.open_exchange_rates' => 'Tasas de cambio',
+			'home.quick_actions.go_to_calculator' => 'Calculadora',
+			'calculator.title' => 'Calculadora',
+			'calculator.settings_subtitle' => 'Conversor rápido USD/EUR/USDT a VES',
+			'calculator.swap.a11y' => 'Invertir conversión',
+			'calculator.keypad.a11y.digit_n' => ({required Object n}) => 'Dígito ${n}',
+			'calculator.keypad.a11y.decimal' => 'Separador decimal',
+			'calculator.keypad.a11y.backspace' => 'Borrar',
+			'calculator.keypad.a11y.clear' => 'Limpiar',
+			'calculator.keypad.a11y.plus' => 'Sumar',
+			'calculator.keypad.a11y.minus' => 'Restar',
+			'calculator.keypad.a11y.equals' => 'Igual',
+			'calculator.source.bcv' => 'BCV',
+			'calculator.source.paralelo' => 'Paralelo',
+			'calculator.source.promedio' => 'Promedio',
+			'calculator.source.manual' => 'Manual',
+			'calculator.source.usdt_label' => 'Paralelo (USDT)',
+			'calculator.source.updated_ago' => ({required Object minutes}) => 'hace ${minutes} min',
+			'calculator.source.updated_just_now' => 'ahora',
+			'calculator.source.updated_unknown' => '—',
+			'calculator.source.a11y_label' => ({required Object source, required Object age}) => 'Fuente de tasa: ${source}, actualizada ${age}',
+			'calculator.manual.field_hint' => ({required Object currency}) => 'Tasa por 1 ${currency}',
+			'calculator.manual.field_label' => 'Tasa manual',
+			'calculator.manual.field_invalid' => 'Ingresá un valor mayor a 0',
+			'calculator.manual.save_link' => 'Guardar como tasa manual',
+			'calculator.warn.no_rate' => 'Sin tasa en caché. Usá el modo Manual o conectate a internet.',
+			'calculator.refresh.a11y' => 'Actualizar tasas',
+			'calculator.refresh.error' => 'No se pudieron actualizar las tasas. Mostrando valores en caché.',
+			'calculator.share.action_a11y' => 'Compartir conversión',
+			'calculator.share.footer' => 'Generado con Wallex',
+			'calculator.share.subject' => 'Conversión cambiaria',
+			'calculator.share.equals_separator' => '=',
+			'calculator.rate_explicit.format' => ({required Object from, required Object to, required Object amount}) => '${from} 1 = ${to} ${amount}',
+			'calculator.rate_explicit.timestamp_long' => ({required Object date}) => 'Actualizado ${date}',
+			'calculator.rate_explicit.timestamp_unknown' => 'Sin tasa',
+			'calculator.rate_explicit.timestamp_manual' => 'Tasa manual',
+			'calculator.copy.tooltip' => 'Copiar',
+			'calculator.copy.a11y' => 'Copiar monto',
+			'calculator.copy.snackbar' => ({required Object value}) => '${value} copiado',
 			'financial_health.display' => 'Salud financiera',
 			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Excelente!'; case GenderContext.female: return 'Excelente!'; } }, 
 			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Bueno'; case GenderContext.female: return 'Buena'; } }, 
@@ -2980,6 +3166,8 @@ extension on TranslationsEs {
 			'account.form.notes' => 'Notas',
 			'account.form.notes_placeholder' => 'Escribe algunas notas/descripciones sobre esta cuenta',
 			'account.form.initial_balance' => 'Balance inicial',
+			_ => null,
+		} ?? switch (path) {
 			'account.form.current_balance' => 'Balance actual',
 			'account.form.create' => 'Crear cuenta',
 			'account.form.edit' => 'Editar cuenta',
@@ -3018,8 +3206,6 @@ extension on TranslationsEs {
 			'currencies.currency_settings' => 'Configuración de la divisa',
 			'currencies.currency_manager' => 'Administrador de divisas',
 			'currencies.currency_manager_descr' => 'Configura tu divisa y sus tipos de cambio con otras',
-			_ => null,
-		} ?? switch (path) {
 			'currencies.preferred_currency' => 'Divisa predeterminada/base',
 			'currencies.tap_to_change_preferred_currency' => 'Toca para cambiar',
 			'currencies.change_preferred_currency_title' => 'Cambiar divisa predeterminada',

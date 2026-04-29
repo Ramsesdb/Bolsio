@@ -35,6 +35,7 @@ class ExchangeRateFormDialog extends StatefulWidget {
     super.key,
     this.currency,
     this.exchangeRateToEdit,
+    this.initialRate,
   }) : assert(
          currency == null || exchangeRateToEdit == null,
          'You cannot provide both a currency and an exchange rate to edit',
@@ -42,6 +43,12 @@ class ExchangeRateFormDialog extends StatefulWidget {
 
   final Currency? currency;
   final ExchangeRate? exchangeRateToEdit;
+
+  /// Pre-fill opcional para el campo de tasa cuando se abre el diálogo en
+  /// modo "create" (no aplica en edit mode). Usado por la Calculadora FX para
+  /// permitir al usuario persistir un manual rate efímero (per spec REQ-CALC-5
+  /// scenario "Persist via existing dialog").
+  final double? initialRate;
 
   @override
   State<ExchangeRateFormDialog> createState() => _ExchangeRateFormDialogState();
@@ -70,7 +77,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       _currency = Currency.fromDB(currencyInDB: rate.currency);
       date = rate.date;
     } else {
-      rateController.text = '';
+      rateController.text = widget.initialRate != null
+          ? widget.initialRate!.toString()
+          : '';
       _currency = widget.currency;
     }
 

@@ -52,6 +52,13 @@ class DashboardLayoutBody extends StatelessWidget {
         );
         continue;
       }
+      // Spec auto-hide: si el predicado `shouldRender` existe y devuelve
+      // `false`, no construimos el widget — evita tarjetas fantasma en
+      // view mode. En edit mode este predicado se ignora (ver
+      // `_DashboardEditBody` en `dashboard.page.dart`).
+      final shouldRender = spec.shouldRender?.call(descriptor) ?? true;
+      if (!shouldRender) continue;
+
       final built = spec.builder(context, descriptor, editing: false);
       final useHalfWidth =
           isWide && descriptor.size == WidgetSize.medium;

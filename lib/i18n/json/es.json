@@ -236,7 +236,67 @@
       "go-to-budgets": "Presupuestos",
       "go-to-reports": "Reportes",
       "open-transactions": "Transacciones",
-      "open-exchange-rates": "Tasas de cambio"
+      "open-exchange-rates": "Tasas de cambio",
+      "go-to-calculator": "Calculadora"
+    }
+  },
+  "CALCULATOR": {
+    "title": "Calculadora",
+    "settings_subtitle": "Conversor rápido USD/EUR/USDT a VES",
+    "swap": {
+      "a11y": "Invertir conversión"
+    },
+    "keypad": {
+      "a11y": {
+        "digit_n": "Dígito {{n}}",
+        "decimal": "Separador decimal",
+        "backspace": "Borrar",
+        "clear": "Limpiar",
+        "plus": "Sumar",
+        "minus": "Restar",
+        "equals": "Igual"
+      }
+    },
+    "source": {
+      "bcv": "BCV",
+      "paralelo": "Paralelo",
+      "promedio": "Promedio",
+      "manual": "Manual",
+      "usdt_label": "Paralelo (USDT)",
+      "updated_ago": "hace {{minutes}} min",
+      "updated_just_now": "ahora",
+      "updated_unknown": "—",
+      "a11y_label": "Fuente de tasa: {{source}}, actualizada {{age}}"
+    },
+    "manual": {
+      "field_hint": "Tasa por 1 {{currency}}",
+      "field_label": "Tasa manual",
+      "field_invalid": "Ingresá un valor mayor a 0",
+      "save_link": "Guardar como tasa manual"
+    },
+    "warn": {
+      "no_rate": "Sin tasa en caché. Usá el modo Manual o conectate a internet."
+    },
+    "refresh": {
+      "a11y": "Actualizar tasas",
+      "error": "No se pudieron actualizar las tasas. Mostrando valores en caché."
+    },
+    "share": {
+      "action_a11y": "Compartir conversión",
+      "footer": "Generado con Wallex",
+      "subject": "Conversión cambiaria",
+      "equals_separator": "="
+    },
+    "rate_explicit": {
+      "format": "{{from}} 1 = {{to}} {{amount}}",
+      "timestamp_long": "Actualizado {{date}}",
+      "timestamp_unknown": "Sin tasa",
+      "timestamp_manual": "Tasa manual"
+    },
+    "copy": {
+      "tooltip": "Copiar",
+      "a11y": "Copiar monto",
+      "snackbar": "{{value}} copiado"
     }
   },
   "FINANCIAL-HEALTH": {

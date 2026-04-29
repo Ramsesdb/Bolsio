@@ -44,6 +44,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsGeneralEn general = TranslationsGeneralEn.internal(_root);
 	late final TranslationsSharedEn shared = TranslationsSharedEn.internal(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn.internal(_root);
+	late final TranslationsCalculatorEn calculator = TranslationsCalculatorEn.internal(_root);
 	late final TranslationsFinancialHealthEn financial_health = TranslationsFinancialHealthEn.internal(_root);
 	late final TranslationsStatsEn stats = TranslationsStatsEn.internal(_root);
 	late final TranslationsIconSelectorEn icon_selector = TranslationsIconSelectorEn.internal(_root);
@@ -314,6 +315,31 @@ class TranslationsHomeEn {
 
 	late final TranslationsHomeDashboardWidgetsEn dashboard_widgets = TranslationsHomeDashboardWidgetsEn.internal(_root);
 	late final TranslationsHomeQuickActionsEn quick_actions = TranslationsHomeQuickActionsEn.internal(_root);
+}
+
+// Path: calculator
+class TranslationsCalculatorEn {
+	TranslationsCalculatorEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Calculator'
+	String get title => 'Calculator';
+
+	/// en: 'Quick converter USD/EUR/USDT to VES'
+	String get settings_subtitle => 'Quick converter USD/EUR/USDT to VES';
+
+	late final TranslationsCalculatorSwapEn swap = TranslationsCalculatorSwapEn.internal(_root);
+	late final TranslationsCalculatorKeypadEn keypad = TranslationsCalculatorKeypadEn.internal(_root);
+	late final TranslationsCalculatorSourceEn source = TranslationsCalculatorSourceEn.internal(_root);
+	late final TranslationsCalculatorManualEn manual = TranslationsCalculatorManualEn.internal(_root);
+	late final TranslationsCalculatorWarnEn warn = TranslationsCalculatorWarnEn.internal(_root);
+	late final TranslationsCalculatorRefreshEn refresh = TranslationsCalculatorRefreshEn.internal(_root);
+	late final TranslationsCalculatorShareEn share = TranslationsCalculatorShareEn.internal(_root);
+	late final TranslationsCalculatorRateExplicitEn rate_explicit = TranslationsCalculatorRateExplicitEn.internal(_root);
+	late final TranslationsCalculatorCopyEn copy = TranslationsCalculatorCopyEn.internal(_root);
 }
 
 // Path: financial_health
@@ -1536,6 +1562,175 @@ class TranslationsHomeQuickActionsEn {
 
 	/// en: 'Exchange rates'
 	String get open_exchange_rates => 'Exchange rates';
+
+	/// en: 'Calculator'
+	String get go_to_calculator => 'Calculator';
+}
+
+// Path: calculator.swap
+class TranslationsCalculatorSwapEn {
+	TranslationsCalculatorSwapEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Invert conversion'
+	String get a11y => 'Invert conversion';
+}
+
+// Path: calculator.keypad
+class TranslationsCalculatorKeypadEn {
+	TranslationsCalculatorKeypadEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsCalculatorKeypadA11yEn a11y = TranslationsCalculatorKeypadA11yEn.internal(_root);
+}
+
+// Path: calculator.source
+class TranslationsCalculatorSourceEn {
+	TranslationsCalculatorSourceEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'BCV'
+	String get bcv => 'BCV';
+
+	/// en: 'Parallel'
+	String get paralelo => 'Parallel';
+
+	/// en: 'Average'
+	String get promedio => 'Average';
+
+	/// en: 'Manual'
+	String get manual => 'Manual';
+
+	/// en: 'Parallel (USDT)'
+	String get usdt_label => 'Parallel (USDT)';
+
+	/// en: '{{minutes}} min ago'
+	String updated_ago({required Object minutes}) => '${minutes} min ago';
+
+	/// en: 'just now'
+	String get updated_just_now => 'just now';
+
+	/// en: '—'
+	String get updated_unknown => '—';
+
+	/// en: 'Rate source: {{source}}, updated {{age}}'
+	String a11y_label({required Object source, required Object age}) => 'Rate source: ${source}, updated ${age}';
+}
+
+// Path: calculator.manual
+class TranslationsCalculatorManualEn {
+	TranslationsCalculatorManualEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Rate per 1 {{currency}}'
+	String field_hint({required Object currency}) => 'Rate per 1 ${currency}';
+
+	/// en: 'Manual rate'
+	String get field_label => 'Manual rate';
+
+	/// en: 'Enter a value greater than 0'
+	String get field_invalid => 'Enter a value greater than 0';
+
+	/// en: 'Save as manual rate'
+	String get save_link => 'Save as manual rate';
+}
+
+// Path: calculator.warn
+class TranslationsCalculatorWarnEn {
+	TranslationsCalculatorWarnEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'No cached rate. Use manual mode or connect to the internet.'
+	String get no_rate => 'No cached rate. Use manual mode or connect to the internet.';
+}
+
+// Path: calculator.refresh
+class TranslationsCalculatorRefreshEn {
+	TranslationsCalculatorRefreshEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Refresh rates'
+	String get a11y => 'Refresh rates';
+
+	/// en: 'Could not update rates. Showing cached values.'
+	String get error => 'Could not update rates. Showing cached values.';
+}
+
+// Path: calculator.share
+class TranslationsCalculatorShareEn {
+	TranslationsCalculatorShareEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Share conversion'
+	String get action_a11y => 'Share conversion';
+
+	/// en: 'Generated with Wallex'
+	String get footer => 'Generated with Wallex';
+
+	/// en: 'FX conversion'
+	String get subject => 'FX conversion';
+
+	/// en: '='
+	String get equals_separator => '=';
+}
+
+// Path: calculator.rate_explicit
+class TranslationsCalculatorRateExplicitEn {
+	TranslationsCalculatorRateExplicitEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '{{from}} 1 = {{to}} {{amount}}'
+	String format({required Object from, required Object to, required Object amount}) => '${from} 1 = ${to} ${amount}';
+
+	/// en: 'Updated {{date}}'
+	String timestamp_long({required Object date}) => 'Updated ${date}';
+
+	/// en: 'No rate available'
+	String get timestamp_unknown => 'No rate available';
+
+	/// en: 'Manual rate'
+	String get timestamp_manual => 'Manual rate';
+}
+
+// Path: calculator.copy
+class TranslationsCalculatorCopyEn {
+	TranslationsCalculatorCopyEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Copy'
+	String get tooltip => 'Copy';
+
+	/// en: 'Copy amount'
+	String get a11y => 'Copy amount';
+
+	/// en: '{{value}} copied'
+	String snackbar({required Object value}) => '${value} copied';
 }
 
 // Path: financial_health.review
@@ -3598,6 +3793,36 @@ class TranslationsHomeDashboardWidgetsPendingImportsAlertEn {
 	String get description => 'Movements waiting for your review.';
 }
 
+// Path: calculator.keypad.a11y
+class TranslationsCalculatorKeypadA11yEn {
+	TranslationsCalculatorKeypadA11yEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Digit {{n}}'
+	String digit_n({required Object n}) => 'Digit ${n}';
+
+	/// en: 'Decimal separator'
+	String get decimal => 'Decimal separator';
+
+	/// en: 'Delete'
+	String get backspace => 'Delete';
+
+	/// en: 'Clear'
+	String get clear => 'Clear';
+
+	/// en: 'Add'
+	String get plus => 'Add';
+
+	/// en: 'Subtract'
+	String get minus => 'Subtract';
+
+	/// en: 'Equals'
+	String get equals => 'Equals';
+}
+
 // Path: financial_health.review.descr
 class TranslationsFinancialHealthReviewDescrEn {
 	TranslationsFinancialHealthReviewDescrEn.internal(this._root);
@@ -4609,6 +4834,44 @@ extension on Translations {
 			'home.quick_actions.go_to_reports' => 'Reports',
 			'home.quick_actions.open_transactions' => 'Transactions',
 			'home.quick_actions.open_exchange_rates' => 'Exchange rates',
+			'home.quick_actions.go_to_calculator' => 'Calculator',
+			'calculator.title' => 'Calculator',
+			'calculator.settings_subtitle' => 'Quick converter USD/EUR/USDT to VES',
+			'calculator.swap.a11y' => 'Invert conversion',
+			'calculator.keypad.a11y.digit_n' => ({required Object n}) => 'Digit ${n}',
+			'calculator.keypad.a11y.decimal' => 'Decimal separator',
+			'calculator.keypad.a11y.backspace' => 'Delete',
+			'calculator.keypad.a11y.clear' => 'Clear',
+			'calculator.keypad.a11y.plus' => 'Add',
+			'calculator.keypad.a11y.minus' => 'Subtract',
+			'calculator.keypad.a11y.equals' => 'Equals',
+			'calculator.source.bcv' => 'BCV',
+			'calculator.source.paralelo' => 'Parallel',
+			'calculator.source.promedio' => 'Average',
+			'calculator.source.manual' => 'Manual',
+			'calculator.source.usdt_label' => 'Parallel (USDT)',
+			'calculator.source.updated_ago' => ({required Object minutes}) => '${minutes} min ago',
+			'calculator.source.updated_just_now' => 'just now',
+			'calculator.source.updated_unknown' => '—',
+			'calculator.source.a11y_label' => ({required Object source, required Object age}) => 'Rate source: ${source}, updated ${age}',
+			'calculator.manual.field_hint' => ({required Object currency}) => 'Rate per 1 ${currency}',
+			'calculator.manual.field_label' => 'Manual rate',
+			'calculator.manual.field_invalid' => 'Enter a value greater than 0',
+			'calculator.manual.save_link' => 'Save as manual rate',
+			'calculator.warn.no_rate' => 'No cached rate. Use manual mode or connect to the internet.',
+			'calculator.refresh.a11y' => 'Refresh rates',
+			'calculator.refresh.error' => 'Could not update rates. Showing cached values.',
+			'calculator.share.action_a11y' => 'Share conversion',
+			'calculator.share.footer' => 'Generated with Wallex',
+			'calculator.share.subject' => 'FX conversion',
+			'calculator.share.equals_separator' => '=',
+			'calculator.rate_explicit.format' => ({required Object from, required Object to, required Object amount}) => '${from} 1 = ${to} ${amount}',
+			'calculator.rate_explicit.timestamp_long' => ({required Object date}) => 'Updated ${date}',
+			'calculator.rate_explicit.timestamp_unknown' => 'No rate available',
+			'calculator.rate_explicit.timestamp_manual' => 'Manual rate',
+			'calculator.copy.tooltip' => 'Copy',
+			'calculator.copy.a11y' => 'Copy amount',
+			'calculator.copy.snackbar' => ({required Object value}) => '${value} copied',
 			'financial_health.display' => 'Financial health',
 			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Very good!'; case GenderContext.female: return 'Very good!'; } }, 
 			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Good'; case GenderContext.female: return 'Good'; } }, 
@@ -4916,6 +5179,8 @@ extension on Translations {
 			'account.form.notes' => 'Notes',
 			'account.form.notes_placeholder' => 'Type some notes/description about this account',
 			'account.form.initial_balance' => 'Initial balance',
+			_ => null,
+		} ?? switch (path) {
 			'account.form.current_balance' => 'Current balance',
 			'account.form.create' => 'Create account',
 			'account.form.edit' => 'Edit account',
@@ -4954,8 +5219,6 @@ extension on Translations {
 			'currencies.currency_settings' => 'Currency settings',
 			'currencies.currency_manager' => 'Currency manager',
 			'currencies.currency_manager_descr' => 'Configure your currency and its exchange rates with others',
-			_ => null,
-		} ?? switch (path) {
 			'currencies.preferred_currency' => 'Preferred/base currency',
 			'currencies.tap_to_change_preferred_currency' => 'Tap to change',
 			'currencies.change_preferred_currency_title' => 'Change preferred currency',
