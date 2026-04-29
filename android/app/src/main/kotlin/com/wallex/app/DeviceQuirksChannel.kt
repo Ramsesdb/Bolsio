@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
@@ -49,11 +50,33 @@ object DeviceQuirksChannel {
                         openNotificationListenerSettings(context)
                         result.success(null)
                     }
+                    "isRestrictedSettingsAllowed" -> {
+                        result.success(isRestrictedSettingsAllowed(context))
+                    }
+                    "getDeviceVendor" -> {
+                        result.success(getDeviceVendor())
+                    }
                     else -> result.notImplemented()
                 }
             } catch (e: Exception) {
                 result.error("DEVICE_QUIRKS_ERROR", e.message, null)
             }
+        }
+    }
+
+    /**
+     * Coarse OEM family bucket used to vary onboarding copy where the system
+     * UI diverges meaningfully from stock Android (e.g. MIUI/HyperOS places
+     * the "Allow restricted settings" toggle at the bottom of App info, not
+     * behind a top-right kebab menu).
+     *
+     * Returns `"xiaomi"` for Xiaomi/Redmi/POCO devices, `"stock"` otherwise.
+     */
+    private fun getDeviceVendor(): String {
+        val mfr = Build.MANUFACTURER.lowercase()
+        return when {
+            mfr.contains("xiaomi") || mfr.contains("redmi") || mfr.contains("poco") -> "xiaomi"
+            else -> "stock"
         }
     }
 
@@ -63,6 +86,71 @@ object DeviceQuirksChannel {
                 ?: return false
             pm.isIgnoringBatteryOptimizations(context.packageName)
         } catch (_: Exception) {
+            false
+        }
+    }
+
+    /**
+     * Best-effort detection of Android's "Allow restricted settings" gate via
+     * an **installer-source heuristic**.
+     *
+     * Background: the canonical AppOps check
+     * (`unsafeCheckOpNoThrow("android:access_restricted_settings", uid, pkg)`)
+     * is unviable for regular apps because the OS gates that op on the
+     * caller holding `MANAGE_APPOPS` / `GET_APP_OPS_STATS` /
+     * `MANAGE_APP_OPS_MODES` — all system-app permissions. Production logcat
+     * confirmed it throws `SecurityException("verifyIncomingOp: uid <X> does
+     * not have any of {MANAGE_APPOPS, GET_APP_OPS_STATS, MANAGE_APP_OPS_MODES}")`
+     * on every device, falling into a fail-open branch that skipped the
+     * slide for everyone. See `openspec/changes/restricted-settings-onboarding/design.md`
+     * § "Detection: post-mortem" for the full write-up.
+     *
+     * The replacement heuristic asks: was the app installed by a trusted
+     * source (Play Store, vendor app store)? If yes, Android does NOT apply
+     * the restricted-settings gate, so we can return `true` and skip the
+     * slide. If the installer is null, unknown, or any sideload-style source
+     * (`com.google.android.packageinstaller`, ADB, etc.), we assume the gate
+     * is active and return `false` so the slide is shown.
+     *
+     * Trade-off: a user with `ACCESS_RESTRICTED_SETTINGS=allow` already
+     * granted but installed via a non-trusted installer will see the slide
+     * once. They can dismiss with "Skip for now" — strictly better than the
+     * AppOps approach which silently skipped the slide for every restricted
+     * user.
+     *
+     * Pre-API-33 devices return `true` unconditionally — the
+     * "Allow restricted settings" gate is an Android 13+ behavior.
+     */
+    private fun isRestrictedSettingsAllowed(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
+        val trustedInstallers = setOf(
+            "com.android.vending",          // Google Play Store
+            "com.google.android.feedback",  // Play Internal / sideload from Play
+            "com.huawei.appmarket",         // Huawei AppGallery
+            "com.amazon.venezia",           // Amazon Appstore
+            "com.sec.android.app.samsungapps", // Samsung Galaxy Store
+        )
+        return try {
+            val installer: String? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    context.packageManager
+                        .getInstallSourceInfo(context.packageName)
+                        .installingPackageName
+                } else {
+                    @Suppress("DEPRECATION")
+                    context.packageManager.getInstallerPackageName(context.packageName)
+                }
+            val allowed = installer != null && installer in trustedInstallers
+            Log.d(
+                "DeviceQuirks",
+                "isRestrictedSettingsAllowed: installer=$installer → allowed=$allowed",
+            )
+            allowed
+        } catch (e: Exception) {
+            Log.d(
+                "DeviceQuirks",
+                "isRestrictedSettingsAllowed failed (treating as sideload): $e",
+            )
             false
         }
     }

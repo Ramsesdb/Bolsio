@@ -1846,7 +1846,7 @@ class _TranslationsSettingsGeneralLanguageTr extends TranslationsSettingsGeneral
 	@override String get section => 'Dil ve metinler';
 	@override String get title => 'Uygulama dili';
 	@override String get descr => 'Metinlerin uygulamada görüntüleneceği dil';
-	@override String get help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
+	@override String get help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 }
 
 // Path: settings.general.locale
@@ -2619,7 +2619,7 @@ extension on TranslationsTr {
 			'settings.general.language.section' => 'Dil ve metinler',
 			'settings.general.language.title' => 'Uygulama dili',
 			'settings.general.language.descr' => 'Metinlerin uygulamada görüntüleneceği dil',
-			'settings.general.language.help' => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz',
+			'settings.general.language.help' => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz',
 			'settings.general.locale.title' => 'Bölge',
 			'settings.general.locale.auto' => 'Sistem',
 			'settings.general.locale.descr' => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...',

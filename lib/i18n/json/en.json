@@ -1146,7 +1146,7 @@
         "section": "Language and texts",
         "title": "App language",
         "descr": "Language in which the texts will be displayed in the app",
-        "help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>"
+        "help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>our guide</a>"
       },
       "LOCALE": {
         "title": "Region",
@@ -1372,6 +1372,22 @@
       "donate.success": "Donation made. Thank you very much for your contribution! ❤️",
       "donate.err": "Oops! It seems there was an error receiving your payment",
       "report": "Report bugs, leave suggestions..."
+    }
+  },
+  "onboarding": {
+    "restricted_settings": {
+      "title": "Allow restricted settings",
+      "subtitle": "Android blocks some permissions for apps installed outside Play Store. We'll fix it in 3 taps.",
+      "step1": "Tap the ⋮ menu in the top-right.",
+      "step2": "Select \"Allow restricted settings\".",
+      "step3": "Toggle it on and return to Wallex.",
+      "step1_xiaomi": "Scroll to the bottom of the page.",
+      "step2_xiaomi": "Toggle on \"Allow restricted settings\".",
+      "cta_primary": "Open app info",
+      "cta_skip": "Skip for now",
+      "cta_done": "Done, continue",
+      "still_blocked_hint": "If you already enabled it, open app info again.",
+      "success_toast": "Done, settings unlocked"
     }
   }
 }

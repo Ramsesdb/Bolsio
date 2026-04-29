@@ -92,6 +92,13 @@ class _AppBottomBarState extends State<AppBottomBar>
       builder: (context, snapshot) {
         final pendingCount = snapshot.data ?? 0;
         final cs = Theme.of(context).colorScheme;
+        final vpBottom =
+            MediaQuery.of(context).viewPadding.bottom;
+        // 28px is the visual offset that looks correct on gesture-nav
+        // phones (where the system bar is transparent and ≤28px tall).
+        // On 3-button nav (vpBottom ≈ 48px) the opaque system bar is
+        // taller than 28, so we use vpBottom to keep the button above it.
+        final aiBottomOffset = vpBottom > 28 ? vpBottom : 28.0;
 
         return Stack(
           clipBehavior: Clip.none,
@@ -202,7 +209,7 @@ class _AppBottomBarState extends State<AppBottomBar>
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 28,
+                bottom: aiBottomOffset,
                 child: _FloatingAiSection(cs: cs),
               ),
           ],

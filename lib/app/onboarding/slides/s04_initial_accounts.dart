@@ -5,7 +5,7 @@ import 'package:wallex/app/onboarding/widgets/v3_bank_tile.dart';
 import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
 import 'package:wallex/app/onboarding/widgets/v3_switch.dart';
 
-class Slide04InitialAccounts extends StatelessWidget {
+class Slide04InitialAccounts extends StatefulWidget {
   const Slide04InitialAccounts({
     super.key,
     required this.selectedBankIds,
@@ -34,11 +34,30 @@ class Slide04InitialAccounts extends StatelessWidget {
   final VoidCallback? onSkip;
 
   @override
+  State<Slide04InitialAccounts> createState() =>
+      _Slide04InitialAccountsState();
+}
+
+class _Slide04InitialAccountsState extends State<Slide04InitialAccounts> {
+  String _query = '';
+
+  List<BankOption> get _filteredBanks {
+    if (_query.isEmpty) return kBanks;
+    final lower = _query.toLowerCase();
+    return kBanks
+        .where((b) => b.name.toLowerCase().contains(lower))
+        .toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final filtered = _filteredBanks;
+
     return V3SlideTemplate(
       primaryLabel: 'Siguiente',
-      onPrimary: onNext,
-      onSecondary: onSkip,
+      onPrimary: widget.onNext,
+      onSecondary: widget.onSkip,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -50,33 +69,120 @@ class Slide04InitialAccounts extends StatelessWidget {
           ),
           const SizedBox(height: V3Tokens.spaceMd),
           Text(
-            'Selecciona los bancos y billeteras que usas. Creamos las cuentas por ti.',
+            'Selecciona los bancos y billeteras que usas. '
+            'Creamos las cuentas por ti.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurfaceVariant,
                 ),
           ),
-          const SizedBox(height: V3Tokens.space24),
-          // 1-column vertical stack per v3 spec. Cards are gapped 7px
-          // (between 6–8 per spec). The parent V3SlideTemplate already
-          // provides a SingleChildScrollView, so this Column does not need
-          // its own scrolling.
-          Column(
-            children: [
-              for (var i = 0; i < kBanks.length; i++) ...[
-                if (i > 0) const SizedBox(height: 7),
-                _BankRow(
-                  bank: kBanks[i],
-                  selected: selectedBankIds.contains(kBanks[i].id),
-                  onTap: () => onToggleBank(kBanks[i].id),
-                  showAlsoUsd: currencyMode == 'DUAL' &&
-                      kBanks[i].supportsBoth &&
-                      selectedBankIds.contains(kBanks[i].id),
-                  alsoUsdValue: alsoUsdForBank[kBanks[i].id] ?? false,
-                  onToggleAlsoUsd: (v) => onToggleAlsoUsd(kBanks[i].id, v),
+          const SizedBox(height: V3Tokens.space16),
+
+          // ── Search field ──────────────────────────────────────────
+          TextField(
+            onChanged: (v) => setState(() => _query = v),
+            style: V3Tokens.uiStyle(
+              size: 14,
+              weight: FontWeight.w500,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Buscar banco o billetera…',
+              hintStyle: V3Tokens.uiStyle(
+                size: 14,
+                weight: FontWeight.w400,
+                color: isDark
+                    ? V3Tokens.mutedDark
+                    : V3Tokens.mutedLight,
+              ),
+              prefixIcon: Icon(
+                Icons.search_rounded,
+                size: 20,
+                color: isDark
+                    ? V3Tokens.mutedDark
+                    : V3Tokens.mutedLight,
+              ),
+              filled: true,
+              fillColor: isDark
+                  ? V3Tokens.pillBgDark
+                  : V3Tokens.pillBgLight,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                  V3Tokens.radiusPill,
                 ),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                  V3Tokens.radiusPill,
+                ),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                  V3Tokens.radiusPill,
+                ),
+                borderSide: BorderSide(
+                  color: V3Tokens.accent.withAlpha(102),
+                  width: 1.5,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: V3Tokens.space16),
+
+          // ── Bank list ─────────────────────────────────────────────
+          if (filtered.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: V3Tokens.space24,
+              ),
+              child: Center(
+                child: Text(
+                  'No se encontraron resultados',
+                  style: V3Tokens.uiStyle(
+                    size: 13,
+                    weight: FontWeight.w500,
+                    color: isDark
+                        ? V3Tokens.faintDark
+                        : V3Tokens.faintLight,
+                  ),
+                ),
+              ),
+            )
+          else
+            Column(
+              children: [
+                for (var i = 0; i < filtered.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 7),
+                  _BankRow(
+                    bank: filtered[i],
+                    selected: widget.selectedBankIds
+                        .contains(filtered[i].id),
+                    onTap: () =>
+                        widget.onToggleBank(filtered[i].id),
+                    showAlsoUsd:
+                        widget.currencyMode == 'DUAL' &&
+                            filtered[i].supportsBoth &&
+                            widget.selectedBankIds
+                                .contains(filtered[i].id),
+                    alsoUsdValue:
+                        widget.alsoUsdForBank[filtered[i].id] ??
+                            false,
+                    onToggleAlsoUsd: (v) =>
+                        widget.onToggleAlsoUsd(
+                      filtered[i].id,
+                      v,
+                    ),
+                  ),
+                ],
               ],
-            ],
-          ),
+            ),
         ],
       ),
     );

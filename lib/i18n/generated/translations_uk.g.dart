@@ -1846,7 +1846,7 @@ class _TranslationsSettingsGeneralLanguageUk extends TranslationsSettingsGeneral
 	@override String get section => 'Мова та тексти';
 	@override String get title => 'Мова додатку';
 	@override String get descr => 'Мова, в якій будуть відображатися тексти в додатку';
-	@override String get help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
+	@override String get help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>нашого посібник</ a>';
 }
 
 // Path: settings.general.locale
@@ -2619,7 +2619,7 @@ extension on TranslationsUk {
 			'settings.general.language.section' => 'Мова та тексти',
 			'settings.general.language.title' => 'Мова додатку',
 			'settings.general.language.descr' => 'Мова, в якій будуть відображатися тексти в додатку',
-			'settings.general.language.help' => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>',
+			'settings.general.language.help' => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>нашого посібник</ a>',
 			'settings.general.locale.title' => 'Регіон',
 			'settings.general.locale.auto' => 'Система',
 			'settings.general.locale.descr' => 'Встановіть формат, який буде використовуватися для дат, чисел...',

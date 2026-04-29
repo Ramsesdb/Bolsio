@@ -65,6 +65,8 @@ ios/Runner/GoogleService-Info.plist
 *.jks
 *.keystore
 android/key.properties
+android/keys/key.properties
+android/keys/*.jks
 
 # Local tool caches
 android/.kotlin/

@@ -8,6 +8,7 @@ import 'package:wallex/app/layout/page_switcher.dart';
 import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
 import 'package:wallex/app/onboarding/widgets/v3_notif_access_mockup.dart';
 import 'package:wallex/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:wallex/app/onboarding/widgets/v3_restricted_settings_step.dart';
 import 'package:wallex/app/onboarding/widgets/v3_secondary_button.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
@@ -45,7 +46,12 @@ class ReturningUserFlow extends StatefulWidget {
 }
 
 class _ReturningUserFlowState extends State<ReturningUserFlow> {
-  /// 0 = welcome back; 1 = activate listener.
+  /// 0 = welcome back; 1 = restricted-settings (conditional on
+  /// `_restrictedSettingsBlocked`); 2 = activate listener.
+  ///
+  /// When `_restrictedSettingsBlocked == false`, step 1 is skipped — the
+  /// welcome CTA jumps directly to step 2 to preserve the original 2-step
+  /// flow.
   int _step = 0;
 
   /// `true` on Android runtimes. The notification-listener step is only
@@ -53,10 +59,40 @@ class _ReturningUserFlowState extends State<ReturningUserFlow> {
   late final bool _isAndroid;
   bool _finishing = false;
 
+  /// Async detection state for the Android `ACCESS_RESTRICTED_SETTINGS`
+  /// AppOp gate. Defaults to "not blocked" until the platform call resolves
+  /// (per spec: default-not-blocked-until-resolved fail-open posture).
+  bool _restrictedSettingsBlocked = false;
+
+  /// `true` once `isRestrictedSettingsAllowed()` has resolved (or has been
+  /// short-circuited on non-Android platforms). Drives the spinner-guarded
+  /// welcome CTA so the user can't tap-through before detection finishes.
+  bool _restrictedSettingsResolved = false;
+
   @override
   void initState() {
     super.initState();
     _isAndroid = !kIsWeb && Platform.isAndroid;
+    _resolveRestrictedSettings();
+  }
+
+  /// Fire-and-forget async detection of the restricted-settings AppOp gate.
+  /// Sets `_restrictedSettingsBlocked = true` only when the OS explicitly
+  /// reports the gate is closed (fail-open on iOS, web, exceptions, and any
+  /// allow/default mode).
+  Future<void> _resolveRestrictedSettings() async {
+    if (!_isAndroid) {
+      if (!mounted) return;
+      setState(() => _restrictedSettingsResolved = true);
+      return;
+    }
+    final allowed =
+        await DeviceQuirksService.instance.isRestrictedSettingsAllowed();
+    if (!mounted) return;
+    setState(() {
+      _restrictedSettingsBlocked = !allowed;
+      _restrictedSettingsResolved = true;
+    });
   }
 
   /// Returns the first-name slice of [widget.displayName] when present, e.g.
@@ -76,19 +112,53 @@ class _ReturningUserFlowState extends State<ReturningUserFlow> {
       return;
     }
 
-    // On Android, skip step 2 if the permission is already granted.
+    // Belt + suspenders: even though the welcome CTA is spinner-guarded by
+    // `_restrictedSettingsResolved`, await the in-flight detection here so
+    // any race condition (e.g. user taps before setState propagates) cannot
+    // route past the restricted-settings step with a stale `false`.
+    if (!_restrictedSettingsResolved) {
+      await _resolveRestrictedSettings();
+    }
+    if (!mounted) return;
+
+    // On Android, skip downstream steps if the listener permission is
+    // already granted (rare on a fresh device but possible).
     final result = await PermissionCoordinator.instance.check();
     if (!mounted) return;
+
+    // ignore: avoid_print
+    print(
+      '[ReturningUserFlow] advanceFromWelcome: '
+      'blocked=$_restrictedSettingsBlocked, '
+      'listenerGranted=${result.notificationListener}',
+    );
 
     if (result.notificationListener) {
       await _finish();
       return;
     }
 
-    setState(() => _step = 1);
+    // Insert the restricted-settings step only when the AppOp is reported as
+    // blocked. Otherwise jump straight to the listener-activation step (the
+    // original 2-step behavior).
+    if (_restrictedSettingsBlocked) {
+      setState(() => _step = 1);
+    } else {
+      setState(() => _step = 2);
+    }
   }
 
-  /// Returns from step 2 back to step 1 ("Bienvenido de vuelta").
+  /// Advance from the restricted-settings step (step 1) to the activate
+  /// listener step (step 2). Invoked by both the secondary "skip" CTA and
+  /// the lifecycle-resume auto-advance path inside `V3RestrictedSettingsStep`.
+  void _advanceFromRestricted() {
+    if (_finishing) return;
+    setState(() => _step = 2);
+  }
+
+  /// Returns from the activate-listener step back to the welcome-back hero.
+  /// The intermediate restricted-settings step (when present) is skipped
+  /// on the way back — going back to the welcome hero is a single tap.
   void _backToWelcome() {
     if (_finishing) return;
     setState(() => _step = 0);
@@ -129,22 +199,41 @@ class _ReturningUserFlowState extends State<ReturningUserFlow> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget current;
+    switch (_step) {
+      case 0:
+        current = _WelcomeBackStep(
+          key: const ValueKey('welcome-back'),
+          firstName: _firstName,
+          onContinue: _advanceFromWelcome,
+          loading: !_restrictedSettingsResolved,
+        );
+        break;
+      case 1:
+        current = V3RestrictedSettingsStep(
+          key: const ValueKey('restricted-settings'),
+          showBackPill: false,
+          onContinue: _advanceFromRestricted,
+          onOpenAppInfo: () {
+            unawaited(DeviceQuirksService.instance.openAppDetails());
+          },
+        );
+        break;
+      default:
+        current = _ActivateListenerStep(
+          key: const ValueKey('activate-listener'),
+          isFinishing: _finishing,
+          onDone: _finish,
+          onBack: _backToWelcome,
+        );
+        break;
+    }
+
     return Scaffold(
       body: SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 220),
-          child: _step == 0
-              ? _WelcomeBackStep(
-                  key: const ValueKey('welcome-back'),
-                  firstName: _firstName,
-                  onContinue: _advanceFromWelcome,
-                )
-              : _ActivateListenerStep(
-                  key: const ValueKey('activate-listener'),
-                  isFinishing: _finishing,
-                  onDone: _finish,
-                  onBack: _backToWelcome,
-                ),
+          child: current,
         ),
       ),
     );
@@ -158,10 +247,16 @@ class _WelcomeBackStep extends StatelessWidget {
     super.key,
     required this.firstName,
     required this.onContinue,
+    this.loading = false,
   });
 
   final String? firstName;
   final VoidCallback onContinue;
+
+  /// While `true`, the primary CTA renders a small inline spinner and is
+  /// disabled. Used to guard against tap-through while the async
+  /// restricted-settings detection is still in flight (typically <50ms).
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +306,9 @@ class _WelcomeBackStep extends StatelessWidget {
           const Spacer(flex: 3),
           V3PrimaryButton(
             label: 'Continuar',
-            onPressed: onContinue,
+            onPressed: loading ? null : onContinue,
             trailingIcon: Icons.arrow_forward,
+            loading: loading,
           ),
         ],
       ),

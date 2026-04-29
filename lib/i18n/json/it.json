@@ -852,7 +852,7 @@
         "section": "Lingua e testi",
         "title": "Lingua dell'app",
         "descr": "Lingua in cui i testi verranno visualizzati nell'app",
-        "help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>la nostra guida</a>"
+        "help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>la nostra guida</a>"
       },
       "LOCALE": {
         "title": "Regione",

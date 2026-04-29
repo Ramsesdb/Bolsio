@@ -65,6 +65,7 @@ class TranslationsEs extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
 	@override late final _TranslationsStatementImportEs statement_import = _TranslationsStatementImportEs._(_root);
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
+	@override late final _TranslationsOnboardingEs onboarding = _TranslationsOnboardingEs._(_root);
 }
 
 // Path: ui_actions
@@ -699,6 +700,16 @@ class _TranslationsMoreEs extends TranslationsMoreEn {
 	@override late final _TranslationsMoreDataEs data = _TranslationsMoreDataEs._(_root);
 	@override late final _TranslationsMoreAboutUsEs about_us = _TranslationsMoreAboutUsEs._(_root);
 	@override late final _TranslationsMoreHelpUsEs help_us = _TranslationsMoreHelpUsEs._(_root);
+}
+
+// Path: onboarding
+class _TranslationsOnboardingEs extends TranslationsOnboardingEn {
+	_TranslationsOnboardingEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsOnboardingRestrictedSettingsEs restricted_settings = _TranslationsOnboardingRestrictedSettingsEs._(_root);
 }
 
 // Path: general.leave_without_saving
@@ -1956,6 +1967,27 @@ class _TranslationsMoreHelpUsEs extends TranslationsMoreHelpUsEn {
 	@override String get thanks_long => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 }
 
+// Path: onboarding.restricted_settings
+class _TranslationsOnboardingRestrictedSettingsEs extends TranslationsOnboardingRestrictedSettingsEn {
+	_TranslationsOnboardingRestrictedSettingsEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Permite la configuración restringida';
+	@override String get subtitle => 'Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.';
+	@override String get step1 => 'Toca el menú ⋮ arriba a la derecha.';
+	@override String get step2 => 'Selecciona "Permitir configuración restringida".';
+	@override String get step3 => 'Activa el toggle y vuelve a Wallex.';
+	@override String get step1_xiaomi => 'Desliza hasta el final de la pantalla.';
+	@override String get step2_xiaomi => 'Activa el toggle "Permitir ajustes restringidos".';
+	@override String get cta_primary => 'Abrir información de la app';
+	@override String get cta_skip => 'Hacer esto más tarde';
+	@override String get cta_done => 'Listo, continuar';
+	@override String get still_blocked_hint => 'Si ya lo activaste, vuelve a abrir la información de la app.';
+	@override String get success_toast => 'Listo, configuración desbloqueada';
+}
+
 // Path: general.time.ranges
 class _TranslationsGeneralTimeRangesEs extends TranslationsGeneralTimeRangesEn {
 	_TranslationsGeneralTimeRangesEs._(TranslationsEs root) : this._root = root, super.internal(root);
@@ -2489,7 +2521,7 @@ class _TranslationsSettingsGeneralLanguageEs extends TranslationsSettingsGeneral
 	@override String get section => 'Idioma y textos';
 	@override String get title => 'Idioma de la aplicación';
 	@override String get descr => 'Idioma en el que se mostrarán los textos en la aplicación';
-	@override String get help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
+	@override String get help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>nuestra guía</a> ';
 }
 
 // Path: settings.general.locale
@@ -3480,7 +3512,7 @@ extension on TranslationsEs {
 			'settings.general.language.section' => 'Idioma y textos',
 			'settings.general.language.title' => 'Idioma de la aplicación',
 			'settings.general.language.descr' => 'Idioma en el que se mostrarán los textos en la aplicación',
-			'settings.general.language.help' => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ',
+			'settings.general.language.help' => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>nuestra guía</a> ',
 			'settings.general.locale.title' => 'Región',
 			'settings.general.locale.auto' => 'Sistema',
 			'settings.general.locale.descr' => 'Establecer el formato a utilizar para fechas, números...',
@@ -3655,6 +3687,18 @@ extension on TranslationsEs {
 			'more.help_us.donate_err' => 'Ups! Parece que ha habido un error a la hora de recibir tu pago',
 			'more.help_us.report' => 'Reporta errores, deja sugerencias...',
 			'more.help_us.thanks_long' => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.',
+			'onboarding.restricted_settings.title' => 'Permite la configuración restringida',
+			'onboarding.restricted_settings.subtitle' => 'Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.',
+			'onboarding.restricted_settings.step1' => 'Toca el menú ⋮ arriba a la derecha.',
+			'onboarding.restricted_settings.step2' => 'Selecciona "Permitir configuración restringida".',
+			'onboarding.restricted_settings.step3' => 'Activa el toggle y vuelve a Wallex.',
+			'onboarding.restricted_settings.step1_xiaomi' => 'Desliza hasta el final de la pantalla.',
+			'onboarding.restricted_settings.step2_xiaomi' => 'Activa el toggle "Permitir ajustes restringidos".',
+			'onboarding.restricted_settings.cta_primary' => 'Abrir información de la app',
+			'onboarding.restricted_settings.cta_skip' => 'Hacer esto más tarde',
+			'onboarding.restricted_settings.cta_done' => 'Listo, continuar',
+			'onboarding.restricted_settings.still_blocked_hint' => 'Si ya lo activaste, vuelve a abrir la información de la app.',
+			'onboarding.restricted_settings.success_toast' => 'Listo, configuración desbloqueada',
 			_ => null,
 		};
 	}

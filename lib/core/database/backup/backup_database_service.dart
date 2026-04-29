@@ -36,7 +36,7 @@ class BackupDatabaseService {
     final file = createAndReturnFile(
       exportPath: exportPath,
       fileName:
-          "monekin-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
+          "wallex-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
     );
 
     return file.writeAsBytes(dbFileInBytes, mode: FileMode.write);

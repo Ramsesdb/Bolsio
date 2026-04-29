@@ -7,7 +7,7 @@ import 'package:wallex/app/settings/widgets/setting_card_item.dart';
 import 'package:wallex/core/extensions/padding.extension.dart';
 import 'package:wallex/core/utils/open_external_url.dart';
 import 'package:wallex/i18n/generated/translations.g.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart'; // TODO: re-enable when share button comes back (Play Store launch)
 
 class HelpUsPage extends StatefulWidget {
   const HelpUsPage({super.key});
@@ -52,34 +52,36 @@ class _HelpUsPageState extends State<HelpUsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SettingCardItem(
-                    title: t.more.help_us.rate_us,
-                    subtitle: t.more.help_us.rate_us_descr,
-                    icon: Icons.star_rounded,
-                    mainAxis: Axis.horizontal,
-                    onTap: () {
-                      openExternalURL(
-                        context,
-                        'https://play.google.com/store/apps/details?id=com.monekin.app',
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  SettingCardItem(
-                    title: t.more.help_us.share,
-                    subtitle: t.more.help_us.share_descr,
-                    icon: Icons.share,
-                    mainAxis: Axis.horizontal,
-                    onTap: () {
-                      SharePlus.instance.share(
-                        ShareParams(
-                          text:
-                              '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app',
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 8),
+                  // TODO: re-enable once Wallex is published on Play Store
+                  // SettingCardItem(
+                  //   title: t.more.help_us.rate_us,
+                  //   subtitle: t.more.help_us.rate_us_descr,
+                  //   icon: Icons.star_rounded,
+                  //   mainAxis: Axis.horizontal,
+                  //   onTap: () {
+                  //     openExternalURL(
+                  //       context,
+                  //       'https://play.google.com/store/apps/details?id=com.monekin.app',
+                  //     );
+                  //   },
+                  // ),
+                  // const SizedBox(height: 8),
+                  // TODO: re-enable once Wallex is published on Play Store
+                  // SettingCardItem(
+                  //   title: t.more.help_us.share,
+                  //   subtitle: t.more.help_us.share_descr,
+                  //   icon: Icons.share,
+                  //   mainAxis: Axis.horizontal,
+                  //   onTap: () {
+                  //     SharePlus.instance.share(
+                  //       ShareParams(
+                  //         text:
+                  //             '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app',
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  // const SizedBox(height: 8),
                   SettingCardItem(
                     title: t.more.help_us.report,
                     icon: Icons.rate_review_outlined,
@@ -87,7 +89,7 @@ class _HelpUsPageState extends State<HelpUsPage> {
                     onTap: () {
                       openExternalURL(
                         context,
-                        'https://github.com/enrique-lozano/Monekin/issues/new/choose',
+                        'https://github.com/Ramsesdb/Wallex/issues',
                       );
                     },
                   ),

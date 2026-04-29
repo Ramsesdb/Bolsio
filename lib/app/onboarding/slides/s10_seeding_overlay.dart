@@ -12,6 +12,7 @@ class Slide10SeedingOverlay extends StatefulWidget {
     required this.selectedBankIds,
     required this.onDone,
     this.alsoUsdForBank = const <String, bool>{},
+    this.currencyMode = 'USD',
   });
 
   final Set<String> selectedBankIds;
@@ -21,6 +22,11 @@ class Slide10SeedingOverlay extends StatefulWidget {
   /// `supportsBoth = true`. Forwarded to the seeder so it creates a
   /// second USD account in addition to the native VES one.
   final Map<String, bool> alsoUsdForBank;
+
+  /// Currency selection from s02 — `'USD'`, `'VES'` or `'DUAL'`. Forwarded
+  /// to the seeder so it can auto-create both VES+USD accounts for
+  /// Venezuelan banks when the user picked USD.
+  final String currencyMode;
 
   final VoidCallback onDone;
 
@@ -40,6 +46,7 @@ class _Slide10SeedingOverlayState extends State<Slide10SeedingOverlay> {
       PersonalVESeeder.seedAll(
         selectedBankIds: widget.selectedBankIds.toList(),
         alsoUsdForBank: widget.alsoUsdForBank,
+        currencyMode: widget.currencyMode,
       ),
       Future<void>.delayed(const Duration(milliseconds: 500)),
     ]);

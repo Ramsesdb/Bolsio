@@ -66,6 +66,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
 	late final TranslationsStatementImportEn statement_import = TranslationsStatementImportEn.internal(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn.internal(_root);
+	late final TranslationsOnboardingEn onboarding = TranslationsOnboardingEn.internal(_root);
 }
 
 // Path: ui_actions
@@ -1348,6 +1349,16 @@ class TranslationsMoreEn {
 	late final TranslationsMoreDataEn data = TranslationsMoreDataEn.internal(_root);
 	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn.internal(_root);
 	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn.internal(_root);
+}
+
+// Path: onboarding
+class TranslationsOnboardingEn {
+	TranslationsOnboardingEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsOnboardingRestrictedSettingsEn restricted_settings = TranslationsOnboardingRestrictedSettingsEn.internal(_root);
 }
 
 // Path: general.leave_without_saving
@@ -3521,6 +3532,51 @@ class TranslationsMoreHelpUsEn {
 	String get report => 'Report bugs, leave suggestions...';
 }
 
+// Path: onboarding.restricted_settings
+class TranslationsOnboardingRestrictedSettingsEn {
+	TranslationsOnboardingRestrictedSettingsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Allow restricted settings'
+	String get title => 'Allow restricted settings';
+
+	/// en: 'Android blocks some permissions for apps installed outside Play Store. We'll fix it in 3 taps.'
+	String get subtitle => 'Android blocks some permissions for apps installed outside Play Store. We\'ll fix it in 3 taps.';
+
+	/// en: 'Tap the ⋮ menu in the top-right.'
+	String get step1 => 'Tap the ⋮ menu in the top-right.';
+
+	/// en: 'Select "Allow restricted settings".'
+	String get step2 => 'Select "Allow restricted settings".';
+
+	/// en: 'Toggle it on and return to Wallex.'
+	String get step3 => 'Toggle it on and return to Wallex.';
+
+	/// en: 'Scroll to the bottom of the page.'
+	String get step1_xiaomi => 'Scroll to the bottom of the page.';
+
+	/// en: 'Toggle on "Allow restricted settings".'
+	String get step2_xiaomi => 'Toggle on "Allow restricted settings".';
+
+	/// en: 'Open app info'
+	String get cta_primary => 'Open app info';
+
+	/// en: 'Skip for now'
+	String get cta_skip => 'Skip for now';
+
+	/// en: 'Done, continue'
+	String get cta_done => 'Done, continue';
+
+	/// en: 'If you already enabled it, open app info again.'
+	String get still_blocked_hint => 'If you already enabled it, open app info again.';
+
+	/// en: 'Done, settings unlocked'
+	String get success_toast => 'Done, settings unlocked';
+}
+
 // Path: general.time.ranges
 class TranslationsGeneralTimeRangesEn {
 	TranslationsGeneralTimeRangesEn.internal(this._root);
@@ -4373,8 +4429,8 @@ class TranslationsSettingsGeneralLanguageEn {
 	/// en: 'Language in which the texts will be displayed in the app'
 	String get descr => 'Language in which the texts will be displayed in the app';
 
-	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>'
-	String get help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
+	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>our guide</a>'
+	String get help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>our guide</a>';
 }
 
 // Path: settings.general.locale
@@ -5493,7 +5549,7 @@ extension on Translations {
 			'settings.general.language.section' => 'Language and texts',
 			'settings.general.language.title' => 'App language',
 			'settings.general.language.descr' => 'Language in which the texts will be displayed in the app',
-			'settings.general.language.help' => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>',
+			'settings.general.language.help' => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>our guide</a>',
 			'settings.general.locale.title' => 'Region',
 			'settings.general.locale.auto' => 'System',
 			'settings.general.locale.descr' => 'Set the format to use for dates, numbers...',
@@ -5668,6 +5724,18 @@ extension on Translations {
 			'more.help_us.donate_success' => 'Donation made. Thank you very much for your contribution! ❤️',
 			'more.help_us.donate_err' => 'Oops! It seems there was an error receiving your payment',
 			'more.help_us.report' => 'Report bugs, leave suggestions...',
+			'onboarding.restricted_settings.title' => 'Allow restricted settings',
+			'onboarding.restricted_settings.subtitle' => 'Android blocks some permissions for apps installed outside Play Store. We\'ll fix it in 3 taps.',
+			'onboarding.restricted_settings.step1' => 'Tap the ⋮ menu in the top-right.',
+			'onboarding.restricted_settings.step2' => 'Select "Allow restricted settings".',
+			'onboarding.restricted_settings.step3' => 'Toggle it on and return to Wallex.',
+			'onboarding.restricted_settings.step1_xiaomi' => 'Scroll to the bottom of the page.',
+			'onboarding.restricted_settings.step2_xiaomi' => 'Toggle on "Allow restricted settings".',
+			'onboarding.restricted_settings.cta_primary' => 'Open app info',
+			'onboarding.restricted_settings.cta_skip' => 'Skip for now',
+			'onboarding.restricted_settings.cta_done' => 'Done, continue',
+			'onboarding.restricted_settings.still_blocked_hint' => 'If you already enabled it, open app info again.',
+			'onboarding.restricted_settings.success_toast' => 'Done, settings unlocked',
 			_ => null,
 		};
 	}

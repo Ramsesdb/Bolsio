@@ -14,6 +14,7 @@ import 'package:wallex/app/onboarding/slides/s04_initial_accounts.dart';
 import 'package:wallex/app/onboarding/slides/s05_autoimport_sell.dart';
 import 'package:wallex/app/onboarding/slides/s06_privacy.dart';
 import 'package:wallex/app/onboarding/slides/s07_post_notifications.dart';
+import 'package:wallex/app/onboarding/slides/s075_restricted_settings.dart';
 import 'package:wallex/app/onboarding/slides/s08_activate_listener.dart';
 import 'package:wallex/app/onboarding/slides/s09_apps_included.dart';
 import 'package:wallex/app/onboarding/slides/s10_seeding_overlay.dart';
@@ -23,6 +24,7 @@ import 'package:wallex/app/onboarding/widgets/v3_progress_bar.dart';
 import 'package:wallex/core/database/services/app-data/app_data_service.dart';
 import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
 import 'package:wallex/core/routes/route_utils.dart';
+import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
 import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
 
 /// Root widget of the v3 onboarding flow.
@@ -64,10 +66,51 @@ class _OnboardingPageState extends State<OnboardingPage> {
   /// spec's "positive Platform.isAndroid check" requirement.
   late final bool _isAndroid;
 
+  /// `true` when Android's `android:access_restricted_settings` AppOp reports
+  /// `MODE_IGNORED`/`MODE_ERRORED` for this app — i.e. the OS will gray-out
+  /// the notification-listener toggle on Android 13+ until the user opts in
+  /// via App info → ⋮ → "Allow restricted settings".
+  ///
+  /// Default `false` (= no extra slide) so the slide list is invariant during
+  /// the in-flight async detection. Flipped to `true` by
+  /// [_resolveRestrictedSettings] when the call resolves to "blocked".
+  /// Triggers a slide list rebuild via `setState` when it transitions, so
+  /// [_buildSlides] inserts [Slide075RestrictedSettings] between s07 and s08.
+  bool _restrictedSettingsBlocked = false;
+
   @override
   void initState() {
     super.initState();
     _isAndroid = !kIsWeb && Platform.isAndroid;
+    _resolveRestrictedSettings();
+  }
+
+  /// Async detection of the restricted-settings AppOp gate. Fires once on
+  /// mount; resolves typically in <50ms. Fail-open: any error (non-Android,
+  /// PlatformException, missing OPSTR on pre-S firmware) returns `true` from
+  /// [DeviceQuirksService.isRestrictedSettingsAllowed], so this method only
+  /// flips [_restrictedSettingsBlocked] in the affirmative-blocked branch.
+  ///
+  /// Late resolution (after the user already passed s07 → s08) is harmless:
+  /// the rebuild would insert s075 at the s07/s08 boundary in the slide list,
+  /// but the [PageController] stays on its current index and the user
+  /// continues uninterrupted per the spec's "Resolución tardía" scenario.
+  Future<void> _resolveRestrictedSettings() async {
+    if (!_isAndroid) return;
+    final allowed =
+        await DeviceQuirksService.instance.isRestrictedSettingsAllowed();
+    if (!mounted) return;
+    if (allowed) {
+      debugPrint(
+        '[OnboardingPage] restrictedSettingsBlocked=$_restrictedSettingsBlocked '
+        '(allowed=true, no s075 inserted)',
+      );
+      return;
+    }
+    setState(() => _restrictedSettingsBlocked = true);
+    debugPrint(
+      '[OnboardingPage] restrictedSettingsBlocked=$_restrictedSettingsBlocked',
+    );
   }
 
   @override
@@ -185,9 +228,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
       SettingKey.onboardingGoals,
       jsonEncode(_selectedGoals.toList()),
     );
+    // 'DUAL' is a UI-only mode label, not a real currency code in the DB.
+    // When the user picks dual USD/VES, the base currency defaults to USD.
+    final persistedCurrency =
+        _selectedCurrency == 'DUAL' ? 'USD' : _selectedCurrency;
     await UserSettingService.instance.setItem(
       SettingKey.preferredCurrency,
-      _selectedCurrency,
+      persistedCurrency,
     );
     await UserSettingService.instance.setItem(
       SettingKey.preferredRateSource,
@@ -312,6 +359,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
         Slide05AutoImportSell(onNext: _next, onSkip: _skip),
         Slide06Privacy(onNext: _next, onSkip: _skip),
         Slide07PostNotifications(onNext: _next),
+        // s075 — restricted-settings AppOp gate. Inserted between s07 and s08
+        // ONLY when Android 13+ sideload reports the gate as blocked, so the
+        // user can flip the kebab toggle in App info before s08 tries to open
+        // the (grayed-out) notification-listener toggle. Slide list length
+        // remains invariant when `_restrictedSettingsBlocked == false`.
+        if (_restrictedSettingsBlocked)
+          Slide075RestrictedSettings(onNext: _next),
         Slide08ActivateListener(onNext: _next),
         Slide09AppsIncluded(
           onNext: _applyChoicesAndAdvance,
@@ -324,6 +378,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       Slide10SeedingOverlay(
         selectedBankIds: _selectedBankIds,
         alsoUsdForBank: _alsoUsdForBank,
+        currencyMode: _selectedCurrency,
         onDone: _next,
       ),
       Slide11Ready(

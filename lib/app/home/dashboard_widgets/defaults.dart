@@ -4,198 +4,210 @@ import 'package:wallex/app/home/dashboard_widgets/registry.dart';
 
 /// Defaults para el layout del dashboard.
 ///
-/// Implementa el contrato del spec `dashboard-layout` § Defaults por
-/// `onboardingGoals` y § Fallback. La lógica vive aquí (separada del
-/// `DashboardLayoutService`) para que el onboarding (`_applyChoices`) y el
-/// renderer (`dashboard.page.dart::initState`) puedan invocar exactamente
-/// la misma función sin importar el servicio entero.
+/// SIMPLIFICADO: por ahora, independientemente de lo que el usuario elija
+/// en el onboarding, siempre se muestran los mismos 4 widgets fijos:
+///   1. Ajustes rápidos (quickUse) — solo nuevo ingreso, nuevo egreso,
+///      calculadora.
+///   2. Mis cuentas (accountCarousel).
+///   3. Tasas de cambio (exchangeRateCard).
+///   4. Movimientos por revisar (pendingImportsAlert).
 ///
-/// Notas de diseño:
-///   - `WidgetType.quickUse` SIEMPRE va en posición 0 (precondición del
-///     spec). Aunque el goal mapping ya lo prepende por convención, lo
-///     forzamos al final para no depender del orden del mapping.
-///   - El cap a 8 widgets aplica DESPUÉS de la deduplicación por type. Si
-///     `quickUse` no entra dentro de los primeros 8 elementos del set
-///     ordenado por goals, igualmente se incluye al inicio (no consume
-///     slot extra — el cap se aplica al resultado final post-prepend).
-///   - El `instanceId` se genera con uuid v4 vía `WidgetDescriptor.create`,
-///     que reusa `generateUUID()` (`package:uuid` ya está en pubspec.yaml).
-///   - El `defaultConfig` de cada `WidgetType` se resuelve consultando el
-///     `DashboardWidgetRegistry` — así un cambio en el spec del widget se
-///     propaga a los defaults sin tocar este archivo.
+/// El mapping por goals está comentado para reactivación futura.
 class DashboardLayoutDefaults {
   const DashboardLayoutDefaults._();
 
-  /// Mapping declarativo `goal → WidgetType[]` del spec dashboard-layout
-  /// § Defaults por onboardingGoals. El orden importa: dentro de un goal,
-  /// los widgets aparecen en este orden; entre goals, gana el orden de
-  /// inserción del set del usuario.
-  static const Map<String, List<WidgetType>> _goalToWidgets =
-      <String, List<WidgetType>>{
-        'track_expenses': <WidgetType>[
-          WidgetType.quickUse,
-          WidgetType.totalBalanceSummary,
-          WidgetType.recentTransactions,
-          WidgetType.incomeExpensePeriod,
-        ],
-        'save_usd': <WidgetType>[
-          WidgetType.quickUse,
-          WidgetType.totalBalanceSummary,
-          WidgetType.exchangeRateCard,
-          WidgetType.accountCarousel,
-        ],
-        'reduce_debt': <WidgetType>[
-          WidgetType.quickUse,
-          WidgetType.totalBalanceSummary,
-          WidgetType.accountCarousel,
-          WidgetType.recentTransactions,
-        ],
-        'budget': <WidgetType>[
-          WidgetType.quickUse,
-          WidgetType.totalBalanceSummary,
-          WidgetType.incomeExpensePeriod,
-          WidgetType.recentTransactions,
-        ],
-        'analyze': <WidgetType>[
-          WidgetType.quickUse,
-          WidgetType.incomeExpensePeriod,
-          WidgetType.recentTransactions,
-          WidgetType.exchangeRateCard,
+  // ── COMENTADO: mapping goal → widgets (reactivar en el futuro) ────────
+  //
+  // /// Mapping declarativo `goal → WidgetType[]` del spec dashboard-layout
+  // /// § Defaults por onboardingGoals. El orden importa: dentro de un goal,
+  // /// los widgets aparecen en este orden; entre goals, gana el orden de
+  // /// inserción del set del usuario.
+  // static const Map<String, List<WidgetType>> _goalToWidgets =
+  //     <String, List<WidgetType>>{
+  //       'track_expenses': <WidgetType>[
+  //         WidgetType.quickUse,
+  //         WidgetType.totalBalanceSummary,
+  //         WidgetType.recentTransactions,
+  //         WidgetType.incomeExpensePeriod,
+  //       ],
+  //       'save_usd': <WidgetType>[
+  //         WidgetType.quickUse,
+  //         WidgetType.totalBalanceSummary,
+  //         WidgetType.exchangeRateCard,
+  //         WidgetType.accountCarousel,
+  //       ],
+  //       'reduce_debt': <WidgetType>[
+  //         WidgetType.quickUse,
+  //         WidgetType.totalBalanceSummary,
+  //         WidgetType.accountCarousel,
+  //         WidgetType.recentTransactions,
+  //       ],
+  //       'budget': <WidgetType>[
+  //         WidgetType.quickUse,
+  //         WidgetType.totalBalanceSummary,
+  //         WidgetType.incomeExpensePeriod,
+  //         WidgetType.recentTransactions,
+  //       ],
+  //       'analyze': <WidgetType>[
+  //         WidgetType.quickUse,
+  //         WidgetType.incomeExpensePeriod,
+  //         WidgetType.recentTransactions,
+  //         WidgetType.exchangeRateCard,
+  //       ],
+  //     };
+
+  // /// Cap declarado en el spec § Defaults — se aplica POST-dedupe pero
+  // /// PRE-prepend de `quickUse`. `quickUse` cuenta hacia el cap (decisión
+  // /// registrada en `tasks.md` § Decisiones tomadas).
+  // static const int _maxWidgets = 8;
+
+  /// Los 4 widgets fijos que se muestran siempre en el dashboard,
+  /// independientemente de los goals del onboarding.
+  static const List<WidgetType> _fixedWidgets = <WidgetType>[
+    WidgetType.quickUse,
+    WidgetType.accountCarousel,
+    WidgetType.exchangeRateCard,
+    WidgetType.pendingImportsAlert,
+  ];
+
+  /// Config especial para el widget quickUse: solo muestra nuevo ingreso,
+  /// nuevo egreso y calculadora.
+  static Map<String, dynamic> get _quickUseFixedConfig =>
+      <String, dynamic>{
+        'chips': <String>[
+          QuickActionId.newIncomeTransaction.name,
+          QuickActionId.newExpenseTransaction.name,
+          QuickActionId.goToCalculator.name,
         ],
       };
-
-  /// Cap declarado en el spec § Defaults — se aplica POST-dedupe pero
-  /// PRE-prepend de `quickUse`. `quickUse` cuenta hacia el cap (decisión
-  /// registrada en `tasks.md` § Decisiones tomadas).
-  static const int _maxWidgets = 8;
 
   /// Construye un layout default a partir del set de goals seleccionado en
   /// el onboarding.
   ///
-  /// Algoritmo:
-  ///   1. Recorrer los goals en su orden de iteración (caller decide
-  ///      `LinkedHashSet` o similar).
-  ///   2. Por cada goal, recorrer sus widgets recomendados en orden.
-  ///   3. Deduplicar por `WidgetType`: la PRIMERA aparición gana —los
-  ///      duplicados subsiguientes se ignoran.
-  ///   4. Garantizar `quickUse` en posición 0 (forzado al inicio si el
-  ///      mapping ya lo incluyó; añadido si no — caso `goals = {}`).
-  ///   5. Capar a [_maxWidgets].
-  ///   6. Materializar `WidgetDescriptor` por cada type vía el registry
-  ///      (defaultConfig + defaultSize). Si el registry no tiene el spec
-  ///      registrado (no debería pasar — `registerDashboardWidgets()` corre
-  ///      antes de `runApp`), ese type se omite.
-  ///
-  /// Cuando [goals] está vacío el resultado equivale al de [fallback].
+  /// SIMPLIFICADO: ignora [goals] y siempre devuelve los 4 widgets fijos.
+  /// El parámetro se mantiene para no romper la firma del caller
+  /// (`onboarding.dart::_applyChoices`).
+  // ignore: avoid-unused-parameters
   static DashboardLayout fromGoals(Set<String> goals) {
-    if (goals.isEmpty) return fallback();
+    // ── COMENTADO: lógica original basada en goals ──────────────────────
+    //
+    // if (goals.isEmpty) return fallback();
+    //
+    // final ordered = <WidgetType>[];
+    // final seen = <WidgetType>{};
+    // for (final goal in goals) {
+    //   final list = _goalToWidgets[goal];
+    //   if (list == null) continue;
+    //   for (final type in list) {
+    //     if (seen.add(type)) ordered.add(type);
+    //   }
+    // }
+    //
+    // final withQuickUse = _ensureQuickUseFirst(ordered);
+    // final withCore = _ensureAccountCarouselSecond(withQuickUse);
+    //
+    // final capped = withCore.length > _maxWidgets
+    //     ? withCore.sublist(0, _maxWidgets)
+    //     : withCore;
+    //
+    // return DashboardLayout(
+    //   schemaVersion: DashboardLayout.currentSchemaVersion,
+    //   widgets: List<WidgetDescriptor>.unmodifiable(
+    //     _buildDescriptors(capped),
+    //   ),
+    // );
 
-    final ordered = <WidgetType>[];
-    final seen = <WidgetType>{};
-    for (final goal in goals) {
-      final list = _goalToWidgets[goal];
-      if (list == null) continue;
-      for (final type in list) {
-        if (seen.add(type)) ordered.add(type);
-      }
-    }
-
-    // Garantiza quickUse en posición 0 — el mapping ya lo incluye, pero si
-    // el set de goals está vacío de mappings conocidos lo añadimos a mano.
-    final withQuickUse = _ensureQuickUseFirst(ordered);
-
-    // accountCarousel es core: SIEMPRE entra justo después de quickUse,
-    // independientemente de los goals. Si ya estaba en la lista (e.g.
-    // save_usd / reduce_debt), se reposiciona — no se duplica.
-    final withCore = _ensureAccountCarouselSecond(withQuickUse);
-
-    // Cap a 8 — si los goals ya llenaban 8 sin accountCarousel, el último
-    // widget goal-driven cae para preservar el core.
-    final capped = withCore.length > _maxWidgets
-        ? withCore.sublist(0, _maxWidgets)
-        : withCore;
-
-    return DashboardLayout(
-      schemaVersion: DashboardLayout.currentSchemaVersion,
-      widgets: List<WidgetDescriptor>.unmodifiable(
-        _buildDescriptors(capped),
-      ),
-    );
+    return _buildFixedLayout();
   }
 
   /// Layout neutro y útil para usuarios cuyo `dashboardLayout` está vacío
   /// pero ya completaron onboarding (e.g. relogin sin blob Firebase). Spec
   /// `dashboard-layout` § Fallback.
   ///
-  /// Lista deliberadamente más rica que el caso `goals={}` puro: sirve
-  /// como punto de partida razonable que el usuario puede customizar luego
-  /// desde edit mode.
+  /// SIMPLIFICADO: devuelve los mismos 4 widgets fijos que [fromGoals].
   static DashboardLayout fallback() {
-    final types = <WidgetType>[
-      WidgetType.quickUse,
-      WidgetType.totalBalanceSummary,
-      WidgetType.accountCarousel,
-      WidgetType.incomeExpensePeriod,
-      WidgetType.recentTransactions,
-      WidgetType.exchangeRateCard,
-      WidgetType.pendingImportsAlert,
-    ];
+    // ── COMENTADO: layout fallback original más rico ────────────────────
+    //
+    // final types = <WidgetType>[
+    //   WidgetType.quickUse,
+    //   WidgetType.totalBalanceSummary,
+    //   WidgetType.accountCarousel,
+    //   WidgetType.incomeExpensePeriod,
+    //   WidgetType.recentTransactions,
+    //   WidgetType.exchangeRateCard,
+    //   WidgetType.pendingImportsAlert,
+    // ];
+    //
+    // return DashboardLayout(
+    //   schemaVersion: DashboardLayout.currentSchemaVersion,
+    //   widgets: List<WidgetDescriptor>.unmodifiable(
+    //     _buildDescriptors(types),
+    //   ),
+    // );
 
-    return DashboardLayout(
-      schemaVersion: DashboardLayout.currentSchemaVersion,
-      widgets: List<WidgetDescriptor>.unmodifiable(_buildDescriptors(types)),
-    );
+    return _buildFixedLayout();
   }
 
   // ─────────── Helpers privados ───────────
 
-  static List<WidgetType> _ensureQuickUseFirst(List<WidgetType> input) {
-    if (input.isEmpty) return <WidgetType>[WidgetType.quickUse];
-    if (input.first == WidgetType.quickUse) return input;
-    final out = <WidgetType>[WidgetType.quickUse];
-    for (final t in input) {
-      if (t != WidgetType.quickUse) out.add(t);
-    }
-    return out;
+  /// Construye el layout fijo con los 4 widgets y el config especial de
+  /// quickUse (solo nuevo ingreso, nuevo egreso, calculadora).
+  static DashboardLayout _buildFixedLayout() {
+    return DashboardLayout(
+      schemaVersion: DashboardLayout.currentSchemaVersion,
+      widgets: List<WidgetDescriptor>.unmodifiable(
+        _buildDescriptors(_fixedWidgets),
+      ),
+    );
   }
 
-  /// Asume que [input] ya tiene `quickUse` en posición 0. Inserta
-  /// `accountCarousel` en posición 1 si no estaba presente, o lo reposiciona
-  /// si ya aparecía más adelante. No duplica.
-  static List<WidgetType> _ensureAccountCarouselSecond(List<WidgetType> input) {
-    final out = <WidgetType>[];
-    var inserted = false;
-    for (var i = 0; i < input.length; i++) {
-      final t = input[i];
-      out.add(t);
-      if (i == 0 && t == WidgetType.quickUse) {
-        out.add(WidgetType.accountCarousel);
-        inserted = true;
-      }
-    }
-    if (!inserted) {
-      // Caso defensivo: input no empezaba con quickUse (no debería ocurrir
-      // porque _ensureQuickUseFirst corre antes). Aún así, garantizamos el
-      // core insertándolo al final si falta.
-      if (!out.contains(WidgetType.accountCarousel)) {
-        out.add(WidgetType.accountCarousel);
-      }
-      return out;
-    }
-    // Eliminar duplicados posteriores de accountCarousel preservando el de
-    // posición 1.
-    final deduped = <WidgetType>[];
-    var seenAccountCarousel = false;
-    for (final t in out) {
-      if (t == WidgetType.accountCarousel) {
-        if (seenAccountCarousel) continue;
-        seenAccountCarousel = true;
-      }
-      deduped.add(t);
-    }
-    return deduped;
-  }
+  // ── COMENTADO: helpers de reordenamiento (ya no necesarios) ───────────
+  //
+  // static List<WidgetType> _ensureQuickUseFirst(
+  //   List<WidgetType> input,
+  // ) {
+  //   if (input.isEmpty) return <WidgetType>[WidgetType.quickUse];
+  //   if (input.first == WidgetType.quickUse) return input;
+  //   final out = <WidgetType>[WidgetType.quickUse];
+  //   for (final t in input) {
+  //     if (t != WidgetType.quickUse) out.add(t);
+  //   }
+  //   return out;
+  // }
+  //
+  // static List<WidgetType> _ensureAccountCarouselSecond(
+  //   List<WidgetType> input,
+  // ) {
+  //   final out = <WidgetType>[];
+  //   var inserted = false;
+  //   for (var i = 0; i < input.length; i++) {
+  //     final t = input[i];
+  //     out.add(t);
+  //     if (i == 0 && t == WidgetType.quickUse) {
+  //       out.add(WidgetType.accountCarousel);
+  //       inserted = true;
+  //     }
+  //   }
+  //   if (!inserted) {
+  //     if (!out.contains(WidgetType.accountCarousel)) {
+  //       out.add(WidgetType.accountCarousel);
+  //     }
+  //     return out;
+  //   }
+  //   final deduped = <WidgetType>[];
+  //   var seenAccountCarousel = false;
+  //   for (final t in out) {
+  //     if (t == WidgetType.accountCarousel) {
+  //       if (seenAccountCarousel) continue;
+  //       seenAccountCarousel = true;
+  //     }
+  //     deduped.add(t);
+  //   }
+  //   return deduped;
+  // }
 
+  /// Construye los descriptores a partir de una lista de tipos.
+  /// Para `quickUse`, aplica el config fijo con solo 3 chips.
   static List<WidgetDescriptor> _buildDescriptors(List<WidgetType> types) {
     final registry = DashboardWidgetRegistry.instance;
     final out = <WidgetDescriptor>[];
@@ -208,11 +220,18 @@ class DashboardLayoutDefaults {
         // refactor que olvide actualizar el bootstrap.
         continue;
       }
+
+      // Para quickUse, usar el config fijo con solo 3 acciones en vez del
+      // default completo del registry.
+      final config = type == WidgetType.quickUse
+          ? _quickUseFixedConfig
+          : spec.defaultConfig;
+
       out.add(
         WidgetDescriptor.create(
           type: type,
           size: spec.defaultSize,
-          config: spec.defaultConfig,
+          config: config,
         ),
       );
     }

@@ -1846,7 +1846,7 @@ class _TranslationsSettingsGeneralLanguageHu extends TranslationsSettingsGeneral
 	@override String get section => 'Nyelv és szövegek';
 	@override String get title => 'Alkalmazás nyelve';
 	@override String get descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
-	@override String get help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
+	@override String get help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'> útmutatónk</a>';
 }
 
 // Path: settings.general.locale
@@ -2619,7 +2619,7 @@ extension on TranslationsHu {
 			'settings.general.language.section' => 'Nyelv és szövegek',
 			'settings.general.language.title' => 'Alkalmazás nyelve',
 			'settings.general.language.descr' => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban',
-			'settings.general.language.help' => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>',
+			'settings.general.language.help' => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'> útmutatónk</a>',
 			'settings.general.locale.title' => 'Régió',
 			'settings.general.locale.auto' => 'Rendszer',
 			'settings.general.locale.descr' => 'Dátumok, számformátumok beállítása...',
