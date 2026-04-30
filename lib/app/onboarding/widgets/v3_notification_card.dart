@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
 
 /// Animated notification card used in slide 5 (auto-import sell).
 /// Entrance animation: `v3-notif-in` — fade + slide from top-right over
 /// [V3Tokens.notifInStagger], with a per-card [delay] for staggering.
 ///
 /// When [highlighted] is true the card renders with an accent border and a
-/// 3px accent halo (alpha 0.10) — used for the Wallex-categorised notif so
+/// 3px accent halo (alpha 0.10) — used for the Bolsio-categorised notif so
 /// it visually stands out against the source-bank notif.
 class V3NotificationCard extends StatelessWidget {
   const V3NotificationCard({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:bolsio/core/services/auto_import/capture/permission_coordinator.dart';
 
 class Slide07PostNotifications extends StatefulWidget {
   const Slide07PostNotifications({
@@ -121,7 +121,7 @@ class _Slide07PostNotificationsState extends State<Slide07PostNotifications>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Permite que Wallex te avise',
+            'Permite que Bolsio te avise',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -222,7 +222,7 @@ class _NotifPreview extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Wallex',
+                  'Bolsio',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                         fontWeight: FontWeight.w500,

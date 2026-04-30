@@ -109,14 +109,14 @@ si está pendiente, el CTA MUST mostrar un spinner inline.
 El widget compartido MUST exponer un CTA primario que invoque
 `DeviceQuirksService.openAppDetails()`, el cual dispara
 `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` con el package
-`com.wallex.app` y `FLAG_ACTIVITY_NEW_TASK`. El sistema operativo MUST abrir
-la pantalla de información de la app de Wallex.
+`com.bolsio.app` y `FLAG_ACTIVITY_NEW_TASK`. El sistema operativo MUST abrir
+la pantalla de información de la app de Bolsio.
 
 #### Scenario: CTA primario abre App Info
 
 - GIVEN el paso restricted-settings está renderizado
 - WHEN el usuario presiona el CTA primario ("Abrir Configuración" o copy equivalente)
-- THEN el sistema abre `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` para `com.wallex.app`
+- THEN el sistema abre `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` para `com.bolsio.app`
 
 ---
 
@@ -133,7 +133,7 @@ y MUST NOT auto-avanzar.
 
 #### Scenario: Resume con AppOp ahora permitido — auto-advance
 
-- GIVEN el usuario regresó a Wallex tras habilitar "Allow restricted settings"
+- GIVEN el usuario regresó a Bolsio tras habilitar "Allow restricted settings"
 - WHEN `didChangeAppLifecycleState(resumed)` dispara la re-consulta
 - AND `isRestrictedSettingsAllowed()` retorna `true`
 - THEN el host avanza automáticamente al siguiente paso (s08 o `_ActivateListenerStep`)

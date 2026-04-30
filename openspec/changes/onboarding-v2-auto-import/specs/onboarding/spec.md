@@ -225,7 +225,7 @@ slide MUST mostrar las instrucciones OEM adicionales inline antes del CTA princi
 
 - GIVEN el usuario está en slide 7
 - AND presiona "Activar ahora"
-- AND en la pantalla del sistema activa el permiso para Wallex
+- AND en la pantalla del sistema activa el permiso para Bolsio
 - AND regresa a la app
 - WHEN `PermissionCoordinator.check()` confirma `notificationListener = true`
 - THEN el slide muestra estado "Activado" (badge de check)
@@ -413,7 +413,7 @@ capturarla y retornar `const []`.
 
 `DeviceQuirksService` MUST exponer el método
 `Future<void> openNotificationListenerSettings()` que invoca la operación
-`'openNotificationListenerSettings'` por el canal `com.wallex.capture/quirks`.
+`'openNotificationListenerSettings'` por el canal `com.bolsio.capture/quirks`.
 El lado Kotlin MUST disparar `Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)`
 con `FLAG_ACTIVITY_NEW_TASK`. Si el intent falla (excepción o plataforma no-Android),
 el método MUST propagar la excepción para que el caller (slide 7) pueda activar

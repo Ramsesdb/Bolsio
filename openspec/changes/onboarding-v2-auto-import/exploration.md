@@ -4,7 +4,7 @@
 
 **Onboarding widget.** The current flow lives entirely in `lib/app/onboarding/onboarding.dart` (~1280 LOC, single file) as `OnboardingPage` — a `StatefulWidget` with a local `PageController` and `AnimatedSmoothIndicator` driving exactly 4 pages (line 126: `static const int _totalPages = 4`):
 
-1. `_WelcomePage` (lines 356–467) — hero icon, Wallex tagline, 3 feature badges, 3 feature tiles. Pure content, no interaction.
+1. `_WelcomePage` (lines 356–467) — hero icon, Bolsio tagline, 3 feature badges, 3 feature tiles. Pure content, no interaction.
 2. `_PermissionsPage` (lines 472–609) — `WidgetsBindingObserver` that wires `PermissionCoordinator.check()` on `didChangeAppLifecycleState` and renders two `_PermissionTile`s (notifications + battery). Uses `requestNotificationListener()` + `requestPostNotifications()` + `openBatteryOptimizationSettings()` directly.
 3. `_SetupPage` (lines 614–756) — 12-bank static grid (`_kBanks`, lines 32–105) with multi-select + USD/VES currency radio. All hardcoded Spanish strings, no slang.
 4. `_ReadyPage` (lines 761–863) — check badge, "Incluido gratis" / "Con tu API key" feature lists.
@@ -24,10 +24,10 @@ else → PageSwitcher
 Seed row in `lib/core/database/sql/initial/seed.dart:9` sets `introSeen = '0'`. `AppDataKey` enum has only 4 values (`app_data_service.dart:6`): `dbVersion, introSeen, lastExportDate, onboarded`.
 
 **Slang i18n.** Config in `build.yaml:24-38`: base locale `en`, input `lib/i18n/json/`, output `lib/i18n/generated/translations.g.dart`, key_case `snake`, enum `AppLocale`. Ten locales (`de, en, es, fr, hu, it, tr, uk, zh-CN, zh-TW`). CLI: `dart run slang` (per `pubspec.yaml:111` comment).
-**Relevant**: an `INTRO` namespace already exists in `es.json:169` with ~60 keys (`w_title`, `w_subtitle`, `perms_*`, `setup_*`, `ready_*`, plus legacy Monekin `sl1Title/sl2Title/lastSlideTitle`). **BUT `onboarding.dart` does NOT consume them** — grep for `t.INTRO|t.intro` in `lib/app/onboarding/` returns zero matches. Every string in the widget is a hardcoded Spanish literal. So the v3 rewrite must both (a) add new keys AND (b) actually wire `t.intro.*` for the first time.
+**Relevant**: an `INTRO` namespace already exists in `es.json:169` with ~60 keys (`w_title`, `w_subtitle`, `perms_*`, `setup_*`, `ready_*`, plus legacy Bolsio `sl1Title/sl2Title/lastSlideTitle`). **BUT `onboarding.dart` does NOT consume them** — grep for `t.INTRO|t.intro` in `lib/app/onboarding/` returns zero matches. Every string in the widget is a hardcoded Spanish literal. So the v3 rewrite must both (a) add new keys AND (b) actually wire `t.intro.*` for the first time.
 
 **Auto-import services.** Under `lib/core/services/auto_import/`:
-- `capture/device_quirks_service.dart` — singleton with `MethodChannel('com.wallex.capture/quirks')`. Exposes `detect()`, `isIgnoringBatteryOptimizations()`, `openBatteryOptimizationSettings()`, `openAutostartSettings()`, `openAppDetails()`. **Missing** a method to open `ACTION_NOTIFICATION_LISTENER_SETTINGS` — today the widget calls `PermissionCoordinator.requestNotificationListener()` which uses the `notification_listener_service` plugin's dialog (per the closed decision #5, this must be replaced with a direct MethodChannel firing `android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS`).
+- `capture/device_quirks_service.dart` — singleton with `MethodChannel('com.bolsio.capture/quirks')`. Exposes `detect()`, `isIgnoringBatteryOptimizations()`, `openBatteryOptimizationSettings()`, `openAutostartSettings()`, `openAppDetails()`. **Missing** a method to open `ACTION_NOTIFICATION_LISTENER_SETTINGS` — today the widget calls `PermissionCoordinator.requestNotificationListener()` which uses the `notification_listener_service` plugin's dialog (per the closed decision #5, this must be replaced with a direct MethodChannel firing `android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS`).
 - `capture/permission_coordinator.dart` — `CapturePermissionsState` with `notificationListener`, `postNotifications`, `batteryOptimizationsIgnored`, `autostart/oemBatteryUserConfirmed`. Already has `requestNotificationListener`/`requestPostNotifications`. Good as-is; slide 7 can reuse it.
 - `profiles/bank_profiles_registry.dart` — **static list**: `BdvSmsProfile, BdvNotifProfile, BinanceApiProfile` (Zinli is a TODO comment). There is NO runtime "detected bank apps → toggle" surface. Per-profile toggles are individual `SettingKey`s (`bdvSmsProfileEnabled`, `bdvNotifProfileEnabled`, `binanceApiProfileEnabled`, `zinliNotifProfileEnabled`) read via `UserSettingService.isProfileEnabled(profileId)`.
 
@@ -50,7 +50,7 @@ Seed row in `lib/core/database/sql/initial/seed.dart:9` sets `introSeen = '0'`. 
 
 **pubspec status.** Already present: `flutter_svg ^2.0.5`, `url_launcher ^6.3.1`, `slang ^4.9.1 + slang_flutter`, `permission_handler ^12.0.1`, `notification_listener_service ^0.3.5`, `device_info_plus ^11.3.0`, `shared_preferences`, `app_settings ^6.1.1`, `smooth_page_indicator ^1.2.1`, `dynamic_color ^1.7.0`. **Missing**: `google_fonts` (Gabarito + Inter), `flutter_animate` (for `v3-notif-in`/`v3-card-in`/`v3-pulse` stagger + pulse animations), and a package-listing library (see below).
 
-**Orphaned SVGs.** `assets/icons/app_onboarding/` contains exactly: `first.svg`, `security.svg`, `upload.svg`, `wallet.svg`. Current `onboarding.dart` does not reference any of them (grep shows zero uses). They are Monekin-era holdovers. Decision: **purge all four** during the rewrite — v3 uses geometric placeholders + Material icons, no SVG illustrations.
+**Orphaned SVGs.** `assets/icons/app_onboarding/` contains exactly: `first.svg`, `security.svg`, `upload.svg`, `wallet.svg`. Current `onboarding.dart` does not reference any of them (grep shows zero uses). They are Bolsio-era holdovers. Decision: **purge all four** during the rewrite — v3 uses geometric placeholders + Material icons, no SVG illustrations.
 
 **Reference uploads.** Directory `guia/uploads/` does **not exist** (ls failure). The checklist assumed it; it isn't there. Design source of truth is the v3 HTML + JSX files at the `guia/` root.
 
@@ -63,7 +63,7 @@ Seed row in `lib/core/database/sql/initial/seed.dart:9` sets `introSeen = '0'`. 
 - `lib/core/database/sql/initial/seed.dart:14-28` — seed default for new `onboardingGoals` key (empty JSON array or null).
 - `lib/core/database/sql/migrations/` — new migration to insert the default row for `onboardingGoals` on existing installs.
 - `lib/core/services/auto_import/capture/device_quirks_service.dart:52-266` — add `openNotificationListenerSettings()` that invokes a new MethodChannel op firing `Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS`.
-- `android/app/src/main/kotlin/.../MainActivity.kt` (or wherever `com.wallex.capture/quirks` is handled) — handle the new op.
+- `android/app/src/main/kotlin/.../MainActivity.kt` (or wherever `com.bolsio.capture/quirks` is handled) — handle the new op.
 - `android/app/src/main/AndroidManifest.xml:1-30` — add `<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>` with a `<!-- TODO: split Play Store flavor without QUERY_ALL_PACKAGES -->` English comment.
 - `pubspec.yaml:22-98` — add `google_fonts`, `flutter_animate`, and a package-listing library (see Approaches).
 - `pubspec.yaml:129-145` — remove `assets/icons/app_onboarding/` entry (all four SVGs deleted).
@@ -94,20 +94,20 @@ Seed row in `lib/core/database/sql/initial/seed.dart:9` sets `introSeen = '0'`. 
 2. **`device_apps` package** — similar API but last updated 2022; reported issues on Android 14+.
    - Pros: Cleaner API.
    - Cons: Stale maintenance.
-3. **Kotlin-side enumeration via existing `com.wallex.capture/quirks` MethodChannel** — add `listInstalledPackages(filter)` op.
+3. **Kotlin-side enumeration via existing `com.bolsio.capture/quirks` MethodChannel** — add `listInstalledPackages(filter)` op.
    - Pros: No new Dart dep; full control over filtering.
    - Cons: More native code to write + maintain; no real win given the Dart plugin works. **Only consider if `installed_apps` has an incompatibility on Android 15 POCO Rodin.**
 
 #### Fork C — Notification Listener deep link
 
-1. **New MethodChannel op on existing channel (recommended)** — add `openNotificationListenerSettings` to `com.wallex.capture/quirks` (both Dart side in `DeviceQuirksService` and Kotlin side), firing `Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS` with `FLAG_ACTIVITY_NEW_TASK`. Per closed decision #5, this replaces the `notification_listener_service` plugin's `requestPermission()` call (which shows an in-app dialog on some devices rather than opening the toggle screen).
+1. **New MethodChannel op on existing channel (recommended)** — add `openNotificationListenerSettings` to `com.bolsio.capture/quirks` (both Dart side in `DeviceQuirksService` and Kotlin side), firing `Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS` with `FLAG_ACTIVITY_NEW_TASK`. Per closed decision #5, this replaces the `notification_listener_service` plugin's `requestPermission()` call (which shows an in-app dialog on some devices rather than opening the toggle screen).
    - Pros: Leverages existing channel + OEM quirks detection. Matches the pattern used by `openBatteryOptimization` / `openAutostart`.
    - Cons: None.
 2. Keep `NotificationListenerService.requestPermission()` — rejected by closed decision #5.
 
 #### Fork D — i18n key namespacing
 
-1. **Clean-slate `intro` namespace (recommended)** — rename existing `INTRO` block → `intro` (snake_case, 10 locales) with entirely new keys for the 10-slide flow. Leave the Monekin-era keys (`sl1Title`, `lastSlideTitle`) out. Since the current widget doesn't consume `t.INTRO.*`, there are no dangling references to fix.
+1. **Clean-slate `intro` namespace (recommended)** — rename existing `INTRO` block → `intro` (snake_case, 10 locales) with entirely new keys for the 10-slide flow. Leave the Bolsio-era keys (`sl1Title`, `lastSlideTitle`) out. Since the current widget doesn't consume `t.INTRO.*`, there are no dangling references to fix.
    - Pros: Clean; matches `key_case: snake` config.
    - Cons: Requires translation pass for all 10 locales — or ship with es+en only and `fallback_strategy: base_locale` (already enabled at `build.yaml:37`) handles the rest.
 2. Keep `INTRO` all-caps — works but inconsistent with config.
@@ -116,7 +116,7 @@ Seed row in `lib/core/database/sql/initial/seed.dart:9` sets `introSeen = '0'`. 
 
 - **A1** new `SettingKey.onboardingGoals` JSON.
 - **B1** `installed_apps` package.
-- **C1** extend `com.wallex.capture/quirks` MethodChannel with `openNotificationListenerSettings`.
+- **C1** extend `com.bolsio.capture/quirks` MethodChannel with `openNotificationListenerSettings`.
 - **D1** rename/rewrite under `intro` snake_case namespace, es+en day-1, other 8 locales via `fallback_strategy: base_locale` until translated.
 
 Keep the routing gate (`AppDataKey.introSeen`) untouched — the rewrite is internal to `OnboardingPage`. Finish semantics stay identical: set `preferredCurrency`, call `PersonalVESeeder.seedAll`, flip `introSeen`, `pushReplacement` to `PageSwitcher`. What changes is the slide count, the token system, the permission/listener UX, and the new writes (`preferredRateSource`, `onboardingGoals`, per-profile toggles for detected apps).

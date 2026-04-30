@@ -8,7 +8,7 @@ Atomic, dependency-ordered checklist organized into 5 tandas (single-session bat
 
 Depends on: nothing. Critical path entry.
 
-- [x] 1.1 In `android/app/src/main/kotlin/com/wallex/app/DeviceQuirksChannel.kt`, add private fun `isRestrictedSettingsAllowed(context: Context): Boolean` per design § Implementation sketch — `Build.VERSION.SDK_INT < Build.VERSION_CODES.S` returns `true`; uses `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", Process.myUid(), packageName)`; returns `true` for `MODE_ALLOWED` or `MODE_DEFAULT`; `try/catch` fail-open returning `true` on any exception.
+- [x] 1.1 In `android/app/src/main/kotlin/com/bolsio/app/DeviceQuirksChannel.kt`, add private fun `isRestrictedSettingsAllowed(context: Context): Boolean` per design § Implementation sketch — `Build.VERSION.SDK_INT < Build.VERSION_CODES.S` returns `true`; uses `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", Process.myUid(), packageName)`; returns `true` for `MODE_ALLOWED` or `MODE_DEFAULT`; `try/catch` fail-open returning `true` on any exception.
 - [x] 1.2 In the same file, add the channel branch `"isRestrictedSettingsAllowed" -> result.success(isRestrictedSettingsAllowed(context))` inside the existing `setMethodCallHandler` switch.
 - [x] 1.3 In `lib/core/services/auto_import/capture/device_quirks_service.dart`, add `Future<bool> isRestrictedSettingsAllowed()` wrapper: returns `true` when `!Platform.isAndroid`; invokes `_channel.invokeMethod<bool>('isRestrictedSettingsAllowed')`; `try/catch` returns `true` on `PlatformException` or any error (fail-open).
 - [x] 1.4 In `lib/core/services/auto_import/capture/permission_coordinator.dart`, add `final bool restrictedSettingsAllowed;` to `CapturePermissionsState`; default `true` in `.initial()`; update `copyWith`, `==`, and `hashCode` to include the new field.
@@ -66,12 +66,12 @@ Depends on: Tandas 3 AND 4 verified. Environment setup required.
 
 - [ ] 5.1 Environment: ensure ADB connection to POCO rodin via USB; confirm "Instalar vía USB" toggle is ON in MIUI dev options (per project memory `feedback_miui_adb_install`).
 - [ ] 5.2 Build APK: `flutter build apk --release --split-per-abi --target-platform android-arm64`.
-- [ ] 5.3 Push to device: `adb push build/app/outputs/flutter-apk/app-arm64-v8a-release.apk /sdcard/Download/wallex-restricted-settings.apk` (use `adb push` + manual install due to MIUI USER_RESTRICTED block on `adb install`).
-- [ ] 5.4 Install manually via Files app on device; clear any prior Wallex install state if needed (`adb shell pm clear com.wallex.app`).
-- [ ] 5.5 Verify positive path in `OnboardingPage`: gate active by default on sideload → traverse onboarding to s07 → s075 renders between s07 and s08 → tap primary CTA → App Info opens for `com.wallex.app` → toggle "Allow restricted settings" ON → press back → app resumes → auto-advances to s08.
+- [ ] 5.3 Push to device: `adb push build/app/outputs/flutter-apk/app-arm64-v8a-release.apk /sdcard/Download/bolsio-restricted-settings.apk` (use `adb push` + manual install due to MIUI USER_RESTRICTED block on `adb install`).
+- [ ] 5.4 Install manually via Files app on device; clear any prior Bolsio install state if needed (`adb shell pm clear com.bolsio.app`).
+- [ ] 5.5 Verify positive path in `OnboardingPage`: gate active by default on sideload → traverse onboarding to s07 → s075 renders between s07 and s08 → tap primary CTA → App Info opens for `com.bolsio.app` → toggle "Allow restricted settings" ON → press back → app resumes → auto-advances to s08.
 - [ ] 5.6 Verify "still blocked" path: at s075, tap primary CTA, return without toggling → inline 1-line hint renders; CTA still functional for retry.
 - [ ] 5.7 Verify skip path: at s075, tap secondary "Hacer esto más tarde" → host advances to s08 with no persisted gate state; `SettingKey.notifListenerEnabled` unchanged.
-- [ ] 5.8 Verify negative path (Play Store simulation): `adb shell appops set com.wallex.app ACCESS_RESTRICTED_SETTINGS allow` → relaunch onboarding (clear app data first) → s075 does NOT appear; slide list length matches v2 baseline.
+- [ ] 5.8 Verify negative path (Play Store simulation): `adb shell appops set com.bolsio.app ACCESS_RESTRICTED_SETTINGS allow` → relaunch onboarding (clear app data first) → s075 does NOT appear; slide list length matches v2 baseline.
 - [ ] 5.9 Verify `ReturningUserFlow` path: clear app data, sign in with Google account that has Firebase/Drift data restored → welcome-back hero renders → tap "Continuar" → restricted-settings step renders (no back-pill) → tap primary CTA → App Info opens → toggle on → return → auto-advances to `_ActivateListenerStep`.
 - [ ] 5.10 Verify `ReturningUserFlow` negative: with AppOp set to `allow`, sign in with returning Google account → welcome-back → "Continuar" → goes directly to `_ActivateListenerStep` (no intermediate step).
 
