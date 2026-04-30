@@ -2,7 +2,7 @@
 schema: spec-driven
 
 context: |
-  Tech stack: Flutter 3.35.6 / Dart >=3.8.0 <4.0.0 (app name: wallex)
+  Tech stack: Flutter 3.35.6 / Dart >=3.8.0 <4.0.0 (app name: bolsio)
   Database: Drift (SQLite) with json1 & fts5 modules, date stored as text
   State/Reactive: RxDart
   Backend: Firebase (Auth, Firestore), Google Sign-In

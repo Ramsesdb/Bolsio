@@ -2,7 +2,7 @@
 
 ### Contexto
 
-Ramses está empezando a usar Wallex desde cero. Quiere registrar el saldo inicial de sus cuentas (BDV) y simultáneamente importar movimientos históricos (semanas/meses atrás) que **no deben afectar el balance actual**. Si hoy mete un saldo inicial + movimientos viejos, el balance queda descuadrado.
+Ramses está empezando a usar Bolsio desde cero. Quiere registrar el saldo inicial de sus cuentas (BDV) y simultáneamente importar movimientos históricos (semanas/meses atrás) que **no deben afectar el balance actual**. Si hoy mete un saldo inicial + movimientos viejos, el balance queda descuadrado.
 
 Solución acordada: añadir `trackedSince: DateTime?` a la tabla `accounts`. Transacciones con `date < trackedSince` aparecen en feeds/listados pero no alteran el balance actual. `trackedSince == NULL` = comportamiento actual (retrocompatible). Equivalente funcional a "Fresh Start" de YNAB.
 
