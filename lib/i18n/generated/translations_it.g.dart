@@ -154,7 +154,7 @@ class _TranslationsHomeIt extends TranslationsHomeEn {
 	@override String get my_accounts => 'I miei conti';
 	@override String get active_accounts => 'Conti attivi';
 	@override String get no_accounts => 'Nessun conto creato ancora';
-	@override String get no_accounts_descr => 'Inizia a usare tutta la magia di Monekin. Crea almeno un conto per iniziare ad aggiungere transazioni';
+	@override String get no_accounts_descr => 'Inizia a usare tutta la magia di Bolsio. Crea almeno un conto per iniziare ad aggiungere transazioni';
 	@override String get last_transactions => 'Ultime transazioni';
 	@override String get should_create_account_header => 'Oops!';
 	@override String get should_create_account_message => 'Devi avere almeno un conto non archiviato prima di poter iniziare a creare transazioni';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusIt extends TranslationsTransactionStatusEn {
 	@override String get reconciled => 'Riconciliata';
 	@override String get reconciled_descr => 'Questa transazione è già stata convalidata e corrisponde a una transazione reale della tua banca';
 	@override String get unreconciled => 'Non riconciliata';
-	@override String get unreconciled_descr => 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Monekin';
+	@override String get unreconciled_descr => 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Bolsio';
 	@override String get pending => 'In sospeso';
 	@override String get pending_descr => 'Questa transazione è in sospeso e pertanto non verrà presa in considerazione nel calcolo dei saldi e delle statistiche';
 	@override String get voided => 'Annullata';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportIt extends TranslationsBackupImportEn {
 	@override String get title => 'Importa i tuoi dati';
 	@override String get title_short => 'Importa';
 	@override String get restore_backup => 'Ripristina backup';
-	@override String get restore_backup_descr => 'Importa un database precedentemente salvato da Monekin. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati';
-	@override String get restore_backup_warn_description => 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Monekin';
+	@override String get restore_backup_descr => 'Importa un database precedentemente salvato da Bolsio. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati';
+	@override String get restore_backup_warn_description => 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Bolsio';
 	@override String get restore_backup_warn_title => 'Sovrascrivi tutti i dati';
 	@override String get select_other_file => 'Seleziona un altro file';
 	@override String get tap_to_select_file => 'Tocca per selezionare un file';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiIt extends TranslationsMoreAiEn {
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Wallex AI';
+	@override String get title => 'Bolsi';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsIt extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Informazioni sull\'app';
-	@override String get description => 'Trova i termini di Monekin, informazioni importanti e connettiti segnalando bug o condividendo idee';
+	@override String get description => 'Trova i termini di Bolsio, informazioni importanti e connettiti segnalando bug o condividendo idee';
 	@override late final _TranslationsMoreAboutUsLegalIt legal = _TranslationsMoreAboutUsLegalIt._(_root);
 	@override late final _TranslationsMoreAboutUsProjectIt project = _TranslationsMoreAboutUsProjectIt._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsIt extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Aiutaci';
-	@override String get description => 'Scopri come puoi aiutare Monekin a migliorare sempre di più';
+	@override String get description => 'Scopri come puoi aiutare Bolsio a migliorare sempre di più';
 	@override String get rate_us => 'Valutaci';
 	@override String get rate_us_descr => 'Ogni valutazione è benvenuta!';
-	@override String get share => 'Condividi Monekin';
+	@override String get share => 'Condividi Bolsio';
 	@override String get share_descr => 'Condividi la nostra app con amici e famiglia';
-	@override String get share_text => 'Monekin! La migliore app di finanza personale. Scaricala qui';
+	@override String get share_text => 'Bolsio! La migliore app di finanza personale. Scaricala qui';
 	@override String get thanks => 'Grazie!';
-	@override String get thanks_long => 'I tuoi contributi a Monekin e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.';
+	@override String get thanks_long => 'I tuoi contributi a Bolsio e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.';
 	@override String get donate => 'Fai una donazione';
 	@override String get donate_descr => 'Con la tua donazione aiuterai l\'app a continuare a ricevere miglioramenti. Quale modo migliore per ringraziare il lavoro svolto se non invitandomi per un caffè?';
 	@override String get donate_success => 'Donazione effettuata. Grazie mille per il tuo contributo! ❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrIt extends TranslationsFinancialHea
 
 	// Translations
 	@override String get insufficient_data => 'Sembra che non abbiamo abbastanza spese per calcolare la tua salute finanziaria. Aggiungi alcune spese/entrate in questo periodo per permetterci di aiutarti!';
-	@override String get very_good => 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Monekin';
+	@override String get very_good => 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Bolsio';
 	@override String get good => 'Ottimo! La tua salute finanziaria è buona. Visita la scheda di analisi per vedere come risparmiare ancora di più!';
 	@override String get normal => 'La tua salute finanziaria è più o meno nella media del resto della popolazione per questo periodo';
 	@override String get bad => 'Sembra che la tua situazione finanziaria non sia ancora delle migliori. Esplora il resto dei grafici per saperne di più sulle tue finanze';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageIt extends TranslationsSettingsGeneral
 	@override String get section => 'Lingua e testi';
 	@override String get title => 'Lingua dell\'app';
 	@override String get descr => 'Lingua in cui i testi verranno visualizzati nell\'app';
-	@override String get help => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>la nostra guida</a>';
+	@override String get help => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>la nostra guida</a>';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectIt extends TranslationsMoreAboutUsProjectEn
 	// Translations
 	@override String get display => 'Progetto';
 	@override String get contributors => 'Collaboratori';
-	@override String get contributors_descr => 'Tutti gli sviluppatori che hanno fatto crescere Monekin';
+	@override String get contributors_descr => 'Tutti gli sviluppatori che hanno fatto crescere Bolsio';
 	@override String get contact => 'Contattaci';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsIt {
 			'home.my_accounts' => 'I miei conti',
 			'home.active_accounts' => 'Conti attivi',
 			'home.no_accounts' => 'Nessun conto creato ancora',
-			'home.no_accounts_descr' => 'Inizia a usare tutta la magia di Monekin. Crea almeno un conto per iniziare ad aggiungere transazioni',
+			'home.no_accounts_descr' => 'Inizia a usare tutta la magia di Bolsio. Crea almeno un conto per iniziare ad aggiungere transazioni',
 			'home.last_transactions' => 'Ultime transazioni',
 			'home.should_create_account_header' => 'Oops!',
 			'home.should_create_account_message' => 'Devi avere almeno un conto non archiviato prima di poter iniziare a creare transazioni',
@@ -2218,7 +2218,7 @@ extension on TranslationsIt {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Molto Cattiva'; case GenderContext.female: return 'Molto Cattiva'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Dati insufficienti'; case GenderContext.female: return 'Dati insufficienti'; } }, 
 			'financial_health.review.descr.insufficient_data' => 'Sembra che non abbiamo abbastanza spese per calcolare la tua salute finanziaria. Aggiungi alcune spese/entrate in questo periodo per permetterci di aiutarti!',
-			'financial_health.review.descr.very_good' => 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Monekin',
+			'financial_health.review.descr.very_good' => 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Bolsio',
 			'financial_health.review.descr.good' => 'Ottimo! La tua salute finanziaria è buona. Visita la scheda di analisi per vedere come risparmiare ancora di più!',
 			'financial_health.review.descr.normal' => 'La tua salute finanziaria è più o meno nella media del resto della popolazione per questo periodo',
 			'financial_health.review.descr.bad' => 'Sembra che la tua situazione finanziaria non sia ancora delle migliori. Esplora il resto dei grafici per saperne di più sulle tue finanze',
@@ -2362,7 +2362,7 @@ extension on TranslationsIt {
 			'transaction.status.reconciled' => 'Riconciliata',
 			'transaction.status.reconciled_descr' => 'Questa transazione è già stata convalidata e corrisponde a una transazione reale della tua banca',
 			'transaction.status.unreconciled' => 'Non riconciliata',
-			'transaction.status.unreconciled_descr' => 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Monekin',
+			'transaction.status.unreconciled_descr' => 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Bolsio',
 			'transaction.status.pending' => 'In sospeso',
 			'transaction.status.pending_descr' => 'Questa transazione è in sospeso e pertanto non verrà presa in considerazione nel calcolo dei saldi e delle statistiche',
 			'transaction.status.voided' => 'Annullata',
@@ -2672,8 +2672,8 @@ extension on TranslationsIt {
 			'backup.import.title' => 'Importa i tuoi dati',
 			'backup.import.title_short' => 'Importa',
 			'backup.import.restore_backup' => 'Ripristina backup',
-			'backup.import.restore_backup_descr' => 'Importa un database precedentemente salvato da Monekin. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati',
-			'backup.import.restore_backup_warn_description' => 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Monekin',
+			'backup.import.restore_backup_descr' => 'Importa un database precedentemente salvato da Bolsio. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati',
+			'backup.import.restore_backup_warn_description' => 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Bolsio',
 			'backup.import.restore_backup_warn_title' => 'Sovrascrivi tutti i dati',
 			'backup.import.select_other_file' => 'Seleziona un altro file',
 			'backup.import.tap_to_select_file' => 'Tocca per selezionare un file',
@@ -2715,7 +2715,7 @@ extension on TranslationsIt {
 			'settings.general.language.section' => 'Lingua e testi',
 			'settings.general.language.title' => 'Lingua dell\'app',
 			'settings.general.language.descr' => 'Lingua in cui i testi verranno visualizzati nell\'app',
-			'settings.general.language.help' => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>la nostra guida</a>',
+			'settings.general.language.help' => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>la nostra guida</a>',
 			'settings.general.locale.title' => 'Regione',
 			'settings.general.locale.auto' => 'Sistema',
 			'settings.general.locale.descr' => 'Imposta il formato da utilizzare per date, numeri...',
@@ -2799,7 +2799,7 @@ extension on TranslationsIt {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Wallex AI',
+			'more.ai.title' => 'Bolsi',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Dati',
@@ -2810,24 +2810,24 @@ extension on TranslationsIt {
 			'more.data.delete_all_header2' => 'Un ultimo passo ⚠️⚠️',
 			'more.data.delete_all_message2' => 'Eliminando un account eliminerai tutti i tuoi dati personali memorizzati. I tuoi conti, transazioni, budget e categorie verranno eliminati e non potranno essere recuperati. Sei d\'accordo?',
 			'more.about_us.display' => 'Informazioni sull\'app',
-			'more.about_us.description' => 'Trova i termini di Monekin, informazioni importanti e connettiti segnalando bug o condividendo idee',
+			'more.about_us.description' => 'Trova i termini di Bolsio, informazioni importanti e connettiti segnalando bug o condividendo idee',
 			'more.about_us.legal.display' => 'Informazioni legali',
 			'more.about_us.legal.privacy' => 'Informativa sulla privacy',
 			'more.about_us.legal.terms' => 'Termini di utilizzo',
 			'more.about_us.legal.licenses' => 'Licenze',
 			'more.about_us.project.display' => 'Progetto',
 			'more.about_us.project.contributors' => 'Collaboratori',
-			'more.about_us.project.contributors_descr' => 'Tutti gli sviluppatori che hanno fatto crescere Monekin',
+			'more.about_us.project.contributors_descr' => 'Tutti gli sviluppatori che hanno fatto crescere Bolsio',
 			'more.about_us.project.contact' => 'Contattaci',
 			'more.help_us.display' => 'Aiutaci',
-			'more.help_us.description' => 'Scopri come puoi aiutare Monekin a migliorare sempre di più',
+			'more.help_us.description' => 'Scopri come puoi aiutare Bolsio a migliorare sempre di più',
 			'more.help_us.rate_us' => 'Valutaci',
 			'more.help_us.rate_us_descr' => 'Ogni valutazione è benvenuta!',
-			'more.help_us.share' => 'Condividi Monekin',
+			'more.help_us.share' => 'Condividi Bolsio',
 			'more.help_us.share_descr' => 'Condividi la nostra app con amici e famiglia',
-			'more.help_us.share_text' => 'Monekin! La migliore app di finanza personale. Scaricala qui',
+			'more.help_us.share_text' => 'Bolsio! La migliore app di finanza personale. Scaricala qui',
 			'more.help_us.thanks' => 'Grazie!',
-			'more.help_us.thanks_long' => 'I tuoi contributi a Monekin e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.',
+			'more.help_us.thanks_long' => 'I tuoi contributi a Bolsio e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.',
 			'more.help_us.donate' => 'Fai una donazione',
 			'more.help_us.donate_descr' => 'Con la tua donazione aiuterai l\'app a continuare a ricevere miglioramenti. Quale modo migliore per ringraziare il lavoro svolto se non invitandomi per un caffè?',
 			'more.help_us.donate_success' => 'Donazione effettuata. Grazie mille per il tuo contributo! ❤️',

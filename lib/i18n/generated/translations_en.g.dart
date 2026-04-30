@@ -50,7 +50,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsIconSelectorEn icon_selector = TranslationsIconSelectorEn.internal(_root);
 	late final TranslationsTransactionEn transaction = TranslationsTransactionEn.internal(_root);
 	late final TranslationsAttachmentsEn attachments = TranslationsAttachmentsEn.internal(_root);
-	late final TranslationsWallexAiEn wallex_ai = TranslationsWallexAiEn.internal(_root);
+	late final TranslationsBolsioAiEn bolsio_ai = TranslationsBolsioAiEn.internal(_root);
 	late final TranslationsTransferEn transfer = TranslationsTransferEn.internal(_root);
 	late final TranslationsRecurrentTransactionsEn recurrent_transactions = TranslationsRecurrentTransactionsEn.internal(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn.internal(_root);
@@ -302,8 +302,8 @@ class TranslationsHomeEn {
 	/// en: 'No accounts created yet'
 	String get no_accounts => 'No accounts created yet';
 
-	/// en: 'Start using all the magic of Monekin. Create at least one account to start adding transactions'
-	String get no_accounts_descr => 'Start using all the magic of Monekin. Create at least one account to start adding transactions';
+	/// en: 'Start using all the magic of Bolsio. Create at least one account to start adding transactions'
+	String get no_accounts_descr => 'Start using all the magic of Bolsio. Create at least one account to start adding transactions';
 
 	/// en: 'Last transactions'
 	String get last_transactions => 'Last transactions';
@@ -577,9 +577,9 @@ class TranslationsAttachmentsEn {
 	String get empty_state => 'No attachments';
 }
 
-// Path: wallex_ai
-class TranslationsWallexAiEn {
-	TranslationsWallexAiEn.internal(this._root);
+// Path: bolsio_ai
+class TranslationsBolsioAiEn {
+	TranslationsBolsioAiEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -594,8 +594,8 @@ class TranslationsWallexAiEn {
 	/// en: 'Microphone access'
 	String get voice_permission_title => 'Microphone access';
 
-	/// en: 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.'
-	String get voice_permission_body => 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.';
+	/// en: 'Bolsio needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.'
+	String get voice_permission_body => 'Bolsio needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.';
 
 	/// en: 'Got it, continue'
 	String get voice_permission_cta => 'Got it, continue';
@@ -795,8 +795,8 @@ class TranslationsWallexAiEn {
 	/// en: 'Destination amount'
 	String get chat_tool_field_value_in_destiny => 'Destination amount';
 
-	/// en: 'Wallex AI'
-	String get chat_header => 'Wallex AI';
+	/// en: 'Bolsi'
+	String get chat_header => 'Bolsi';
 
 	/// en: 'Loading financial context...'
 	String get chat_boot_loading => 'Loading financial context...';
@@ -804,8 +804,8 @@ class TranslationsWallexAiEn {
 	/// en: 'AI chat is disabled in settings.'
 	String get chat_disabled => 'AI chat is disabled in settings.';
 
-	/// en: 'Hi! I'm **Wallex AI**, your financial assistant. I can help you with: - Check balances and the state of your accounts - Analyze spending by category - Review recent transactions - Review budgets What would you like to check?'
-	String get chat_welcome_message => 'Hi! I\'m **Wallex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?';
+	/// en: 'Hi! I'm Bolsi 👛 your pocket buddy. How can I help today?'
+	String get chat_welcome_message => 'Hi! I\'m Bolsi 👛 your pocket buddy. How can I help today?';
 }
 
 // Path: transfer
@@ -1269,11 +1269,23 @@ class TranslationsProfileEn {
 
 	// Translations
 
-	/// en: 'Upload custom avatar'
-	String get upload_custom_avatar => 'Upload custom avatar';
+	/// en: 'Your avatar'
+	String get your_avatar => 'Your avatar';
 
-	/// en: 'Use preset avatar'
-	String get use_preset_avatar => 'Use preset avatar';
+	/// en: 'Upload photo'
+	String get upload_photo => 'Upload photo';
+
+	/// en: 'Replace'
+	String get replace_photo => 'Replace';
+
+	/// en: 'Your photo'
+	String get your_photo_badge => 'Your photo';
+
+	/// en: 'Your visible name'
+	String get name_label => 'Your visible name';
+
+	/// en: '{{count}} options'
+	String options_count({required Object count}) => '${count} options';
 }
 
 // Path: settings
@@ -1701,8 +1713,8 @@ class TranslationsCalculatorShareEn {
 	/// en: 'Share conversion'
 	String get action_a11y => 'Share conversion';
 
-	/// en: 'Generated with Wallex'
-	String get footer => 'Generated with Wallex';
+	/// en: 'Generated with Bolsio'
+	String get footer => 'Generated with Bolsio';
 
 	/// en: 'FX conversion'
 	String get subject => 'FX conversion';
@@ -2154,8 +2166,8 @@ class TranslationsTransactionStatusEn {
 	/// en: 'Unreconciled'
 	String get unreconciled => 'Unreconciled';
 
-	/// en: 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin'
-	String get unreconciled_descr => 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin';
+	/// en: 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Bolsio'
+	String get unreconciled_descr => 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Bolsio';
 
 	/// en: 'Pending'
 	String get pending => 'Pending';
@@ -2998,11 +3010,11 @@ class TranslationsBackupImportEn {
 	/// en: 'Restore Backup'
 	String get restore_backup => 'Restore Backup';
 
-	/// en: 'Import a previously saved database from Monekin. This action will replace any current application data with the new data'
-	String get restore_backup_descr => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
+	/// en: 'Import a previously saved database from Bolsio. This action will replace any current application data with the new data'
+	String get restore_backup_descr => 'Import a previously saved database from Bolsio. This action will replace any current application data with the new data';
 
-	/// en: 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin'
-	String get restore_backup_warn_description => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
+	/// en: 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Bolsio'
+	String get restore_backup_warn_description => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Bolsio';
 
 	/// en: 'Overwrite all data'
 	String get restore_backup_warn_title => 'Overwrite all data';
@@ -3554,8 +3566,8 @@ class TranslationsMoreAiEn {
 
 	// Translations
 
-	/// en: 'Wallex AI'
-	String get title => 'Wallex AI';
+	/// en: 'Bolsi'
+	String get title => 'Bolsi';
 
 	/// en: 'Set up your financial assistant'
 	String get configure => 'Set up your financial assistant';
@@ -3605,8 +3617,8 @@ class TranslationsMoreAboutUsEn {
 	/// en: 'App information'
 	String get display => 'App information';
 
-	/// en: 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas'
-	String get description => 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas';
+	/// en: 'Find Bolsio’s terms, important info, and connect by reporting bugs or sharing ideas'
+	String get description => 'Find Bolsio’s terms, important info, and connect by reporting bugs or sharing ideas';
 
 	late final TranslationsMoreAboutUsLegalEn legal = TranslationsMoreAboutUsLegalEn.internal(_root);
 	late final TranslationsMoreAboutUsProjectEn project = TranslationsMoreAboutUsProjectEn.internal(_root);
@@ -3623,8 +3635,8 @@ class TranslationsMoreHelpUsEn {
 	/// en: 'Help us'
 	String get display => 'Help us';
 
-	/// en: 'Find out how you can help Monekin become better and better'
-	String get description => 'Find out how you can help Monekin become better and better';
+	/// en: 'Find out how you can help Bolsio become better and better'
+	String get description => 'Find out how you can help Bolsio become better and better';
 
 	/// en: 'Rate us'
 	String get rate_us => 'Rate us';
@@ -3632,20 +3644,20 @@ class TranslationsMoreHelpUsEn {
 	/// en: 'Any rate is welcome!'
 	String get rate_us_descr => 'Any rate is welcome!';
 
-	/// en: 'Share Monekin'
-	String get share => 'Share Monekin';
+	/// en: 'Share Bolsio'
+	String get share => 'Share Bolsio';
 
 	/// en: 'Share our app to friends and family'
 	String get share_descr => 'Share our app to friends and family';
 
-	/// en: 'Monekin! The best personal finance app. Download it here'
-	String get share_text => 'Monekin! The best personal finance app. Download it here';
+	/// en: 'Bolsio! The best personal finance app. Download it here'
+	String get share_text => 'Bolsio! The best personal finance app. Download it here';
 
 	/// en: 'Thank you!'
 	String get thanks => 'Thank you!';
 
-	/// en: 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.'
-	String get thanks_long => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+	/// en: 'Your contributions to Bolsio and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.'
+	String get thanks_long => 'Your contributions to Bolsio and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
 
 	/// en: 'Make a donation'
 	String get donate => 'Make a donation';
@@ -3683,8 +3695,8 @@ class TranslationsOnboardingRestrictedSettingsEn {
 	/// en: 'Select "Allow restricted settings".'
 	String get step2 => 'Select "Allow restricted settings".';
 
-	/// en: 'Toggle it on and return to Wallex.'
-	String get step3 => 'Toggle it on and return to Wallex.';
+	/// en: 'Toggle it on and return to Bolsio.'
+	String get step3 => 'Toggle it on and return to Bolsio.';
 
 	/// en: 'Scroll to the bottom of the page.'
 	String get step1_xiaomi => 'Scroll to the bottom of the page.';
@@ -4021,8 +4033,8 @@ class TranslationsFinancialHealthReviewDescrEn {
 	/// en: 'It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!'
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
 
-	/// en: 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin'
-	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
+	/// en: 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Bolsio'
+	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Bolsio';
 
 	/// en: 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!'
 	String get good => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
@@ -4560,8 +4572,8 @@ class TranslationsSettingsGeneralLanguageEn {
 	/// en: 'Language in which the texts will be displayed in the app'
 	String get descr => 'Language in which the texts will be displayed in the app';
 
-	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>our guide</a>'
-	String get help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>our guide</a>';
+	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>our guide</a>'
+	String get help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>our guide</a>';
 }
 
 // Path: settings.general.locale
@@ -4650,8 +4662,8 @@ class TranslationsSettingsHiddenModePinEn {
 	/// en: 'Use fingerprint'
 	String get use_biometric => 'Use fingerprint';
 
-	/// en: 'Unlock Wallex'
-	String get biometric_reason => 'Unlock Wallex';
+	/// en: 'Unlock Bolsio'
+	String get biometric_reason => 'Unlock Bolsio';
 
 	/// en: 'PIN updated'
 	String get pin_changed => 'PIN updated';
@@ -4833,8 +4845,8 @@ class TranslationsMoreAboutUsProjectEn {
 	/// en: 'Collaborators'
 	String get contributors => 'Collaborators';
 
-	/// en: 'All the developers who have made Monekin grow'
-	String get contributors_descr => 'All the developers who have made Monekin grow';
+	/// en: 'All the developers who have made Bolsio grow'
+	String get contributors_descr => 'All the developers who have made Bolsio grow';
 
 	/// en: 'Contact us'
 	String get contact => 'Contact us';
@@ -4997,7 +5009,7 @@ extension on Translations {
 			'home.my_accounts' => 'My accounts',
 			'home.active_accounts' => 'Active accounts',
 			'home.no_accounts' => 'No accounts created yet',
-			'home.no_accounts_descr' => 'Start using all the magic of Monekin. Create at least one account to start adding transactions',
+			'home.no_accounts_descr' => 'Start using all the magic of Bolsio. Create at least one account to start adding transactions',
 			'home.last_transactions' => 'Last transactions',
 			'home.should_create_account_header' => 'Oops!',
 			'home.should_create_account_message' => 'You must have at least one no-archived account before you can start creating transactions',
@@ -5067,7 +5079,7 @@ extension on Translations {
 			'calculator.refresh.a11y' => 'Refresh rates',
 			'calculator.refresh.error' => 'Could not update rates. Showing cached values.',
 			'calculator.share.action_a11y' => 'Share conversion',
-			'calculator.share.footer' => 'Generated with Wallex',
+			'calculator.share.footer' => 'Generated with Bolsio',
 			'calculator.share.subject' => 'FX conversion',
 			'calculator.share.equals_separator' => '=',
 			'calculator.rate_explicit.format' => ({required Object from, required Object to, required Object amount}) => '${from} 1 = ${to} ${amount}',
@@ -5085,7 +5097,7 @@ extension on Translations {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Very Bad'; case GenderContext.female: return 'Very Bad'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Insufficient data'; case GenderContext.female: return 'Insufficient data'; } }, 
 			'financial_health.review.descr.insufficient_data' => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!',
-			'financial_health.review.descr.very_good' => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin',
+			'financial_health.review.descr.very_good' => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Bolsio',
 			'financial_health.review.descr.good' => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!',
 			'financial_health.review.descr.normal' => 'Your financial health is more or less in the average of the rest of the population for this period',
 			'financial_health.review.descr.bad' => 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances',
@@ -5251,7 +5263,7 @@ extension on Translations {
 			'transaction.status.reconciled' => 'Reconciled',
 			'transaction.status.reconciled_descr' => 'This transaction has already been validated and corresponds to a real transaction from your bank',
 			'transaction.status.unreconciled' => 'Unreconciled',
-			'transaction.status.unreconciled_descr' => 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin',
+			'transaction.status.unreconciled_descr' => 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Bolsio',
 			'transaction.status.pending' => 'Pending',
 			'transaction.status.pending_descr' => 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics',
 			'transaction.status.voided' => 'Voided',
@@ -5266,80 +5278,80 @@ extension on Translations {
 			'attachments.upload_from_gallery' => 'Upload from gallery',
 			'attachments.upload_from_camera' => 'Take photo',
 			'attachments.empty_state' => 'No attachments',
-			'wallex_ai.voice_settings_title' => 'Voice input',
-			'wallex_ai.voice_settings_subtitle' => 'Dictate expenses and ask the assistant',
-			'wallex_ai.voice_permission_title' => 'Microphone access',
-			'wallex_ai.voice_permission_body' => 'Wallex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.',
-			'wallex_ai.voice_permission_cta' => 'Got it, continue',
-			'wallex_ai.voice_permission_denied_title' => 'Microphone permission denied',
-			'wallex_ai.voice_permission_denied_body' => 'To dictate or voice-chat, enable the permission in your system settings.',
-			'wallex_ai.voice_permission_denied_snackbar' => 'Microphone permission denied',
-			'wallex_ai.voice_permission_open_settings' => 'Open settings',
-			'wallex_ai.voice_offline_hint' => 'Check your internet connection to use voice dictation.',
-			'wallex_ai.voice_stt_unavailable' => 'Speech recognition isn\'t available on this device.',
-			'wallex_ai.voice_empty_transcript' => 'I didn\'t hear anything, try again.',
-			'wallex_ai.voice_fab_tooltip' => 'Dictate expense',
-			'wallex_ai.voice_listening_title' => 'Listening...',
-			'wallex_ai.voice_listening_subtitle' => 'Tell me the expense in one phrase.',
-			'wallex_ai.voice_listening_hint' => 'E.g. "I spent 20 dollars on lunch"',
-			'wallex_ai.voice_error_title' => 'Something went wrong',
-			'wallex_ai.voice_error_fallback' => 'Recognition error',
-			'wallex_ai.voice_cancel' => 'Cancel',
-			'wallex_ai.voice_done' => 'Done',
-			'wallex_ai.voice_retry' => 'Retry',
-			'wallex_ai.voice_processing' => 'Processing...',
-			'wallex_ai.voice_review_title' => 'New voice transaction',
-			'wallex_ai.voice_review_tap_to_edit' => 'Tap to edit',
-			'wallex_ai.voice_review_account_label' => 'Account',
-			'wallex_ai.voice_review_auto_countdown' => ({required Object seconds}) => 'Auto ${seconds}s',
-			'wallex_ai.voice_review_save' => 'Save',
-			'wallex_ai.voice_review_edit_more' => 'Edit more',
-			'wallex_ai.voice_review_description_placeholder' => 'Description',
-			'wallex_ai.voice_review_amount_placeholder' => 'Amount',
-			'wallex_ai.voice_review_category_placeholder' => 'Category',
-			'wallex_ai.voice_review_category_none' => 'No category',
-			'wallex_ai.voice_review_date_placeholder' => 'Date',
-			'wallex_ai.voice_review_date_today' => 'Today',
-			'wallex_ai.voice_review_account_placeholder' => 'Select account',
-			'wallex_ai.voice_review_description_hint' => 'What was it for...?',
-			'wallex_ai.voice_save_success_auto' => 'Expense saved',
-			'wallex_ai.voice_save_success_manual' => 'Done, saved.',
-			'wallex_ai.voice_save_undo_label' => 'Undo',
-			'wallex_ai.voice_save_undo_success' => 'Deleted',
-			'wallex_ai.voice_validation_amount_zero' => 'Add an amount greater than 0 to continue.',
-			'wallex_ai.voice_validation_account_missing' => 'Select an account.',
-			'wallex_ai.voice_validation_category_missing' => 'Select a category.',
-			'wallex_ai.voice_flow_no_proposal' => 'I couldn\'t extract an expense from what you said.',
-			'wallex_ai.voice_flow_error_title' => 'I couldn\'t interpret that',
-			'wallex_ai.voice_flow_gateway_unavailable_title' => 'AI service unavailable',
-			'wallex_ai.voice_flow_gateway_unavailable' => 'The AI service is not available. Please try again in a moment.',
-			'wallex_ai.chat_input_hint_default' => 'Ask about your finances...',
-			'wallex_ai.chat_input_hint_using_tools' => 'Looking up your data...',
-			'wallex_ai.chat_error_generic' => 'I couldn\'t process your question, try again.',
-			'wallex_ai.chat_error_loop_cap' => 'I couldn\'t complete the query.',
-			'wallex_ai.chat_tool_create_transaction_expense' => 'Create expense',
-			'wallex_ai.chat_tool_create_transaction_income' => 'Register income',
-			'wallex_ai.chat_tool_create_transfer' => 'Create transfer',
-			'wallex_ai.chat_tool_generic_confirm' => 'Confirm action',
-			'wallex_ai.chat_tool_review_subtitle' => 'Check the details before confirming.',
-			'wallex_ai.chat_tool_no_details' => 'No details available.',
-			'wallex_ai.chat_tool_cta_approve' => 'Approve and run',
-			'wallex_ai.chat_tool_cta_cancel' => 'Cancel',
-			'wallex_ai.chat_tool_field_amount' => 'Amount',
-			'wallex_ai.chat_tool_field_type' => 'Type',
-			'wallex_ai.chat_tool_field_type_income' => 'Income',
-			'wallex_ai.chat_tool_field_type_expense' => 'Expense',
-			'wallex_ai.chat_tool_field_description' => 'Description',
-			'wallex_ai.chat_tool_field_category' => 'Category',
-			'wallex_ai.chat_tool_field_account' => 'Account',
-			'wallex_ai.chat_tool_field_date' => 'Date',
-			'wallex_ai.chat_tool_field_from_account' => 'From',
-			'wallex_ai.chat_tool_field_to_account' => 'To',
-			'wallex_ai.chat_tool_field_value_in_destiny' => 'Destination amount',
-			'wallex_ai.chat_header' => 'Wallex AI',
-			'wallex_ai.chat_boot_loading' => 'Loading financial context...',
-			'wallex_ai.chat_disabled' => 'AI chat is disabled in settings.',
-			'wallex_ai.chat_welcome_message' => 'Hi! I\'m **Wallex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?',
+			'bolsio_ai.voice_settings_title' => 'Voice input',
+			'bolsio_ai.voice_settings_subtitle' => 'Dictate expenses and ask the assistant',
+			'bolsio_ai.voice_permission_title' => 'Microphone access',
+			'bolsio_ai.voice_permission_body' => 'Bolsio needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.',
+			'bolsio_ai.voice_permission_cta' => 'Got it, continue',
+			'bolsio_ai.voice_permission_denied_title' => 'Microphone permission denied',
+			'bolsio_ai.voice_permission_denied_body' => 'To dictate or voice-chat, enable the permission in your system settings.',
+			'bolsio_ai.voice_permission_denied_snackbar' => 'Microphone permission denied',
+			'bolsio_ai.voice_permission_open_settings' => 'Open settings',
+			'bolsio_ai.voice_offline_hint' => 'Check your internet connection to use voice dictation.',
+			'bolsio_ai.voice_stt_unavailable' => 'Speech recognition isn\'t available on this device.',
+			'bolsio_ai.voice_empty_transcript' => 'I didn\'t hear anything, try again.',
+			'bolsio_ai.voice_fab_tooltip' => 'Dictate expense',
+			'bolsio_ai.voice_listening_title' => 'Listening...',
+			'bolsio_ai.voice_listening_subtitle' => 'Tell me the expense in one phrase.',
+			'bolsio_ai.voice_listening_hint' => 'E.g. "I spent 20 dollars on lunch"',
+			'bolsio_ai.voice_error_title' => 'Something went wrong',
+			'bolsio_ai.voice_error_fallback' => 'Recognition error',
+			'bolsio_ai.voice_cancel' => 'Cancel',
+			'bolsio_ai.voice_done' => 'Done',
+			'bolsio_ai.voice_retry' => 'Retry',
+			'bolsio_ai.voice_processing' => 'Processing...',
+			'bolsio_ai.voice_review_title' => 'New voice transaction',
+			'bolsio_ai.voice_review_tap_to_edit' => 'Tap to edit',
+			'bolsio_ai.voice_review_account_label' => 'Account',
+			'bolsio_ai.voice_review_auto_countdown' => ({required Object seconds}) => 'Auto ${seconds}s',
+			'bolsio_ai.voice_review_save' => 'Save',
+			'bolsio_ai.voice_review_edit_more' => 'Edit more',
+			'bolsio_ai.voice_review_description_placeholder' => 'Description',
+			'bolsio_ai.voice_review_amount_placeholder' => 'Amount',
+			'bolsio_ai.voice_review_category_placeholder' => 'Category',
+			'bolsio_ai.voice_review_category_none' => 'No category',
+			'bolsio_ai.voice_review_date_placeholder' => 'Date',
+			'bolsio_ai.voice_review_date_today' => 'Today',
+			'bolsio_ai.voice_review_account_placeholder' => 'Select account',
+			'bolsio_ai.voice_review_description_hint' => 'What was it for...?',
+			'bolsio_ai.voice_save_success_auto' => 'Expense saved',
+			'bolsio_ai.voice_save_success_manual' => 'Done, saved.',
+			'bolsio_ai.voice_save_undo_label' => 'Undo',
+			'bolsio_ai.voice_save_undo_success' => 'Deleted',
+			'bolsio_ai.voice_validation_amount_zero' => 'Add an amount greater than 0 to continue.',
+			'bolsio_ai.voice_validation_account_missing' => 'Select an account.',
+			'bolsio_ai.voice_validation_category_missing' => 'Select a category.',
+			'bolsio_ai.voice_flow_no_proposal' => 'I couldn\'t extract an expense from what you said.',
+			'bolsio_ai.voice_flow_error_title' => 'I couldn\'t interpret that',
+			'bolsio_ai.voice_flow_gateway_unavailable_title' => 'AI service unavailable',
+			'bolsio_ai.voice_flow_gateway_unavailable' => 'The AI service is not available. Please try again in a moment.',
+			'bolsio_ai.chat_input_hint_default' => 'Ask about your finances...',
+			'bolsio_ai.chat_input_hint_using_tools' => 'Looking up your data...',
+			'bolsio_ai.chat_error_generic' => 'I couldn\'t process your question, try again.',
+			'bolsio_ai.chat_error_loop_cap' => 'I couldn\'t complete the query.',
+			'bolsio_ai.chat_tool_create_transaction_expense' => 'Create expense',
+			'bolsio_ai.chat_tool_create_transaction_income' => 'Register income',
+			'bolsio_ai.chat_tool_create_transfer' => 'Create transfer',
+			'bolsio_ai.chat_tool_generic_confirm' => 'Confirm action',
+			'bolsio_ai.chat_tool_review_subtitle' => 'Check the details before confirming.',
+			'bolsio_ai.chat_tool_no_details' => 'No details available.',
+			'bolsio_ai.chat_tool_cta_approve' => 'Approve and run',
+			'bolsio_ai.chat_tool_cta_cancel' => 'Cancel',
+			'bolsio_ai.chat_tool_field_amount' => 'Amount',
+			'bolsio_ai.chat_tool_field_type' => 'Type',
+			'bolsio_ai.chat_tool_field_type_income' => 'Income',
+			'bolsio_ai.chat_tool_field_type_expense' => 'Expense',
+			'bolsio_ai.chat_tool_field_description' => 'Description',
+			'bolsio_ai.chat_tool_field_category' => 'Category',
+			'bolsio_ai.chat_tool_field_account' => 'Account',
+			'bolsio_ai.chat_tool_field_date' => 'Date',
+			'bolsio_ai.chat_tool_field_from_account' => 'From',
+			'bolsio_ai.chat_tool_field_to_account' => 'To',
+			'bolsio_ai.chat_tool_field_value_in_destiny' => 'Destination amount',
+			'bolsio_ai.chat_header' => 'Bolsi',
+			'bolsio_ai.chat_boot_loading' => 'Loading financial context...',
+			'bolsio_ai.chat_disabled' => 'AI chat is disabled in settings.',
+			'bolsio_ai.chat_welcome_message' => 'Hi! I\'m Bolsi 👛 your pocket buddy. How can I help today?',
 			'transfer.display' => 'Transfer',
 			'transfer.transfers' => 'Transfers',
 			'transfer.transfer_to' => ({required Object account}) => 'Transfer to ${account}',
@@ -5653,8 +5665,8 @@ extension on Translations {
 			'backup.import.title' => 'Import your data',
 			'backup.import.title_short' => 'Import',
 			'backup.import.restore_backup' => 'Restore Backup',
-			'backup.import.restore_backup_descr' => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data',
-			'backup.import.restore_backup_warn_description' => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin',
+			'backup.import.restore_backup_descr' => 'Import a previously saved database from Bolsio. This action will replace any current application data with the new data',
+			'backup.import.restore_backup_warn_description' => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Bolsio',
 			'backup.import.restore_backup_warn_title' => 'Overwrite all data',
 			'backup.import.select_other_file' => 'Select other file',
 			'backup.import.tap_to_select_file' => 'Tap to select a file',
@@ -5685,8 +5697,12 @@ extension on Translations {
 			'backup.about.modify_date' => 'Last modified',
 			'backup.about.last_backup' => 'Last backup',
 			'backup.about.size' => 'Size',
-			'profile.upload_custom_avatar' => 'Upload custom avatar',
-			'profile.use_preset_avatar' => 'Use preset avatar',
+			'profile.your_avatar' => 'Your avatar',
+			'profile.upload_photo' => 'Upload photo',
+			'profile.replace_photo' => 'Replace',
+			'profile.your_photo_badge' => 'Your photo',
+			'profile.name_label' => 'Your visible name',
+			'profile.options_count' => ({required Object count}) => '${count} options',
 			'settings.title_long' => 'Settings & Customization',
 			'settings.title_short' => 'Settings',
 			'settings.description' => 'Theme, Language, Data and more',
@@ -5698,7 +5714,7 @@ extension on Translations {
 			'settings.general.language.section' => 'Language and texts',
 			'settings.general.language.title' => 'App language',
 			'settings.general.language.descr' => 'Language in which the texts will be displayed in the app',
-			'settings.general.language.help' => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>our guide</a>',
+			'settings.general.language.help' => 'If you want to collaborate with the translations of this app, you can consult <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>our guide</a>',
 			'settings.general.locale.title' => 'Region',
 			'settings.general.locale.auto' => 'System',
 			'settings.general.locale.descr' => 'Set the format to use for dates, numbers...',
@@ -5733,7 +5749,7 @@ extension on Translations {
 			'settings.hidden_mode.pin.incorrect' => 'Incorrect PIN',
 			'settings.hidden_mode.pin.too_many_attempts' => ({required Object seconds}) => 'Too many attempts. Try again in ${seconds}s',
 			'settings.hidden_mode.pin.use_biometric' => 'Use fingerprint',
-			'settings.hidden_mode.pin.biometric_reason' => 'Unlock Wallex',
+			'settings.hidden_mode.pin.biometric_reason' => 'Unlock Bolsio',
 			'settings.hidden_mode.pin.pin_changed' => 'PIN updated',
 			'settings.hidden_mode.pin.unlocked' => 'Full view unlocked',
 			'settings.transactions.menu_title' => 'Transactions',
@@ -5865,7 +5881,7 @@ extension on Translations {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Wallex AI',
+			'more.ai.title' => 'Bolsi',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Data',
@@ -5876,36 +5892,36 @@ extension on Translations {
 			'more.data.delete_all_header2' => 'One last step ⚠️⚠️',
 			'more.data.delete_all_message2' => 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?',
 			'more.about_us.display' => 'App information',
-			'more.about_us.description' => 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas',
+			'more.about_us.description' => 'Find Bolsio’s terms, important info, and connect by reporting bugs or sharing ideas',
 			'more.about_us.legal.display' => 'Legal information',
 			'more.about_us.legal.privacy' => 'Privacy policy',
 			'more.about_us.legal.terms' => 'Terms of use',
 			'more.about_us.legal.licenses' => 'Licenses',
 			'more.about_us.project.display' => 'Project',
 			'more.about_us.project.contributors' => 'Collaborators',
-			'more.about_us.project.contributors_descr' => 'All the developers who have made Monekin grow',
+			'more.about_us.project.contributors_descr' => 'All the developers who have made Bolsio grow',
 			'more.about_us.project.contact' => 'Contact us',
 			'more.help_us.display' => 'Help us',
-			'more.help_us.description' => 'Find out how you can help Monekin become better and better',
+			'more.help_us.description' => 'Find out how you can help Bolsio become better and better',
 			'more.help_us.rate_us' => 'Rate us',
 			'more.help_us.rate_us_descr' => 'Any rate is welcome!',
-			'more.help_us.share' => 'Share Monekin',
+			'more.help_us.share' => 'Share Bolsio',
 			'more.help_us.share_descr' => 'Share our app to friends and family',
-			'more.help_us.share_text' => 'Monekin! The best personal finance app. Download it here',
+			'more.help_us.share_text' => 'Bolsio! The best personal finance app. Download it here',
 			'more.help_us.thanks' => 'Thank you!',
-			'more.help_us.thanks_long' => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.',
+			'more.help_us.thanks_long' => 'Your contributions to Bolsio and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.donate' => 'Make a donation',
 			'more.help_us.donate_descr' => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?',
 			'more.help_us.donate_success' => 'Donation made. Thank you very much for your contribution! ❤️',
 			'more.help_us.donate_err' => 'Oops! It seems there was an error receiving your payment',
-			_ => null,
-		} ?? switch (path) {
 			'more.help_us.report' => 'Report bugs, leave suggestions...',
 			'onboarding.restricted_settings.title' => 'Allow restricted settings',
 			'onboarding.restricted_settings.subtitle' => 'Android blocks some permissions for apps installed outside Play Store. We\'ll fix it in 3 taps.',
 			'onboarding.restricted_settings.step1' => 'Tap the ⋮ menu in the top-right.',
 			'onboarding.restricted_settings.step2' => 'Select "Allow restricted settings".',
-			'onboarding.restricted_settings.step3' => 'Toggle it on and return to Wallex.',
+			'onboarding.restricted_settings.step3' => 'Toggle it on and return to Bolsio.',
 			'onboarding.restricted_settings.step1_xiaomi' => 'Scroll to the bottom of the page.',
 			'onboarding.restricted_settings.step2_xiaomi' => 'Toggle on "Allow restricted settings".',
 			'onboarding.restricted_settings.cta_primary' => 'Open app info',

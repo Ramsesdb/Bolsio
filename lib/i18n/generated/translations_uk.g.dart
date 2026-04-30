@@ -154,7 +154,7 @@ class _TranslationsHomeUk extends TranslationsHomeEn {
 	@override String get my_accounts => 'Мої рахунки';
 	@override String get active_accounts => 'Активні рахунки';
 	@override String get no_accounts => 'Рахунки ще не створені';
-	@override String get no_accounts_descr => 'Почніть використовувати всю магію Monekin. Створіть принаймні один рахунок, щоб почати додавати транзакції';
+	@override String get no_accounts_descr => 'Почніть використовувати всю магію Bolsio. Створіть принаймні один рахунок, щоб почати додавати транзакції';
 	@override String get last_transactions => 'Останні транзакції';
 	@override String get should_create_account_header => 'Ой!';
 	@override String get should_create_account_message => 'Перш ніж почати створювати транзакції, вам потрібно мати принаймні один неархівований рахунок';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusUk extends TranslationsTransactionStatusEn {
 	@override String get reconciled => 'Узгоджений';
 	@override String get reconciled_descr => 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
 	@override String get unreconciled => 'Не узгоджений';
-	@override String get unreconciled_descr => 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Monekin';
+	@override String get unreconciled_descr => 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Bolsio';
 	@override String get pending => 'Очікується';
 	@override String get pending_descr => 'Ця транзакція очікується і тому не буде враховуватися при розрахунку балансів і статистики';
 	@override String get voided => 'Скасований';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportUk extends TranslationsBackupImportEn {
 	@override String get title => 'Імпорт ваших даних';
 	@override String get title_short => 'Імпорт';
 	@override String get restore_backup => 'Відновити резервну копію';
-	@override String get restore_backup_descr => 'Імпортуйте раніше збережену базу даних з Monekin. Ця дія замінить будь-які поточні дані програми новими даними';
-	@override String get restore_backup_warn_description => 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Monekin';
+	@override String get restore_backup_descr => 'Імпортуйте раніше збережену базу даних з Bolsio. Ця дія замінить будь-які поточні дані програми новими даними';
+	@override String get restore_backup_warn_description => 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Bolsio';
 	@override String get restore_backup_warn_title => 'Перезаписати всі дані';
 	@override String get select_other_file => 'Вибрати інший файл';
 	@override String get tap_to_select_file => 'Торкніться, щоб вибрати файл';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiUk extends TranslationsMoreAiEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Wallex AI';
+	@override String get title => 'Bolsi';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsUk extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Інформація про додаток';
-	@override String get description => 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
+	@override String get description => 'Знаходьте умови Bolsio, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
 	@override late final _TranslationsMoreAboutUsLegalUk legal = _TranslationsMoreAboutUsLegalUk._(_root);
 	@override late final _TranslationsMoreAboutUsProjectUk project = _TranslationsMoreAboutUsProjectUk._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsUk extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Допоможіть нам';
-	@override String get description => 'Дізнайтеся, як ви можете допомогти Monekin ставати кращим і кращим';
+	@override String get description => 'Дізнайтеся, як ви можете допомогти Bolsio ставати кращим і кращим';
 	@override String get rate_us => 'Оцініть нас';
 	@override String get rate_us_descr => 'Будь-яка оцінка вітається!';
-	@override String get share => 'Поділіться Monekin';
+	@override String get share => 'Поділіться Bolsio';
 	@override String get share_descr => 'Поділіться нашим додатком з друзями та родиною';
-	@override String get share_text => 'Monekin! Найкращий додаток для особистих фінансів. Завантажте його тут';
+	@override String get share_text => 'Bolsio! Найкращий додаток для особистих фінансів. Завантажте його тут';
 	@override String get thanks => 'Дякуємо!';
-	@override String get thanks_long => 'Ваші внески в Monekin та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.';
+	@override String get thanks_long => 'Ваші внески в Bolsio та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.';
 	@override String get donate => 'Зробіть пожертву';
 	@override String get donate_descr => 'З вашою пожертвою ви допоможете додатку продовжувати отримувати вдосконалення. Що може бути краще, ніж подякувати за виконану роботу, запрошуючи мене на каву?';
 	@override String get donate_success => 'Пожертва зроблена. Дуже вдячний за ваш внесок! ❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrUk extends TranslationsFinancialHea
 
 	// Translations
 	@override String get insufficient_data => 'Схоже, у нас недостатньо витрат, щоб розрахувати ваше фінансове здоров\'я. Додайте деякі витрати/доходи за цей період, щоб дозволити нам допомогти вам!';
-	@override String get very_good => 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Monekin';
+	@override String get very_good => 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Bolsio';
 	@override String get good => 'Чудово! Ваше фінансове здоров\'я гарне. Відвідайте вкладку аналізу, щоб побачити, як зберегти ще більше!';
 	@override String get normal => 'Ваше фінансове здоров\'я більш-менш в середньому залишку населення за цей період';
 	@override String get bad => 'Схоже, що ваша фінансова ситуація ще не найкраща. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageUk extends TranslationsSettingsGeneral
 	@override String get section => 'Мова та тексти';
 	@override String get title => 'Мова додатку';
 	@override String get descr => 'Мова, в якій будуть відображатися тексти в додатку';
-	@override String get help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>нашого посібник</ a>';
+	@override String get help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>нашого посібник</ a>';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectUk extends TranslationsMoreAboutUsProjectEn
 	// Translations
 	@override String get display => 'Проект';
 	@override String get contributors => 'Співробітники';
-	@override String get contributors_descr => 'Усі розробники, які зробили Monekin краще';
+	@override String get contributors_descr => 'Усі розробники, які зробили Bolsio краще';
 	@override String get contact => 'Зв\'яжіться з нами';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsUk {
 			'home.my_accounts' => 'Мої рахунки',
 			'home.active_accounts' => 'Активні рахунки',
 			'home.no_accounts' => 'Рахунки ще не створені',
-			'home.no_accounts_descr' => 'Почніть використовувати всю магію Monekin. Створіть принаймні один рахунок, щоб почати додавати транзакції',
+			'home.no_accounts_descr' => 'Почніть використовувати всю магію Bolsio. Створіть принаймні один рахунок, щоб почати додавати транзакції',
 			'home.last_transactions' => 'Останні транзакції',
 			'home.should_create_account_header' => 'Ой!',
 			'home.should_create_account_message' => 'Перш ніж почати створювати транзакції, вам потрібно мати принаймні один неархівований рахунок',
@@ -2218,7 +2218,7 @@ extension on TranslationsUk {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Дуже погано'; case GenderContext.female: return 'Дуже погано'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Недостатньо даних'; case GenderContext.female: return 'Недостатньо даних'; } }, 
 			'financial_health.review.descr.insufficient_data' => 'Схоже, у нас недостатньо витрат, щоб розрахувати ваше фінансове здоров\'я. Додайте деякі витрати/доходи за цей період, щоб дозволити нам допомогти вам!',
-			'financial_health.review.descr.very_good' => 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Monekin',
+			'financial_health.review.descr.very_good' => 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Bolsio',
 			'financial_health.review.descr.good' => 'Чудово! Ваше фінансове здоров\'я гарне. Відвідайте вкладку аналізу, щоб побачити, як зберегти ще більше!',
 			'financial_health.review.descr.normal' => 'Ваше фінансове здоров\'я більш-менш в середньому залишку населення за цей період',
 			'financial_health.review.descr.bad' => 'Схоже, що ваша фінансова ситуація ще не найкраща. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси',
@@ -2362,7 +2362,7 @@ extension on TranslationsUk {
 			'transaction.status.reconciled' => 'Узгоджений',
 			'transaction.status.reconciled_descr' => 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку',
 			'transaction.status.unreconciled' => 'Не узгоджений',
-			'transaction.status.unreconciled_descr' => 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Monekin',
+			'transaction.status.unreconciled_descr' => 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Bolsio',
 			'transaction.status.pending' => 'Очікується',
 			'transaction.status.pending_descr' => 'Ця транзакція очікується і тому не буде враховуватися при розрахунку балансів і статистики',
 			'transaction.status.voided' => 'Скасований',
@@ -2672,8 +2672,8 @@ extension on TranslationsUk {
 			'backup.import.title' => 'Імпорт ваших даних',
 			'backup.import.title_short' => 'Імпорт',
 			'backup.import.restore_backup' => 'Відновити резервну копію',
-			'backup.import.restore_backup_descr' => 'Імпортуйте раніше збережену базу даних з Monekin. Ця дія замінить будь-які поточні дані програми новими даними',
-			'backup.import.restore_backup_warn_description' => 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Monekin',
+			'backup.import.restore_backup_descr' => 'Імпортуйте раніше збережену базу даних з Bolsio. Ця дія замінить будь-які поточні дані програми новими даними',
+			'backup.import.restore_backup_warn_description' => 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Bolsio',
 			'backup.import.restore_backup_warn_title' => 'Перезаписати всі дані',
 			'backup.import.select_other_file' => 'Вибрати інший файл',
 			'backup.import.tap_to_select_file' => 'Торкніться, щоб вибрати файл',
@@ -2715,7 +2715,7 @@ extension on TranslationsUk {
 			'settings.general.language.section' => 'Мова та тексти',
 			'settings.general.language.title' => 'Мова додатку',
 			'settings.general.language.descr' => 'Мова, в якій будуть відображатися тексти в додатку',
-			'settings.general.language.help' => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>нашого посібник</ a>',
+			'settings.general.language.help' => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>нашого посібник</ a>',
 			'settings.general.locale.title' => 'Регіон',
 			'settings.general.locale.auto' => 'Система',
 			'settings.general.locale.descr' => 'Встановіть формат, який буде використовуватися для дат, чисел...',
@@ -2799,7 +2799,7 @@ extension on TranslationsUk {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Wallex AI',
+			'more.ai.title' => 'Bolsi',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Дані',
@@ -2810,24 +2810,24 @@ extension on TranslationsUk {
 			'more.data.delete_all_header2' => 'Останній крок ⚠️⚠️',
 			'more.data.delete_all_message2' => 'Видаляючи обліковий запис, ви видалите всі ваші збережені особисті дані. Ваші облікові записи, транзакції, бюджети та категорії будуть видалені і не можуть бути відновлені. Ви згодні?',
 			'more.about_us.display' => 'Інформація про додаток',
-			'more.about_us.description' => 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями',
+			'more.about_us.description' => 'Знаходьте умови Bolsio, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями',
 			'more.about_us.legal.display' => 'Юридична інформація',
 			'more.about_us.legal.privacy' => 'Політика конфіденційності',
 			'more.about_us.legal.terms' => 'Умови використання',
 			'more.about_us.legal.licenses' => 'Ліцензії',
 			'more.about_us.project.display' => 'Проект',
 			'more.about_us.project.contributors' => 'Співробітники',
-			'more.about_us.project.contributors_descr' => 'Усі розробники, які зробили Monekin краще',
+			'more.about_us.project.contributors_descr' => 'Усі розробники, які зробили Bolsio краще',
 			'more.about_us.project.contact' => 'Зв\'яжіться з нами',
 			'more.help_us.display' => 'Допоможіть нам',
-			'more.help_us.description' => 'Дізнайтеся, як ви можете допомогти Monekin ставати кращим і кращим',
+			'more.help_us.description' => 'Дізнайтеся, як ви можете допомогти Bolsio ставати кращим і кращим',
 			'more.help_us.rate_us' => 'Оцініть нас',
 			'more.help_us.rate_us_descr' => 'Будь-яка оцінка вітається!',
-			'more.help_us.share' => 'Поділіться Monekin',
+			'more.help_us.share' => 'Поділіться Bolsio',
 			'more.help_us.share_descr' => 'Поділіться нашим додатком з друзями та родиною',
-			'more.help_us.share_text' => 'Monekin! Найкращий додаток для особистих фінансів. Завантажте його тут',
+			'more.help_us.share_text' => 'Bolsio! Найкращий додаток для особистих фінансів. Завантажте його тут',
 			'more.help_us.thanks' => 'Дякуємо!',
-			'more.help_us.thanks_long' => 'Ваші внески в Monekin та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.',
+			'more.help_us.thanks_long' => 'Ваші внески в Bolsio та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.',
 			'more.help_us.donate' => 'Зробіть пожертву',
 			'more.help_us.donate_descr' => 'З вашою пожертвою ви допоможете додатку продовжувати отримувати вдосконалення. Що може бути краще, ніж подякувати за виконану роботу, запрошуючи мене на каву?',
 			'more.help_us.donate_success' => 'Пожертва зроблена. Дуже вдячний за ваш внесок! ❤️',

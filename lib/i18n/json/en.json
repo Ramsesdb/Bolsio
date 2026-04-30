@@ -178,7 +178,7 @@
     "my-accounts": "My accounts",
     "active-accounts": "Active accounts",
     "no-accounts": "No accounts created yet",
-    "no-accounts.descr": "Start using all the magic of Monekin. Create at least one account to start adding transactions",
+    "no-accounts.descr": "Start using all the magic of Bolsio. Create at least one account to start adding transactions",
     "last-transactions": "Last transactions",
     "should-create-account.header": "Oops!",
     "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions",
@@ -283,7 +283,7 @@
     },
     "share": {
       "action_a11y": "Share conversion",
-      "footer": "Generated with Kilatex",
+      "footer": "Generated with Bolsio",
       "subject": "FX conversion",
       "equals_separator": "="
     },
@@ -322,7 +322,7 @@
       },
       "descr": {
         "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!",
-        "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin",
+        "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Bolsio",
         "good": "Great! Your financial health is good. Visit the analysis tab to see how to save even more!",
         "normal": "Your financial health is more or less in the average of the rest of the population for this period",
         "bad": "It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances",
@@ -539,7 +539,7 @@
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",
-      "unreconciled.descr": "This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin",
+      "unreconciled.descr": "This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Bolsio",
       "pending": "Pending",
       "pending.descr": "This transaction is pending and therefore it will not be taken into account when calculating balances and statistics",
       "voided": "Voided",
@@ -572,11 +572,11 @@
     "upload-from-camera": "Take photo",
     "empty-state": "No attachments"
   },
-  "KILATEX-AI": {
+  "BOLSIO-AI": {
     "voice_settings_title": "Voice input",
     "voice_settings_subtitle": "Dictate expenses and ask the assistant",
     "voice_permission_title": "Microphone access",
-    "voice_permission_body": "Kilatex needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.",
+    "voice_permission_body": "Bolsio needs the microphone to transcribe what you dictate and turn it into transactions or questions. Audio is never stored.",
     "voice_permission_cta": "Got it, continue",
     "voice_permission_denied_title": "Microphone permission denied",
     "voice_permission_denied_body": "To dictate or voice-chat, enable the permission in your system settings.",
@@ -643,10 +643,10 @@
     "chat_tool_field_from_account": "From",
     "chat_tool_field_to_account": "To",
     "chat_tool_field_value_in_destiny": "Destination amount",
-    "chat_header": "Kilatex AI",
+    "chat_header": "Bolsi",
     "chat_boot_loading": "Loading financial context...",
     "chat_disabled": "AI chat is disabled in settings.",
-    "chat_welcome_message": "Hi! I'm **Kilatex AI**, your financial assistant.\n\nI can help you with:\n- Check balances and the state of your accounts\n- Analyze spending by category\n- Review recent transactions\n- Review budgets\n\nWhat would you like to check?"
+    "chat_welcome_message": "Hi! I'm Bolsi 👛 your pocket buddy. How can I help today?"
   },
   "TRANSFER": {
     "display": "Transfer",
@@ -1086,8 +1086,8 @@
       "title": "Import your data",
       "title.short": "Import",
       "restore-backup": "Restore Backup",
-      "restore-backup-descr": "Import a previously saved database from Monekin. This action will replace any current application data with the new data",
-      "restore-backup-warn.description": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin",
+      "restore-backup-descr": "Import a previously saved database from Bolsio. This action will replace any current application data with the new data",
+      "restore-backup-warn.description": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Bolsio",
       "restore-backup-warn.title": "Overwrite all data",
       "select-other-file": "Select other file",
       "tap-to-select-file": "Tap to select a file",
@@ -1129,8 +1129,12 @@
     }
   },
   "PROFILE": {
-    "upload-custom-avatar": "Upload custom avatar",
-    "use-preset-avatar": "Use preset avatar"
+    "your-avatar": "Your avatar",
+    "upload-photo": "Upload photo",
+    "replace-photo": "Replace",
+    "your-photo-badge": "Your photo",
+    "name-label": "Your visible name",
+    "options-count": "{{count}} options"
   },
   "SETTINGS": {
     "title_long": "Settings & Customization",
@@ -1146,7 +1150,7 @@
         "section": "Language and texts",
         "title": "App language",
         "descr": "Language in which the texts will be displayed in the app",
-        "help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>our guide</a>"
+        "help": "If you want to collaborate with the translations of this app, you can consult <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>our guide</a>"
       },
       "LOCALE": {
         "title": "Region",
@@ -1191,7 +1195,7 @@
         "incorrect": "Incorrect PIN",
         "too_many_attempts": "Too many attempts. Try again in {{seconds}}s",
         "use_biometric": "Use fingerprint",
-        "biometric_reason": "Unlock Kilatex",
+        "biometric_reason": "Unlock Bolsio",
         "pin_changed": "PIN updated",
         "unlocked": "Full view unlocked"
       }
@@ -1368,7 +1372,7 @@
       "more_options": "More appearance options"
     },
     "AI": {
-      "title": "Kilatex AI",
+      "title": "Bolsi",
       "configure": "Set up your financial assistant",
       "active_with": "Active · {provider}"
     },
@@ -1383,7 +1387,7 @@
     },
     "ABOUT_US": {
       "display": "App information",
-      "description": "Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas",
+      "description": "Find Bolsio’s terms, important info, and connect by reporting bugs or sharing ideas",
       "LEGAL": {
         "display": "Legal information",
         "privacy": "Privacy policy",
@@ -1393,20 +1397,20 @@
       "PROJECT": {
         "display": "Project",
         "contributors": "Collaborators",
-        "contributors.descr": "All the developers who have made Monekin grow",
+        "contributors.descr": "All the developers who have made Bolsio grow",
         "contact": "Contact us"
       }
     },
     "HELP_US": {
       "display": "Help us",
-      "description": "Find out how you can help Monekin become better and better",
+      "description": "Find out how you can help Bolsio become better and better",
       "rate-us": "Rate us",
       "rate-us.descr": "Any rate is welcome!",
-      "share": "Share Monekin",
+      "share": "Share Bolsio",
       "share.descr": "Share our app to friends and family",
-      "share.text": "Monekin! The best personal finance app. Download it here",
+      "share.text": "Bolsio! The best personal finance app. Download it here",
       "thanks": "Thank you!",
-      "thanks_long": "Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.",
+      "thanks_long": "Your contributions to Bolsio and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.",
       "donate": "Make a donation",
       "donate.descr": "With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?",
       "donate.success": "Donation made. Thank you very much for your contribution! ❤️",
@@ -1420,7 +1424,7 @@
       "subtitle": "Android blocks some permissions for apps installed outside Play Store. We'll fix it in 3 taps.",
       "step1": "Tap the ⋮ menu in the top-right.",
       "step2": "Select \"Allow restricted settings\".",
-      "step3": "Toggle it on and return to Kilatex.",
+      "step3": "Toggle it on and return to Bolsio.",
       "step1_xiaomi": "Scroll to the bottom of the page.",
       "step2_xiaomi": "Toggle on \"Allow restricted settings\".",
       "cta_primary": "Open app info",
