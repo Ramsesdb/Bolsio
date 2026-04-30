@@ -2,37 +2,37 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/accounts/account_type_selector.dart';
-import 'package:kilatex/app/accounts/widgets/retroactive_dialogs.dart';
-import 'package:kilatex/app/categories/form/icon_and_color_selector.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/extensions/lists.extensions.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:kilatex/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:kilatex/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/presentation/widgets/show_more_content_button.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/supported_icon/supported_icon_service.dart';
-import 'package:kilatex/core/utils/text_field_utils.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_type_selector.dart';
+import 'package:bolsio/app/accounts/widgets/retroactive_dialogs.dart';
+import 'package:bolsio/app/categories/form/icon_and_color_selector.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/extensions/lists.extensions.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:bolsio/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:bolsio/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/presentation/widgets/show_more_content_button.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
+import 'package:bolsio/core/utils/text_field_utils.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 
@@ -83,7 +83,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     if (_trackedSinceDate != null &&
         _closeDate != null &&
         _trackedSinceDate!.isAfter(_closeDate!)) {
-      WallexSnackbar.warning(
+      BolsioSnackbar.warning(
         SnackbarParams(t.account.form.tracked_since_validation_after_closing),
       );
       return;
@@ -101,7 +101,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
               )
               .first)
           .isNotEmpty) {
-        WallexSnackbar.warning(
+        BolsioSnackbar.warning(
           SnackbarParams(t.account.form.tr_before_opening_date),
         );
 
@@ -170,7 +170,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       if (confirmed != true) {
         if (!mounted) return;
         if (isStrong) {
-          WallexSnackbar.warning(
+          BolsioSnackbar.warning(
             SnackbarParams(t.account.retroactive.strong_confirm_mismatch),
           );
         }
@@ -203,7 +203,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        WallexSnackbar.error(
+        BolsioSnackbar.error(
           SnackbarParams.fromError(
             t.account.form.already_exists,
             duration: const Duration(seconds: 6),

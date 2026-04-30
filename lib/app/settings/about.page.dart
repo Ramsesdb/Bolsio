@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/widgets/display_app_icon.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/extensions/string.extension.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/utils/open_external_url.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/widgets/display_app_icon.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/extensions/string.extension.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/utils/open_external_url.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              snapshot.data?.appName.capitalize() ?? 'Wallex',
+                              snapshot.data?.appName.capitalize() ?? 'Bolsio',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
                             Text(
@@ -102,7 +102,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/Ramsesdb/Wallex/graphs/contributors',
+                  '__BOLSIO_GITHUB_URL__/graphs/contributors',
                 );
               },
             ),
@@ -111,7 +111,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/Ramsesdb/Wallex/issues/new/choose',
+                  '__BOLSIO_GITHUB_URL__/issues/new/choose',
                 );
               },
             ),
@@ -127,7 +127,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/Ramsesdb/Wallex/blob/main/docs/TERMS_OF_USE.md',
+                  '__BOLSIO_GITHUB_URL__/blob/main/docs/TERMS_OF_USE.md',
                 );
               },
             ),
@@ -136,7 +136,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {
                 openExternalURL(
                   context,
-                  'https://github.com/Ramsesdb/Wallex/blob/main/docs/PRIVACY_POLICY.md',
+                  '__BOLSIO_GITHUB_URL__/blob/main/docs/PRIVACY_POLICY.md',
                 );
               },
             ),

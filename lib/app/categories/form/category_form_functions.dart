@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/categories/selectors/category_picker.dart';
-import 'package:kilatex/app/categories/subcategory_form.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/presentation/widgets/html_text.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/categories/selectors/category_picker.dart';
+import 'package:bolsio/app/categories/subcategory_form.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/presentation/widgets/html_text.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../../core/services/supported_icon/supported_icon_service.dart';
 
@@ -59,14 +59,14 @@ class CategoryFormFunctions {
       CategoryService.instance
           .deleteCategory(categoryId)
           .then((value) {
-            WallexSnackbar.success(
+            BolsioSnackbar.success(
               SnackbarParams(t.categories.delete_success),
             );
 
             RouteUtils.popRoute();
           })
           .catchError((error) {
-            WallexSnackbar.error(SnackbarParams.fromError(error));
+            BolsioSnackbar.error(SnackbarParams.fromError(error));
           });
     });
   }
@@ -144,7 +144,7 @@ class CategoryFormFunctions {
         await Future.wait(futures);
 
         RouteUtils.popRoute();
-        WallexSnackbar.success(SnackbarParams(t.categories.merge_success));
+        BolsioSnackbar.success(SnackbarParams(t.categories.merge_success));
       });
     });
   }
@@ -156,7 +156,7 @@ class CategoryFormFunctions {
       category.copyWith(parentCategoryID: const drift.Value(null)),
     );
 
-    WallexSnackbar.success(SnackbarParams(t.categories.create_success));
+    BolsioSnackbar.success(SnackbarParams(t.categories.create_success));
   }
 
   static void makeSubcategory(BuildContext context, Category category) {
@@ -240,7 +240,7 @@ class CategoryFormFunctions {
         await Future.wait(futures);
 
         RouteUtils.popRoute();
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(t.categories.make_child_success),
         );
       });

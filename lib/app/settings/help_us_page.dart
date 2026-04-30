@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/purchases/donate_button.dart';
-import 'package:kilatex/app/settings/purchases/in_app_purchase.dart';
-import 'package:kilatex/app/settings/widgets/display_app_icon.dart';
-import 'package:kilatex/app/settings/widgets/setting_card_item.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/utils/open_external_url.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/purchases/donate_button.dart';
+import 'package:bolsio/app/settings/purchases/in_app_purchase.dart';
+import 'package:bolsio/app/settings/widgets/display_app_icon.dart';
+import 'package:bolsio/app/settings/widgets/setting_card_item.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/utils/open_external_url.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 // import 'package:share_plus/share_plus.dart'; // TODO: re-enable when share button comes back (Play Store launch)
 
 class HelpUsPage extends StatefulWidget {
@@ -52,7 +52,7 @@ class _HelpUsPageState extends State<HelpUsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // TODO: re-enable once Wallex is published on Play Store
+                  // TODO: re-enable once Bolsio is published on Play Store
                   // SettingCardItem(
                   //   title: t.more.help_us.rate_us,
                   //   subtitle: t.more.help_us.rate_us_descr,
@@ -61,12 +61,12 @@ class _HelpUsPageState extends State<HelpUsPage> {
                   //   onTap: () {
                   //     openExternalURL(
                   //       context,
-                  //       'https://play.google.com/store/apps/details?id=com.monekin.app',
+                  //       'https://play.google.com/store/apps/details?id=com.bolsio.app',
                   //     );
                   //   },
                   // ),
                   // const SizedBox(height: 8),
-                  // TODO: re-enable once Wallex is published on Play Store
+                  // TODO: re-enable once Bolsio is published on Play Store
                   // SettingCardItem(
                   //   title: t.more.help_us.share,
                   //   subtitle: t.more.help_us.share_descr,
@@ -76,7 +76,7 @@ class _HelpUsPageState extends State<HelpUsPage> {
                   //     SharePlus.instance.share(
                   //       ShareParams(
                   //         text:
-                  //             '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app',
+                  //             '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.bolsio.app',
                   //       ),
                   //     );
                   //   },
@@ -89,7 +89,7 @@ class _HelpUsPageState extends State<HelpUsPage> {
                     onTap: () {
                       openExternalURL(
                         context,
-                        'https://github.com/Ramsesdb/Wallex/issues',
+                        '__BOLSIO_GITHUB_URL__/issues',
                       );
                     },
                   ),

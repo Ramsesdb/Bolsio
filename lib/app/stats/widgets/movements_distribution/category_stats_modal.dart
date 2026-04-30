@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
-import 'package:kilatex/app/transactions/transactions.page.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
+import 'package:bolsio/app/transactions/transactions.page.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class SubcategoryModalItem {
   String id;

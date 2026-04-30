@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/indexed_stacks/lazy_indexed_stack.dart';
+import 'package:bolsio/app/layout/indexed_stacks/lazy_indexed_stack.dart';
 
 class FadeIndexedStack extends StatefulWidget {
   final int index;

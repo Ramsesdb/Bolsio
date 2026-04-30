@@ -3,36 +3,36 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/common/widgets/attachment_viewer.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/transactions/label_value_info_table.dart';
-import 'package:kilatex/app/transactions/utils/transaction_details.utils.dart';
-import 'package:kilatex/app/transactions/widgets/translucent_transaction_status_card.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/extensions/string.extension.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/services/supported_icon/supported_icon_service.dart';
-import 'package:kilatex/core/models/tags/tag.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/presentation/widgets/wallex_quick_actions_buttons.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/database/services/debts/debt_service.dart';
-import 'package:kilatex/core/models/debt/debt.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/attachments/attachment_model.dart';
-import 'package:kilatex/core/services/attachments/attachments_service.dart';
-import 'package:kilatex/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:kilatex/core/utils/constants.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/common/widgets/attachment_viewer.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/transactions/label_value_info_table.dart';
+import 'package:bolsio/app/transactions/utils/transaction_details.utils.dart';
+import 'package:bolsio/app/transactions/widgets/translucent_transaction_status_card.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/extensions/string.extension.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
+import 'package:bolsio/core/models/tags/tag.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/presentation/widgets/bolsio_quick_actions_buttons.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/database/services/debts/debt_service.dart';
+import 'package:bolsio/core/models/debt/debt.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/attachments/attachment_model.dart';
+import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:bolsio/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:bolsio/core/utils/constants.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
@@ -108,7 +108,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         TransactionService.instance.deleteTransaction(transaction.id).then((
           value,
         ) {
-          WallexSnackbar.success(
+          BolsioSnackbar.success(
             SnackbarParams(
               '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
             ),
@@ -126,7 +126,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       ) {
         if (inserted == 0) return;
 
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(t.transaction.next_payments.skip_success),
         );
       });
@@ -795,7 +795,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           const SizedBox(height: 16),
                           CardWithHeader(
                             title: t.general.quick_actions,
-                            body: WallexQuickActionsButton(
+                            body: BolsioQuickActionsButton(
                               actions: transactionDetailsActions,
                             ),
                           ),

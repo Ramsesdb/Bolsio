@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/settings/pages/appareance_settings.page.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/settings/pages/appareance_settings.page.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 Future<void> showThemeQuickPickerSheet(BuildContext context) {
   return showModalBottomSheet(

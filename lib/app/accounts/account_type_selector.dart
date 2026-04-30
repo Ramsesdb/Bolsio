@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/models/account/account.dart';
+import 'package:bolsio/core/models/account/account.dart';
 
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector({
@@ -34,7 +34,7 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
           final AccountType item = AccountType.values[index];
 
           return Flexible(
-            child: WallexFilterChip(
+            child: BolsioFilterChip(
               accountType: item,
               onPressed: () {
                 setState(() {
@@ -51,8 +51,8 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
   }
 }
 
-class WallexFilterChip extends StatelessWidget {
-  const WallexFilterChip({
+class BolsioFilterChip extends StatelessWidget {
+  const BolsioFilterChip({
     super.key,
     required this.accountType,
     required this.onPressed,

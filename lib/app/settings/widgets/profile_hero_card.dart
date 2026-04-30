@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
-import 'package:kilatex/app/settings/widgets/edit_profile_modal.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/presentation/widgets/tappable.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:bolsio/app/common/widgets/user_avatar_display.dart';
+import 'package:bolsio/app/settings/widgets/edit_profile_modal.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
 
 class ProfileHeroCard extends StatelessWidget {
   const ProfileHeroCard({super.key});

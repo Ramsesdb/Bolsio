@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/accounts/account_selector.dart';
-import 'package:kilatex/app/categories/selectors/category_multi_selector.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/budget/budget_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/extensions/lists.extensions.dart';
-import 'package:kilatex/core/models/budget/budget.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/date-utils/periodicity.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/text_field_utils.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_selector.dart';
+import 'package:bolsio/app/categories/selectors/category_multi_selector.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/budget/budget_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/extensions/lists.extensions.dart';
+import 'package:bolsio/core/models/budget/budget.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/date-utils/periodicity.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/text_field_utils.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/count_indicator.dart';
@@ -58,14 +58,14 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     if (valueToNumber! < 0) {
-      WallexSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
+      BolsioSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
       return;
     }
 
     onSuccess() {
       RouteUtils.popRoute();
 
-      WallexSnackbar.success(
+      BolsioSnackbar.success(
         SnackbarParams(
           isEditMode
               ? t.budgets.form.edit_success
@@ -97,7 +97,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            WallexSnackbar.error(SnackbarParams.fromError(error));
+            BolsioSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       BudgetServive.instance
@@ -106,7 +106,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            WallexSnackbar.error(SnackbarParams.fromError(error));
+            BolsioSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }

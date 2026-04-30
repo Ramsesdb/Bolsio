@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/core/models/debt/debt.dart';
-import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/core/models/debt/debt.dart';
+import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// A compact banner shown in [TransactionFormPage] when the transaction being
 /// created is pre-linked to a [Debt]. Visible only during creation (not edit).

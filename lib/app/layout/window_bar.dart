@@ -1,7 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/settings/widgets/display_app_icon.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/app/settings/widgets/display_app_icon.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
 
 Color getWindowBackgroundColor(BuildContext context) {
   // return Colors.red;
@@ -70,7 +70,7 @@ class WindowBarState extends State<WindowBar> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Wallex',
+                          'Bolsio',
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ),

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
-import 'package:kilatex/core/services/dolar_api_service.dart';
-import 'package:kilatex/core/services/rate_providers/rate_provider_manager.dart';
+import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
+import 'package:bolsio/core/services/dolar_api_service.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider_manager.dart';
 
 /// Selector visual de tasa de cambio para usar en una transaccion multi-divisa.
 ///

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart' hide BottomNavigationBar;
-import 'package:kilatex/app/budgets/budgets_page.dart';
-import 'package:kilatex/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:kilatex/app/layout/indexed_stacks/fade_indexed_stack.dart';
-import 'package:kilatex/app/layout/page_context.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/layout/widgets/app_bottom_bar.dart';
-import 'package:kilatex/app/transactions/animate_fab.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/core/routes/destinations.dart';
-import 'package:kilatex/core/utils/app_utils.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/app/budgets/budgets_page.dart';
+import 'package:bolsio/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:bolsio/app/layout/indexed_stacks/fade_indexed_stack.dart';
+import 'package:bolsio/app/layout/page_context.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/layout/widgets/app_bottom_bar.dart';
+import 'package:bolsio/app/transactions/animate_fab.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/routes/destinations.dart';
+import 'package:bolsio/core/utils/app_utils.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
 
 /// This page is the entry point of the app once the user has complete onboarding
 ///

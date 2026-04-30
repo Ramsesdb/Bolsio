@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/styles/big_button_style.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/styles/big_button_style.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -36,7 +36,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
   bool _isSharing = false;
 
   void _showErrorSnackBar(String error) {
-    WallexSnackbar.error(SnackbarParams.fromError(error));
+    BolsioSnackbar.error(SnackbarParams.fromError(error));
   }
 
   Future<File> _generateExportFile(String directoryPath) async {
@@ -122,13 +122,13 @@ class _ExportDataPageState extends State<ExportDataPage> {
       }
 
       if (path == null) {
-        WallexSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
+        BolsioSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
         return;
       }
 
       try {
         final file = await _generateExportFile(path);
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(t.backup.export.success(x: file.parent.path)),
         );
       } on PathAccessException catch (_) {

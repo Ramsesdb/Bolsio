@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
 
 class DisplayAppIcon extends StatelessWidget {
   const DisplayAppIcon({

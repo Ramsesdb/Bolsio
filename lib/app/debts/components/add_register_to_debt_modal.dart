@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/debts/components/transaction_selector.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/core/database/services/debts/debt_service.dart';
-import 'package:kilatex/core/models/debt/debt.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/modal_container.dart';
-import 'package:kilatex/core/presentation/widgets/outlined_button_stacked.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/debts/components/transaction_selector.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/core/database/services/debts/debt_service.dart';
+import 'package:bolsio/core/models/debt/debt.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/modal_container.dart';
+import 'package:bolsio/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class AddMoneyTransactionToDebtModal extends StatelessWidget {
   const AddMoneyTransactionToDebtModal({required this.debt});
@@ -52,14 +52,14 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
                         transactionId: transaction.id,
                         debtId: debt.id,
                       );
-                      WallexSnackbar.success(
+                      BolsioSnackbar.success(
                         SnackbarParams(
                           t.debts.actions.link_transaction.success,
                           showAtTop: true,
                         ),
                       );
                     } catch (e) {
-                      WallexSnackbar.error(
+                      BolsioSnackbar.error(
                         SnackbarParams.fromError(e, showAtTop: true),
                       );
                     }

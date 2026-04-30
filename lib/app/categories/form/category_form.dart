@@ -1,24 +1,24 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/categories/form/category_form_functions.dart';
-import 'package:kilatex/app/categories/form/icon_and_color_selector.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/extensions/lists.extensions.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:kilatex/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/constants.dart';
-import 'package:kilatex/core/utils/text_field_utils.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/categories/form/category_form_functions.dart';
+import 'package:bolsio/app/categories/form/icon_and_color_selector.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/extensions/lists.extensions.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:bolsio/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/constants.dart';
+import 'package:bolsio/core/utils/text_field_utils.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});
@@ -88,10 +88,10 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       await CategoryService.instance
           .updateCategory(categoryToEdit!)
           .then((value) {
-            WallexSnackbar.success(SnackbarParams(t.categories.edit_success));
+            BolsioSnackbar.success(SnackbarParams(t.categories.edit_success));
           })
           .catchError((error) {
-            WallexSnackbar.error(SnackbarParams.fromError(error));
+            BolsioSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       final db = AppDB.instance;
@@ -101,7 +101,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        WallexSnackbar.error(SnackbarParams(t.categories.already_exists));
+        BolsioSnackbar.error(SnackbarParams(t.categories.already_exists));
         return;
       }
 
@@ -119,12 +119,12 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
           .then((value) {
             if (mounted) RouteUtils.popRoute();
 
-            WallexSnackbar.success(
+            BolsioSnackbar.success(
               SnackbarParams(t.categories.create_success),
             );
           })
           .catchError((error) {
-            WallexSnackbar.error(SnackbarParams.fromError(error));
+            BolsioSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }

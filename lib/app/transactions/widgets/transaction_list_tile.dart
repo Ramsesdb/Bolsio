@@ -3,24 +3,24 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/app/transactions/transaction_details.page.dart';
-import 'package:kilatex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/models/date-utils/periodicity.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:kilatex/core/utils/constants.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/app/transactions/transaction_details.page.dart';
+import 'package:bolsio/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/models/date-utils/periodicity.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:bolsio/core/utils/constants.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -513,7 +513,7 @@ Future<bool> executeTransactionSwipeAction(
         newTrStatus,
       );
 
-      WallexSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      BolsioSnackbar.success(SnackbarParams(t.transaction.edit_success));
       break;
   }
 

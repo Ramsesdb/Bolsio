@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/animations/shake_widget.dart';
-import 'package:kilatex/core/utils/focus.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/animations/shake_widget.dart';
+import 'package:bolsio/core/utils/focus.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class TransactionAccountSelectorRow extends StatelessWidget {
   const TransactionAccountSelectorRow({

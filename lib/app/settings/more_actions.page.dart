@@ -1,40 +1,40 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/accounts/all_accounts_page.dart';
-import 'package:kilatex/app/auth/welcome_screen.dart';
-import 'package:kilatex/app/budgets/budgets_page.dart';
-import 'package:kilatex/app/calculator/calculator.page.dart';
-import 'package:kilatex/app/categories/categories_list_page.dart';
-import 'package:kilatex/app/currencies/currency_manager.dart';
-import 'package:kilatex/app/debts/debts_page.dart';
-import 'package:kilatex/app/goals/goals_page.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/about.page.dart';
-import 'package:kilatex/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:kilatex/app/settings/pages/appareance_settings.page.dart';
-import 'package:kilatex/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:kilatex/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:kilatex/app/settings/pages/general_settings.page.dart';
-import 'package:kilatex/app/settings/pages/hidden_mode_settings.page.dart';
-import 'package:kilatex/app/settings/pages/transactions_settings.page.dart';
-import 'package:kilatex/app/settings/widgets/profile_hero_card.dart';
-import 'package:kilatex/app/settings/widgets/setting_card_item.dart';
-import 'package:kilatex/app/settings/widgets/settings_quick_access.dart';
-import 'package:kilatex/app/settings/widgets/settings_search_bar.dart';
-import 'package:kilatex/app/settings/widgets/wallex_ai_hero_card.dart';
-import 'package:kilatex/app/tags/tag_list.page.dart';
-import 'package:kilatex/app/transactions/recurrent_transactions_page.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/database/utils/personal_ve_seeders.dart';
-import 'package:kilatex/core/models/goal/goal.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/all_accounts_page.dart';
+import 'package:bolsio/app/auth/welcome_screen.dart';
+import 'package:bolsio/app/budgets/budgets_page.dart';
+import 'package:bolsio/app/calculator/calculator.page.dart';
+import 'package:bolsio/app/categories/categories_list_page.dart';
+import 'package:bolsio/app/currencies/currency_manager.dart';
+import 'package:bolsio/app/debts/debts_page.dart';
+import 'package:bolsio/app/goals/goals_page.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/about.page.dart';
+import 'package:bolsio/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:bolsio/app/settings/pages/appareance_settings.page.dart';
+import 'package:bolsio/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:bolsio/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:bolsio/app/settings/pages/general_settings.page.dart';
+import 'package:bolsio/app/settings/pages/hidden_mode_settings.page.dart';
+import 'package:bolsio/app/settings/pages/transactions_settings.page.dart';
+import 'package:bolsio/app/settings/widgets/profile_hero_card.dart';
+import 'package:bolsio/app/settings/widgets/setting_card_item.dart';
+import 'package:bolsio/app/settings/widgets/settings_quick_access.dart';
+import 'package:bolsio/app/settings/widgets/settings_search_bar.dart';
+import 'package:bolsio/app/settings/widgets/bolsio_ai_hero_card.dart';
+import 'package:bolsio/app/tags/tag_list.page.dart';
+import 'package:bolsio/app/transactions/recurrent_transactions_page.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/utils/personal_ve_seeders.dart';
+import 'package:bolsio/core/models/goal/goal.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class MoreActionsPage extends StatefulWidget {
@@ -333,7 +333,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
           spacing: 16,
           children: [
             const ProfileHeroCard(),
-            const WallexAiHeroCard(),
+            const BolsioAiHeroCard(),
             SettingsSearchBar(onChanged: (q) => setState(() => _searchQuery = q)),
 
             if (_searchQuery.isNotEmpty) ...[

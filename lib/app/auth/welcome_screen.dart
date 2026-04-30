@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kilatex/app/auth/returning_user_flow.dart';
-import 'package:kilatex/app/onboarding/onboarding.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_secondary_button.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/app/auth/returning_user_flow.dart';
+import 'package:bolsio/app/onboarding/onboarding.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 /// First-run welcome screen. Offers two paths:
 /// 1. "Iniciar con Google" (primary) — signs in, pulls Firebase data, seeds if empty.
@@ -23,7 +23,7 @@ import 'package:kilatex/core/utils/logger.dart';
 ///
 /// Layout (v3 hero):
 /// - Background: pure AMOLED black (#000000) on dark, #FAFAF7 on light.
-/// - Top-left: small "Wallex" wordmark.
+/// - Top-left: small "Bolsio" wordmark.
 /// - Middle: large display title left-aligned ("Tu dinero en bolívares y
 ///   dólares, al día.") using Gabarito 900 (clamped to fit the viewport).
 /// - Bottom: full-width primary + secondary pill buttons.
@@ -265,7 +265,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Top: minimal Wallex wordmark, left-aligned.
+                  // Top: minimal Bolsio wordmark, left-aligned.
                   Row(
                     children: [
                       Container(
@@ -284,7 +284,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       const SizedBox(width: V3Tokens.spaceXs),
                       Text(
-                        'Wallex',
+                        'Bolsio',
                         style: V3Tokens.uiStyle(
                           size: 14,
                           weight: FontWeight.w700,

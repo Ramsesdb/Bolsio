@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/models/date-utils/periodicity.dart';
-import 'package:kilatex/core/models/transaction/recurrency_data.dart';
-import 'package:kilatex/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:kilatex/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/models/date-utils/periodicity.dart';
+import 'package:bolsio/core/models/transaction/recurrency_data.dart';
+import 'package:bolsio/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 List<RecurrencyData> recurrencyOptionsForTranslationForm = [
   const RecurrencyData.noRepeat(),

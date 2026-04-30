@@ -5,43 +5,44 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
-import 'package:kilatex/app/home/dashboard_widgets/dashboard_layout_body.dart';
-import 'package:kilatex/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:kilatex/app/home/dashboard_widgets/defaults.dart';
-import 'package:kilatex/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
-import 'package:kilatex/app/home/dashboard_widgets/edit/editable_widget_frame.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:kilatex/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
-import 'package:kilatex/app/home/widgets/income_or_expense_card.dart';
-import 'package:kilatex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:bolsio/app/common/widgets/user_avatar_display.dart';
+import 'package:bolsio/app/home/dashboard_widgets/dashboard_layout_body.dart';
+import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:bolsio/app/home/dashboard_widgets/defaults.dart';
+import 'package:bolsio/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
+import 'package:bolsio/app/home/dashboard_widgets/edit/editable_widget_frame.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:bolsio/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
+import 'package:bolsio/app/home/widgets/income_or_expense_card.dart';
+import 'package:bolsio/app/home/widgets/new_transaction_fl_button.dart';
 
-import 'package:kilatex/app/layout/page_context.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/widgets/edit_profile_modal.dart';
-import 'package:kilatex/app/settings/widgets/pin_modal.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:kilatex/core/models/date-utils/date_period.dart';
-import 'package:kilatex/core/models/date-utils/date_period_state.dart';
-import 'package:kilatex/core/models/date-utils/period_type.dart';
-import 'package:kilatex/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:kilatex/core/presentation/debug_page.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:kilatex/core/presentation/widgets/tappable.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/app_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_context.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/widgets/edit_profile_modal.dart';
+import 'package:bolsio/app/settings/widgets/pin_modal.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/models/date-utils/date_period.dart';
+import 'package:bolsio/core/models/date-utils/date_period_state.dart';
+import 'package:bolsio/core/models/date-utils/period_type.dart';
+import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/debug_page.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/app_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -518,7 +519,7 @@ class _DashboardPageState extends State<DashboardPage>
                             _editing
                                 ? Icons.check_rounded
                                 : Icons.edit_outlined,
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.of(context).onHeaderMuted,
                             size: 20,
                           ),
                           onPressed: () => unawaited(_toggleEditing()),
@@ -531,7 +532,7 @@ class _DashboardPageState extends State<DashboardPage>
                             tooltip: '',
                             icon: Icon(
                               Icons.more_vert_rounded,
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.of(context).onHeaderMuted,
                               size: 20,
                             ),
                             onSelected: (value) {
@@ -559,13 +560,13 @@ class _DashboardPageState extends State<DashboardPage>
                 ),
                 Divider(
                   height: 16,
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.of(context).onHeaderSubtle,
                 ),
                 const SizedBox(height: 8),
                 Builder(
                   builder: (context) {
                     final labelStyle = Theme.of(context).textTheme.labelMedium!
-                        .copyWith(color: Colors.white.withValues(alpha: 0.7));
+                        .copyWith(color: AppColors.of(context).onHeaderMuted);
 
                     // `visibleIds` is pushed down from the single top-level
                     // StreamBuilder on HiddenModeService.visibleAccountIdsStream
@@ -642,12 +643,12 @@ class _DashboardPageState extends State<DashboardPage>
           context,
           showLongMonth: MediaQuery.of(context).size.width > 360,
         ),
-        style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+        style: TextStyle(color: AppColors.of(context).onHeaderMuted),
       ),
-      backgroundColor: Colors.white.withValues(alpha: 0.08),
+      backgroundColor: AppColors.of(context).onHeader.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+        side: BorderSide(color: AppColors.of(context).onHeader.withValues(alpha: 0.2)),
       ),
       onPressed: () {
         // Hidden Mode restricts the period picker to bounded ranges so the
@@ -722,10 +723,10 @@ class _DashboardPageState extends State<DashboardPage>
               onLongPress: _handleSecretTap,
               child: UserAvatarDisplay(
                 avatar: appStateSettings[SettingKey.avatar],
-                backgroundColor: Colors.white.withValues(alpha: 0.15),
+                backgroundColor: AppColors.of(context).onHeader.withValues(alpha: 0.15),
                 border: Border.all(
                   width: 2,
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: AppColors.of(context).onHeader.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -739,7 +740,7 @@ class _DashboardPageState extends State<DashboardPage>
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       overflow: TextOverflow.fade,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.of(context).onHeaderMuted,
                     ),
                   ),
                   Text(
@@ -748,7 +749,7 @@ class _DashboardPageState extends State<DashboardPage>
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontSize: 18,
                       overflow: TextOverflow.fade,
-                      color: Colors.white,
+                      color: AppColors.of(context).onHeader,
                     ),
                   ),
 
@@ -832,7 +833,7 @@ class _DashboardPageState extends State<DashboardPage>
 }
 
 Color onHeaderSmallTextColor(BuildContext context) =>
-    Colors.white.withValues(alpha: 0.7);
+    AppColors.of(context).onHeaderMuted;
 
 /// Renderer del body cuando `_editing == true`. Spec
 /// `dashboard-edit-mode`. Forza todos los items a `fullWidth` (ADR-5),

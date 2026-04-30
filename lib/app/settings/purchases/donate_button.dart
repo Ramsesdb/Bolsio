@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:kilatex/app/settings/purchases/in_app_purchase.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/settings/purchases/in_app_purchase.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -48,7 +48,7 @@ class _DonateButtonState extends State<DonateButton> {
                 _subscription?.cancel();
               },
               onError: (error) {
-                WallexSnackbar.error(
+                BolsioSnackbar.error(
                   SnackbarParams.fromError(t.more.help_us.donate_err),
                 );
               },
@@ -64,11 +64,11 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          WallexSnackbar.error(
+          BolsioSnackbar.error(
             SnackbarParams.fromError(t.more.help_us.donate_err),
           );
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          WallexSnackbar.success(
+          BolsioSnackbar.success(
             SnackbarParams(t.more.help_us.donate_success),
           );
         }
@@ -92,7 +92,7 @@ class _DonateButtonState extends State<DonateButton> {
         onTap: () async {
           if (!(await IAPConnection.isAvailable())) {
             // TODO: Implement other payment methods
-            WallexSnackbar.error(
+            BolsioSnackbar.error(
               SnackbarParams.fromError(
                 'The current platform not supported or the store is not ready yet',
               ),
@@ -107,7 +107,7 @@ class _DonateButtonState extends State<DonateButton> {
               .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
-            WallexSnackbar.error(
+            BolsioSnackbar.error(
               SnackbarParams.fromError(
                 "Products not found -> ${response.notFoundIDs.join(',')}",
               ),
@@ -115,7 +115,7 @@ class _DonateButtonState extends State<DonateButton> {
 
             return;
           } else if (response.error != null) {
-            WallexSnackbar.error(
+            BolsioSnackbar.error(
               SnackbarParams.fromError(response.error!.message),
             );
 

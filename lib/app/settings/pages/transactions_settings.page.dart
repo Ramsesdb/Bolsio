@@ -1,24 +1,24 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/pages/default_form_transacation_values.page.dart';
-import 'package:kilatex/app/settings/pages/general_settings.page.dart';
-import 'package:kilatex/app/settings/widgets/wallex_tile_switch.dart';
-import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
-import 'package:kilatex/app/settings/widgets/transaction_swipe_action_selector.dart';
-import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/models/tags/tag.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:kilatex/core/presentation/widgets/modal_container.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/pages/default_form_transacation_values.page.dart';
+import 'package:bolsio/app/settings/pages/general_settings.page.dart';
+import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
+import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
+import 'package:bolsio/app/settings/widgets/transaction_swipe_action_selector.dart';
+import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/models/tags/tag.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:bolsio/core/presentation/widgets/modal_container.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TransactionsSettingsPage extends StatelessWidget {
@@ -121,7 +121,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                               ),
 
                               const SizedBox(height: 16),
-                              WallexTileSwitch(
+                              BolsioTileSwitch(
                                 title: t.settings.transactions.style.show_tags,
                                 initialValue:
                                     appStateSettings[SettingKey
@@ -137,7 +137,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                                   );
                                 },
                               ),
-                              WallexTileSwitch(
+                              BolsioTileSwitch(
                                 title: t.settings.transactions.style.show_time,
                                 initialValue:
                                     appStateSettings[SettingKey

@@ -4,13 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/stats/utils/common_axis_titles.dart';
-import 'package:kilatex/app/stats/widgets/fund_evolution_info.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/models/budget/budget.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:kilatex/core/utils/constants.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/stats/utils/common_axis_titles.dart';
+import 'package:bolsio/app/stats/widgets/fund_evolution_info.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/models/budget/budget.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:bolsio/core/utils/constants.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
   const BudgetEvolutionChart({super.key, required this.budget});

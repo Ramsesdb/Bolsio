@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:kilatex/app/settings/widgets/theme_quick_picker_sheet.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:bolsio/app/settings/widgets/theme_quick_picker_sheet.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class SettingsQuickAccess extends StatefulWidget {
   const SettingsQuickAccess({super.key});
@@ -22,7 +23,7 @@ class _SettingsQuickAccessState extends State<SettingsQuickAccess> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final appColors = AppColors.of(context);
-    final privateMode = appStateSettings[SettingKey.privateMode] == '1';
+    final initialPrivateMode = appStateSettings[SettingKey.privateMode] == '1';
     final autoImport = appStateSettings[SettingKey.autoImportEnabled] == '1';
 
     final themeMode = getThemeFromString(appStateSettings[SettingKey.themeMode]);
@@ -49,22 +50,27 @@ class _SettingsQuickAccessState extends State<SettingsQuickAccess> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            dense: true,
-            visualDensity: VisualDensity.compact,
-            leading: Icon(Icons.visibility_off_outlined, color: cs.primary),
-            title: Text(t.settings.security.private_mode),
-            trailing: Switch.adaptive(
-              value: privateMode,
-              onChanged: (v) async {
-                await UserSettingService.instance.setItem(
-                  SettingKey.privateMode,
-                  v ? '1' : '0',
-                  updateGlobalState: true,
-                );
-                if (mounted) setState(() {});
-              },
-            ),
+          StreamBuilder<bool>(
+            stream: PrivateModeService.instance.privateModeStream,
+            initialData: initialPrivateMode,
+            builder: (context, snapshot) {
+              final privateMode = snapshot.data ?? initialPrivateMode;
+              return ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                leading: Icon(
+                  Icons.visibility_off_outlined,
+                  color: cs.primary,
+                ),
+                title: Text(t.settings.security.private_mode),
+                trailing: Switch.adaptive(
+                  value: privateMode,
+                  onChanged: (v) async {
+                    await PrivateModeService.instance.setPrivateMode(v);
+                  },
+                ),
+              );
+            },
           ),
           const Divider(height: 1, indent: 16, endIndent: 16),
           ListTile(

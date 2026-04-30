@@ -3,32 +3,32 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kilatex/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:kilatex/app/layout/page_context.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/transactions/widgets/bulk_edit_transaction_modal.dart';
-import 'package:kilatex/app/transactions/widgets/transaction_list.dart';
-import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:kilatex/core/presentation/widgets/wallex_popup_menu_button.dart';
-import 'package:kilatex/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:kilatex/core/presentation/widgets/no_results.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/list_tile_action_item.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:bolsio/app/layout/page_context.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/transactions/widgets/bulk_edit_transaction_modal.dart';
+import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
+import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:bolsio/core/presentation/widgets/bolsio_popup_menu_button.dart';
+import 'package:bolsio/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
+import 'package:bolsio/core/presentation/widgets/no_results.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/list_tile_action_item.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -466,7 +466,7 @@ class TransactionsPageState extends State<TransactionsPage> {
         t.transaction.list.selected_short(n: selectedTransactions.length),
       ),
       actions: [
-        WallexPopupMenuButton(
+        BolsioPopupMenuButton(
           actionItems: [
             ListTileActionItem(
               label: t.ui_actions.edit,
@@ -518,7 +518,7 @@ class TransactionsPageState extends State<TransactionsPage> {
 
                   Future.wait(futures)
                       .then((value) {
-                        WallexSnackbar.success(
+                        BolsioSnackbar.success(
                           SnackbarParams(
                             selectedTransactions.length <= 1
                                 ? t.transaction.delete_success
@@ -531,7 +531,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                         cleanSelectedTransactions();
                       })
                       .catchError((err) {
-                        WallexSnackbar.error(SnackbarParams.fromError(err));
+                        BolsioSnackbar.error(SnackbarParams.fromError(err));
                       });
                 });
               },

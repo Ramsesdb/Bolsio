@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/widgets/pin_modal.dart';
-import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
-import 'package:kilatex/app/settings/widgets/wallex_tile_switch.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/widgets/pin_modal.dart';
+import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
+import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Settings page to enable/disable Hidden Mode and rotate the PIN.
 ///
@@ -70,7 +70,7 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
     if (!mounted) return;
     if (changed) {
       final t = Translations.of(context);
-      WallexSnackbar.info(SnackbarParams(t.settings.hidden_mode.pin.pin_changed));
+      BolsioSnackbar.info(SnackbarParams(t.settings.hidden_mode.pin.pin_changed));
     }
   }
 
@@ -104,7 +104,7 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else ...[
-                WallexTileSwitch(
+                BolsioTileSwitch(
                   title: t.settings.hidden_mode.enable,
                   subtitle: isEnabled
                       ? t.settings.hidden_mode.enabled_badge

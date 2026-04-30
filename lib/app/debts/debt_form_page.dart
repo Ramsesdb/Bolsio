@@ -1,35 +1,35 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/accounts/widgets/balance_currency_form_field.dart';
-import 'package:kilatex/app/debts/components/transaction_selector.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/debts/debt_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/extensions/numbers.extensions.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/models/debt/debt.dart';
-import 'package:kilatex/core/models/debt/debt_direction.enum.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/styles/borders.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:kilatex/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/services/supported_icon/supported_icon_service.dart';
-import 'package:kilatex/core/utils/constants.dart';
-import 'package:kilatex/core/utils/text_field_utils.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/widgets/balance_currency_form_field.dart';
+import 'package:bolsio/app/debts/components/transaction_selector.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/debts/debt_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/extensions/numbers.extensions.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/models/debt/debt.dart';
+import 'package:bolsio/core/models/debt/debt_direction.enum.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/styles/borders.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:bolsio/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
+import 'package:bolsio/core/utils/constants.dart';
+import 'package:bolsio/core/utils/text_field_utils.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class DebtFormPage extends StatefulWidget {
   const DebtFormPage({super.key, this.debt, this.type})
@@ -428,7 +428,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
         }
       }
 
-      WallexSnackbar.success(
+      BolsioSnackbar.success(
         SnackbarParams(
           widget.isEditing
               ? t.debts.actions.edit.success
@@ -437,7 +437,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
       );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      WallexSnackbar.error(SnackbarParams.fromError(e));
+      BolsioSnackbar.error(SnackbarParams.fromError(e));
     }
   }
 

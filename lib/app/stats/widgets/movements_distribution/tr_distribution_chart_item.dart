@@ -1,4 +1,4 @@
-import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
 
 class TrDistributionChartItem<T> {
   final T category;

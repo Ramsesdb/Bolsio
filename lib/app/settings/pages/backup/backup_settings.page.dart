@@ -2,23 +2,23 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/pages/backup/export_page.dart';
-import 'package:kilatex/app/settings/pages/backup/import_csv.page.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/backup/backup_database_service.dart';
-import 'package:kilatex/core/extensions/numbers.extensions.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/routes/destinations.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/attachments/attachments_service.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/pages/backup/export_page.dart';
+import 'package:bolsio/app/settings/pages/backup/import_csv.page.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/backup/backup_database_service.dart';
+import 'package:bolsio/core/extensions/numbers.extensions.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/routes/destinations.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
-import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
 import '../../widgets/settings_list_utils.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
 
 class BackupSettingsPage extends StatefulWidget {
   const BackupSettingsPage({super.key});
@@ -65,7 +65,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                           if (!value) {
                             RouteUtils.popRoute();
 
-                            WallexSnackbar.info(
+                            BolsioSnackbar.info(
                               SnackbarParams(t.backup.no_file_selected),
                             );
 
@@ -78,14 +78,14 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                             AppMenuDestinationsID.dashboard,
                           );
 
-                          WallexSnackbar.success(
+                          BolsioSnackbar.success(
                             SnackbarParams(t.backup.import.success),
                           );
                         })
                         .catchError((err) {
                           RouteUtils.popRoute();
 
-                          WallexSnackbar.error(SnackbarParams.fromError(err));
+                          BolsioSnackbar.error(SnackbarParams.fromError(err));
                         });
                   });
                 },
@@ -155,7 +155,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       .purgeOrphans();
 
                   if (!context.mounted) return;
-                  WallexSnackbar.success(
+                  BolsioSnackbar.success(
                     SnackbarParams('Limpieza completada: $removed elementos'),
                   );
                 },
@@ -191,7 +191,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       await CategoryService.instance.initializeCategories();
 
                       if (context.mounted) {
-                        WallexSnackbar.success(
+                        BolsioSnackbar.success(
                           SnackbarParams(
                             'Datos reparados exitosamente. Reinicia la app.',
                           ),
@@ -199,7 +199,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        WallexSnackbar.error(SnackbarParams('Error: $e'));
+                        BolsioSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }
@@ -240,7 +240,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       await FirebaseSyncService.instance.pushAllData();
 
                       if (context.mounted) {
-                        WallexSnackbar.success(
+                        BolsioSnackbar.success(
                           SnackbarParams(
                             'Datos subidos exitosamente a la nube',
                           ),
@@ -248,7 +248,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        WallexSnackbar.error(SnackbarParams('Error: $e'));
+                        BolsioSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }
@@ -299,16 +299,16 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                                     '${errors > 0 ? 'Errores: $errors. $firstErr' : ''}'
                                 .trim();
                         if (errors > 0) {
-                          WallexSnackbar.error(SnackbarParams(msg));
+                          BolsioSnackbar.error(SnackbarParams(msg));
                         } else {
-                          WallexSnackbar.success(
+                          BolsioSnackbar.success(
                             SnackbarParams('$msg Reinicia la app para verlos.'),
                           );
                         }
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        WallexSnackbar.error(SnackbarParams('Error: $e'));
+                        BolsioSnackbar.error(SnackbarParams('Error: $e'));
                       }
                     }
                   }

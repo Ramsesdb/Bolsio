@@ -1,21 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/calculator/calculator.page.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/app/settings/pages/appareance_settings.page.dart';
-import 'package:kilatex/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:kilatex/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:kilatex/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:kilatex/app/settings/pages/general_settings.page.dart';
-import 'package:kilatex/app/settings/pages/hidden_mode_settings.page.dart';
-import 'package:kilatex/app/settings/pages/transactions_settings.page.dart';
-import 'package:kilatex/core/database/utils/personal_ve_seeders.dart';
-import 'package:kilatex/core/extensions/padding.extension.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/calculator/calculator.page.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/app/settings/pages/appareance_settings.page.dart';
+import 'package:bolsio/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:bolsio/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:bolsio/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:bolsio/app/settings/pages/general_settings.page.dart';
+import 'package:bolsio/app/settings/pages/hidden_mode_settings.page.dart';
+import 'package:bolsio/app/settings/pages/transactions_settings.page.dart';
+import 'package:bolsio/core/database/utils/personal_ve_seeders.dart';
+import 'package:bolsio/core/extensions/padding.extension.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -168,7 +168,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
             _SectionHeader('Inteligencia Artificial'),
             _SettingRouteTile(
-              title: 'Wallex AI',
+              title: 'Bolsi',
               subtitle: 'Categorizacion, insights y chat con IA',
               icon: Icons.auto_awesome_rounded,
               onTap: () => RouteUtils.pushRoute(const AiSettingsPage()),

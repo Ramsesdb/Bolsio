@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/debts/debt_details_page.dart';
-import 'package:kilatex/core/database/services/debts/debt_service.dart';
-import 'package:kilatex/core/models/debt/debt.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/supported_icon/supported_icon_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/debts/debt_details_page.dart';
+import 'package:bolsio/core/database/services/debts/debt_service.dart';
+import 'package:bolsio/core/models/debt/debt.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class DebtList extends StatelessWidget {
   const DebtList({

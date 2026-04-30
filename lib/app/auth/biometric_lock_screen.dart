@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 
 /// Full-screen biometric lock gate shown on app launch.
 ///
@@ -59,7 +59,7 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> {
       }
 
       final authenticated = await _auth.authenticate(
-        localizedReason: 'Desbloquea Wallex para acceder a tus finanzas',
+        localizedReason: 'Desbloquea Bolsio para acceder a tus finanzas',
         options: const AuthenticationOptions(
           // Allow PIN/pattern/password as fallback.
           biometricOnly: false,
@@ -108,7 +108,7 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> {
 
                 // App name
                 Text(
-                  'Wallex',
+                  'Bolsio',
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

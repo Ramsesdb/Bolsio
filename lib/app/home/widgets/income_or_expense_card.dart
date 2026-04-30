@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:kilatex/core/models/date-utils/date_period_state.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/models/date-utils/date_period_state.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -81,7 +82,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
                 children: [
                   Text(type.displayName(context), style: labelStyle),
                   if (policy == null)
-                    _buildSkeletonAmount()
+                    _buildSkeletonAmount(context)
                   else if (policy is DualMode)
                     _DualBalanceLines(filters: _buildFilters(), policy: policy)
                   else
@@ -98,17 +99,17 @@ class IncomeOrExpenseCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSkeletonAmount() {
+  Widget _buildSkeletonAmount(BuildContext context) {
     return Skeletonizer(
       enabled: true,
       child: CurrencyDisplayer(
         amountToConvert: 9999,
         compactView: true,
         showDecimals: false,
-        integerStyle: const TextStyle(
+        integerStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w300,
-          color: Colors.white,
+          color: AppColors.of(context).onHeader,
         ),
       ),
     );
@@ -142,10 +143,10 @@ class _SingleBalanceLine extends StatelessWidget {
                 amountToConvert: amount,
                 compactView: true,
                 showDecimals: false,
-                integerStyle: const TextStyle(
+                integerStyle: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: AppColors.of(context).onHeader,
                 ),
               ),
             ),
@@ -194,10 +195,10 @@ class _DualBalanceLines extends StatelessWidget {
                     amountToConvert: primaryAmount,
                     compactView: true,
                     showDecimals: false,
-                    integerStyle: const TextStyle(
+                    integerStyle: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w300,
-                      color: Colors.white,
+                      color: AppColors.of(context).onHeader,
                     ),
                   ),
                 ),
@@ -259,7 +260,7 @@ class _SecondaryEquivalenceLine extends StatelessWidget {
             '≈ $formatted ${_secondarySymbol(policy.secondary)}',
             style: TextStyle(
               fontSize: 11,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.of(context).onHeaderSubtle,
             ),
           ),
         );

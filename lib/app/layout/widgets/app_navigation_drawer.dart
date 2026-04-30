@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
-import 'package:kilatex/app/layout/window_bar.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/routes/destinations.dart';
-import 'package:kilatex/core/utils/app_utils.dart';
+import 'package:bolsio/app/common/widgets/user_avatar_display.dart';
+import 'package:bolsio/app/layout/window_bar.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/routes/destinations.dart';
+import 'package:bolsio/core/utils/app_utils.dart';
 
 /// Sidebar navigation drawer used in desktop layouts only
 class SideNavigationDrawer extends StatelessWidget {

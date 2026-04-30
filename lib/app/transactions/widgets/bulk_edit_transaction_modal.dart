@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/categories/selectors/category_picker.dart';
-import 'package:kilatex/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/modal_container.dart';
-import 'package:kilatex/core/presentation/widgets/outlined_button_stacked.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/date_time_picker.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/categories/selectors/category_picker.dart';
+import 'package:bolsio/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/modal_container.dart';
+import 'package:bolsio/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/date_time_picker.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({
@@ -140,7 +140,7 @@ class BulkEditTransactionModal extends StatelessWidget {
 
     Future.wait(futures)
         .then((value) {
-          WallexSnackbar.success(
+          BolsioSnackbar.success(
             transactionsToEdit.length <= 1
                 ? SnackbarParams(t.transaction.edit_success)
                 : SnackbarParams(
@@ -153,7 +153,7 @@ class BulkEditTransactionModal extends StatelessWidget {
           onSuccess();
         })
         .catchError((err) {
-          WallexSnackbar.error(SnackbarParams.fromError(err));
+          BolsioSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 }

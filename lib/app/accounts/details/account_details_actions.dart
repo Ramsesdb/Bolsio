@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/accounts/account_form.dart';
-import 'package:kilatex/app/accounts/details/account_details.dart';
-import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/list_tile_action_item.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_form.dart';
+import 'package:bolsio/app/accounts/details/account_details.dart';
+import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/list_tile_action_item.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -128,13 +128,13 @@ abstract class AccountDetailsActions {
           .updateAccount(account.copyWith(closingDate: const drift.Value(null)))
           .then((value) {
             if (value) {
-              WallexSnackbar.success(
+              BolsioSnackbar.success(
                 SnackbarParams(t.account.close.unarchive_succes),
               );
             }
           })
           .catchError((err) {
-            WallexSnackbar.error(SnackbarParams.fromError(err));
+            BolsioSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -175,10 +175,10 @@ abstract class AccountDetailsActions {
               RouteUtils.popRoute();
             }
 
-            WallexSnackbar.success(SnackbarParams(t.account.delete.success));
+            BolsioSnackbar.success(SnackbarParams(t.account.delete.success));
           })
           .catchError((err) {
-            WallexSnackbar.error(SnackbarParams.fromError(err));
+            BolsioSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
