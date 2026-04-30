@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// The status of a target (budget or goal) relative to the current date.
 enum TargetTimelineStatus {

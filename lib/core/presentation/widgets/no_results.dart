@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kilatex/core/presentation/animations/fade_in.dart';
-import 'package:kilatex/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:kilatex/core/presentation/theme.dart';
+import 'package:bolsio/core/presentation/animations/fade_in.dart';
+import 'package:bolsio/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:bolsio/core/presentation/theme.dart';
 
 class NoResults extends StatelessWidget {
   const NoResults({

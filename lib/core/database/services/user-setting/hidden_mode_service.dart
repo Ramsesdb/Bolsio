@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 /// Service that manages the app "Hidden Mode": a stronger-than-private-mode
 /// layer that removes savings accounts (and their transactions / balances) from

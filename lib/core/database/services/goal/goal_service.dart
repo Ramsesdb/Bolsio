@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/models/goal/goal.dart';
-import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/goal/goal.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
 
 class GoalService {
   final AppDB db;

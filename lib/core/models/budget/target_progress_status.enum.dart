@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/models/budget/target_timeline_status.enum.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/budget/target_timeline_status.enum.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 ///  The progress status of a target (budget or goal) based on its current progress.
 enum TargetProgressStatus {

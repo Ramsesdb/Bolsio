@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:kilatex/core/database/utils/database_enum.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/utils/database_enum.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 enum GoalType implements DatabaseEnum<int> {
   expense(0),

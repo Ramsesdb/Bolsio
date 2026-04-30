@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class TransactionStatusFilterChip extends StatelessWidget {
   const TransactionStatusFilterChip({

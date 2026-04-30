@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' show Colors, Icons;
 import 'package:flutter/widgets.dart';
-import 'package:kilatex/core/database/utils/database_enum.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/utils/database_enum.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 enum DebtDirection implements DatabaseEnum<int> {
   /// The user lent money to someone else

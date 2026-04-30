@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'ui_number_formatter.dart';

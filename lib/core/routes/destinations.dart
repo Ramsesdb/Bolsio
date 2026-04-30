@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/budgets/budgets_page.dart';
-import 'package:kilatex/app/home/dashboard.page.dart';
-import 'package:kilatex/app/settings/more_actions.page.dart';
-import 'package:kilatex/app/stats/stats_page.dart';
-import 'package:kilatex/app/transactions/transactions.page.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/budgets/budgets_page.dart';
+import 'package:bolsio/app/home/dashboard.page.dart';
+import 'package:bolsio/app/settings/more_actions.page.dart';
+import 'package:bolsio/app/stats/stats_page.dart';
+import 'package:bolsio/app/transactions/transactions.page.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 // GlobalKeys for each destination page
 final GlobalKey<State<StatefulWidget>> dashboardPageKey = GlobalKey();

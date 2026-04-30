@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 enum TransactionFormField {
   category('category'),

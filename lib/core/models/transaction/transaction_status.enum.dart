@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/utils/database_enum.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/utils/database_enum.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Literally the `null` value, just casted to TransactionStatus? to avoid
 /// issues with null safety

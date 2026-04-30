@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/services/voice/voice_service.dart';
-import 'package:kilatex/core/services/voice/voice_service_speech_to_text.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/services/voice/voice_service.dart';
+import 'package:bolsio/core/services/voice/voice_service_speech_to_text.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Outcome of the microphone permission flow.
 enum VoicePermissionOutcome {
@@ -48,9 +48,9 @@ Future<VoicePermissionOutcome> ensureMicPermissionWithExplainer(
   if (!context.mounted) return VoicePermissionOutcome.denied;
   final accepted = await confirmDialog(
     context,
-    dialogTitle: t.wallex_ai.voice_permission_title,
-    contentParagraphs: [Text(t.wallex_ai.voice_permission_body)],
-    confirmationText: t.wallex_ai.voice_permission_cta,
+    dialogTitle: t.bolsio_ai.voice_permission_title,
+    contentParagraphs: [Text(t.bolsio_ai.voice_permission_body)],
+    confirmationText: t.bolsio_ai.voice_permission_cta,
     showCancelButton: true,
   );
 
@@ -73,9 +73,9 @@ Future<VoicePermissionOutcome> _showOpenSettingsDialog(
   final t = Translations.of(context);
   final confirmed = await confirmDialog(
     context,
-    dialogTitle: t.wallex_ai.voice_permission_denied_title,
-    contentParagraphs: [Text(t.wallex_ai.voice_permission_denied_body)],
-    confirmationText: t.wallex_ai.voice_permission_open_settings,
+    dialogTitle: t.bolsio_ai.voice_permission_denied_title,
+    contentParagraphs: [Text(t.bolsio_ai.voice_permission_denied_body)],
+    confirmationText: t.bolsio_ai.voice_permission_open_settings,
     showCancelButton: true,
   );
 
@@ -95,9 +95,9 @@ void showMicPermissionDeniedSnackbar(BuildContext context) {
   final t = Translations.of(context);
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(t.wallex_ai.voice_permission_denied_snackbar),
+      content: Text(t.bolsio_ai.voice_permission_denied_snackbar),
       action: SnackBarAction(
-        label: t.wallex_ai.voice_permission_open_settings,
+        label: t.bolsio_ai.voice_permission_open_settings,
         onPressed: () => openAppSettings(),
       ),
       duration: const Duration(seconds: 5),

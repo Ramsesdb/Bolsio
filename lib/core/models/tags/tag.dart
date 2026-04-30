@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
 
 class Tag extends TagInDB {
   Tag({

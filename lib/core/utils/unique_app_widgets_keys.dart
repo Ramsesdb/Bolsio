@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_switcher.dart';
-import 'package:kilatex/app/layout/widgets/app_navigation_sidebar.dart';
-import 'package:kilatex/app/layout/window_bar.dart';
-import 'package:kilatex/core/presentation/helpers/global_snackbar.dart';
+import 'package:bolsio/app/layout/page_switcher.dart';
+import 'package:bolsio/app/layout/widgets/app_navigation_sidebar.dart';
+import 'package:bolsio/app/layout/window_bar.dart';
+import 'package:bolsio/core/presentation/helpers/global_snackbar.dart';
 
 final GlobalKey<PageSwitcherState> tabsPageKey = GlobalKey();
 final GlobalKey<AppNavigationSidebarState> navigationSidebarKey = GlobalKey();

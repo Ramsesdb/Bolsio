@@ -5,11 +5,11 @@ import 'dart:typed_data';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/utils/logger.dart';
 import 'package:path/path.dart' as path;
 
 class BackupDatabaseService {
@@ -36,7 +36,7 @@ class BackupDatabaseService {
     final file = createAndReturnFile(
       exportPath: exportPath,
       fileName:
-          "wallex-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
+          "bolsio-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
     );
 
     return file.writeAsBytes(dbFileInBytes, mode: FileMode.write);
@@ -114,7 +114,7 @@ class BackupDatabaseService {
     final file = createAndReturnFile(
       exportPath: exportPath,
       fileName:
-          "Wallex_Report_${DateFormat('yyyyMMdd_HHmmss').format(DateTime.now())}.csv",
+          "Bolsio_Report_${DateFormat('yyyyMMdd_HHmmss').format(DateTime.now())}.csv",
     );
 
     return file.writeAsString(

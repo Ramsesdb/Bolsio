@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/filters/saved_filters_service.dart';
-import 'package:kilatex/core/models/filters/saved_filter.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/filters/saved_filters_service.dart';
+import 'package:bolsio/core/models/filters/saved_filter.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class SavedFilterFormPage extends StatefulWidget {
   const SavedFilterFormPage({super.key, this.savedFilter, this.initialFilter});
@@ -74,7 +74,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
     });
 
     if (mounted) {
-      WallexSnackbar.success(
+      BolsioSnackbar.success(
         SnackbarParams(t.transaction.filters.saved.save_success),
       );
       Navigator.of(context).pop();
@@ -105,7 +105,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
         widget.savedFilter!.id,
       );
       if (mounted) {
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(t.transaction.filters.saved.delete_success),
         );
         Navigator.of(context).pop();

@@ -1,14 +1,14 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:drift/drift.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/utils/drift_utils.dart';
-import 'package:kilatex/core/extensions/string.extension.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/utils/drift_utils.dart';
+import 'package:bolsio/core/extensions/string.extension.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 

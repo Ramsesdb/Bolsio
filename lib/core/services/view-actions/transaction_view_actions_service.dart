@@ -1,17 +1,17 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/debts/debt_service.dart';
-import 'package:kilatex/core/database/services/tags/tags_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/list_tile_action_item.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/debts/debt_service.dart';
+import 'package:bolsio/core/database/services/tags/tags_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/list_tile_action_item.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 import '../../../i18n/generated/translations.g.dart';
 
@@ -92,7 +92,7 @@ class TransactionViewActionService {
           .deleteTransaction(transactionId)
           .then((value) {
             if (value == 0) {
-              WallexSnackbar.error(
+              BolsioSnackbar.error(
                 SnackbarParams('Error removing the transaction'),
               );
 
@@ -103,12 +103,12 @@ class TransactionViewActionService {
               RouteUtils.popRoute();
             }
 
-            WallexSnackbar.success(
+            BolsioSnackbar.success(
               SnackbarParams(t.transaction.delete_success),
             );
           })
           .catchError((err) {
-            WallexSnackbar.error(SnackbarParams.fromError(err));
+            BolsioSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -133,11 +133,11 @@ class TransactionViewActionService {
       try {
         await _duplicateTransaction(transaction, newTrId);
 
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(t.transaction.duplicate_success),
         );
       } catch (error) {
-        WallexSnackbar.error(SnackbarParams.fromError(error));
+        BolsioSnackbar.error(SnackbarParams.fromError(error));
       }
     });
   }
@@ -187,12 +187,12 @@ class TransactionViewActionService {
       DebtService.instance
           .unlinkTransactionFromDebt(transactionId)
           .then((value) {
-            WallexSnackbar.success(
+            BolsioSnackbar.success(
               SnackbarParams(t.debts.actions.unlink_transaction.success),
             );
           })
           .catchError((err) {
-            WallexSnackbar.error(SnackbarParams.fromError(err));
+            BolsioSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }

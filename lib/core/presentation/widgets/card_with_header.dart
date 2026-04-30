@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 16.0;

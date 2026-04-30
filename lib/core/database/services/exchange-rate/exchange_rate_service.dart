@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/core/models/exchange-rate/exchange_rate.dart';
-import 'package:kilatex/core/services/rate_providers/rate_provider_manager.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/models/exchange-rate/exchange_rate.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider_manager.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../app_db.dart';
