@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Per-emit conversion outcome — the converted total plus the set of
 /// native currencies whose rate was missing.

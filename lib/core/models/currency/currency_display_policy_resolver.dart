@@ -1,7 +1,7 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_mode.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_mode.dart';
 
 /// Resolves a reactive [CurrencyDisplayPolicy] from `userSettings` rows.
 ///

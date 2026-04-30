@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_mode.dart';
-import 'package:kilatex/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_mode.dart';
+import 'package:bolsio/core/presentation/widgets/currency_selector_modal.dart';
 
 /// Pure value object describing the on-disk write set that
 /// [persistCurrencyModeChange] will apply for a given mode change.

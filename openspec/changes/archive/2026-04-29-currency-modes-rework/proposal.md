@@ -2,7 +2,7 @@
 
 ## Why
 
-Today wallex has no real concept of "currency mode". The dashboard hardcodes a "USD primary + Bs equivalence" two-line layout for everyone, even users who picked VES-only or another single currency in onboarding. The `'DUAL'` selection in onboarding is silently collapsed to `'USD'` before persistence, so the app cannot tell a single-USD user from a dual-USD/VES user. The same conflation feeds a bug where toggling BCV/Paralelo on the dashboard re-converts every native-currency transaction through the active rate, producing wrong totals. This rework introduces a real, persisted currency mode (4 variants), generalizes rate sources beyond Bs, and absorbs the related dashboard conversion bug.
+Today bolsio has no real concept of "currency mode". The dashboard hardcodes a "USD primary + Bs equivalence" two-line layout for everyone, even users who picked VES-only or another single currency in onboarding. The `'DUAL'` selection in onboarding is silently collapsed to `'USD'` before persistence, so the app cannot tell a single-USD user from a dual-USD/VES user. The same conflation feeds a bug where toggling BCV/Paralelo on the dashboard re-converts every native-currency transaction through the active rate, producing wrong totals. This rework introduces a real, persisted currency mode (4 variants), generalizes rate sources beyond Bs, and absorbs the related dashboard conversion bug.
 
 ## What Changes
 

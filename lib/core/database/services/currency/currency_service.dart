@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class CurrencyService {
   final AppDB db;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/exit_without_save_warn_dialog.dart';
-import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/currencies/widgets/currency_edit_fields.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/exit_without_save_warn_dialog.dart';
+import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class EditCurrencyPage extends StatefulWidget {
   const EditCurrencyPage({super.key, required this.currency});
@@ -39,13 +39,13 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
     CurrencyService.instance
         .updateCurrency(widget.currency.code, updatedCurrency)
         .then((value) {
-          WallexSnackbar.success(
+          BolsioSnackbar.success(
             SnackbarParams(t.currencies.currency_form.edit_success),
           );
           RouteUtils.popRoute(updatedCurrency);
         })
         .catchError((err) {
-          WallexSnackbar.error(SnackbarParams.fromError(err));
+          BolsioSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 

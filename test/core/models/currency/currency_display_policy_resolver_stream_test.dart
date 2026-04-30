@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:wallex/core/models/currency/currency_display_policy.dart';
-import 'package:wallex/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
 
 /// Phase 10 task 10.4 — `CurrencyDisplayPolicyResolver` stream contract.
 ///

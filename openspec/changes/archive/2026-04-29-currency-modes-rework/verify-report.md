@@ -162,7 +162,7 @@ Test breakdown (by phase, per apply-progress Run 11):
 
 **Result**:
 ```
-Analyzing wallex...
+Analyzing bolsio...
    info - Don't use 'BuildContext's across async gaps - lib\core\utils\date_time_picker.dart:44:5 - use_build_context_synchronously
 1 issue found. (ran in 16.6s)
 ```
@@ -268,7 +268,7 @@ The change is implementation-complete, spec-compliant, test-green, analyzer-clea
 
 - **status**: `pass`
 - **executive_summary**: `currency-modes-rework verified PASS. 182/182 tests green; flutter analyze clean against baseline (1 pre-existing info lint, unchanged). All 7 resolved decisions, both bug fixes, and rollback docs verified. 36/36 spec scenarios traced (35 fully covered by tests, 1 — Frankfurter stale-data UI banner — partial / non-blocking). Zero out-of-scope violations.`
-- **artifacts**: `c:\proyectos personales\wallex\openspec\changes\currency-modes-rework\verify-report.md`
+- **artifacts**: `c:\proyectos personales\bolsio\openspec\changes\currency-modes-rework\verify-report.md`
 - **next_recommended**: `/sdd-archive currency-modes-rework`
 - **risks**: `None blocking archive. Three non-blocking suggestions: (1) stale-rate UI banner for Frankfurter datas >24h is partial; (2) tasks 3.7 / 8.3 unchecked but deliverables exist in Phase 10 — optional bookkeeping flip; (3) EXPLAIN QUERY PLAN re-check before scaling beyond 3 betas.`
 - **Test totals**: 182 passed / 0 failed / 0 skipped.

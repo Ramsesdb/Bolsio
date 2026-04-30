@@ -1,4 +1,4 @@
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Sealed abstraction that drives how the dashboard renders totals,
 /// equivalences, and the BCV/Paralelo chip.

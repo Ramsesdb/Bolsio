@@ -3,7 +3,7 @@
 **Change**: `currency-modes-rework`
 **Archived on**: 2026-04-29
 **Archiver**: sdd-archive
-**Project**: wallex
+**Project**: bolsio
 **Artifact store mode**: openspec
 **Verify verdict**: **PASS** (see `verify-report.md` Section "Summary verdict")
 
@@ -37,7 +37,7 @@ The archive is permitted because the verify report dated 2026-04-29 reached PASS
 
 ### Why all five are CREATE, not MERGE
 
-Pre-archive, `openspec/specs/` contained only its `.gitkeep` placeholder — no domain subdirectories existed. The wallex project initialized OpenSpec for SDD purposes after the main spec corpus was empty, so this change is the first to populate `openspec/specs/`. Per the `sdd-archive` skill rule "If main spec does NOT exist → the delta spec IS a full spec; copy it directly," each of the 5 deltas was copied verbatim to its main spec path. No requirements were dropped, replaced, or reordered.
+Pre-archive, `openspec/specs/` contained only its `.gitkeep` placeholder — no domain subdirectories existed. The bolsio project initialized OpenSpec for SDD purposes after the main spec corpus was empty, so this change is the first to populate `openspec/specs/`. Per the `sdd-archive` skill rule "If main spec does NOT exist → the delta spec IS a full spec; copy it directly," each of the 5 deltas was copied verbatim to its main spec path. No requirements were dropped, replaced, or reordered.
 
 ### What each new main spec covers (concise)
 

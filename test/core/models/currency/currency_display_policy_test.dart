@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/models/currency/currency_display_policy.dart';
-import 'package:wallex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:wallex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Phase 2 stub tests for [CurrencyDisplayPolicy] and the pure
 /// [CurrencyDisplayPolicyResolver.buildPolicy] resolver.

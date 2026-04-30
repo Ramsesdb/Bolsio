@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:kilatex/core/services/rate_providers/manual_override_provider.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:bolsio/core/services/rate_providers/manual_override_provider.dart';
 
 /// Phase 5 task 5.4 — UI entry point that lets the user set or edit the
 /// manual override rate for a currency pair.

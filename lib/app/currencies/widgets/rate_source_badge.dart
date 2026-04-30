@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Compact pill-style badge that surfaces the on-disk `source` value for
 /// an exchange-rate row. Phase 5 task 5.5 — adds visibility into the

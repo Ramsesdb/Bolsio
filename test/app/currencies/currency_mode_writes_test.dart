@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/currencies/widgets/currency_mode_picker.dart';
-import 'package:wallex/core/models/currency/currency_mode.dart';
+import 'package:bolsio/app/currencies/widgets/currency_mode_picker.dart';
+import 'package:bolsio/core/models/currency/currency_mode.dart';
 
 /// Phase 5 task 5.3 — verifies the on-disk write set produced for a
 /// mode change. The implementation MUST:
