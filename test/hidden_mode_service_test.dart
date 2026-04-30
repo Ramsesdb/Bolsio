@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 
 /// Unit tests for the core PIN / crypto behavior of [HiddenModeService].
 ///
