@@ -2,7 +2,7 @@
 
 ## Why
 
-Una cuenta en Wallex no puede hoy tener saldo inicial correcto + historial de movimientos pasados a la vez: los movimientos históricos recalculan el balance y lo descuadran. Esto bloquea a un usuario que empieza a usar la app de cero y quiere meter su archivo de transacciones viejas sin perder la cifra real de saldo.
+Una cuenta en Bolsio no puede hoy tener saldo inicial correcto + historial de movimientos pasados a la vez: los movimientos históricos recalculan el balance y lo descuadran. Esto bloquea a un usuario que empieza a usar la app de cero y quiere meter su archivo de transacciones viejas sin perder la cifra real de saldo.
 
 ## What Changes
 
