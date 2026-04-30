@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kilatex/app/accounts/account_form.dart';
-import 'package:kilatex/app/home/dashboard.page.dart';
-import 'package:kilatex/app/settings/widgets/edit_profile_modal.dart';
-import 'package:kilatex/app/stats/stats_page.dart';
-import 'package:kilatex/app/transactions/transactions.page.dart';
-import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
-import 'package:kilatex/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_form.dart';
+import 'package:bolsio/app/home/dashboard.page.dart';
+import 'package:bolsio/app/settings/widgets/edit_profile_modal.dart';
+import 'package:bolsio/app/stats/stats_page.dart';
+import 'package:bolsio/app/transactions/transactions.page.dart';
+import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
+import 'package:bolsio/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../helpers.dart';
 
 void main() {
   setUpAll(() async {
-    await setupMonekin();
+    await setupBolsio();
   });
 
   testWidgets('Navigation', (tester) async {
-    await startMonekin(tester);
+    await startBolsio(tester);
 
     await tester.tap(find.text('User'));
     await tester.pumpAndSettle();
@@ -25,7 +25,7 @@ void main() {
       find.widgetWithText(EditProfileModal, t.settings.edit_profile),
       findsOneWidget,
     );
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(find.byKey(const ValueKey('edit-profile-cancel')));
 
     await tester.pumpAndSettle();
 

@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kilatex/app/accounts/account_form.dart';
-import 'package:kilatex/app/accounts/all_accounts_page.dart';
-import 'package:kilatex/app/budgets/budget_form_page.dart';
-import 'package:kilatex/app/budgets/budgets_page.dart';
-import 'package:kilatex/app/categories/categories_list_page.dart';
-import 'package:kilatex/app/categories/form/category_form.dart';
-import 'package:kilatex/app/settings/about.page.dart';
-import 'package:kilatex/app/settings/help_us_page.dart';
-import 'package:kilatex/app/settings/more_actions.page.dart';
-import 'package:kilatex/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:kilatex/app/settings/pages/backup/export_page.dart';
-import 'package:kilatex/app/settings/pages/backup/import_csv.page.dart';
-import 'package:kilatex/app/settings/settings_page.dart';
-import 'package:kilatex/app/settings/widgets/language_selector.dart';
-import 'package:kilatex/app/stats/stats_page.dart';
-import 'package:kilatex/app/tags/tag_form_page.dart';
-import 'package:kilatex/app/tags/tag_list.page.dart';
-import 'package:kilatex/app/transactions/recurrent_transactions_page.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_form.dart';
+import 'package:bolsio/app/accounts/all_accounts_page.dart';
+import 'package:bolsio/app/budgets/budget_form_page.dart';
+import 'package:bolsio/app/budgets/budgets_page.dart';
+import 'package:bolsio/app/categories/categories_list_page.dart';
+import 'package:bolsio/app/categories/form/category_form.dart';
+import 'package:bolsio/app/settings/about.page.dart';
+import 'package:bolsio/app/settings/help_us_page.dart';
+import 'package:bolsio/app/settings/more_actions.page.dart';
+import 'package:bolsio/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:bolsio/app/settings/pages/backup/export_page.dart';
+import 'package:bolsio/app/settings/pages/backup/import_csv.page.dart';
+import 'package:bolsio/app/settings/settings_page.dart';
+import 'package:bolsio/app/settings/widgets/language_selector.dart';
+import 'package:bolsio/app/stats/stats_page.dart';
+import 'package:bolsio/app/tags/tag_form_page.dart';
+import 'package:bolsio/app/tags/tag_list.page.dart';
+import 'package:bolsio/app/transactions/recurrent_transactions_page.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../helpers.dart';
 
 void main() {
   setUpAll(() async {
-    await setupMonekin();
+    await setupBolsio();
   });
 
   testWidgets('More Actions Page navigation', (tester) async {
     final settingsPage = find.byType(MoreActionsPage);
 
-    await startMonekin(tester);
+    await startBolsio(tester);
     await openMorePage(tester);
 
     await tester.tap(find.text(t.more.help_us.display));
@@ -106,7 +106,7 @@ void main() {
     await tester.tap(find.text(t.more.about_us.display));
     await tester.pumpAndSettle();
     expect(find.byType(AboutPage), findsOneWidget);
-    expect(find.text('Monekin'), findsOneWidget); // Assuming static app name
+    expect(find.text('Bolsio'), findsOneWidget); // Static app name for Bolsio
     await tester.pageBack();
     await tester.pumpAndSettle();
 

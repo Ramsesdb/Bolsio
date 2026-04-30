@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:kilatex/app/home/dashboard.page.dart';
-import 'package:kilatex/app/onboarding/onboarding.dart';
-import 'package:kilatex/app/settings/more_actions.page.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
-import 'package:kilatex/main.dart';
+import 'package:bolsio/app/home/dashboard.page.dart';
+import 'package:bolsio/app/onboarding/onboarding.dart';
+import 'package:bolsio/app/settings/more_actions.page.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:bolsio/main.dart';
 
-Future<void> setupMonekin() async {
+Future<void> setupBolsio() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   await UserSettingService.instance.initializeGlobalStateMap();
   await AppDataService.instance.initializeGlobalStateMap();
@@ -21,12 +21,12 @@ Future<void> setupMonekin() async {
   );
 }
 
-Future<void> startMonekin(WidgetTester tester) async {
-  await tester.pumpWidget(const WallexAppEntryPoint());
+Future<void> startBolsio(WidgetTester tester) async {
+  await tester.pumpWidget(const BolsioAppEntryPoint());
   await tester.pumpAndSettle();
-  expect(find.byType(WallexAppEntryPoint), findsOneWidget);
+  expect(find.byType(BolsioAppEntryPoint), findsOneWidget);
 
-  // Legacy Monekin onboarding button — no longer present in the v3 onboarding
+  // Legacy Bolsio onboarding button — no longer present in the v3 onboarding
   // flow. The INTRO i18n namespace was removed 2026-04-24 (onboarding-v2-auto-import
   // Fase 6). This test helper is broken against v3; left as a literal so the file
   // compiles until the integration tests are rewired for v3 slides.
