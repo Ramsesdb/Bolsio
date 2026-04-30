@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
 
 /// Execution mode for mutating tools (create_transaction, create_transfer).
 ///
@@ -29,7 +29,7 @@ abstract class AiTool {
   Map<String, dynamic> get parametersSchema;
 
   /// Whether calling this tool changes persisted state.
-  /// Drives the approval gate in the `wallexAssistant` profile.
+  /// Drives the approval gate in the `bolsioAssistant` profile.
   bool get isMutating;
 
   /// Dispatch the tool with a JSON-decoded arguments map.

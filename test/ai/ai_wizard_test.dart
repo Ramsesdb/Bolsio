@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s1_welcome.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s2_choose_provider.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s4_paste_key.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/provider_card.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/steps/s1_welcome.step.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/steps/s2_choose_provider.step.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/steps/s4_paste_key.step.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/widgets/provider_card.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 /// Widget tests for the AI setup wizard.
 ///

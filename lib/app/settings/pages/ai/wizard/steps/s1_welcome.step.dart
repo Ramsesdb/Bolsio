@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
 
 /// Step 1 of the AI setup wizard — welcome screen with a value pitch and
 /// the "Empezar" / "Después" CTA pair.
@@ -64,7 +64,7 @@ class S1WelcomeStep extends StatelessWidget {
           ),
           const SizedBox(height: V3Tokens.space24),
           Text(
-            'Conectá un proveedor de IA en menos de un minuto y desbloqueá las funciones inteligentes de wallex.',
+            'Conectá un proveedor de IA en menos de un minuto y desbloqueá las funciones inteligentes de bolsio.',
             style: V3Tokens.uiStyle(
               size: 14,
               weight: FontWeight.w500,

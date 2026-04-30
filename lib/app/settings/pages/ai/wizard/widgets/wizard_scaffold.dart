@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_progress_bar.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_progress_bar.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_secondary_button.dart';
 
 /// Standard scaffold for every step of the AI setup wizard.
 ///

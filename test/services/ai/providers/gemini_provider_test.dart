@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:wallex/core/services/ai/providers/gemini_provider.dart';
+import 'package:bolsio/core/services/ai/providers/gemini_provider.dart';
 
 class _FakeClient extends http.BaseClient {
   _FakeClient(this._statusCode, this._body);

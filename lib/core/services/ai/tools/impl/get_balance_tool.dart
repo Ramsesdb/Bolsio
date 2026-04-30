@@ -1,4 +1,4 @@
-import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
 
 import '../ai_tool.dart';
 

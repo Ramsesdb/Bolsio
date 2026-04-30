@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/models/chat_card_payload.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:bolsio/app/chat/models/chat_card_payload.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
 
 // Maps read-only data-tool results to inline ChatCardPayloads.
 // Only read-only tools become cards; mutating tools (create_transaction,
@@ -103,7 +103,7 @@ class ChatCardDispatcher {
       final id = entry['categoryId']?.toString();
       final name = (entry['categoryName'] as String?) ?? '—';
       final amount = _asDouble(entry['amount']) ?? 0.0;
-      Color dotColor = WallexAiTokens.hexBank;
+      Color dotColor = BolsioAiTokens.hexBank;
       if (id != null) {
         try {
           final cat = await CategoryService.instance.getCategoryById(id).first;
@@ -155,7 +155,7 @@ class ChatCardDispatcher {
       final initial = a.name.isEmpty ? '?' : a.name.characters.first.toUpperCase();
       final color = a.color != null
           ? ColorHex.get(a.color!)
-          : WallexAiTokens.hexBank;
+          : BolsioAiTokens.hexBank;
       items.add(AccountPickItem(
         id: a.id,
         name: a.name,

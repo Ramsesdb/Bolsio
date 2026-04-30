@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/transactions/voice_input/voice_record_overlay.dart';
-import 'package:kilatex/app/transactions/voice_input/voice_review_sheet.dart';
-import 'package:kilatex/core/models/auto_import/capture_channel.dart';
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
-import 'package:kilatex/core/services/ai/agents/quick_expense_agent.dart';
-import 'package:kilatex/core/services/voice/voice_permission_dialog.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/transactions/voice_input/voice_record_overlay.dart';
+import 'package:bolsio/app/transactions/voice_input/voice_review_sheet.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/services/ai/agents/agent_run_result.dart';
+import 'package:bolsio/core/services/ai/agents/quick_expense_agent.dart';
+import 'package:bolsio/core/services/voice/voice_permission_dialog.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// End-to-end voice quick-expense flow for the FAB mic action.
 ///
@@ -44,8 +44,8 @@ abstract class VoiceCaptureFlow {
     if (!context.mounted) return;
 
     if (trimmed.isEmpty) {
-      WallexSnackbar.warning(
-        SnackbarParams(t.wallex_ai.voice_empty_transcript),
+      BolsioSnackbar.warning(
+        SnackbarParams(t.bolsio_ai.voice_empty_transcript),
       );
       return;
     }
@@ -69,7 +69,7 @@ abstract class VoiceCaptureFlow {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
                 const SizedBox(width: 12),
-                Expanded(child: Text(t.wallex_ai.voice_processing)),
+                Expanded(child: Text(t.bolsio_ai.voice_processing)),
               ],
             ),
           );
@@ -91,7 +91,7 @@ abstract class VoiceCaptureFlow {
     } catch (e) {
       dismissLoader();
       if (!context.mounted) return;
-      WallexSnackbar.error(SnackbarParams.fromError(e));
+      BolsioSnackbar.error(SnackbarParams.fromError(e));
       return;
     }
     dismissLoader();
@@ -104,13 +104,13 @@ abstract class VoiceCaptureFlow {
       // comprehension failures — the former is a server issue, not the user's
       // fault, so we show a clearer message instead of "no pude interpretar".
       final isGatewayDown = result.error == 'gateway_unavailable';
-      WallexSnackbar.error(
+      BolsioSnackbar.error(
         SnackbarParams(
           isGatewayDown
-              ? t.wallex_ai.voice_flow_gateway_unavailable_title
-              : t.wallex_ai.voice_flow_error_title,
+              ? t.bolsio_ai.voice_flow_gateway_unavailable_title
+              : t.bolsio_ai.voice_flow_error_title,
           message: isGatewayDown
-              ? t.wallex_ai.voice_flow_gateway_unavailable
+              ? t.bolsio_ai.voice_flow_gateway_unavailable
               : result.error,
         ),
       );
@@ -118,8 +118,8 @@ abstract class VoiceCaptureFlow {
     }
 
     if (result.proposals.isEmpty) {
-      WallexSnackbar.warning(
-        SnackbarParams(t.wallex_ai.voice_flow_no_proposal),
+      BolsioSnackbar.warning(
+        SnackbarParams(t.bolsio_ai.voice_flow_no_proposal),
       );
       return;
     }

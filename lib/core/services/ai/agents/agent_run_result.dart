@@ -1,6 +1,6 @@
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
-import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
-import 'package:kilatex/core/services/ai/ai_completion_result.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/services/ai/agents/agent_profile.dart';
+import 'package:bolsio/core/services/ai/ai_completion_result.dart';
 
 /// Outcome of one agent run.
 enum AgentRunStatus {
@@ -48,7 +48,7 @@ class AgentRunResult {
   /// loop.
   final List<Map<String, dynamic>> messages;
 
-  /// Tool calls that need user approval (for `wallexAssistant`).
+  /// Tool calls that need user approval (for `bolsioAssistant`).
   final List<PendingApproval> pendingApprovals;
 
   /// Proposals emitted by tools run in propose mode (for `quickExpense`).

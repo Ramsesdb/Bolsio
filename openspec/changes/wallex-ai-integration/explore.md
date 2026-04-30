@@ -1,8 +1,8 @@
-# Exploration: wallex-ai-integration
+# Exploration: bolsio-ai-integration
 
 ## Context
 
-Integrate 4 AI-powered features into Wallex using the existing Nexus AI Gateway (multi-provider proxy: Cerebras, Groq, Gemini, OpenRouter). Features: Smart Auto-Categorization, Financial Chat, Spending Pattern Analysis, Budget Prediction.
+Integrate 4 AI-powered features into Bolsio using the existing Nexus AI Gateway (multi-provider proxy: Cerebras, Groq, Gemini, OpenRouter). Features: Smart Auto-Categorization, Financial Chat, Spending Pattern Analysis, Budget Prediction.
 
 ## Findings
 

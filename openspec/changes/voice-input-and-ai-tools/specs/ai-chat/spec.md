@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Extends `WallexChatPage` with a voice input affordance and a tool-enabled message flow, preserving the existing streaming UX for plain-text (no-tool) responses.
+Extends `BolsioChatPage` with a voice input affordance and a tool-enabled message flow, preserving the existing streaming UX for plain-text (no-tool) responses.
 
 ## Requirements
 
 ### Requirement: Voice Input Affordance in Chat
 
-The system MUST render a mic button in the chat input row when both `SettingKey.nexusAiEnabled` and `SettingKey.aiVoiceEnabled` are `'1'`. Tapping it MUST open `VoiceRecordOverlay`; on stop, the final transcript SHALL be sent to `_sendToAgent(wallexAssistant, userText: transcript)`.
+The system MUST render a mic button in the chat input row when both `SettingKey.nexusAiEnabled` and `SettingKey.aiVoiceEnabled` are `'1'`. Tapping it MUST open `VoiceRecordOverlay`; on stop, the final transcript SHALL be sent to `_sendToAgent(bolsioAssistant, userText: transcript)`.
 
 #### Scenario: Voice-driven question
 
@@ -20,7 +20,7 @@ The system MUST render a mic button in the chat input row when both `SettingKey.
 #### Scenario: Voice disabled hides mic
 
 - GIVEN `aiVoiceEnabled = '0'`
-- WHEN `WallexChatPage` renders
+- WHEN `BolsioChatPage` renders
 - THEN the mic button is absent and only the text send button is shown
 
 ### Requirement: Tool-Enabled Message Flow

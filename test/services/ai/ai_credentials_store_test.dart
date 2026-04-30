@@ -1,8 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/ai/ai_credentials.dart';
-import 'package:wallex/core/services/ai/ai_credentials_store.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/core/services/ai/ai_credentials.dart';
+import 'package:bolsio/core/services/ai/ai_credentials_store.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

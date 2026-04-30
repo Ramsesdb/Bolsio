@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:kilatex/core/services/ai/ai_credentials.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:bolsio/core/services/ai/ai_credentials.dart';
 
 /// Step 6 — success screen confirming the active provider + model.
 ///
@@ -46,7 +46,7 @@ class S6DoneStep extends StatelessWidget {
       // step would be confusing). The "Configurar otro" CTA gives the
       // user an explicit return path to step 2 if they want.
       showBack: false,
-      primaryLabel: 'Empezar a usar wallex',
+      primaryLabel: 'Empezar a usar bolsio',
       onPrimary: onFinish,
       secondaryLabel: 'Otro proveedor',
       onSecondary: onConfigureAnother,

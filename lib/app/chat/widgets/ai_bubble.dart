@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
 class AiBubble extends StatelessWidget {
   const AiBubble({
@@ -15,7 +15,7 @@ class AiBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final width = MediaQuery.of(context).size.width;
 
     return ConstrainedBox(
@@ -25,10 +25,10 @@ class AiBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: tokens.bubbleAi,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(WallexAiTokens.bubbleTailRadius),
-            topRight: Radius.circular(WallexAiTokens.bubbleRadius),
-            bottomLeft: Radius.circular(WallexAiTokens.bubbleRadius),
-            bottomRight: Radius.circular(WallexAiTokens.bubbleRadius),
+            topLeft: Radius.circular(BolsioAiTokens.bubbleTailRadius),
+            topRight: Radius.circular(BolsioAiTokens.bubbleRadius),
+            bottomLeft: Radius.circular(BolsioAiTokens.bubbleRadius),
+            bottomRight: Radius.circular(BolsioAiTokens.bubbleRadius),
           ),
           border: Border.all(color: tokens.border, width: 0.5),
         ),
@@ -66,7 +66,7 @@ class _StreamingCursorState extends State<_StreamingCursor>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: WallexAiTokens.streamingCursorBlink,
+      duration: BolsioAiTokens.streamingCursorBlink,
     )..repeat(reverse: true);
   }
 

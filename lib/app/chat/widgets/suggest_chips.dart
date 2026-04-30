@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
 class SuggestChips extends StatelessWidget {
   const SuggestChips({
@@ -17,7 +17,7 @@ class SuggestChips extends StatelessWidget {
   Widget build(BuildContext context) {
     if (suggestions.isEmpty) return const SizedBox.shrink();
 
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final bg = tokens.accent.withValues(alpha: 0.08);
     final border = tokens.accent.withValues(alpha: 0.44);
 

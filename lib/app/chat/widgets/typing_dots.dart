@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
 class TypingDots extends StatefulWidget {
   const TypingDots({super.key, this.label});
@@ -19,7 +19,7 @@ class _TypingDotsState extends State<TypingDots>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: WallexAiTokens.typingBounceDuration,
+      duration: BolsioAiTokens.typingBounceDuration,
     )..repeat();
   }
 
@@ -31,17 +31,17 @@ class _TypingDotsState extends State<TypingDots>
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: tokens.bubbleAi,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(WallexAiTokens.bubbleTailRadius),
-          topRight: Radius.circular(WallexAiTokens.bubbleRadius),
-          bottomLeft: Radius.circular(WallexAiTokens.bubbleRadius),
-          bottomRight: Radius.circular(WallexAiTokens.bubbleRadius),
+          topLeft: Radius.circular(BolsioAiTokens.bubbleTailRadius),
+          topRight: Radius.circular(BolsioAiTokens.bubbleRadius),
+          bottomLeft: Radius.circular(BolsioAiTokens.bubbleRadius),
+          bottomRight: Radius.circular(BolsioAiTokens.bubbleRadius),
         ),
         border: Border.all(color: tokens.border, width: 0.5),
       ),
@@ -62,7 +62,7 @@ class _TypingDotsState extends State<TypingDots>
                     final progress = _phasedProgress(_controller.value, i);
                     final curved = Curves.easeInOut.transform(progress);
                     final translateY =
-                        -_bounceCurve(curved) * WallexAiTokens.typingTranslateY;
+                        -_bounceCurve(curved) * BolsioAiTokens.typingTranslateY;
                     final opacity = 0.4 + 0.6 * _bounceCurve(curved);
                     return Transform.translate(
                       offset: Offset(0, translateY),
@@ -97,8 +97,8 @@ class _TypingDotsState extends State<TypingDots>
   }
 
   double _phasedProgress(double value, int index) {
-    final staggerRatio = WallexAiTokens.typingStagger.inMilliseconds /
-        WallexAiTokens.typingBounceDuration.inMilliseconds;
+    final staggerRatio = BolsioAiTokens.typingStagger.inMilliseconds /
+        BolsioAiTokens.typingBounceDuration.inMilliseconds;
     final shifted = (value - index * staggerRatio) % 1.0;
     return shifted < 0 ? shifted + 1.0 : shifted;
   }

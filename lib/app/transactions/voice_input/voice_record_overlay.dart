@@ -2,19 +2,19 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/widgets/voice_action_buttons.dart';
-import 'package:kilatex/core/services/voice/voice_service.dart';
-import 'package:kilatex/core/services/voice/voice_service_speech_to_text.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/chat/widgets/voice_action_buttons.dart';
+import 'package:bolsio/core/services/voice/voice_service.dart';
+import 'package:bolsio/core/services/voice/voice_service_speech_to_text.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
-/// Wallex "Liquid Glass" voice capture sheet.
+/// Bolsio "Liquid Glass" voice capture sheet.
 ///
 /// Public contract (preserved):
 ///  - returns a String on completion (may be empty for silence/VAD auto-stop)
 ///  - returns null when the user cancels or STT errors out
 ///
 /// The visual skin (blurred translucent sheet, 3-ring mic pulse, animated
-/// transcript, mustard accent) comes from the Wallex Voice Sheets design bundle.
+/// transcript, mustard accent) comes from the Bolsio Voice Sheets design bundle.
 Future<String?> showVoiceRecordOverlay(
   BuildContext context, {
   VoiceService? service,
@@ -39,7 +39,7 @@ Future<String?> showVoiceRecordOverlay(
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// Wallex palette tokens (neutrals only). The accent is resolved per-build
+// Bolsio palette tokens (neutrals only). The accent is resolved per-build
 // from Theme.of(context).colorScheme.primary so the voice overlay follows
 // the user's selected accent (or Material You dynamic color) rather than
 // the legacy hardcoded mustard.
@@ -161,7 +161,7 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
 
     final result = await widget.service.stop();
     if (!mounted) return;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     debugPrint(
       'VoiceOverlay.finalize status=${result.status} '
       'transcript="${result.transcript}"',
@@ -190,7 +190,7 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
     }
   }
 
-  String _mapErrorMessage(String? raw, TranslationsWallexAiEn t) {
+  String _mapErrorMessage(String? raw, TranslationsBolsioAiEn t) {
     if (raw == null || raw.isEmpty) return t.voice_error_fallback;
     final lower = raw.toLowerCase();
     if (lower.contains('internet') || lower.contains('network')) {
@@ -234,7 +234,7 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     final mq = MediaQuery.of(context);
     // 62% of screen height per spec; clamp so it never exceeds available space.
     final sheetHeight = (mq.size.height * 0.62).clamp(440.0, 720.0).toDouble();
@@ -394,7 +394,7 @@ class _VoiceRecordOverlayState extends State<_VoiceRecordOverlay>
 class _StatusBadge extends StatelessWidget {
   const _StatusBadge({required this.state, required this.t});
   final _OverlayState state;
-  final TranslationsWallexAiEn t;
+  final TranslationsBolsioAiEn t;
 
   @override
   Widget build(BuildContext context) {

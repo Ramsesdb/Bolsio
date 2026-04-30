@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/services/ai/ai_credentials.dart';
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/services/ai/ai_credentials.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 /// Per-provider secure credential store backing the BYOK setup.
 ///

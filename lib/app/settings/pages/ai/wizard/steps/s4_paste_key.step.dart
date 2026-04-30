@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:kilatex/core/services/ai/ai_key_validator.dart';
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:bolsio/core/services/ai/ai_key_validator.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 /// Heuristic — looser than [AiKeyValidator.validate]. Used to decide
 /// whether a clipboard snippet is "probably a key" worth auto-pasting.

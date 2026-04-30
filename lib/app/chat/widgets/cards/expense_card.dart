@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/models/chat_card_payload.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/models/chat_card_payload.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
 class ExpenseCard extends StatelessWidget {
   const ExpenseCard(this.payload, {super.key});
@@ -9,7 +9,7 @@ class ExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final width = MediaQuery.of(context).size.width;
 
     // Cap at 5 rows, collapse overflow into "Otros".
@@ -21,7 +21,7 @@ class ExpenseCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: tokens.bubbleAi,
-          borderRadius: BorderRadius.circular(WallexAiTokens.cardRadius),
+          borderRadius: BorderRadius.circular(BolsioAiTokens.cardRadius),
           border: Border.all(color: tokens.border, width: 1),
         ),
         child: Column(
@@ -97,7 +97,7 @@ class _TotalAmount extends StatelessWidget {
 
   final double total;
   final String currencyCode;
-  final WallexAiTokens tokens;
+  final BolsioAiTokens tokens;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class _DeltaPill extends StatelessWidget {
   const _DeltaPill({required this.deltaPct, required this.tokens});
 
   final double deltaPct;
-  final WallexAiTokens tokens;
+  final BolsioAiTokens tokens;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class _DeltaPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
         color: pillColor.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(WallexAiTokens.chipRadius),
+        borderRadius: BorderRadius.circular(BolsioAiTokens.chipRadius),
       ),
       child: Text(
         '$sign${deltaPct.toStringAsFixed(1)}%',
@@ -181,7 +181,7 @@ class _StackedBar extends StatelessWidget {
     final segments = rows.where((r) => r.percent >= 0.005).toList();
     if (segments.isEmpty) return const SizedBox(height: 8);
     return ClipRRect(
-      borderRadius: BorderRadius.circular(WallexAiTokens.chipRadius),
+      borderRadius: BorderRadius.circular(BolsioAiTokens.chipRadius),
       child: SizedBox(
         height: 8,
         child: Row(
@@ -202,7 +202,7 @@ class _CategoryRow extends StatelessWidget {
   const _CategoryRow({required this.row, required this.tokens});
 
   final ExpenseCategoryRow row;
-  final WallexAiTokens tokens;
+  final BolsioAiTokens tokens;
 
   @override
   Widget build(BuildContext context) {

@@ -41,14 +41,14 @@ The system MUST enforce an `AgentProfile.maxToolLoops` cap on the number of mode
 
 #### Scenario: Cap reached
 
-- GIVEN `wallexAssistant.maxToolLoops = 3` and the model emits a tool call on every iteration
+- GIVEN `bolsioAssistant.maxToolLoops = 3` and the model emits a tool call on every iteration
 - WHEN the 3rd loop completes and the 4th response still contains `tool_calls`
 - THEN the loop stops without executing the 4th batch
 - AND the UI shows a fallback message indicating the assistant could not complete the task
 
 ### Requirement: Mutating Tool Approval Gate
 
-The system MUST require explicit user approval before executing `create_transaction` or `create_transfer` in the `wallexAssistant` profile. Read-only tools MUST execute without approval.
+The system MUST require explicit user approval before executing `create_transaction` or `create_transfer` in the `bolsioAssistant` profile. Read-only tools MUST execute without approval.
 
 #### Scenario: Approval required for create_transaction
 
@@ -66,7 +66,7 @@ The system MUST require explicit user approval before executing `create_transact
 
 ### Requirement: Agent Profile Isolation
 
-The system MUST expose at least two profiles: `quickExpense` (tools = `[CreateTransactionTool]`, `tool_choice` forced to that function, `maxToolLoops = 1`) and `wallexAssistant` (tools = all six, `tool_choice: 'auto'`, `maxToolLoops = 3`). A profile MUST NOT be able to invoke tools outside its declared set.
+The system MUST expose at least two profiles: `quickExpense` (tools = `[CreateTransactionTool]`, `tool_choice` forced to that function, `maxToolLoops = 1`) and `bolsioAssistant` (tools = all six, `tool_choice: 'auto'`, `maxToolLoops = 3`). A profile MUST NOT be able to invoke tools outside its declared set.
 
 #### Scenario: quickExpense cannot call non-transaction tools
 

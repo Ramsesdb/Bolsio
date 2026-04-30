@@ -1,9 +1,9 @@
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 import '../ai_tool.dart';
 

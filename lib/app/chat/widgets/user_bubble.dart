@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
 class UserBubble extends StatelessWidget {
   const UserBubble({
@@ -13,7 +13,7 @@ class UserBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final width = MediaQuery.of(context).size.width;
 
     return ConstrainedBox(
@@ -23,10 +23,10 @@ class UserBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: tokens.accent,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(WallexAiTokens.bubbleRadius),
-            topRight: Radius.circular(WallexAiTokens.bubbleRadius),
-            bottomLeft: Radius.circular(WallexAiTokens.bubbleRadius),
-            bottomRight: Radius.circular(WallexAiTokens.bubbleTailRadius),
+            topLeft: Radius.circular(BolsioAiTokens.bubbleRadius),
+            topRight: Radius.circular(BolsioAiTokens.bubbleRadius),
+            bottomLeft: Radius.circular(BolsioAiTokens.bubbleRadius),
+            bottomRight: Radius.circular(BolsioAiTokens.bubbleTailRadius),
           ),
         ),
         child: Text(

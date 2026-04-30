@@ -1,9 +1,9 @@
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 /// Common interface implemented by every concrete BYOK provider.
 ///
 /// The shape mirrors the OpenAI chat-completion API because every consumer
-/// in wallex already speaks that dialect. Concrete implementations are
+/// in bolsio already speaks that dialect. Concrete implementations are
 /// responsible for translating into their native request body (Anthropic's
 /// `system` field, Gemini's `contents`, etc.).
 abstract class AiProvider {

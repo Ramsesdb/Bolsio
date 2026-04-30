@@ -11,10 +11,10 @@ Extend `NexusAiService` non-breakingly with a `completeWithTools` method, add a 
 | STT engine | `speech_to_text: ^7.x` on-device (Google/MS) behind `VoiceService` interface | Cloud Whisper via new `/v1/audio/transcriptions`; Gemini audio-in; Vosk offline | Zero backend work, free, partial transcripts for UX. Interface keeps Whisper as clean future swap. |
 | Tool-loop transport | Non-streaming JSON for tool phase; `streamComplete` only for final text | Parse tool_call SSE deltas in `streamComplete` | SSE tool-call deltas are fragmented; non-streaming is simpler and matches most OpenAI tool apps. |
 | Context strategy | Keep `FinancialContextBuilder` shrunk (~1k chars: accounts + categories) + tools for fresh reads | Delete builder; pure tools | Halves system-prompt tokens, avoids staleness, bootstraps model with "what exists". |
-| Scoped tool exec | `CreateTransactionTool` emits a `TransactionProposal` (no DB write) in `quickExpense`; writes in `wallexAssistant` after approval | Two separate tool classes | Single tool shape, `execMode` flag toggles commit; less surface. |
+| Scoped tool exec | `CreateTransactionTool` emits a `TransactionProposal` (no DB write) in `quickExpense`; writes in `bolsioAssistant` after approval | Two separate tool classes | Single tool shape, `execMode` flag toggles commit; less surface. |
 | Model pinning | Default `openai/gpt-4.1-mini`; allow `groq/llama-3.3-70b-versatile` fallback via existing `SettingKey.nexusAiModel` | Auto-select | Tool-call reliability varies by provider; user-level pin already exists. |
 | Mutating-tool safety | Chat agent requires explicit user tap on approval bubble before `CreateTransactionTool`/`CreateTransferTool` executes | Auto-commit with undo | "Undo" for financial writes is risky; pre-approval matches UX of high-impact actions. |
-| Agent loop cap | `maxToolLoops = 3` for `wallexAssistant`, `1` for `quickExpense` | Unbounded | Prevents runaway cost/latency; 3 covers nearly all realistic multi-tool questions. |
+| Agent loop cap | `maxToolLoops = 3` for `bolsioAssistant`, `1` for `quickExpense` | Unbounded | Prevents runaway cost/latency; 3 covers nearly all realistic multi-tool questions. |
 
 ## Data Flow
 
@@ -43,7 +43,7 @@ FAB mic → VoiceCaptureFlow → VoiceService.startSession(es-VE)
                                               ▼
                                        Undo snackbar
 
-Chat mic → VoiceService → text → wallexChatPage._sendToAgent
+Chat mic → VoiceService → text → bolsioChatPage._sendToAgent
                                               │
                   ┌───────────────────────────┘
                   ▼
@@ -71,13 +71,13 @@ Chat mic → VoiceService → text → wallexChatPage._sendToAgent
 | `lib/core/services/ai/tools/impl/create_transfer_tool.dart` | Create | Two-leg transfer; commit-only with approval. |
 | `lib/core/services/ai/agents/agent_profile.dart` | Create | Immutable record: `name, systemPrompt, tools, temperature, maxToolLoops, toolChoice, requiresApproval(toolName)`. |
 | `lib/core/services/ai/agents/quick_expense_agent.dart` | Create | Profile + `run(transcript) → TransactionProposal` runner, loops=1. |
-| `lib/core/services/ai/agents/wallex_ai_agent.dart` | Create | Profile + `run(messages) → Stream<AgentEvent>` runner with tool/approval/final-text events. |
+| `lib/core/services/ai/agents/bolsio_ai_agent.dart` | Create | Profile + `run(messages) → Stream<AgentEvent>` runner with tool/approval/final-text events. |
 | `lib/core/services/ai/nexus_ai_service.dart` | Modify | Add `completeWithTools({messages, tools, toolChoice, model, temperature}) → {content, toolCalls[]}`. |
 | `lib/core/services/ai/financial_context_builder.dart` | Modify | Shrink to accounts + category list (~1k chars). |
 | `lib/core/models/auto_import/transaction_proposal.dart` | Modify | Add `CaptureChannel.voice`. |
 | `lib/core/database/services/user-setting/user_setting_service.dart` | Modify | Trailing `SettingKey.aiVoiceEnabled` case. |
 | `lib/app/settings/pages/ai/ai_settings.page.dart` | Modify | New `SwitchListTile` gated on `_aiEnabled`. |
-| `lib/app/chat/wallex_chat.page.dart` | Modify | Mic button, refactor `_send` → `_sendToAgent`, approval bubble widget, stream fallback when no tool_calls. |
+| `lib/app/chat/bolsio_chat.page.dart` | Modify | Mic button, refactor `_send` → `_sendToAgent`, approval bubble widget, stream fallback when no tool_calls. |
 | `lib/app/home/widgets/new_transaction_fl_button.dart` | Modify | 4th fan action `Icons.mic_none_rounded`. |
 | `lib/app/transactions/voice_input/voice_capture_flow.dart` | Create | `static Future<void> start(ctx)` — mirrors `ReceiptImportFlow.start`. |
 | `lib/app/transactions/voice_input/voice_record_overlay.dart` | Create | Bottom sheet: waveform bars, partial transcript, cancel, auto-stop VAD. Reused by chat. |
@@ -109,7 +109,7 @@ class AgentProfile {
   final Object toolChoice;       // 'auto' | {'type':'function','function':{'name':...}}
   final double temperature;
   final int maxToolLoops;
-  bool requiresApproval(String toolName) => ...; // wallexAssistant: true for mutating
+  bool requiresApproval(String toolName) => ...; // bolsioAssistant: true for mutating
 }
 
 // NexusAiService addition
@@ -129,7 +129,7 @@ messages = [system, ...history, user]
 for i in 0..profile.maxToolLoops:
   r = nexus.completeWithTools(messages, registry.toolsJson, profile.toolChoice)
   if r.toolCalls.isEmpty:
-    if i == 0 and profile == wallexAssistant:
+    if i == 0 and profile == bolsioAssistant:
       return streamComplete(messages)   // preserve chat streaming UX
     return r.content
   for call in r.toolCalls:

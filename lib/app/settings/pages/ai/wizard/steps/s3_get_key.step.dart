@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:bolsio/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
 
 /// Step 3 of the AI setup wizard — provider-specific instructions for
 /// fetching an API key.
@@ -154,7 +154,7 @@ class S3GetKeyStep extends StatelessWidget {
                 const SizedBox(width: V3Tokens.spaceMd),
                 Expanded(
                   child: Text(
-                    'Volvé a wallex después de copiar la key — la voy a detectar automáticamente del portapapeles.',
+                    'Volvé a bolsio después de copiar la key — la voy a detectar automáticamente del portapapeles.',
                     style: V3Tokens.uiStyle(
                       size: 13,
                       weight: FontWeight.w500,

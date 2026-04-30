@@ -5,36 +5,36 @@ import 'dart:ui';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/app/accounts/account_selector.dart';
-import 'package:kilatex/app/chat/widgets/voice_action_buttons.dart';
-import 'package:kilatex/app/categories/selectors/category_picker.dart';
-import 'package:kilatex/app/transactions/form/dialogs/amount_selector.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/database/utils/drift_utils.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/date_time_picker.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_selector.dart';
+import 'package:bolsio/app/chat/widgets/voice_action_buttons.dart';
+import 'package:bolsio/app/categories/selectors/category_picker.dart';
+import 'package:bolsio/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/database/utils/drift_utils.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/date_time_picker.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Review + auto-confirm sheet shown after the quick-expense agent returns a
 /// [TransactionProposal] from a voice transcript.
 ///
-/// Visual skin: Wallex Liquid Glass voice review sheet — blurred 62% sheet
+/// Visual skin: Bolsio Liquid Glass voice review sheet — blurred 62% sheet
 /// with drag handle, auto-save pill (top-right), three glass edit chips
 /// (descripción / monto / categoría), account row, "Editar más" + "Guardar"
 /// actions. Business logic (auto-confirm countdown, picker delegation, DB
@@ -57,7 +57,7 @@ Future<void> showVoiceReviewSheet(
 }
 
 String _formatReviewDate(BuildContext context, DateTime date) {
-  final t = Translations.of(context).wallex_ai;
+  final t = Translations.of(context).bolsio_ai;
   final now = DateTime.now();
   final isSameDay =
       date.year == now.year && date.month == now.month && date.day == now.day;
@@ -71,7 +71,7 @@ String _formatReviewDate(BuildContext context, DateTime date) {
   return '${dateFormat.format(date)} · $timeLabel';
 }
 
-// Wallex palette tokens — neutral-only. The accent is resolved per-build
+// Bolsio palette tokens — neutral-only. The accent is resolved per-build
 // from Theme.of(context).colorScheme.primary so the sheet follows the user's
 // selected accent (or Material You dynamic color) instead of the legacy
 // hardcoded mustard. See [_kAccentOf].
@@ -248,7 +248,7 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
 
   Future<void> _editAmount() async {
     _pauseAutoConfirm();
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -292,7 +292,7 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
 
   Future<void> _editDescription() async {
     _pauseAutoConfirm();
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     final controller = TextEditingController(text: _description ?? '');
     final result = await showModalBottomSheet<String>(
       context: context,
@@ -371,8 +371,8 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
     } catch (e, st) {
       debugPrint('VoiceReviewSheet._editAccount: picker threw $e\n$st');
       if (!mounted) return;
-      final t = Translations.of(context).wallex_ai;
-      WallexSnackbar.error(SnackbarParams(t.voice_validation_account_missing));
+      final t = Translations.of(context).bolsio_ai;
+      BolsioSnackbar.error(SnackbarParams(t.voice_validation_account_missing));
       return;
     }
     if (!mounted) return;
@@ -398,8 +398,8 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
         'VoiceReviewSheet._editAccount: setState failed $e\n$st',
       );
       if (!mounted) return;
-      final t = Translations.of(context).wallex_ai;
-      WallexSnackbar.error(
+      final t = Translations.of(context).bolsio_ai;
+      BolsioSnackbar.error(
         SnackbarParams(t.voice_validation_account_missing, message: '$e'),
       );
     }
@@ -409,22 +409,22 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
     if (_isSaving) return;
     _autoConfirmTimer?.cancel();
     _tickTimer?.cancel();
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
 
     if (_amount <= 0) {
-      WallexSnackbar.warning(
+      BolsioSnackbar.warning(
         SnackbarParams(t.voice_validation_amount_zero),
       );
       return;
     }
     if (_account == null) {
-      WallexSnackbar.warning(
+      BolsioSnackbar.warning(
         SnackbarParams(t.voice_validation_account_missing),
       );
       return;
     }
     if (_type.isIncomeOrExpense && _category == null) {
-      WallexSnackbar.warning(
+      BolsioSnackbar.warning(
         SnackbarParams(t.voice_validation_category_missing),
       );
       return;
@@ -461,23 +461,23 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
-      WallexSnackbar.error(SnackbarParams.fromError(e));
+      BolsioSnackbar.error(SnackbarParams.fromError(e));
       return;
     }
 
     if (!mounted) return;
     Navigator.of(context).pop();
 
-    WallexSnackbar.success(
+    BolsioSnackbar.success(
       SnackbarParams(
         auto ? t.voice_save_success_auto : t.voice_save_success_manual,
         duration: _undoDuration,
         actions: [
-          WallexSnackbarAction(
+          BolsioSnackbarAction(
             label: t.voice_save_undo_label,
             onPressed: () async {
               await TransactionService.instance.deleteTransaction(newId);
-              WallexSnackbar.info(
+              BolsioSnackbar.info(
                 SnackbarParams(
                   t.voice_save_undo_success,
                   duration: const Duration(seconds: 2),
@@ -522,7 +522,7 @@ class _VoiceReviewSheetState extends State<_VoiceReviewSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     final mq = MediaQuery.of(context);
     // Min height so we still fit content when keyboard is closed.
     final sheetHeight = (mq.size.height * 0.62).clamp(500.0, 780.0).toDouble();
@@ -1162,7 +1162,7 @@ class _AutoSavePill extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                Translations.of(context).wallex_ai.voice_review_auto_countdown(
+                Translations.of(context).bolsio_ai.voice_review_auto_countdown(
                       seconds: secondsLeft.ceil(),
                     ),
                 style: TextStyle(
@@ -1231,7 +1231,7 @@ class _AccountRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     return Material(
       color: Colors.transparent,
       child: InkWell(

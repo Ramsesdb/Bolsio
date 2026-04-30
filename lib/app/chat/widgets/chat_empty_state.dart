@@ -2,20 +2,20 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:kilatex/app/chat/widgets/wallex_ai_orb.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
+import 'package:bolsio/app/chat/widgets/bolsio_ai_orb.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class ChatEmptyState extends StatefulWidget {
   const ChatEmptyState({super.key, required this.onSuggestionTap});
@@ -176,7 +176,7 @@ class _ChatEmptyStateState extends State<ChatEmptyState> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final accentDeep = tokens.accent.darken(0.1);
 
     final prompts = <_Prompt>[
@@ -211,7 +211,7 @@ class _ChatEmptyStateState extends State<ChatEmptyState> {
       child: Column(
         children: [
           const Spacer(),
-          const WallexAiOrb(size: 120, showGlow: true, animated: true),
+          const BolsioAiOrb(size: 120, showGlow: true, animated: true),
           const SizedBox(height: 24),
           RichText(
             textAlign: TextAlign.center,
@@ -281,21 +281,21 @@ class _PromptPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final preview = prompt.preview;
 
     return Material(
       color: tokens.bubbleAi,
-      borderRadius: BorderRadius.circular(WallexAiTokens.innerCardRadius),
+      borderRadius: BorderRadius.circular(BolsioAiTokens.innerCardRadius),
       child: InkWell(
         onTap: () => onTap(prompt.label),
-        borderRadius: BorderRadius.circular(WallexAiTokens.innerCardRadius),
+        borderRadius: BorderRadius.circular(BolsioAiTokens.innerCardRadius),
         child: Container(
           height: 52,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
-              WallexAiTokens.innerCardRadius,
+              BolsioAiTokens.innerCardRadius,
             ),
             border: Border.all(color: tokens.border, width: 1),
           ),
@@ -336,7 +336,7 @@ class _PromptPill extends StatelessWidget {
 
   Widget _buildPreview(
     BuildContext context,
-    WallexAiTokens tokens,
+    BolsioAiTokens tokens,
     String? preview,
   ) {
     final text = Text(

@@ -1,11 +1,11 @@
-import 'package:kilatex/core/services/ai/ai_credentials.dart';
-import 'package:kilatex/core/services/ai/ai_credentials_store.dart';
-import 'package:kilatex/core/services/ai/ai_provider.dart';
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
-import 'package:kilatex/core/services/ai/providers/anthropic_provider.dart';
-import 'package:kilatex/core/services/ai/providers/gemini_provider.dart';
-import 'package:kilatex/core/services/ai/providers/nexus_provider.dart';
-import 'package:kilatex/core/services/ai/providers/openai_provider.dart';
+import 'package:bolsio/core/services/ai/ai_credentials.dart';
+import 'package:bolsio/core/services/ai/ai_credentials_store.dart';
+import 'package:bolsio/core/services/ai/ai_provider.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/core/services/ai/providers/anthropic_provider.dart';
+import 'package:bolsio/core/services/ai/providers/gemini_provider.dart';
+import 'package:bolsio/core/services/ai/providers/nexus_provider.dart';
+import 'package:bolsio/core/services/ai/providers/openai_provider.dart';
 
 /// Singleton dispatcher in front of every BYOK provider.
 ///

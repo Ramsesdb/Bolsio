@@ -1,10 +1,10 @@
-import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
-import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
-import 'package:kilatex/core/services/ai/agents/agent_runner.dart';
-import 'package:kilatex/core/services/ai/financial_context_builder.dart';
-import 'package:kilatex/core/services/ai/tools/ai_tool.dart';
-import 'package:kilatex/core/services/ai/tools/ai_tool_registry.dart';
-import 'package:kilatex/core/services/ai/tools/impl/create_transaction_tool.dart';
+import 'package:bolsio/core/services/ai/agents/agent_profile.dart';
+import 'package:bolsio/core/services/ai/agents/agent_run_result.dart';
+import 'package:bolsio/core/services/ai/agents/agent_runner.dart';
+import 'package:bolsio/core/services/ai/financial_context_builder.dart';
+import 'package:bolsio/core/services/ai/tools/ai_tool.dart';
+import 'package:bolsio/core/services/ai/tools/ai_tool_registry.dart';
+import 'package:bolsio/core/services/ai/tools/impl/create_transaction_tool.dart';
 
 /// Agent that converts a Spanish voice transcript into a single
 /// `TransactionProposal` via a forced `create_transaction` tool call.
@@ -82,7 +82,7 @@ class QuickExpenseAgent {
   }
 
   static const String _systemPrompt =
-      'Eres un extractor de gastos de voz para Wallex. Recibes una sola '
+      'Eres un extractor de gastos de voz para Bolsio. Recibes una sola '
       'transcripcion en espanol venezolano (ej: "gaste 20 en uber", "compre '
       'comida por 35 dolares").\n\n'
       'REGLA DE ORO (no negociable): TU UNICA SALIDA VALIDA ES UNA LLAMADA '

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/models/chat_card_payload.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:kilatex/app/chat/widgets/hex_tile.dart';
+import 'package:bolsio/app/chat/models/chat_card_payload.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
+import 'package:bolsio/app/chat/widgets/hex_tile.dart';
 
 class AccountPickCard extends StatelessWidget {
   const AccountPickCard(
@@ -15,7 +15,7 @@ class AccountPickCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final width = MediaQuery.of(context).size.width;
 
     return ConstrainedBox(
@@ -24,7 +24,7 @@ class AccountPickCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: tokens.bubbleAi,
-          borderRadius: BorderRadius.circular(WallexAiTokens.cardRadius),
+          borderRadius: BorderRadius.circular(BolsioAiTokens.cardRadius),
           border: Border.all(color: tokens.border, width: 1),
         ),
         child: GridView.count(
@@ -56,17 +56,17 @@ class _AccountTile extends StatelessWidget {
   });
 
   final AccountPickItem item;
-  final WallexAiTokens tokens;
+  final BolsioAiTokens tokens;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: tokens.surfaceAlt,
-      borderRadius: BorderRadius.circular(WallexAiTokens.innerCardRadius),
+      borderRadius: BorderRadius.circular(BolsioAiTokens.innerCardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(WallexAiTokens.innerCardRadius),
+        borderRadius: BorderRadius.circular(BolsioAiTokens.innerCardRadius),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

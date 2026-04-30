@@ -2,12 +2,12 @@
 
 ## Context
 
-Introduce voice input to Wallex in two surfaces that share one STT + tool-calling stack:
+Introduce voice input to Bolsio in two surfaces that share one STT + tool-calling stack:
 
 1. **Scoped voice on the Add-Transaction FAB** — push-to-talk, single tool `create_transaction`, chip-based review with auto-save + undo (MonAi-like UX).
-2. **Conversational voice in the Wallex AI chat** — push-to-talk next to the send button, full tool registry (`get_balance`, `list_transactions`, `get_stats_by_category`, `get_budgets`, `create_transaction`, `create_transfer`, etc.), open questions in Spanish.
+2. **Conversational voice in the Bolsio AI chat** — push-to-talk next to the send button, full tool registry (`get_balance`, `list_transactions`, `get_stats_by_category`, `get_budgets`, `create_transaction`, `create_transfer`, etc.), open questions in Spanish.
 
-Shared plumbing: one `VoiceService` (STT abstraction), one `AIToolRegistry` with Dart-callable tools, two agent profiles (`quick-expense-agent`, `wallex-ai-agent`) that reuse the existing `NexusAiService`. Full realtime streaming ("live mode" / Gemini Live / OpenAI Realtime) is explicitly out of scope for this change.
+Shared plumbing: one `VoiceService` (STT abstraction), one `AIToolRegistry` with Dart-callable tools, two agent profiles (`quick-expense-agent`, `bolsio-ai-agent`) that reuse the existing `NexusAiService`. Full realtime streaming ("live mode" / Gemini Live / OpenAI Realtime) is explicitly out of scope for this change.
 
 ---
 
@@ -18,15 +18,15 @@ Shared plumbing: one `VoiceService` (STT abstraction), one `AIToolRegistry` with
 - `lib/core/services/ai/nexus_ai_service.dart` — OpenAI-compatible client against `https://api.ramsesdb.tech/v1/chat/completions`. Three methods today:
   - `complete(messages, temperature)` — non-streaming, text-only, returns `String?`.
   - `completeMultimodal(systemPrompt, userPrompt, imageBase64)` — vision support (used by receipt OCR).
-  - `streamComplete(messages, temperature)` — SSE stream, yields `String` deltas, used by `WallexChatPage`.
+  - `streamComplete(messages, temperature)` — SSE stream, yields `String` deltas, used by `BolsioChatPage`.
   - **No tool-call path exists today.** The body only sends `{ stream, temperature, messages }`. The gateway (`AI_infi/index.ts` + `types.ts`) already passes through `tools`, `tool_choice` on `ChatOptions` — so the backend is ready; the Dart client is not.
 - `lib/core/services/ai/nexus_credentials_store.dart` — `flutter_secure_storage` with `encryptedSharedPreferences`, keys `nexus_ai_api_key` + `nexus_ai_model` (default `openai/gpt-4.1-mini`).
-- `lib/core/services/ai/financial_context_builder.dart` — bakes accounts + 60 last tx + categories + budgets into a ~8k-char system-prompt blob. Used by `WallexChatPage._bootstrap`. This is the **pre-computed context** pattern; switching to tools is an alternative architecture, not an addition.
+- `lib/core/services/ai/financial_context_builder.dart` — bakes accounts + 60 last tx + categories + budgets into a ~8k-char system-prompt blob. Used by `BolsioChatPage._bootstrap`. This is the **pre-computed context** pattern; switching to tools is an alternative architecture, not an addition.
 
 ### Chat surface
 
-- `lib/app/chat/wallex_chat.page.dart` — self-contained `StatefulWidget` with in-memory `_messages` list, `TextEditingController`, manual SSE aggregation in `_send()`. Input row is an inline `Row` with `TextField` + `IconButton.filled` (send). Avatar, markdown rendering, typing indicator all present. No audio/mic code anywhere.
-- `lib/app/ai/ai_hub.page.dart` — entry-point hub with a card linking to `WallexChatPage` plus insights.
+- `lib/app/chat/bolsio_chat.page.dart` — self-contained `StatefulWidget` with in-memory `_messages` list, `TextEditingController`, manual SSE aggregation in `_send()`. Input row is an inline `Row` with `TextField` + `IconButton.filled` (send). Avatar, markdown rendering, typing indicator all present. No audio/mic code anywhere.
+- `lib/app/ai/ai_hub.page.dart` — entry-point hub with a card linking to `BolsioChatPage` plus insights.
 
 ### Add-transaction surface
 
@@ -87,7 +87,7 @@ Shared plumbing: one `VoiceService` (STT abstraction), one `AIToolRegistry` with
   - `CreateTransferTool(fromAccount, toAccount, amount, fxRate?)` → `TransactionService.insertTransaction` × 2.
 - `lib/core/services/ai/agent_profiles.dart` — `AgentProfile { name, systemPrompt, tools, temperature, maxToolLoops }`:
   - `quickExpense` → system = expense extractor in es-VE, tools = `[CreateTransactionTool]`, `tool_choice: {type:'function', function:{name:'create_transaction'}}` to force single call.
-  - `wallexAssistant` → system = full financial-assistant prompt, tools = all, `tool_choice: 'auto'`, max 3 loops.
+  - `bolsioAssistant` → system = full financial-assistant prompt, tools = all, `tool_choice: 'auto'`, max 3 loops.
 
 ### NexusAiService extension
 
@@ -97,7 +97,7 @@ Shared plumbing: one `VoiceService` (STT abstraction), one `AIToolRegistry` with
 
 ### UI
 
-- **Chat surface** — `lib/app/chat/wallex_chat.page.dart`:
+- **Chat surface** — `lib/app/chat/bolsio_chat.page.dart`:
   - Replace current single-send button row with `[mic] [text] [send]`.
   - New widget `VoiceRecordOverlay` — bottom sheet with waveform (simple bars from RMS), live partial transcript, cancel button, auto-stop on silence > 2s.
   - Refactor `_send` into `_sendToAgent(AgentProfile profile, {String userText, bool playTts = false})` that runs the tool loop: model call → if `tool_calls` → execute each → append tool messages → recurse (bounded).
@@ -217,14 +217,14 @@ And recurses (`completeWithTools` with the extended message history) up to `maxT
 | File | Change | Notes |
 |------|--------|-------|
 | `lib/app/home/widgets/new_transaction_fl_button.dart:189` | Add 4th `_FanAction(Icons.mic_none_rounded, tooltip: t.transaction.voice_input.entry, onPressed: _startVoiceCapture)` | Local state `_VoiceCaptureState` handles permission + overlay. |
-| `lib/app/chat/wallex_chat.page.dart:316` | Insert `_MicButton(onResult: (text) => _sendWithVoice(text))` before the `TextField` in the input Row | Reuses `_send` pathway with `text` prefilled. |
-| `lib/app/chat/wallex_chat.page.dart:_send` | Refactor to `_sendToAgent(profile: AgentProfile.wallexAssistant, userText: text)` | Agent loop handles tool calls transparently. |
+| `lib/app/chat/bolsio_chat.page.dart:316` | Insert `_MicButton(onResult: (text) => _sendWithVoice(text))` before the `TextField` in the input Row | Reuses `_send` pathway with `text` prefilled. |
+| `lib/app/chat/bolsio_chat.page.dart:_send` | Refactor to `_sendToAgent(profile: AgentProfile.bolsioAssistant, userText: text)` | Agent loop handles tool calls transparently. |
 | `lib/app/transactions/voice_input/voice_capture_flow.dart` (new) | Entry point: `static Future<void> start(BuildContext ctx)` | Mirrors `ReceiptImportFlow.start` signature — consistent mental model. |
 | `lib/app/transactions/voice_input/voice_record_overlay.dart` (new) | Modal bottom sheet with live waveform + partial transcript + cancel | Reused by chat mic button too. |
 | `lib/app/transactions/voice_input/voice_review_sheet.dart` (new) | 3 chips + auto-confirm countdown | `.fromProposal(TransactionProposal)` — reuses receipt model. |
 | `lib/core/services/voice/voice_service.dart` (new) | Singleton `VoiceService.instance.startSession(...)` | Abstracts STT engine. |
 | `lib/core/services/ai/tools/*.dart` (new) | Tool registry + concrete tools | 6 tools for MVP. |
-| `lib/core/services/ai/agent_profiles.dart` (new) | 2 profiles | `quickExpense`, `wallexAssistant`. |
+| `lib/core/services/ai/agent_profiles.dart` (new) | 2 profiles | `quickExpense`, `bolsioAssistant`. |
 | `lib/core/services/ai/nexus_ai_service.dart` | Add `completeWithTools`; keep `complete`/`streamComplete`/`completeMultimodal` backward-compatible | Non-breaking addition. |
 | `lib/app/settings/pages/ai/ai_settings.page.dart` | New `SwitchListTile` "Entrada por voz" | One additional sub-toggle. |
 | `lib/core/database/services/user-setting/user_setting_service.dart` | New `SettingKey.aiVoiceEnabled` | Trailing enum add, no migration. |
@@ -244,15 +244,15 @@ And recurses (`completeWithTools` with the extended message history) up to `maxT
 7. **Background noise / environmental audio** — `speech_to_text` has VAD built in; auto-stop on silence > 2s. Add explicit "Cancelar" button and manual stop.
 8. **TTS for assistant replies (Phase 2)** — `flutter_tts` works on both Android and Windows; es-VE voice available on most devices. Deferred; behind `SettingKey.aiVoiceTtsEnabled` in a later change.
 9. **Gateway tool-call pass-through across providers** — Cerebras historically shaky on tools; Gemini on OpenRouter is fine; Groq Llama 3.3 70B is fine. Recommend pinning `openai/gpt-4.1-mini` (current default) or `groq/llama-3.3-70b-versatile` for tool-heavy agent loops. Document in the design phase.
-10. **Agent loop runaway** — Model could keep calling tools. Mitigate: hard-cap `maxToolLoops = 3` in `wallexAssistant` (scoped agent allows only 1). Log every loop iteration with telemetry.
-11. **Conflict with in-progress `WallexChatPage`** — the current page's `_send` handles streaming directly. Refactoring to agent-loop means the streaming UX for plain conversational replies (no tools) must be preserved. Mitigate: agent loop detects "no tool_calls" on first response → switches to `streamComplete` path for the final text.
+10. **Agent loop runaway** — Model could keep calling tools. Mitigate: hard-cap `maxToolLoops = 3` in `bolsioAssistant` (scoped agent allows only 1). Log every loop iteration with telemetry.
+11. **Conflict with in-progress `BolsioChatPage`** — the current page's `_send` handles streaming directly. Refactoring to agent-loop means the streaming UX for plain conversational replies (no tools) must be preserved. Mitigate: agent loop detects "no tool_calls" on first response → switches to `streamComplete` path for the final text.
 12. **No tool_calls parsing in `NexusAiService` today** — this is the single largest net-new complexity. Gateway pass-through is verified (`AI_infi/index.ts:575,621`) so only the Dart side needs work.
 
 ---
 
 ## Relation to Other Open SDD Changes
 
-### `wallex-ai-integration` — FOUNDATIONAL DEPENDENCY (already landed per current code)
+### `bolsio-ai-integration` — FOUNDATIONAL DEPENDENCY (already landed per current code)
 
 - This change **extends** `NexusAiService` with `completeWithTools`. The credentials store, settings keys, master toggle, and `FinancialContextBuilder` already exist on main.
 - **Trade-off**: we're moving from "pre-computed context dump" (current `FinancialContextBuilder`) to "on-demand tool calls" for the conversational surface. Keep the context builder as the **bootstrap system prompt** (user's accounts + category list, ~1k chars) so the model knows what to ask for, then let tools fetch fresh data on demand. This halves system-prompt tokens, avoids stale data, and keeps a single source of truth for reads.
@@ -301,7 +301,7 @@ Ship scoped quick-expense voice first (no chat surface), then chat voice later.
 
 ### 4. Voice-only in chat, skip scoped surface
 
-Only add mic to `WallexChatPage`; users dictate "créame un gasto de 45 en uber" through the chat agent.
+Only add mic to `BolsioChatPage`; users dictate "créame un gasto de 45 en uber" through the chat agent.
 
 - **Pros**: Smallest code change; chat already exists.
 - **Cons**: Loses MonAi-like single-tap ergonomics from the FAB; every quick-expense takes 3+ round trips (open chat → dictate → wait → confirm). Defeats the value prop.
@@ -350,4 +350,4 @@ The orchestrator should tell the user:
 >
 > One architectural decision for the proposal phase: do we keep `FinancialContextBuilder` as bootstrap context (recommended) or remove it in favor of pure tool-call-based reads? Recommendation: keep, but shrink its output to accounts + category list (~1k chars), letting tools fetch transactions/budgets on demand. This halves token cost and avoids stale data.
 >
-> No conflict with `attachments-and-receipt-ocr` (parallel sibling, both add a `CaptureChannel` case on `TransactionProposal`). Depends on `wallex-ai-integration` (already landed). Ready to run `/sdd-propose`.
+> No conflict with `attachments-and-receipt-ocr` (parallel sibling, both add a `CaptureChannel` case on `TransactionProposal`). Depends on `bolsio-ai-integration` (already landed). Ready to run `/sdd-propose`.
