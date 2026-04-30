@@ -2,7 +2,7 @@
 
 ## Context
 
-Wallex currently forces manual transcription of transactions from Pago Móvil BDV screenshots, bank transfer confirmations, and invoice photos — error-prone work compounded by dual-currency (USD/VES) and BCV/paralelo rates. User avatars are also limited to SVG presets with no custom-image support. The same storage primitive (local attachments with DB metadata) solves both gaps.
+Bolsio currently forces manual transcription of transactions from Pago Móvil BDV screenshots, bank transfer confirmations, and invoice photos — error-prone work compounded by dual-currency (USD/VES) and BCV/paralelo rates. User avatars are also limited to SVG presets with no custom-image support. The same storage primitive (local attachments with DB metadata) solves both gaps.
 
 Goal: from the dashboard FAB, pick an image (gallery or camera), extract transaction fields via a hybrid OCR + multimodal-AI + regex-fallback pipeline, pre-fill the transaction form, and persist the image as a permanent attachment — reusing a generic `attachments` subsystem that later powers custom avatars (and future: budgets, accounts, multi-image).
 
@@ -18,7 +18,7 @@ A detailed plan is already approved at `C:\Users\ramse\.claude\plans\como-puedo-
 - `TransactionProposal` already carries structured fields (`amount`, `currencyId`, `date`, `type`, `counterpartyName`, `bankRef`, `bankName`) but lacks a `receiptImage` channel.
 - `BdvNotifProfile` (`lib/core/services/auto_import/profiles/bdv_notif_profile.dart`) owns the regex library for BDV Pago Móvil / transfers — currently invoked only from the notification-listener flow but fully reusable over arbitrary text.
 
-### AI layer (from active change `wallex-ai-integration`)
+### AI layer (from active change `bolsio-ai-integration`)
 
 - `NexusAiService` (`lib/core/services/ai/nexus_ai_service.dart`) proxies to `api.ramsesdb.tech` (multi-provider gateway: Cerebras, Groq, Gemini, OpenRouter). Today it exposes `complete()` (non-streaming) and SSE streaming for chat, both text-only.
 - `NexusCredentialsStore` with `flutter_secure_storage` encrypted prefs. Master toggle `nexusAiEnabled` in settings.
@@ -62,7 +62,7 @@ A detailed plan is already approved at `C:\Users\ramse\.claude\plans\como-puedo-
 - `lib/core/services/receipt_ocr/receipt_extractor_service.dart` — orchestrates OCR → Nexus multimodal → regex fallback → `TransactionProposal`.
 
 ### AI extension
-- `lib/core/services/ai/nexus_ai_service.dart` — add `completeMultimodal({systemPrompt, userPrompt, imageBase64, temperature})`. **This extends the service introduced by `wallex-ai-integration`** (see overlap section).
+- `lib/core/services/ai/nexus_ai_service.dart` — add `completeMultimodal({systemPrompt, userPrompt, imageBase64, temperature})`. **This extends the service introduced by `bolsio-ai-integration`** (see overlap section).
 
 ### UI
 - `lib/app/transactions/receipt_import/receipt_import_flow.dart` (new) — entry point from FAB.
@@ -91,7 +91,7 @@ A detailed plan is already approved at `C:\Users\ramse\.claude\plans\como-puedo-
 
 | Change | Overlap type | Notes |
 |--------|--------------|-------|
-| `wallex-ai-integration` | **EXTENDS** | Owns `NexusAiService` and settings scaffolding. This change adds a `completeMultimodal()` method on that service and a `receiptAiEnabled` sub-toggle beside the master `nexusAiEnabled`. We MUST sequence after (or coordinate with) `wallex-ai-integration`'s foundation phase. Backward-compatible addition — no breaking change to existing text-only `complete()`. |
+| `bolsio-ai-integration` | **EXTENDS** | Owns `NexusAiService` and settings scaffolding. This change adds a `completeMultimodal()` method on that service and a `receiptAiEnabled` sub-toggle beside the master `nexusAiEnabled`. We MUST sequence after (or coordinate with) `bolsio-ai-integration`'s foundation phase. Backward-compatible addition — no breaking change to existing text-only `complete()`. |
 | `firebase-always-on` | **NONE (indirect note)** | Unrelated domain (auth/sync). Worth noting only that attached files are **not** synced to Firebase in this change's scope — backup/sync of binary attachments is out of scope and deferred. If Ramses relies on Firebase restore post-reinstall, receipts will be lost. Flag as known limitation. |
 | `fix-exchange-rate-fallback` | **NONE** | Pure display/SQL fix in exchange-rate layer. No surface contact with transaction capture, DB schema beyond its own queries, or attachments. Safe to develop in parallel. |
 
@@ -165,7 +165,7 @@ Tandas 1–3 are backend-ish and testable without UI. Tanda 4 is the user-visibl
 
 ## Risks
 
-- **Sequencing dependency on `wallex-ai-integration`.** `completeMultimodal()` assumes `NexusAiService` and credentials store exist. Mitigate: implement tanda 2 (regex-only) first so the receipt feature is functional without Nexus; gate tanda 3 on `wallex-ai-integration`'s foundation phase landing.
+- **Sequencing dependency on `bolsio-ai-integration`.** `completeMultimodal()` assumes `NexusAiService` and credentials store exist. Mitigate: implement tanda 2 (regex-only) first so the receipt feature is functional without Nexus; gate tanda 3 on `bolsio-ai-integration`'s foundation phase landing.
 - **DB migration v22 → v23 on live data.** Ramses has real balances on device. Mitigate: additive-only migration (no `ALTER TABLE` on `transactions`); test on a DB copy before pushing.
 - **ML Kit binary size.** `google_mlkit_text_recognition` adds ~15–25 MB to APK. Acceptable for a personal app; document for awareness.
 - **Camera permission friction on MIUI.** Xiaomi aggressively revokes permissions. Mitigate: `permission_handler.openAppSettings()` with explanatory dialog when denied.
@@ -183,8 +183,8 @@ Tandas 1–3 are backend-ish and testable without UI. Tanda 4 is the user-visibl
 
 The orchestrator should tell the user:
 
-> The exploration condenses the approved plan and confirms the generic `attachments` approach over direct columns. One dependency to decide: `attachments-and-receipt-ocr` **extends** `wallex-ai-integration` (it adds `completeMultimodal()` on top of `NexusAiService`). Options:
-> (a) Land `wallex-ai-integration`'s foundation phase first, then start this change's tandas in order.
+> The exploration condenses the approved plan and confirms the generic `attachments` approach over direct columns. One dependency to decide: `attachments-and-receipt-ocr` **extends** `bolsio-ai-integration` (it adds `completeMultimodal()` on top of `NexusAiService`). Options:
+> (a) Land `bolsio-ai-integration`'s foundation phase first, then start this change's tandas in order.
 > (b) Start this change now but restrict to tandas 1, 2, 4–6 (regex-only, no Nexus) and stitch in tanda 3 after the AI foundation lands.
 >
 > No conflict with `firebase-always-on` or `fix-exchange-rate-fallback`. Known limitation: receipts are NOT Firebase-synced — call this out in the proposal and success criteria. Ready to run `/sdd-propose` once the sequencing option is chosen.

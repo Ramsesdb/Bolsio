@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
-import 'package:kilatex/app/transactions/receipt_import/receipt_review_page.dart';
-import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:kilatex/core/services/receipt_ocr/receipt_image_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
+import 'package:bolsio/app/transactions/receipt_import/receipt_review_page.dart';
+import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:bolsio/core/services/receipt_ocr/receipt_image_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 abstract class ReceiptImportFlow {
   static Future<void> start(
@@ -87,7 +87,7 @@ abstract class ReceiptImportFlow {
       dismissLoader();
 
       if (extraction.outcome == ExtractionOutcome.imageCorrupt) {
-        WallexSnackbar.error(
+        BolsioSnackbar.error(
           SnackbarParams(t.transaction.receipt_import.error.image_corrupt),
         );
         if (await file.exists()) {
@@ -97,7 +97,7 @@ abstract class ReceiptImportFlow {
       }
 
       if (extraction.outcome == ExtractionOutcome.empty) {
-        WallexSnackbar.warning(
+        BolsioSnackbar.warning(
           SnackbarParams(t.transaction.receipt_import.error.ocr_empty),
         );
         await RouteUtils.pushRoute(
@@ -107,7 +107,7 @@ abstract class ReceiptImportFlow {
       }
 
       if (extraction.outcome == ExtractionOutcome.noAmount) {
-        WallexSnackbar.warning(
+        BolsioSnackbar.warning(
           SnackbarParams(t.transaction.receipt_import.error.no_amount),
         );
         await RouteUtils.pushRoute(
@@ -137,7 +137,7 @@ abstract class ReceiptImportFlow {
       dismissLoader();
       if (!context.mounted) return;
 
-      WallexSnackbar.error(SnackbarParams.fromError(e));
+      BolsioSnackbar.error(SnackbarParams.fromError(e));
       if (await file.exists()) {
         await file.delete();
       }

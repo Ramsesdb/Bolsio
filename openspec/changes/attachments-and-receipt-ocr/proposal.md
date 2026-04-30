@@ -54,7 +54,7 @@ Migration is additive: rollback = drop `attachments` table, revert UI patches, d
 
 ## Dependencies
 
-Depends on `NexusAiService` (already implemented on `main`, tracked under inactive `wallex-ai-integration` change — see `lib/core/services/ai/nexus_ai_service.dart`, `nexus_credentials_store.dart`, recent commits `541c50e`, `ab38970`). This proposal EXTENDS it with a new `completeMultimodal()` method; existing text-only `complete()` stays backward-compatible. New pubspec entries: `image_picker`, `google_mlkit_text_recognition`, `image`.
+Depends on `NexusAiService` (already implemented on `main`, tracked under inactive `bolsio-ai-integration` change — see `lib/core/services/ai/nexus_ai_service.dart`, `nexus_credentials_store.dart`, recent commits `541c50e`, `ab38970`). This proposal EXTENDS it with a new `completeMultimodal()` method; existing text-only `complete()` stays backward-compatible. New pubspec entries: `image_picker`, `google_mlkit_text_recognition`, `image`.
 
 ## Success Criteria
 

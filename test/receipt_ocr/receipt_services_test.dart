@@ -6,16 +6,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/services/ai/nexus_ai_service.dart';
-import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
-import 'package:wallex/core/services/receipt_ocr/ocr_service.dart';
-import 'package:wallex/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:wallex/core/services/receipt_ocr/receipt_image_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/services/ai/nexus_ai_service.dart';
+import 'package:bolsio/core/services/auto_import/profiles/bank_profile.dart';
+import 'package:bolsio/core/services/receipt_ocr/ocr_service.dart';
+import 'package:bolsio/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:bolsio/core/services/receipt_ocr/receipt_image_service.dart';
 
 class _FakeOcrService extends OcrService {
   _FakeOcrService(this._text) : super();
@@ -90,7 +90,7 @@ void main() {
   setUp(() async {
     extractor = ReceiptExtractorService();
     imageService = ReceiptImageService();
-    tempRoot = await Directory.systemTemp.createTemp('wallex_receipt_ocr_test_');
+    tempRoot = await Directory.systemTemp.createTemp('bolsio_receipt_ocr_test_');
     appStateSettings[SettingKey.nexusAiEnabled] = '1';
     appStateSettings[SettingKey.receiptAiEnabled] = '1';
 

@@ -4,9 +4,9 @@ import 'package:drift/drift.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/services/attachments/attachment_model.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/services/attachments/attachment_model.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 class AttachmentsService {
   AttachmentsService._(this.db);

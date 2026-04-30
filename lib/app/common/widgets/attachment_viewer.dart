@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/services/attachments/attachments_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class AttachmentViewer extends StatefulWidget {
   const AttachmentViewer({super.key, required this.file, this.attachmentId});
@@ -27,13 +27,13 @@ class _AttachmentViewerState extends State<AttachmentViewer> {
       await AttachmentsService.instance.deleteById(id);
       if (!mounted) return;
 
-      WallexSnackbar.success(
+      BolsioSnackbar.success(
         SnackbarParams(Translations.of(context).attachments.remove),
       );
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
-      WallexSnackbar.error(SnackbarParams.fromError(e));
+      BolsioSnackbar.error(SnackbarParams.fromError(e));
     } finally {
       if (mounted) {
         setState(() => _isDeleting = false);

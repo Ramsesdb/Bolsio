@@ -6,17 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:wallex/app/transactions/transaction_details.page.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/services/attachments/attachment_model.dart';
-import 'package:wallex/core/services/attachments/attachments_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/transactions/transaction_details.page.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/services/attachments/attachment_model.dart';
+import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 Widget _wrap(Widget child) {
   return TranslationProvider(
@@ -57,7 +57,7 @@ void main() {
     appStateSettings[SettingKey.amoledMode] = '0';
     appStateSettings[SettingKey.themeMode] = 'system';
 
-    tempRoot = await Directory.systemTemp.createTemp('wallex_tdr_test_');
+    tempRoot = await Directory.systemTemp.createTemp('bolsio_tdr_test_');
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(pathProviderChannel, (MethodCall call) async {

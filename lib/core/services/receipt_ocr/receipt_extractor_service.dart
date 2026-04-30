@@ -3,15 +3,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/auto_import/capture_channel.dart';
-import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/services/ai/nexus_ai_service.dart';
-import 'package:kilatex/core/services/auto_import/profiles/bdv_notif_profile.dart';
-import 'package:kilatex/core/services/auto_import/profiles/bank_profile.dart';
-import 'package:kilatex/core/services/receipt_ocr/ocr_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/services/ai/nexus_ai_service.dart';
+import 'package:bolsio/core/services/auto_import/profiles/bdv_notif_profile.dart';
+import 'package:bolsio/core/services/auto_import/profiles/bank_profile.dart';
+import 'package:bolsio/core/services/receipt_ocr/ocr_service.dart';
 
 typedef MultimodalCompleteFn = Future<String?> Function({
   required String systemPrompt,
