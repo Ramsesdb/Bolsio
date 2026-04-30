@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 /// Captura un widget montado bajo `RepaintBoundary(key: ...)` a un PNG
 /// temporal y devuelve un `XFile` listo para `SharePlus.instance.share`
@@ -47,7 +47,7 @@ Future<XFile?> renderShareCard(
     final bytes = byteData.buffer.asUint8List();
     final dir = await getTemporaryDirectory();
     final ts = DateTime.now().millisecondsSinceEpoch;
-    final file = File('${dir.path}/wallex_calc_$ts.png');
+    final file = File('${dir.path}/bolsio_calc_$ts.png');
     await file.writeAsBytes(bytes, flush: true);
 
     return XFile(file.path, mimeType: 'image/png');

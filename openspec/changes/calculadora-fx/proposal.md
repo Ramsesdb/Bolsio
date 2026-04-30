@@ -4,7 +4,7 @@
 
 ## Why
 
-Wallex users in Venezuela perform ad-hoc FX conversions (USD/EUR/USDT ↔ VES) many times per day — at the store, during negotiations, splitting bills. Today the app exposes rates inside `CurrencyManagerPage` and the transaction form's `ExchangeRateSelector`, but there is no first-class surface for "just convert and tell me the number". Users open Rial or a browser, leaving Wallex for a use case it already has all the data for (DolarApi, BCV/paralelo, promedio, manual overrides). A dedicated Calculadora reuses existing plumbing and turns Wallex into the daily-driver FX surface Venezuelan users already expect.
+Bolsio users in Venezuela perform ad-hoc FX conversions (USD/EUR/USDT ↔ VES) many times per day — at the store, during negotiations, splitting bills. Today the app exposes rates inside `CurrencyManagerPage` and the transaction form's `ExchangeRateSelector`, but there is no first-class surface for "just convert and tell me the number". Users open Rial or a browser, leaving Bolsio for a use case it already has all the data for (DolarApi, BCV/paralelo, promedio, manual overrides). A dedicated Calculadora reuses existing plumbing and turns Bolsio into the daily-driver FX surface Venezuelan users already expect.
 
 ## What changes
 
@@ -19,7 +19,7 @@ Wallex users in Venezuela perform ad-hoc FX conversions (USD/EUR/USDT ↔ VES) m
 - Share action: render branded card via `RepaintBoundary.toImage(pixelRatio: 3)` → temp PNG → `Share.shareXFiles` with plain-text companion. Fallback to `Share.share(plainText)` on render failure.
 - New `goToCalculator` entry in `QuickActionId` (appended at end; enum order is persisted in layout JSON) and registered in `kQuickActions` under `QuickActionCategory.navigation` with `Icons.calculate_outlined`. **Default OFF** in initial chip set — opt-in via `QuickUseConfigSheet`.
 - Secondary entry points: small "Calculadora" button in `CurrencyManagerPage` rates table + settings menu link. Three discovery surfaces, zero forced layout migration.
-- New `calculator.*` i18n keys in `en.json` and `es.json` only (per memory `feedback_wallex_i18n_fallback`).
+- New `calculator.*` i18n keys in `en.json` and `es.json` only (per memory `feedback_bolsio_i18n_fallback`).
 
 ## Out of scope (v1)
 

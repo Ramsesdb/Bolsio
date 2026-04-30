@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:kilatex/app/calculator/models/rate_source.dart';
-import 'package:kilatex/app/calculator/utils/share_card_renderer.dart';
-import 'package:kilatex/app/calculator/widgets/calculator_keypad.dart';
-import 'package:kilatex/app/calculator/widgets/currency_amount_pane.dart';
-import 'package:kilatex/app/calculator/widgets/rate_source_chip.dart';
-import 'package:kilatex/app/calculator/widgets/share_card.dart';
-import 'package:kilatex/app/currencies/exchange_rate_form.dart';
-import 'package:kilatex/app/transactions/form/dialogs/evaluate_expression.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
-import 'package:kilatex/core/services/dolar_api_service.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/calculator/models/rate_source.dart';
+import 'package:bolsio/app/calculator/utils/share_card_renderer.dart';
+import 'package:bolsio/app/calculator/widgets/calculator_keypad.dart';
+import 'package:bolsio/app/calculator/widgets/currency_amount_pane.dart';
+import 'package:bolsio/app/calculator/widgets/rate_source_chip.dart';
+import 'package:bolsio/app/calculator/widgets/share_card.dart';
+import 'package:bolsio/app/currencies/exchange_rate_form.dart';
+import 'package:bolsio/app/transactions/form/dialogs/evaluate_expression.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
+import 'package:bolsio/core/services/dolar_api_service.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Codes que la Calculadora siempre ofrece como pane currency, aunque el
 /// usuario no los tenga habilitados en `CurrencyManager`. USDT en v1 es alias
@@ -1195,7 +1195,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
 /// between panes"). Decisión de iconografía: `Icons.swap_vert` — coherente
 /// con el eje vertical de las panes apiladas (per design.md § "No-decisiones:
 /// iconografía exacta del swap button"). Usa `colorScheme.primary` para
-/// matchear el accent dinámico de wallex (mismo patrón que el FAB de
+/// matchear el accent dinámico de bolsio (mismo patrón que el FAB de
 /// `transactions.page.dart`).
 class _SwapButton extends StatelessWidget {
   const _SwapButton({required this.onPressed, required this.semanticsLabel});

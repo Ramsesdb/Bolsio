@@ -120,7 +120,7 @@ void main() {
         final uiContents = uiRateSource.readAsStringSync();
         expect(
           uiContents.contains(
-            "import 'package:wallex/core/services/rate_providers/rate_source.dart'",
+            "import 'package:bolsio/core/services/rate_providers/rate_source.dart'",
           ),
           isFalse,
           reason:
