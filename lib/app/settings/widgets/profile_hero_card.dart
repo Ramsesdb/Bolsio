@@ -28,6 +28,9 @@ class ProfileHeroCard extends StatelessWidget {
           context: context,
           isScrollControlled: true,
           showDragHandle: true,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
           builder: (_) => const EditProfileModal(),
         );
       },

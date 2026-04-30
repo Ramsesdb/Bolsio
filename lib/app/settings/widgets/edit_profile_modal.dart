@@ -13,9 +13,9 @@ import 'package:bolsio/core/routes/route_utils.dart';
 import 'package:bolsio/core/utils/text_field_utils.dart';
 import 'package:bolsio/i18n/generated/translations.g.dart';
 
-const double _kHeroAvatarSize = 140;
-const double _kTileSpacing = 14;
-const double _kRowGap = 16;
+const double _kHeroAvatarSize = 110;
+const double _kTileSpacing = 12;
+const double _kRowGap = 12;
 const int _kNameMaxLength = 20;
 
 const List<String> _kPresetAvatars = [
@@ -51,7 +51,11 @@ class _EditProfileModalState extends State<EditProfileModal> {
   @override
   void initState() {
     super.initState();
-    _selectedPreset = appStateSettings[SettingKey.avatar];
+    final storedAvatar = appStateSettings[SettingKey.avatar];
+    // Treat empty string (set when an uploaded photo was saved) as "no preset".
+    _selectedPreset = (storedAvatar == null || storedAvatar.isEmpty)
+        ? null
+        : storedAvatar;
     _nameController.value = TextEditingValue(
       text: appStateSettings[SettingKey.userName] ?? '',
     );
@@ -83,10 +87,14 @@ class _EditProfileModalState extends State<EditProfileModal> {
     if (!mounted) return;
     setState(() {
       _customAvatarFile = file.existsSync() ? file : null;
-      // If the user has a stored custom photo and no preset is set, default
-      // selection to the uploaded photo so the hero matches what they saw.
-      if (_customAvatarFile != null && _selectedPreset == null) {
+      // The uploaded attachment is the source of truth (matches
+      // UserAvatarDisplay semantics outside the modal). If a stored custom
+      // photo exists, it is the active selection and the preset is cleared
+      // so the hero and tile #1 reflect the same state the user sees on the
+      // dashboard / settings.
+      if (_customAvatarFile != null) {
         _uploadedPhotoSelected = true;
+        _selectedPreset = null;
       }
     });
   }
@@ -235,7 +243,7 @@ class _EditProfileModalState extends State<EditProfileModal> {
           Divider(height: 1, thickness: 1, color: cs.outlineVariant),
           Flexible(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(22, 24, 22, 16),
+              padding: const EdgeInsets.fromLTRB(22, 18, 22, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -250,7 +258,7 @@ class _EditProfileModalState extends State<EditProfileModal> {
                     accent: cs.primary,
                     surface: cs.surfaceContainerHigh,
                   ),
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 18),
                   _NameField(
                     controller: _nameController,
                     formKey: _formKey,
@@ -259,7 +267,7 @@ class _EditProfileModalState extends State<EditProfileModal> {
                     secondary: cs.onSurfaceVariant,
                     tertiary: cs.outline,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
                   _PickerHeading(
                     label: t.profile.your_avatar,
                     aside: t.profile.options_count(
@@ -268,7 +276,7 @@ class _EditProfileModalState extends State<EditProfileModal> {
                     secondary: cs.onSurfaceVariant,
                     tertiary: cs.outline,
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   _AvatarGrid(
                     presets: _kPresetAvatars,
                     selectedPreset: _uploadedPhotoSelected
@@ -365,12 +373,12 @@ class _HeroAvatar extends StatelessWidget {
                   BoxShadow(
                     color: Colors.white.withValues(alpha: 0.025),
                     blurRadius: 0,
-                    spreadRadius: 8,
+                    spreadRadius: 6,
                   ),
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.5),
-                    blurRadius: 18,
-                    offset: const Offset(0, 6),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),

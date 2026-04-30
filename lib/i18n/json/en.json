@@ -214,7 +214,10 @@
       },
       "exchange-rate-card": {
         "name": "Exchange rates",
-        "description": "USD ↔ VES rates from BCV and Paralelo."
+        "description": "USD ↔ VES rates from BCV and Paralelo.",
+        "pivot-label": "Show rates in",
+        "pivot-auto": "Automatic",
+        "pivot-help": "1 unit of each currency = N units of the chosen currency."
       },
       "quick-use": {
         "name": "Quick actions",
