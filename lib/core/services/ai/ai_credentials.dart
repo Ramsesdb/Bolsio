@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
 
 /// Per-provider credential bundle persisted in [AiCredentialsStore].
 ///

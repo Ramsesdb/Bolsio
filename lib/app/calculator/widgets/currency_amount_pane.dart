@@ -2,8 +2,8 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/number_symbols_data.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
 
 /// Visual pane mostrando una currency + monto display dentro de la
 /// `CalculatorPage`.

@@ -1,7 +1,7 @@
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
 
 import 'bank_profile.dart';
 

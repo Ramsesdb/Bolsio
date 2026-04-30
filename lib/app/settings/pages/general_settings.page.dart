@@ -1,16 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/language_selector.dart';
-import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
-import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
-import 'package:wallex/core/database/services/user-setting/enum/supported_locales.dart';
-import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/language_selector.dart';
+import 'package:kilatex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
+import 'package:kilatex/core/database/services/user-setting/enum/supported_locales.dart';
+import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});

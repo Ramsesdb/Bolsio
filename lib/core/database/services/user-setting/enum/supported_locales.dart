@@ -1,5 +1,5 @@
-import 'package:wallex/core/database/services/user-setting/enum/writing_system.enum.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/services/user-setting/enum/writing_system.enum.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class SupportedLocale {
   final AppLocale locale;

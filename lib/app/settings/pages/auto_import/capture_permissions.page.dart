@@ -2,9 +2,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Guided checklist for every permission / OEM tweak the capture pipeline
 /// needs in order to stay alive in the background.

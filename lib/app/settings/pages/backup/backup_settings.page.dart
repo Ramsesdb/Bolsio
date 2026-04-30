@@ -2,23 +2,23 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/pages/backup/export_page.dart';
-import 'package:wallex/app/settings/pages/backup/import_csv.page.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/backup/backup_database_service.dart';
-import 'package:wallex/core/extensions/numbers.extensions.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/routes/destinations.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/attachments/attachments_service.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/pages/backup/export_page.dart';
+import 'package:kilatex/app/settings/pages/backup/import_csv.page.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/backup/backup_database_service.dart';
+import 'package:kilatex/core/extensions/numbers.extensions.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/routes/destinations.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/attachments/attachments_service.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
-import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
 import '../../widgets/settings_list_utils.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
 
 class BackupSettingsPage extends StatefulWidget {
   const BackupSettingsPage({super.key});

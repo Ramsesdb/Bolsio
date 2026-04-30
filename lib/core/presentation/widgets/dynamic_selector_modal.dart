@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// A dynamic selector modal that displays a list of selectable items with radio buttons.
 ///

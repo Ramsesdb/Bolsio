@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:wallex/app/transactions/transactions.page.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:kilatex/app/transactions/transactions.page.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class SuccessPage extends StatefulWidget {
   const SuccessPage({super.key});

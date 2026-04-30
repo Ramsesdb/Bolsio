@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
-import 'package:wallex/core/services/auto_import/capture/capture_event_log.dart';
-import 'package:wallex/core/services/auto_import/capture/models/capture_event.dart';
-import 'package:wallex/core/services/auto_import/capture/notification_capture_source.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:wallex/core/services/auto_import/dedupe/fingerprint_registry.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:kilatex/core/services/auto_import/capture/capture_event_log.dart';
+import 'package:kilatex/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:kilatex/core/services/auto_import/capture/notification_capture_source.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/core/services/auto_import/dedupe/fingerprint_registry.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 /// Coarse-grained health status of the notification listener pipeline.
 ///

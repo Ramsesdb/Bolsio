@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallex/core/presentation/widgets/simple_shadow.dart';
+import 'package:kilatex/core/presentation/widgets/simple_shadow.dart';
 
 part 'supported_icon.g.dart';
 

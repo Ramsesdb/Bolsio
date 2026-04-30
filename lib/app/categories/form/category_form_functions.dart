@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:wallex/app/categories/selectors/category_picker.dart';
-import 'package:wallex/app/categories/subcategory_form.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/supported_icon.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/presentation/widgets/html_text.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/categories/selectors/category_picker.dart';
+import 'package:kilatex/app/categories/subcategory_form.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/presentation/widgets/html_text.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 import '../../../core/services/supported_icon/supported_icon_service.dart';
 

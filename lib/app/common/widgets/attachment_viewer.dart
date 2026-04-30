@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/services/attachments/attachments_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/services/attachments/attachments_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class AttachmentViewer extends StatefulWidget {
   const AttachmentViewer({super.key, required this.file, this.attachmentId});

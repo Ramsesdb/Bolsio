@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/extensions/lists.extensions.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/custom_color_picker_modal.dart';
-import 'package:wallex/core/presentation/widgets/gradient-box.borders.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/extensions/lists.extensions.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/custom_color_picker_modal.dart';
+import 'package:kilatex/core/presentation/widgets/gradient-box.borders.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 Future<void> showColorPickerModal(
   BuildContext context,

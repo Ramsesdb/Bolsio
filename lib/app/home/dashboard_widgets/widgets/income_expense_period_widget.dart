@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
-import 'package:wallex/app/home/widgets/income_or_expense_card.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
+import 'package:kilatex/app/home/widgets/income_or_expense_card.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Modos del widget — coinciden con el contrato declarado en
 /// `WidgetDescriptor.config['mode']`. Encapsulamos la (de)serialización en
@@ -78,7 +78,6 @@ class IncomeExpensePeriodWidget extends StatelessWidget {
       type: type,
       periodState: dateRangeService,
       labelStyle: labelStyle,
-      rateSource: rateSource,
       filters: _buildFilterSet(),
     );
   }

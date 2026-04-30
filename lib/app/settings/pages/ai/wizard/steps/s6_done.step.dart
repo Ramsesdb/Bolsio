@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:wallex/core/services/ai/ai_credentials.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:kilatex/core/services/ai/ai_credentials.dart';
 
 /// Step 6 — success screen confirming the active provider + model.
 ///

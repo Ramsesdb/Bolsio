@@ -4,10 +4,10 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
-import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/services/auto_import/background/local_notification_service.dart';
+import 'package:kilatex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// Manages the Android foreground service that keeps auto-import capture
 /// running when the app is closed.

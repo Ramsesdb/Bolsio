@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:wallex/app/debts/debt_form_page.dart';
-import 'package:wallex/core/models/debt/debt_direction.enum.dart';
-import 'package:wallex/core/routes/route_utils.dart';
+import 'package:kilatex/app/debts/debt_form_page.dart';
+import 'package:kilatex/core/models/debt/debt_direction.enum.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
 
 class DebtFabButton extends StatefulWidget {
   const DebtFabButton({super.key});

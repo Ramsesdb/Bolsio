@@ -3,12 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/migrator.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/utils/debouncer.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/migrator.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/utils/debouncer.dart';
+import 'package:kilatex/core/utils/logger.dart';
 
 /// Singleton service that owns the in-memory copy of the dashboard layout
 /// and persists changes to `SettingKey.dashboardLayout` (debounced 300 ms).

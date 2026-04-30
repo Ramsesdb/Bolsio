@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/supported-icon/supported_icon.dart';
-import 'package:wallex/core/presentation/styles/borders.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:wallex/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
+import 'package:kilatex/core/presentation/styles/borders.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:kilatex/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class IconAndColorSelector extends StatelessWidget {
   const IconAndColorSelector({

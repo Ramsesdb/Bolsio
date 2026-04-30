@@ -1,14 +1,14 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/auto_import/proposal_review.page.dart';
-import 'package:wallex/app/transactions/auto_import/widgets/pending_import_tile.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:wallex/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:kilatex/app/transactions/auto_import/proposal_review.page.dart';
+import 'package:kilatex/app/transactions/auto_import/widgets/pending_import_tile.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:kilatex/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// Page showing the inbox of auto-imported transaction proposals.
 ///

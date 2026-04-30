@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
 
 /// Marco visual aplicado a cada widget durante edit mode. Spec
 /// `dashboard-edit-mode` § Edit frame.

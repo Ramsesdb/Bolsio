@@ -1,12 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
-import 'package:wallex/core/services/rate_providers/rate_provider_manager.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/models/exchange-rate/exchange_rate.dart';
+import 'package:kilatex/core/services/rate_providers/rate_provider_manager.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../app_db.dart';
+import '../user-setting/user_setting_service.dart';
 
 class ExchangeRateService {
   final AppDB db;
@@ -193,6 +194,27 @@ class ExchangeRateService {
     });
   }
 
+  /// Convert [amount] from [fromCurrency] to [toCurrency].
+  ///
+  /// Contract (per `currency-modes-rework` Phase 4):
+  ///   - identity (`from == to`)               → `amount * 1.0`
+  ///   - both rows exist (or one is the base)  → concrete value
+  ///   - any rate is missing (and not the base) → `null`
+  ///
+  /// The previous implementation defaulted missing rates to `1.0`, which
+  /// silently masked "tasa no configurada" cases as 1:1 conversions —
+  /// catastrophic for VES (where 1 USD ≈ 40 VES, treating it as 1:1
+  /// inflated USD totals 40×). Callers MUST handle the `null` explicitly:
+  /// either skip the contribution and surface a "tasa no configurada"
+  /// hint to the user, or fall back to
+  /// [calculateExchangeRateToPreferredCurrencyOrZero] when the widget
+  /// cannot represent missing data.
+  ///
+  /// `_baseCurrency` is the user's preferred currency: rates are stored
+  /// relative to it, so the base never has its own row in `exchangeRates`
+  /// — for the base currency, missing row → `1.0` is correct. Per the
+  /// `RateRefreshService` storage convention, the base is `'VES'` when
+  /// preferred is VES, otherwise `'USD'`.
   Stream<double?> calculateExchangeRate({
     required String fromCurrency,
     required String toCurrency,
@@ -201,6 +223,11 @@ class ExchangeRateService {
     String? source,
   }) {
     date ??= DateTime.now();
+
+    // Identity short-circuit — never hit the DB.
+    if (fromCurrency == toCurrency) {
+      return Stream<double?>.value(amount.toDouble());
+    }
 
     final fromExchangeRate = _getRateWithFallback(
       currencyCode: fromCurrency,
@@ -217,15 +244,30 @@ class ExchangeRateService {
       fromExchangeRate,
       toExchangeRate,
       (from, to) {
-        // A currency with no stored rate is the base/reference currency
-        // (e.g. VES has no rate because all rates are expressed in VES).
-        // Treat its rate as 1.0.
-        final fromRate = from?.exchangeRate ?? 1.0;
-        final toRate = to?.exchangeRate ?? 1.0;
-        if (toRate == 0) return null;
+        final base = _baseCurrency;
+        // A missing row is legitimate ONLY for the base currency (which
+        // has no row by storage convention). For any other currency,
+        // null means "tasa no configurada" — propagate as null.
+        final double? fromRate =
+            from?.exchangeRate ?? (fromCurrency == base ? 1.0 : null);
+        final double? toRate =
+            to?.exchangeRate ?? (toCurrency == base ? 1.0 : null);
+        if (fromRate == null || toRate == null || toRate == 0) {
+          return null;
+        }
         return (fromRate / toRate) * amount;
       },
     );
+  }
+
+  /// Resolve the storage base currency from app state. Returns `'VES'`
+  /// when the user's preferred currency is VES (rates stored relative
+  /// to VES), otherwise `'USD'` — the storage convention used by
+  /// `RateRefreshService._runJob`. Reading from `appStateSettings`
+  /// (the in-memory mirror of `userSettings`) keeps this synchronous.
+  String get _baseCurrency {
+    final pref = appStateSettings[SettingKey.preferredCurrency];
+    return pref == 'VES' ? 'VES' : 'USD';
   }
 
   /// Backfill missing exchange rates for a date range using [RateProviderManager].

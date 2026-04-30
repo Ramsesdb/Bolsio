@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/supported_icon.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
 
 part 'icon_displayer.g.dart';
 

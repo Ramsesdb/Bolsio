@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/models/tags/tag.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/models/tags/tag.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class TagStats extends StatelessWidget {
   const TagStats({super.key, required this.filters});

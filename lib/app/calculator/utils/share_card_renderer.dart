@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/core/utils/logger.dart';
 
 /// Captura un widget montado bajo `RepaintBoundary(key: ...)` a un PNG
 /// temporal y devuelve un `XFile` listo para `SharePlus.instance.share`

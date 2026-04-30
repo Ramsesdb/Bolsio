@@ -1,6 +1,6 @@
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/services/ai/agents/agent_profile.dart';
-import 'package:wallex/core/services/ai/ai_completion_result.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
+import 'package:kilatex/core/services/ai/ai_completion_result.dart';
 
 /// Outcome of one agent run.
 enum AgentRunStatus {

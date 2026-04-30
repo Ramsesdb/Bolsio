@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/accounts/account_form.dart';
-import 'package:wallex/app/home/dashboard.page.dart';
-import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
-import 'package:wallex/app/stats/stats_page.dart';
-import 'package:wallex/app/transactions/transactions.page.dart';
-import 'package:wallex/core/presentation/widgets/card_with_header.dart';
-import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/account_form.dart';
+import 'package:kilatex/app/home/dashboard.page.dart';
+import 'package:kilatex/app/settings/widgets/edit_profile_modal.dart';
+import 'package:kilatex/app/stats/stats_page.dart';
+import 'package:kilatex/app/transactions/transactions.page.dart';
+import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
+import 'package:kilatex/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 import '../helpers.dart';
 

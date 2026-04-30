@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/supported-icon/supported_icon.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/constants.dart';
-import 'package:wallex/core/utils/text_field_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/constants.dart';
+import 'package:kilatex/core/utils/text_field_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class SubcategoryFormDialog extends StatefulWidget {
   const SubcategoryFormDialog({

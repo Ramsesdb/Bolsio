@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
 
 /// Full-screen overlay shown during slide 9 while `PersonalVESeeder.seedAll`
 /// runs. Guaranteed to be visible at least 500 ms (enforced by caller via

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
 
 /// Full-screen biometric lock gate shown on app launch.
 ///
@@ -33,6 +34,13 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> {
 
   Future<void> _authenticate() async {
     if (_isAuthenticating) return;
+
+    // Respect user toggle — skip auth entirely if disabled.
+    final biometricEnabled = appStateSettings[SettingKey.biometricEnabled];
+    if (biometricEnabled == '0') {
+      widget.onAuthenticated();
+      return;
+    }
 
     setState(() {
       _isAuthenticating = true;

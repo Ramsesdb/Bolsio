@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
 
 Radius get inputBorderRadius => Radius.circular(6);
 

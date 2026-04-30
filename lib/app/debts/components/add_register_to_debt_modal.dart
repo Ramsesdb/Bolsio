@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/debts/components/transaction_selector.dart';
-import 'package:wallex/app/transactions/form/transaction_form.page.dart';
-import 'package:wallex/core/database/services/debts/debt_service.dart';
-import 'package:wallex/core/models/debt/debt.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/outlined_button_stacked.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/debts/components/transaction_selector.dart';
+import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
+import 'package:kilatex/core/database/services/debts/debt_service.dart';
+import 'package:kilatex/core/models/debt/debt.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class AddMoneyTransactionToDebtModal extends StatelessWidget {
   const AddMoneyTransactionToDebtModal({required this.debt});

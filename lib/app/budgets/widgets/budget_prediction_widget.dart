@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/budget/budget.dart';
-import 'package:wallex/core/services/ai/budget_prediction_service.dart';
+import 'package:kilatex/core/models/budget/budget.dart';
+import 'package:kilatex/core/services/ai/budget_prediction_service.dart';
 
 class BudgetPredictionWidget extends StatefulWidget {
   const BudgetPredictionWidget({super.key, required this.budget});

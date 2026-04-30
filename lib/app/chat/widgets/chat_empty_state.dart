@@ -2,20 +2,20 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:wallex/app/chat/widgets/wallex_ai_orb.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:kilatex/app/chat/widgets/wallex_ai_orb.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class ChatEmptyState extends StatefulWidget {
   const ChatEmptyState({super.key, required this.onSuggestionTap});

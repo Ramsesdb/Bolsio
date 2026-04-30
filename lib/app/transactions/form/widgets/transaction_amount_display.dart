@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/animations/animated_expanded.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
 
 class TransactionAmountDisplay extends StatelessWidget {
   const TransactionAmountDisplay({

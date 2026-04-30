@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Shared onboarding step that walks the user through enabling the Android
 /// "Allow restricted settings" AppOp before reaching the notification listener

@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:wallex/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/utils/drift_utils.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/count_indicator.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/utils/drift_utils.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/count_indicator.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 Future<List<Account>?> showAccountSelectorBottomSheet(
   BuildContext context,

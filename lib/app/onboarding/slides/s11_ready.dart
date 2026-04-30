@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
 
 class Slide11Ready extends StatelessWidget {
   const Slide11Ready({

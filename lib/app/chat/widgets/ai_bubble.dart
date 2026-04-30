@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
 
 class AiBubble extends StatelessWidget {
   const AiBubble({

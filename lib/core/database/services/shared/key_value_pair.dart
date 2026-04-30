@@ -1,6 +1,6 @@
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
 
 class KeyValuePairInDB<T extends Enum> {
   final T key;

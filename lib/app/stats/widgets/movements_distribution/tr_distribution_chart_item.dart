@@ -1,4 +1,4 @@
-import 'package:wallex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
 
 class TrDistributionChartItem<T> {
   final T category;

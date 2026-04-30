@@ -4,19 +4,19 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wallex/app/layout/page_switcher.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_notif_access_mockup.dart';
-import 'package:wallex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:wallex/app/onboarding/widgets/v3_restricted_settings_step.dart';
-import 'package:wallex/app/onboarding/widgets/v3_secondary_button.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/app/layout/page_switcher.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_notif_access_mockup.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_restricted_settings_step.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
 
 /// Mini-flow shown to a returning Google user (data already in Firebase).
 ///

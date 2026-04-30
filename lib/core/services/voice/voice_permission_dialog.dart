@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/services/voice/voice_service.dart';
-import 'package:wallex/core/services/voice/voice_service_speech_to_text.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/services/voice/voice_service.dart';
+import 'package:kilatex/core/services/voice/voice_service_speech_to_text.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Outcome of the microphone permission flow.
 enum VoicePermissionOutcome {

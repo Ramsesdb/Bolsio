@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/styles/borders.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/presentation/styles/borders.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
 
 class ListTileField extends StatelessWidget {
   const ListTileField({

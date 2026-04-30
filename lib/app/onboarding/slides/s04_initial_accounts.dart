@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/bank_options.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_bank_tile.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:wallex/app/onboarding/widgets/v3_switch.dart';
+import 'package:kilatex/app/onboarding/bank_options.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_bank_tile.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_switch.dart';
 
 class Slide04InitialAccounts extends StatefulWidget {
   const Slide04InitialAccounts({

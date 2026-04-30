@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/custom_color_picker.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/custom_color_picker.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 Future<void> showCustomColorPickerModal(
   BuildContext context,

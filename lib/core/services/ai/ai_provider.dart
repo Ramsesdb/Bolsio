@@ -1,4 +1,4 @@
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
 
 /// Common interface implemented by every concrete BYOK provider.
 ///

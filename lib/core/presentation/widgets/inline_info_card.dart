@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
-import 'package:wallex/core/presentation/theme.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/presentation/responsive/responsive_row_column.dart';
+import 'package:kilatex/core/presentation/theme.dart';
 
 abstract class InlineInfoCardMode {
   const InlineInfoCardMode();

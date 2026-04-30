@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Display a dialog with a title, a description and confirm/cancel buttons.
 ///

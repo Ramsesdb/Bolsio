@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/string.extension.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/extensions/string.extension.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
 
 class TappableTextEntry extends StatelessWidget {
   const TappableTextEntry({

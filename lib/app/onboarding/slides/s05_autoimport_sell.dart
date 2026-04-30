@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:wallex/app/onboarding/widgets/v3_notification_card.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_notification_card.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
 
 class Slide05AutoImportSell extends StatelessWidget {
   const Slide05AutoImportSell({

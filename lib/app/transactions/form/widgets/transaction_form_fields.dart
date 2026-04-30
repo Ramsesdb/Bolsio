@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:wallex/core/utils/constants.dart';
-import 'package:wallex/core/utils/text_field_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:kilatex/core/utils/constants.dart';
+import 'package:kilatex/core/utils/text_field_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class TransactionTitleField extends StatelessWidget {
   const TransactionTitleField({super.key, required this.controller});

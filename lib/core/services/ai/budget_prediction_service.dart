@@ -1,9 +1,9 @@
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/budget/budget.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/services/ai/ai_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/budget/budget.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/services/ai/ai_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
 
 class BudgetPredictionResult {
   final String text;

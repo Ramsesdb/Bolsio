@@ -1,15 +1,15 @@
-import 'package:wallex/core/services/ai/agents/agent_profile.dart';
-import 'package:wallex/core/services/ai/agents/agent_run_result.dart';
-import 'package:wallex/core/services/ai/agents/agent_runner.dart';
-import 'package:wallex/core/services/ai/financial_context_builder.dart';
-import 'package:wallex/core/services/ai/tools/ai_tool.dart';
-import 'package:wallex/core/services/ai/tools/ai_tool_registry.dart';
-import 'package:wallex/core/services/ai/tools/impl/create_transaction_tool.dart';
-import 'package:wallex/core/services/ai/tools/impl/create_transfer_tool.dart';
-import 'package:wallex/core/services/ai/tools/impl/get_balance_tool.dart';
-import 'package:wallex/core/services/ai/tools/impl/get_budgets_tool.dart';
-import 'package:wallex/core/services/ai/tools/impl/get_stats_by_category_tool.dart';
-import 'package:wallex/core/services/ai/tools/impl/list_transactions_tool.dart';
+import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
+import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
+import 'package:kilatex/core/services/ai/agents/agent_runner.dart';
+import 'package:kilatex/core/services/ai/financial_context_builder.dart';
+import 'package:kilatex/core/services/ai/tools/ai_tool.dart';
+import 'package:kilatex/core/services/ai/tools/ai_tool_registry.dart';
+import 'package:kilatex/core/services/ai/tools/impl/create_transaction_tool.dart';
+import 'package:kilatex/core/services/ai/tools/impl/create_transfer_tool.dart';
+import 'package:kilatex/core/services/ai/tools/impl/get_balance_tool.dart';
+import 'package:kilatex/core/services/ai/tools/impl/get_budgets_tool.dart';
+import 'package:kilatex/core/services/ai/tools/impl/get_stats_by_category_tool.dart';
+import 'package:kilatex/core/services/ai/tools/impl/list_transactions_tool.dart';
 
 /// Full chat agent for `WallexChatPage`.
 ///

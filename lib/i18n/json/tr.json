@@ -869,7 +869,8 @@
       "private_mode": "Özel mod",
       "private_mode_descr": "Tüm parasal değerleri gizle",
       "private_mode_activated": "Özel mod etkinleştirildi",
-      "private_mode_deactivated": "Özel mod devre dışı bırakıldı"
+      "private_mode_deactivated": "Özel mod devre dışı bırakıldı",
+      "BIOMETRIC": { "title": "Use fingerprint/biometrics", "descr": "Require authentication when opening the app", "section_title": "Biyometrik kilit" }
     },
     "TRANSACTIONS": {
       "menu_title": "İşlemler",
@@ -911,6 +912,9 @@
         "modal_title": "Select Default Type"
       }
     },
+    "AUTO_IMPORT": {
+      "menu_title": "Banka otomatik içe aktarma"
+    },
     "APPEARANCE": {
       "menu_title": "Tema ve Stil",
       "menu_descr": "Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler",
@@ -935,6 +939,11 @@
   "MORE": {
     "title": "Daha Fazla",
     "title_long": "Daha fazla eylem",
+    "SEARCH": { "hint": "Search settings…" },
+    "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
+    "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase senkronizasyonu" },
+    "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
+    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Veri",
       "display.descr": "Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın",

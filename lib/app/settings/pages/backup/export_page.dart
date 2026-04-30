@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/presentation/animations/animated_expanded.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/styles/big_button_style.dart';
-import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/styles/big_button_style.dart';
+import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 

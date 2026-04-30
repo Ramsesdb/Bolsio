@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:wallex/app/home/dashboard.page.dart';
-import 'package:wallex/app/onboarding/onboarding.dart';
-import 'package:wallex/app/settings/more_actions.page.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
-import 'package:wallex/main.dart';
+import 'package:kilatex/app/home/dashboard.page.dart';
+import 'package:kilatex/app/onboarding/onboarding.dart';
+import 'package:kilatex/app/settings/more_actions.page.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:kilatex/main.dart';
 
 Future<void> setupMonekin() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

@@ -2,17 +2,17 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/models/date-utils/periodicity.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/no_results.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/models/date-utils/periodicity.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/widgets/no_results.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});

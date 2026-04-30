@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:notification_listener_service/notification_event.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
+import 'package:kilatex/core/services/auto_import/capture/capture_health_monitor.dart';
 
 import 'capture_source.dart';
 

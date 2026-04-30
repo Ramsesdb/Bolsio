@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/widgets/v3_seeding_overlay.dart';
-import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_seeding_overlay.dart';
+import 'package:kilatex/core/database/utils/personal_ve_seeders.dart';
 
 /// Theatrical seeding slide. Calls `PersonalVESeeder.seedAll` and waits for
 /// both the seeding future and a 500 ms minimum visual delay before advancing.

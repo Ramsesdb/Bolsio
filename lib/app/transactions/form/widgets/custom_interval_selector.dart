@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/core/models/date-utils/periodicity.dart';
-import 'package:wallex/core/models/transaction/recurrency_data.dart';
-import 'package:wallex/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:wallex/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:wallex/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/text_field_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/core/models/date-utils/periodicity.dart';
+import 'package:kilatex/core/models/transaction/recurrency_data.dart';
+import 'package:kilatex/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:kilatex/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:kilatex/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/text_field_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class IntervalSelectorPage extends StatefulWidget {
   const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});

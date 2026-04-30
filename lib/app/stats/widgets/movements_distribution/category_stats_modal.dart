@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
-import 'package:wallex/app/transactions/transactions.page.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/supported-icon/supported_icon.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
+import 'package:kilatex/app/transactions/transactions.page.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/supported-icon/supported_icon.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class SubcategoryModalItem {
   String id;

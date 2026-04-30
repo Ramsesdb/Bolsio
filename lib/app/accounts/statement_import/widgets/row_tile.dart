@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/services/statement_import/models/matching_result.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class RowTile extends StatelessWidget {
   const RowTile({

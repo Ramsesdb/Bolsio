@@ -1,6 +1,6 @@
-import 'package:wallex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
 
 /// Defaults para el layout del dashboard.
 ///

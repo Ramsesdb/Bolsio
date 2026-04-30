@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/budgets/budget_form_page.dart';
-import 'package:wallex/app/layout/page_context.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/core/database/services/budget/budget_service.dart';
-import 'package:wallex/core/presentation/animations/animated_floating_button.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/budgets/budget_form_page.dart';
+import 'package:kilatex/app/layout/page_context.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/core/database/services/budget/budget_service.dart';
+import 'package:kilatex/core/presentation/animations/animated_floating_button.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class BudgetsPage extends StatefulWidget {
   const BudgetsPage({super.key});

@@ -4,28 +4,29 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/auth/welcome_screen.dart';
-import 'package:wallex/app/home/dashboard_widgets/defaults.dart';
-import 'package:wallex/app/layout/page_switcher.dart';
-import 'package:wallex/app/onboarding/slides/s01_goals.dart';
-import 'package:wallex/app/onboarding/slides/s02_currency.dart';
-import 'package:wallex/app/onboarding/slides/s03_rate_source.dart';
-import 'package:wallex/app/onboarding/slides/s04_initial_accounts.dart';
-import 'package:wallex/app/onboarding/slides/s05_autoimport_sell.dart';
-import 'package:wallex/app/onboarding/slides/s06_privacy.dart';
-import 'package:wallex/app/onboarding/slides/s07_post_notifications.dart';
-import 'package:wallex/app/onboarding/slides/s075_restricted_settings.dart';
-import 'package:wallex/app/onboarding/slides/s08_activate_listener.dart';
-import 'package:wallex/app/onboarding/slides/s09_apps_included.dart';
-import 'package:wallex/app/onboarding/slides/s10_seeding_overlay.dart';
-import 'package:wallex/app/onboarding/slides/s11_ready.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_progress_bar.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/app/auth/welcome_screen.dart';
+import 'package:kilatex/app/home/dashboard_widgets/defaults.dart';
+import 'package:kilatex/app/layout/page_switcher.dart';
+import 'package:kilatex/app/onboarding/slides/s01_goals.dart';
+import 'package:kilatex/app/onboarding/slides/s02_currency.dart';
+import 'package:kilatex/app/onboarding/slides/s03_rate_source.dart';
+import 'package:kilatex/app/onboarding/slides/s04_initial_accounts.dart';
+import 'package:kilatex/app/onboarding/slides/s05_autoimport_sell.dart';
+import 'package:kilatex/app/onboarding/slides/s06_privacy.dart';
+import 'package:kilatex/app/onboarding/slides/s07_post_notifications.dart';
+import 'package:kilatex/app/onboarding/slides/s075_restricted_settings.dart';
+import 'package:kilatex/app/onboarding/slides/s08_activate_listener.dart';
+import 'package:kilatex/app/onboarding/slides/s09_apps_included.dart';
+import 'package:kilatex/app/onboarding/slides/s10_seeding_overlay.dart';
+import 'package:kilatex/app/onboarding/slides/s11_ready.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_progress_bar.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/currency/currency_mode.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
 
 /// Root widget of the v3 onboarding flow.
 ///
@@ -46,18 +47,31 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   // ── User selections (lifted state) ──────────────────────────────────────
   final Set<String> _selectedGoals = <String>{};
-  // Currency default: USD. Spec module 3 allows any of USD/VES/DUAL; the
-  // device-default detection helper noted in the spec isn't wired in here
-  // to keep Fase 5 scoped to controller wiring. If the user does not tap,
-  // 'USD' is persisted.
-  String _selectedCurrency = 'USD';
+
+  /// Currency mode picked on slide 2. Defaults to [CurrencyMode.single_usd]
+  /// — the historical onboarding default was USD. The 4-mode rework
+  /// (`currency-modes-rework`) widens this from a 3-option string
+  /// (`'USD'|'VES'|'DUAL'`) to the canonical [CurrencyMode] enum that maps
+  /// 1:1 to the on-disk `currencyMode` setting.
+  CurrencyMode _selectedMode = CurrencyMode.single_usd;
+
+  /// Primary currency ISO code. For `single_*` modes this IS the user's
+  /// chosen currency; for `dual` it is the primary side of the pair.
+  /// Defaults match [_selectedMode] = `single_usd`.
+  String _selectedPrimaryCurrency = 'USD';
+
+  /// Secondary currency ISO code. Only meaningful (and only persisted) when
+  /// [_selectedMode] is [CurrencyMode.dual]. For all single modes this is
+  /// `null` — at persist time we either skip the row or write `null`.
+  String? _selectedSecondaryCurrency;
+
   String _selectedRateSource = 'bcv';
   final Set<String> _selectedBankIds = <String>{};
 
-  /// Per-bank "also USD?" flag, only meaningful when [_selectedCurrency] is
-  /// `'DUAL'` and the bank has `supportsBoth = true`. Key = bank id, value =
-  /// whether the user wants a second USD account seeded alongside the
-  /// native VES one. Cleared automatically when a bank is deselected from
+  /// Per-bank "also USD?" flag, only meaningful when [_selectedMode] is
+  /// [CurrencyMode.dual] and the bank has `supportsBoth = true`. Key = bank
+  /// id, value = whether the user wants a second USD account seeded alongside
+  /// the native VES one. Cleared automatically when a bank is deselected from
   /// [_selectedBankIds].
   final Map<String, bool> _alsoUsdForBank = <String, bool>{};
 
@@ -178,8 +192,57 @@ class _OnboardingPageState extends State<OnboardingPage> {
     });
   }
 
-  void _selectCurrency(String code) {
-    setState(() => _selectedCurrency = code);
+  /// Lift state from [Slide02Currency]. The slide emits the full tuple
+  /// (`mode`, `primary`, `secondary?`) on every tile tap or modal selection.
+  /// `setState` triggers a slide-list rebuild so [Slide03RateSource] is
+  /// included/excluded based on the new mode + pair without manual
+  /// PageController index recompute (per design §5).
+  void _onCurrencyModeChanged(
+    CurrencyMode mode,
+    String primary,
+    String? secondary,
+  ) {
+    setState(() {
+      _selectedMode = mode;
+      _selectedPrimaryCurrency = primary;
+      // Preserve a previously chosen secondary across Dual → Single
+      // transitions (per resolved decision #2). When the new mode is
+      // single_*, we DO NOT clear the in-memory secondary — it stays as
+      // the suggested default if the user comes back to dual. At persist
+      // time `_applyChoices()` only writes secondaryCurrency when the
+      // committed mode is `dual`.
+      if (mode == CurrencyMode.dual) {
+        _selectedSecondaryCurrency = secondary;
+      }
+    });
+  }
+
+  /// Whether [Slide03RateSource] applies to the current selection. True
+  /// only when mode is dual AND the unordered pair is exactly USD+VES,
+  /// per `specs/onboarding/spec.md` Requirement "Gating del slide 3".
+  bool get _needsRateSourceSlide {
+    if (_selectedMode != CurrencyMode.dual) return false;
+    final secondary = _selectedSecondaryCurrency;
+    if (secondary == null) return false;
+    final pair = {_selectedPrimaryCurrency, secondary};
+    return pair.containsAll(<String>{'USD', 'VES'});
+  }
+
+  /// Legacy currency-mode string consumed by [Slide04InitialAccounts] and
+  /// [Slide10SeedingOverlay] / [PersonalVESeeder.seedAll] which still
+  /// switch on `'USD'|'VES'|'DUAL'`. We translate at the boundary so the
+  /// downstream wiring (out of scope for this phase) keeps working.
+  String get _legacyCurrencyMode {
+    switch (_selectedMode) {
+      case CurrencyMode.single_usd:
+        return 'USD';
+      case CurrencyMode.single_bs:
+        return 'VES';
+      case CurrencyMode.single_other:
+        return _selectedPrimaryCurrency;
+      case CurrencyMode.dual:
+        return 'DUAL';
+    }
   }
 
   void _selectRateSource(String source) {
@@ -228,18 +291,51 @@ class _OnboardingPageState extends State<OnboardingPage> {
       SettingKey.onboardingGoals,
       jsonEncode(_selectedGoals.toList()),
     );
-    // 'DUAL' is a UI-only mode label, not a real currency code in the DB.
-    // When the user picks dual USD/VES, the base currency defaults to USD.
-    final persistedCurrency =
-        _selectedCurrency == 'DUAL' ? 'USD' : _selectedCurrency;
+
+    // ── Currency mode + primary + secondary ───────────────────────────────
+    // Replaces the old lossy `'DUAL' → 'USD'` collapse. We now persist:
+    //   - currencyMode       : the canonical enum dbValue
+    //   - preferredCurrency  : the user's primary ISO code
+    //   - secondaryCurrency  : ISO code when mode is dual, NULL otherwise
+    //   - preferredRateSource: only when slide 3 was shown (dual USD+VES)
+    //
+    // Per `specs/onboarding/spec.md` Requirement "Selección de moneda
+    // preferida (slide 2)" + design.md §5.
+    await UserSettingService.instance.setItem(
+      SettingKey.currencyMode,
+      _selectedMode.dbValue,
+    );
     await UserSettingService.instance.setItem(
       SettingKey.preferredCurrency,
-      persistedCurrency,
+      _selectedPrimaryCurrency,
     );
-    await UserSettingService.instance.setItem(
-      SettingKey.preferredRateSource,
-      _selectedRateSource,
-    );
+    if (_selectedMode == CurrencyMode.dual) {
+      await UserSettingService.instance.setItem(
+        SettingKey.secondaryCurrency,
+        _selectedSecondaryCurrency ?? 'VES',
+      );
+    } else {
+      // Single modes: write NULL so the row is canonical (vs. leaving a
+      // stale value behind from a prior dual selection on this device).
+      // The migration heuristic from Phase 1 also writes NULL for single
+      // modes, so this keeps the in-memory state aligned with the
+      // freshly-onboarded shape.
+      await UserSettingService.instance.setItem(
+        SettingKey.secondaryCurrency,
+        null,
+      );
+    }
+
+    // `preferredRateSource` is only meaningful for the BCV/Paralelo gating
+    // on USD↔VES dual. For every other mode/pair we skip the write — leaving
+    // any existing value alone (it will be ignored at read time when the
+    // policy doesn't ask for the chip).
+    if (_needsRateSourceSlide) {
+      await UserSettingService.instance.setItem(
+        SettingKey.preferredRateSource,
+        _selectedRateSource,
+      );
+    }
 
     // Spec `dashboard-layout` § Defaults por onboardingGoals (Scenario
     // "Goal único save_usd"): derivar el layout del dashboard a partir de
@@ -326,21 +422,34 @@ class _OnboardingPageState extends State<OnboardingPage> {
         // s01 has no skip — the goals selection is the first thing we ask.
       ),
       Slide02Currency(
-        selected: _selectedCurrency,
-        onSelect: _selectCurrency,
+        mode: _selectedMode,
+        primaryCurrency: _selectedPrimaryCurrency,
+        secondaryCurrency: _selectedSecondaryCurrency,
+        onChange: _onCurrencyModeChanged,
         onNext: _next,
         onSkip: _skip,
       ),
-      Slide03RateSource(
-        selected: _selectedRateSource,
-        onSelect: _selectRateSource,
-        onNext: _next,
-        onSkip: _skip,
-      ),
+      // Slide 3 (rate source) is conditional per the spec: only shown when
+      // the user picked dual mode AND the unordered pair is exactly USD+VES.
+      // For any other mode/pair the controller advances directly to slide 4.
+      // `_buildSlides()` runs every `build`, so the PageController index
+      // re-resolves automatically when the user goes back to slide 2 and
+      // changes mode (per design.md §5).
+      if (_needsRateSourceSlide)
+        Slide03RateSource(
+          selected: _selectedRateSource,
+          onSelect: _selectRateSource,
+          onNext: _next,
+          onSkip: _skip,
+        ),
       Slide04InitialAccounts(
         selectedBankIds: _selectedBankIds,
         onToggleBank: _toggleBank,
-        currencyMode: _selectedCurrency,
+        // Slide 4 still consumes the legacy `'USD'|'VES'|'DUAL'` string for
+        // its "also USD" sub-row gating + seeding. We translate the new
+        // mode at the boundary. The rework's downstream coupling to s04 /
+        // PersonalVESeeder is out of scope for this phase.
+        currencyMode: _legacyCurrencyMode,
         alsoUsdForBank: _alsoUsdForBank,
         onToggleAlsoUsd: _toggleAlsoUsd,
         // On Android slide 4 hands off to slide 5; on non-Android it hands
@@ -378,7 +487,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       Slide10SeedingOverlay(
         selectedBankIds: _selectedBankIds,
         alsoUsdForBank: _alsoUsdForBank,
-        currencyMode: _selectedCurrency,
+        currencyMode: _legacyCurrencyMode,
         onDone: _next,
       ),
       Slide11Ready(

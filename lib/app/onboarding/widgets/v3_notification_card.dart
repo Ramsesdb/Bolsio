@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
 
 /// Animated notification card used in slide 5 (auto-import sell).
 /// Entrance animation: `v3-notif-in` — fade + slide from top-right over

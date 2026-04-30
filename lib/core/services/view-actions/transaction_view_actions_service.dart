@@ -1,17 +1,17 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/form/transaction_form.page.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/debts/debt_service.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/list_tile_action_item.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/debts/debt_service.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/list_tile_action_item.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 import '../../../i18n/generated/translations.g.dart';
 

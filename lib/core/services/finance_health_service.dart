@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/utils/date_time_picker.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/utils/date_time_picker.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../models/transaction/transaction_type.enum.dart';

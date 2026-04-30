@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_notif_access_mockup.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_notif_access_mockup.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
 
 class Slide08ActivateListener extends StatefulWidget {
   const Slide08ActivateListener({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/account/account.dart';
+import 'package:kilatex/core/models/account/account.dart';
 
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector({

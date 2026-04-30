@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/animate_fab.dart';
-import 'package:wallex/core/presentation/helpers/empty_app_bar.dart';
-import 'package:wallex/core/utils/app_utils.dart';
+import 'package:kilatex/app/transactions/animate_fab.dart';
+import 'package:kilatex/core/presentation/helpers/empty_app_bar.dart';
+import 'package:kilatex/core/utils/app_utils.dart';
 
 class PageFramework extends StatelessWidget {
   const PageFramework({

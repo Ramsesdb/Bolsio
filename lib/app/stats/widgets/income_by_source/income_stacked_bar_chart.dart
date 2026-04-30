@@ -2,21 +2,21 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/stats/utils/common_axis_titles.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/date-utils/period_type.dart';
-import 'package:wallex/core/models/date-utils/periodicity.dart';
-import 'package:wallex/core/models/tags/tag.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/app/stats/utils/common_axis_titles.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/date-utils/period_type.dart';
+import 'package:kilatex/core/models/date-utils/periodicity.dart';
+import 'package:kilatex/core/models/tags/tag.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 /// A bucket of transactions grouped by a time period for the stacked bar chart.
 class _TimeBucket {

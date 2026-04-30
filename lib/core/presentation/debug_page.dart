@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/core/database/utils/demo_app_seeders.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/loading_overlay.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/core/database/utils/demo_app_seeders.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/loading_overlay.dart';
+import 'package:kilatex/core/utils/logger.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/provider_card.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/widgets/provider_card.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
 
 /// Step 2 of the AI setup wizard — provider selector.
 ///

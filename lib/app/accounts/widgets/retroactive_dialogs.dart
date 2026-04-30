@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Simple confirmation dialog shown when changing `trackedSince` on an
 /// existing account produces a balance delta that is not "dangerous" enough

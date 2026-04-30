@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
 
 class Tag extends TagInDB {
   Tag({

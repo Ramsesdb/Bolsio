@@ -2,33 +2,129 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/calculator/calculator.page.dart';
-import 'package:wallex/app/currencies/edit_currency_page.dart';
-import 'package:wallex/app/currencies/exchange_rate_details.dart';
-import 'package:wallex/app/currencies/exchange_rate_form.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/presentation/animations/animated_expanded.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/calculator/calculator.page.dart';
+import 'package:kilatex/app/currencies/edit_currency_page.dart';
+import 'package:kilatex/app/currencies/exchange_rate_details.dart';
+import 'package:kilatex/app/currencies/exchange_rate_form.dart';
+import 'package:kilatex/app/currencies/widgets/currency_mode_picker.dart';
+import 'package:kilatex/app/currencies/widgets/manual_override_dialog.dart';
+import 'package:kilatex/app/currencies/widgets/rate_source_badge.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/models/currency/currency_mode.dart';
+import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
-import 'package:wallex/core/services/dolar_api_service.dart';
-import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/services/dolar_api_service.dart';
+import 'package:kilatex/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 class CurrencyManagerPage extends StatelessWidget {
   const CurrencyManagerPage({super.key});
+
+  /// Open the 4-mode currency-mode picker and persist the result.
+  ///
+  /// Phase 5 task 5.1 + 5.2 + 5.3:
+  ///   - Tile opens [showCurrencyModePicker] (4 options, Dual exposes
+  ///     primary/secondary sub-pickers via [CurrencySelectorModal]).
+  ///   - On confirm we call [computeModeWrites] + [persistCurrencyModeChange]
+  ///     which writes ONLY [SettingKey.currencyMode],
+  ///     [SettingKey.preferredCurrency], (conditionally)
+  ///     [SettingKey.secondaryCurrency] and [SettingKey.preferredRateSource].
+  ///   - The handler MUST NOT touch accounts or transactions tables — see
+  ///     the spec invariant in `computeModeWrites` and the unit test in
+  ///     `test/app/currencies/currency_mode_writes_test.dart`.
+  ///   - Resolved decision #2: on Dual → Single switch we deliberately
+  ///     omit [SettingKey.secondaryCurrency] from the write set so the
+  ///     existing on-disk row is preserved.
+  Future<void> changeCurrencyMode(BuildContext context) async {
+    final currentMode = CurrencyMode.fromDb(
+      appStateSettings[SettingKey.currencyMode],
+    );
+    final currentPrimary =
+        appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+    final currentSecondary = appStateSettings[SettingKey.secondaryCurrency];
+    final currentRateSource =
+        appStateSettings[SettingKey.preferredRateSource] ?? 'bcv';
+
+    final choice = await showCurrencyModePicker(
+      context: context,
+      currentMode: currentMode,
+      currentPrimary: currentPrimary,
+      currentSecondary: currentSecondary,
+    );
+    if (choice == null) return;
+
+    final writes = computeModeWrites(
+      newMode: choice.mode,
+      primary: choice.primary,
+      secondary: choice.secondary,
+      selectedRateSource: currentRateSource,
+    );
+    await persistCurrencyModeChange(writes);
+
+    if (!context.mounted) return;
+    WallexSnackbar.success(
+      SnackbarParams(_modeChangeMessage(choice.mode)),
+    );
+  }
+
+  /// Open the manual-override dialog (Phase 5 task 5.4). Returns once the
+  /// user dismisses or saves.
+  Future<void> openManualOverride(
+    BuildContext context, {
+    Currency? initialCurrency,
+  }) async {
+    final saved = await showManualOverrideDialog(
+      context,
+      initialCurrency: initialCurrency,
+    );
+    if (!context.mounted) return;
+    if (saved) {
+      WallexSnackbar.success(
+        SnackbarParams('Tasa manual guardada.'),
+      );
+    }
+  }
+
+  String _modeChangeMessage(CurrencyMode mode) {
+    switch (mode) {
+      case CurrencyMode.single_usd:
+        return 'Modo actualizado: Solo USD.';
+      case CurrencyMode.single_bs:
+        return 'Modo actualizado: Solo Bs.';
+      case CurrencyMode.single_other:
+        return 'Modo actualizado: una sola moneda.';
+      case CurrencyMode.dual:
+        return 'Modo actualizado: Dual.';
+    }
+  }
+
+  String _modeSubtitle(CurrencyMode mode, String primary, String? secondary) {
+    switch (mode) {
+      case CurrencyMode.single_usd:
+        return 'Solo USD';
+      case CurrencyMode.single_bs:
+        return 'Solo Bs';
+      case CurrencyMode.single_other:
+        return 'Solo $primary';
+      case CurrencyMode.dual:
+        final s = secondary ?? 'VES';
+        return 'Dual ($primary / $s)';
+    }
+  }
 
   Future<void> forceRefreshRates(BuildContext context) async {
     WallexSnackbar.success(
@@ -115,6 +211,47 @@ class CurrencyManagerPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── Modo de moneda (Phase 5 task 5.1) ─────────────────────
+            // The mode tile lives at the very top of the page because it
+            // is the highest-impact toggle in the screen — every other
+            // tile (preferred currency, exchange rates list) is derived
+            // from this state. We subscribe to the live setting stream so
+            // the subtitle updates without a manual reload after the user
+            // returns from the bottom sheet.
+            createListSeparator(context, 'Modo de moneda'),
+            StreamBuilder<String?>(
+              stream: UserSettingService.instance
+                  .getSettingFromDB(SettingKey.currencyMode),
+              builder: (context, modeSnap) {
+                final mode = CurrencyMode.fromDb(modeSnap.data);
+                final primary =
+                    appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+                final secondary =
+                    appStateSettings[SettingKey.secondaryCurrency];
+                return ListTile(
+                  leading: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.125),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.tune_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  title: const Text('Modo de moneda'),
+                  subtitle: Text(_modeSubtitle(mode, primary, secondary)),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => changeCurrencyMode(context),
+                );
+              },
+            ),
             createListSeparator(context, t.currencies.preferred_currency),
             StreamBuilder(
               stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
@@ -228,7 +365,18 @@ class CurrencyManagerPage extends StatelessWidget {
                           },
                         ),
                       ),
-                      title: Text(item.currency.code),
+                      title: Row(
+                        children: [
+                          Text(item.currency.code),
+                          const SizedBox(width: 8),
+                          // Phase 5 task 5.5 — per-pair source badge.
+                          // The `source` value lives on `ExchangeRateInDB`
+                          // (inherited via [ExchangeRate]). Pre-v28 rows
+                          // may have `null` here; the badge widget
+                          // labels those as "Auto" for clarity.
+                          RateSourceBadge(rawSource: item.source),
+                        ],
+                      ),
                       subtitle: StreamBuilder(
                         stream: CurrencyService.instance.getCurrencyByCode(
                           item.currencyCode,
@@ -299,6 +447,30 @@ class CurrencyManagerPage extends StatelessWidget {
                         onTap: () => addExchangeRate(context),
                       ),
                       const SizedBox(height: 8),
+                      // --- Start: Manual override entry (Phase 5 task 5.4) ---
+                      const Divider(indent: 16, endIndent: 16),
+                      ListTile(
+                        title: const Text('Forzar manual por par'),
+                        subtitle: const Text(
+                          'Establecer una tasa manual que sobrescribe la automática.',
+                        ),
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: Colors.blueGrey.withValues(alpha: 0.125),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.edit_note_rounded,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                        onTap: () => openManualOverride(context),
+                      ),
+                      const SizedBox(height: 8),
+                      // --- End: Manual override entry ---
                       // --- Start: Update Rate Button ---
                       const Divider(indent: 16, endIndent: 16),
                       ListTile(

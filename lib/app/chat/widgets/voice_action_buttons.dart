@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Shared cancel-X + "Enviar" pill pair used across every voice-recording
 /// surface in the app (chat voice overlay, voice quick-expense overlay,

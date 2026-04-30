@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal_status.dart';
 
 /// CRUD service for the `pending_imports` table.
 ///

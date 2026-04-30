@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/services/statement_import/statement_batches_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/services/statement_import/statement_batches_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Banner sticky que aparece encima de la lista de transacciones de la cuenta
 /// cuando existe al menos un batch de statement_import reciente (≤ 7 días)

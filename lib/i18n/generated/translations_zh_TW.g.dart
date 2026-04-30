@@ -511,6 +511,7 @@ class _TranslationsSettingsZhTw extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsGeneralZhTw general = _TranslationsSettingsGeneralZhTw._(_root);
 	@override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
 	@override late final _TranslationsSettingsTransactionsZhTw transactions = _TranslationsSettingsTransactionsZhTw._(_root);
+	@override late final _TranslationsSettingsAutoImportZhTw auto_import = _TranslationsSettingsAutoImportZhTw._(_root);
 	@override late final _TranslationsSettingsAppearanceZhTw appearance = _TranslationsSettingsAppearanceZhTw._(_root);
 }
 
@@ -523,6 +524,11 @@ class _TranslationsMoreZhTw extends TranslationsMoreEn {
 	// Translations
 	@override String get title => '更多';
 	@override String get title_long => '更多';
+	@override late final _TranslationsMoreSearchZhTw search = _TranslationsMoreSearchZhTw._(_root);
+	@override late final _TranslationsMoreSectionsZhTw sections = _TranslationsMoreSectionsZhTw._(_root);
+	@override late final _TranslationsMoreAccountZhTw account = _TranslationsMoreAccountZhTw._(_root);
+	@override late final _TranslationsMoreThemeZhTw theme = _TranslationsMoreThemeZhTw._(_root);
+	@override late final _TranslationsMoreAiZhTw ai = _TranslationsMoreAiZhTw._(_root);
 	@override late final _TranslationsMoreDataZhTw data = _TranslationsMoreDataZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsZhTw about_us = _TranslationsMoreAboutUsZhTw._(_root);
 	@override late final _TranslationsMoreHelpUsZhTw help_us = _TranslationsMoreHelpUsZhTw._(_root);
@@ -1344,6 +1350,7 @@ class _TranslationsSettingsSecurityZhTw extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => '隱藏所有貨幣值';
 	@override String get private_mode_activated => '隱私模式已啟用';
 	@override String get private_mode_deactivated => '隱私模式已禁用';
+	@override late final _TranslationsSettingsSecurityBiometricZhTw biometric = _TranslationsSettingsSecurityBiometricZhTw._(_root);
 }
 
 // Path: settings.transactions
@@ -1360,6 +1367,16 @@ class _TranslationsSettingsTransactionsZhTw extends TranslationsSettingsTransact
 	@override late final _TranslationsSettingsTransactionsSwipeActionsZhTw swipe_actions = _TranslationsSettingsTransactionsSwipeActionsZhTw._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesZhTw default_values = _TranslationsSettingsTransactionsDefaultValuesZhTw._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeZhTw default_type = _TranslationsSettingsTransactionsDefaultTypeZhTw._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportZhTw extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => '銀行自動匯入';
 }
 
 // Path: settings.appearance
@@ -1382,6 +1399,73 @@ class _TranslationsSettingsAppearanceZhTw extends TranslationsSettingsAppearance
 	@override String get text => '文本';
 	@override String get font => '字體';
 	@override String get font_platform => '平台';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchZhTw extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsZhTw extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Quick access';
+	@override String get management => 'Management';
+	@override String get configuration => 'Configuration';
+	@override String get data => 'Data';
+	@override String get tools => 'Tools';
+	@override String get about => 'About';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountZhTw extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Sign out';
+	@override String get sync_active => 'Synced';
+	@override String get sync_inactive => 'Sync disabled';
+	@override String get no_account => 'No account linked';
+	@override String get fallback_name => 'Your account';
+	@override String get firebase_sync => 'Firebase 同步';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeZhTw extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Theme';
+	@override String get system => 'System';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
+	@override String get amoled => 'AMOLED mode';
+	@override String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiZhTw extends TranslationsMoreAiEn {
+	_TranslationsMoreAiZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Set up your financial assistant';
+	@override String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -1861,6 +1945,18 @@ class _TranslationsSettingsGeneralLocaleZhTw extends TranslationsSettingsGeneral
 	@override String get descr => '設定用於日期、數字的格式...';
 	@override String get warn => '更改區域時應用程式將更新';
 	@override String get first_day_of_week => '一週的第一天';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricZhTw extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricZhTw._(TranslationsZhTw root) : this._root = root, super.internal(root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Use fingerprint/biometrics';
+	@override String get descr => 'Require authentication when opening the app';
+	@override String get section_title => '生物識別鎖';
 }
 
 // Path: settings.transactions.style
@@ -2632,6 +2728,9 @@ extension on TranslationsZhTw {
 			'settings.security.private_mode_descr' => '隱藏所有貨幣值',
 			'settings.security.private_mode_activated' => '隱私模式已啟用',
 			'settings.security.private_mode_deactivated' => '隱私模式已禁用',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => '生物識別鎖',
 			'settings.transactions.menu_title' => '交易',
 			'settings.transactions.menu_descr' => '配置交易行為',
 			'settings.transactions.title' => '交易設定',
@@ -2662,6 +2761,7 @@ extension on TranslationsZhTw {
 			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
 			'settings.transactions.default_type.title' => 'Default Type',
 			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.auto_import.menu_title' => '銀行自動匯入',
 			'settings.appearance.menu_title' => '主題與風格',
 			'settings.appearance.menu_descr' => '主題選擇、顏色以及與應用程式外觀相關的其他內容',
 			'settings.appearance.theme_and_colors' => '主題和顏色',
@@ -2680,6 +2780,28 @@ extension on TranslationsZhTw {
 			'settings.appearance.font_platform' => '平台',
 			'more.title' => '更多',
 			'more.title_long' => '更多',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Firebase 同步',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => '數據',
 			'more.data.display_descr' => '匯出和匯入您的數據，這樣您就不會丟失任何東西',
 			'more.data.delete_all' => '刪除我的資料',

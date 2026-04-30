@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/account_form.dart';
-import 'package:wallex/app/accounts/details/account_details.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
-import 'package:wallex/core/presentation/styles/borders.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/presentation/widgets/trending_value.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/account_form.dart';
+import 'package:kilatex/app/accounts/details/account_details.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/responsive/responsive_row_column.dart';
+import 'package:kilatex/core/presentation/styles/borders.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/presentation/widgets/trending_value.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 bool _useSmallLayout(BuildContext context) =>
     BreakPoint.of(context).isSmallerThan(BreakpointID.lg);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/list_tile_action_item.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/list_tile_action_item.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class BottomSheetFooter extends StatelessWidget {
   const BottomSheetFooter({

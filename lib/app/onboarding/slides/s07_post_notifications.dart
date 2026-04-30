@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
 
 class Slide07PostNotifications extends StatefulWidget {
   const Slide07PostNotifications({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/transactions/auto_import/widgets/proposal_status_chip.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:kilatex/app/transactions/auto_import/widgets/proposal_status_chip.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal_status.dart';
 
 /// A list tile representing a single pending import proposal.
 class PendingImportTile extends StatelessWidget {

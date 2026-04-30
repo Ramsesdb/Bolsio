@@ -189,4 +189,157 @@ void main() {
       },
     );
   });
+
+  group('calculateExchangeRate contract (post-Phase 4)', () {
+    // Pure simulation of the new contract — identity short-circuits to 1.0;
+    // a missing rate is null UNLESS the missing currency is the storage
+    // base (where "no row" is the intended encoding for `1.0`).
+
+    /// Mirror of [_resolveRate] inside `calculateExchangeRate`: returns
+    /// `1.0` when the row is missing AND the currency is the base; null
+    /// otherwise.
+    double? resolveRate({
+      required double? rowRate,
+      required String currency,
+      required String baseCurrency,
+    }) {
+      return rowRate ?? (currency == baseCurrency ? 1.0 : null);
+    }
+
+    /// Mirror of the final combineLatest projection.
+    double? compute({
+      required double? fromRow,
+      required double? toRow,
+      required String fromCurrency,
+      required String toCurrency,
+      required String baseCurrency,
+      double amount = 1.0,
+    }) {
+      if (fromCurrency == toCurrency) return amount;
+      final fromRate = resolveRate(
+        rowRate: fromRow,
+        currency: fromCurrency,
+        baseCurrency: baseCurrency,
+      );
+      final toRate = resolveRate(
+        rowRate: toRow,
+        currency: toCurrency,
+        baseCurrency: baseCurrency,
+      );
+      if (fromRate == null || toRate == null || toRate == 0) return null;
+      return (fromRate / toRate) * amount;
+    }
+
+    test('identity USD→USD returns amount * 1.0', () {
+      expect(
+        compute(
+          fromRow: null,
+          toRow: null,
+          fromCurrency: 'USD',
+          toCurrency: 'USD',
+          baseCurrency: 'USD',
+          amount: 100.0,
+        ),
+        100.0,
+      );
+    });
+
+    test('identity VES→VES returns amount * 1.0', () {
+      expect(
+        compute(
+          fromRow: null,
+          toRow: null,
+          fromCurrency: 'VES',
+          toCurrency: 'VES',
+          baseCurrency: 'VES',
+          amount: 250.0,
+        ),
+        250.0,
+      );
+    });
+
+    test(
+      'concrete rate USD→VES with preferred=USD (base=USD)',
+      () {
+        // base=USD → USD has no row, gets 1.0; VES row = 40
+        // result = (1 / 40) * 100 = 2.5 (USD-equivalent of 100 VES)
+        // Inverse direction (USD→VES, amount=100): (1.0 / 40) * 100 = 2.5
+        // (this matches the actual storage convention: VES row stores
+        // "1 VES = 1/X USD", so 1 USD = X VES is the inverse).
+        // For the dashboard the typical lookup is VES→USD.
+        final result = compute(
+          fromRow: 1.0 / 40,
+          toRow: null,
+          fromCurrency: 'VES',
+          toCurrency: 'USD',
+          baseCurrency: 'USD',
+          amount: 1000.0,
+        );
+        // 1000 VES * (1/40) / 1 = 25 USD
+        expect(result, closeTo(25.0, 0.0001));
+      },
+    );
+
+    test(
+      'concrete rate USD→VES with preferred=VES (base=VES)',
+      () {
+        // base=VES → VES has no row, gets 1.0; USD row = 40 (VES per USD)
+        // result = (40 / 1) * 1 = 40 VES per USD
+        final result = compute(
+          fromRow: 40.0,
+          toRow: null,
+          fromCurrency: 'USD',
+          toCurrency: 'VES',
+          baseCurrency: 'VES',
+          amount: 1.0,
+        );
+        expect(result, 40.0);
+      },
+    );
+
+    test(
+      'missing rate returns null (NOT 1.0) — the original bug',
+      () {
+        // base=USD → JPY has no row; JPY != base, so null
+        final result = compute(
+          fromRow: null,
+          toRow: null,
+          fromCurrency: 'USD',
+          toCurrency: 'JPY',
+          baseCurrency: 'USD',
+        );
+        expect(result, isNull,
+            reason: 'JPY is not the base; missing row MUST be null, '
+                'not silently 1.0');
+      },
+    );
+
+    test(
+      'missing fromCurrency rate returns null even when base==toCurrency',
+      () {
+        // base=USD; from=ARS missing; to=USD (base, gets 1.0)
+        // → fromRate is null, propagate null.
+        final result = compute(
+          fromRow: null,
+          toRow: null,
+          fromCurrency: 'ARS',
+          toCurrency: 'USD',
+          baseCurrency: 'USD',
+          amount: 50.0,
+        );
+        expect(result, isNull);
+      },
+    );
+
+    test('toRate of 0 returns null (avoid divide-by-zero)', () {
+      final result = compute(
+        fromRow: 100.0,
+        toRow: 0.0,
+        fromCurrency: 'EUR',
+        toCurrency: 'JPY',
+        baseCurrency: 'USD',
+      );
+      expect(result, isNull);
+    });
+  });
 }

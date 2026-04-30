@@ -1,5 +1,5 @@
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
 
 /// Abstract interface for a capture source that listens for bank events.
 ///

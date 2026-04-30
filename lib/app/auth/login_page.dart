@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/utils/logger.dart';
 
 /// Login page with email/password authentication via Firebase.
 class LoginPage extends StatefulWidget {

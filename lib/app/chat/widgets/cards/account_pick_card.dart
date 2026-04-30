@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/models/chat_card_payload.dart';
-import 'package:wallex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:wallex/app/chat/widgets/hex_tile.dart';
+import 'package:kilatex/app/chat/models/chat_card_payload.dart';
+import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:kilatex/app/chat/widgets/hex_tile.dart';
 
 class AccountPickCard extends StatelessWidget {
   const AccountPickCard(

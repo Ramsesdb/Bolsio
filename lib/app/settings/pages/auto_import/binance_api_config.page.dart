@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/services/auto_import/binance/binance_api_client.dart';
-import 'package:wallex/core/services/auto_import/binance/binance_api_exception.dart';
-import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:kilatex/core/services/auto_import/binance/binance_api_client.dart';
+import 'package:kilatex/core/services/auto_import/binance/binance_api_exception.dart';
+import 'package:kilatex/core/services/auto_import/binance/binance_credentials_store.dart';
 
 /// Configuration page for Binance API credentials.
 ///

@@ -1,6 +1,6 @@
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/shared/key_value_pair.dart';
-import 'package:wallex/core/database/services/shared/key_value_service.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/shared/key_value_pair.dart';
+import 'package:kilatex/core/database/services/shared/key_value_service.dart';
 
 /// The keys of the avalaible settings of the app
 enum AppDataKey { dbVersion, introSeen, lastExportDate, onboarded, lastPullAt }

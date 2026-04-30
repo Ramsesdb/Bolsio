@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wallex/core/services/voice/voice_service.dart';
+import 'package:kilatex/core/services/voice/voice_service.dart';
 
 /// Test fake for [VoiceService]. Emits a canned sequence of partials, then
 /// resolves [stop] with a final transcript.

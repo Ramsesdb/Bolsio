@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wallex/app/auth/returning_user_flow.dart';
-import 'package:wallex/app/onboarding/onboarding.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:wallex/app/onboarding/widgets/v3_secondary_button.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/app/auth/returning_user_flow.dart';
+import 'package:kilatex/app/onboarding/onboarding.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/utils/logger.dart';
 
 /// First-run welcome screen. Offers two paths:
 /// 1. "Iniciar con Google" (primary) — signs in, pulls Firebase data, seeds if empty.

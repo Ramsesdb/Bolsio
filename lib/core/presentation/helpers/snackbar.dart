@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/helpers/global_snackbar.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/core/presentation/helpers/global_snackbar.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
 
 class SnackbarParams {
   /// The amount of time the snack bar should be displayed.

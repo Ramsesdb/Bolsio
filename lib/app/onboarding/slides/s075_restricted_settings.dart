@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/widgets/v3_restricted_settings_step.dart';
-import 'package:wallex/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_restricted_settings_step.dart';
+import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
 
 /// Onboarding slide adapter for the "Allow restricted settings" gate, sitting
 /// between [Slide07PostNotifications] and [Slide08ActivateListener] when the

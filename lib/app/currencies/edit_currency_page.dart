@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/exit_without_save_warn_dialog.dart';
-import 'package:wallex/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/currencies/widgets/currency_edit_fields.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/exit_without_save_warn_dialog.dart';
+import 'package:kilatex/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class EditCurrencyPage extends StatefulWidget {
   const EditCurrencyPage({super.key, required this.currency});

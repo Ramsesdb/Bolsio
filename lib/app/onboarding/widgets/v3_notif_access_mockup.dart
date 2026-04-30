@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
 
 /// Mini "Acceso a notificaciones" Android settings mockup, rendered inside a
 /// [V3MiniPhoneFrame].

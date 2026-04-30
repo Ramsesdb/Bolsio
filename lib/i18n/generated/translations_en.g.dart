@@ -1300,6 +1300,7 @@ class TranslationsSettingsEn {
 	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn.internal(_root);
 	late final TranslationsSettingsHiddenModeEn hidden_mode = TranslationsSettingsHiddenModeEn.internal(_root);
 	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn.internal(_root);
+	late final TranslationsSettingsAutoImportEn auto_import = TranslationsSettingsAutoImportEn.internal(_root);
 	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn.internal(_root);
 }
 
@@ -1346,6 +1347,11 @@ class TranslationsMoreEn {
 	/// en: 'More actions'
 	String get title_long => 'More actions';
 
+	late final TranslationsMoreSearchEn search = TranslationsMoreSearchEn.internal(_root);
+	late final TranslationsMoreSectionsEn sections = TranslationsMoreSectionsEn.internal(_root);
+	late final TranslationsMoreAccountEn account = TranslationsMoreAccountEn.internal(_root);
+	late final TranslationsMoreThemeEn theme = TranslationsMoreThemeEn.internal(_root);
+	late final TranslationsMoreAiEn ai = TranslationsMoreAiEn.internal(_root);
 	late final TranslationsMoreDataEn data = TranslationsMoreDataEn.internal(_root);
 	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn.internal(_root);
 	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn.internal(_root);
@@ -3095,6 +3101,8 @@ class TranslationsSettingsSecurityEn {
 
 	/// en: 'Private mode disabled'
 	String get private_mode_deactivated => 'Private mode disabled';
+
+	late final TranslationsSettingsSecurityBiometricEn biometric = TranslationsSettingsSecurityBiometricEn.internal(_root);
 }
 
 // Path: settings.hidden_mode
@@ -3150,6 +3158,18 @@ class TranslationsSettingsTransactionsEn {
 	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn.internal(_root);
 	late final TranslationsSettingsTransactionsDefaultValuesEn default_values = TranslationsSettingsTransactionsDefaultValuesEn.internal(_root);
 	late final TranslationsSettingsTransactionsDefaultTypeEn default_type = TranslationsSettingsTransactionsDefaultTypeEn.internal(_root);
+}
+
+// Path: settings.auto_import
+class TranslationsSettingsAutoImportEn {
+	TranslationsSettingsAutoImportEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Bank auto-import'
+	String get menu_title => 'Bank auto-import';
 }
 
 // Path: settings.appearance
@@ -3431,6 +3451,117 @@ class TranslationsStatementImportUndoEn {
 
 	/// en: 'Import undone'
 	String get success => 'Import undone';
+}
+
+// Path: more.search
+class TranslationsMoreSearchEn {
+	TranslationsMoreSearchEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Search settings…'
+	String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class TranslationsMoreSectionsEn {
+	TranslationsMoreSectionsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Quick access'
+	String get quick_access => 'Quick access';
+
+	/// en: 'Management'
+	String get management => 'Management';
+
+	/// en: 'Configuration'
+	String get configuration => 'Configuration';
+
+	/// en: 'Data'
+	String get data => 'Data';
+
+	/// en: 'Tools'
+	String get tools => 'Tools';
+
+	/// en: 'About'
+	String get about => 'About';
+}
+
+// Path: more.account
+class TranslationsMoreAccountEn {
+	TranslationsMoreAccountEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Sign out'
+	String get sign_out => 'Sign out';
+
+	/// en: 'Synced'
+	String get sync_active => 'Synced';
+
+	/// en: 'Sync disabled'
+	String get sync_inactive => 'Sync disabled';
+
+	/// en: 'No account linked'
+	String get no_account => 'No account linked';
+
+	/// en: 'Your account'
+	String get fallback_name => 'Your account';
+
+	/// en: 'Firebase Sync'
+	String get firebase_sync => 'Firebase Sync';
+}
+
+// Path: more.theme
+class TranslationsMoreThemeEn {
+	TranslationsMoreThemeEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Theme'
+	String get title => 'Theme';
+
+	/// en: 'System'
+	String get system => 'System';
+
+	/// en: 'Light'
+	String get light => 'Light';
+
+	/// en: 'Dark'
+	String get dark => 'Dark';
+
+	/// en: 'AMOLED mode'
+	String get amoled => 'AMOLED mode';
+
+	/// en: 'More appearance options'
+	String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class TranslationsMoreAiEn {
+	TranslationsMoreAiEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Wallex AI'
+	String get title => 'Wallex AI';
+
+	/// en: 'Set up your financial assistant'
+	String get configure => 'Set up your financial assistant';
+
+	/// en: 'Active · {provider}'
+	String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -4455,6 +4586,24 @@ class TranslationsSettingsGeneralLocaleEn {
 
 	/// en: 'First day of week'
 	String get first_day_of_week => 'First day of week';
+}
+
+// Path: settings.security.biometric
+class TranslationsSettingsSecurityBiometricEn {
+	TranslationsSettingsSecurityBiometricEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Use fingerprint/biometrics'
+	String get title => 'Use fingerprint/biometrics';
+
+	/// en: 'Require authentication when opening the app'
+	String get descr => 'Require authentication when opening the app';
+
+	/// en: 'Biometric lock'
+	String get section_title => 'Biometric lock';
 }
 
 // Path: settings.hidden_mode.pin
@@ -5562,6 +5711,9 @@ extension on Translations {
 			'settings.security.private_mode_descr' => 'Hide all monetary values',
 			'settings.security.private_mode_activated' => 'Private mode activated',
 			'settings.security.private_mode_deactivated' => 'Private mode disabled',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => 'Biometric lock',
 			'settings.hidden_mode.title' => 'Hidden Mode',
 			'settings.hidden_mode.menu_descr' => 'Hide your savings accounts behind a PIN',
 			'settings.hidden_mode.enable' => 'Enable Hidden Mode',
@@ -5614,6 +5766,7 @@ extension on Translations {
 			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
 			'settings.transactions.default_type.title' => 'Default Type',
 			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.auto_import.menu_title' => 'Bank auto-import',
 			'settings.appearance.menu_title' => 'Theme & Style',
 			'settings.appearance.menu_descr' => 'Theme selection, colors and other things related to the app appearance',
 			'settings.appearance.theme_and_colors' => 'Theme and colors',
@@ -5693,6 +5846,28 @@ extension on Translations {
 			'statement_import.entry_point' => 'Import account statement',
 			'more.title' => 'More',
 			'more.title_long' => 'More actions',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Firebase Sync',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Data',
 			'more.data.display_descr' => 'Export and import your data so you don\'t lose anything',
 			'more.data.delete_all' => 'Delete my data',
@@ -5723,6 +5898,8 @@ extension on Translations {
 			'more.help_us.donate_descr' => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?',
 			'more.help_us.donate_success' => 'Donation made. Thank you very much for your contribution! ❤️',
 			'more.help_us.donate_err' => 'Oops! It seems there was an error receiving your payment',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.report' => 'Report bugs, leave suggestions...',
 			'onboarding.restricted_settings.title' => 'Allow restricted settings',
 			'onboarding.restricted_settings.subtitle' => 'Android blocks some permissions for apps installed outside Play Store. We\'ll fix it in 3 taps.',

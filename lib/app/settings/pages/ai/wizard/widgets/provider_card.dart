@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
 
 /// Selectable radio-style card for an AI provider in the wizard.
 ///

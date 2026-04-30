@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:wallex/app/settings/purchases/in_app_purchase.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/settings/purchases/in_app_purchase.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 

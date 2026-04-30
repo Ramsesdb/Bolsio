@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/display_app_icon.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/extensions/string.extension.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/utils/open_external_url.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/display_app_icon.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/extensions/string.extension.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/utils/open_external_url.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

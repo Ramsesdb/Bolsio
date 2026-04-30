@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:wallex/app/chat/wallex_chat.page.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/ai/spending_insights_service.dart';
+import 'package:kilatex/app/chat/wallex_chat.page.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/ai/spending_insights_service.dart';
 
 class AiHubPage extends StatefulWidget {
   const AiHubPage({super.key});

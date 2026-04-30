@@ -511,6 +511,7 @@ class _TranslationsSettingsUk extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsGeneralUk general = _TranslationsSettingsGeneralUk._(_root);
 	@override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
 	@override late final _TranslationsSettingsTransactionsUk transactions = _TranslationsSettingsTransactionsUk._(_root);
+	@override late final _TranslationsSettingsAutoImportUk auto_import = _TranslationsSettingsAutoImportUk._(_root);
 	@override late final _TranslationsSettingsAppearanceUk appearance = _TranslationsSettingsAppearanceUk._(_root);
 }
 
@@ -523,6 +524,11 @@ class _TranslationsMoreUk extends TranslationsMoreEn {
 	// Translations
 	@override String get title => 'Більше';
 	@override String get title_long => 'Більше дій';
+	@override late final _TranslationsMoreSearchUk search = _TranslationsMoreSearchUk._(_root);
+	@override late final _TranslationsMoreSectionsUk sections = _TranslationsMoreSectionsUk._(_root);
+	@override late final _TranslationsMoreAccountUk account = _TranslationsMoreAccountUk._(_root);
+	@override late final _TranslationsMoreThemeUk theme = _TranslationsMoreThemeUk._(_root);
+	@override late final _TranslationsMoreAiUk ai = _TranslationsMoreAiUk._(_root);
 	@override late final _TranslationsMoreDataUk data = _TranslationsMoreDataUk._(_root);
 	@override late final _TranslationsMoreAboutUsUk about_us = _TranslationsMoreAboutUsUk._(_root);
 	@override late final _TranslationsMoreHelpUsUk help_us = _TranslationsMoreHelpUsUk._(_root);
@@ -1344,6 +1350,7 @@ class _TranslationsSettingsSecurityUk extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => 'Приховати всі грошові значення';
 	@override String get private_mode_activated => 'Приватний режим активовано';
 	@override String get private_mode_deactivated => 'Приватний режим вимкнено';
+	@override late final _TranslationsSettingsSecurityBiometricUk biometric = _TranslationsSettingsSecurityBiometricUk._(_root);
 }
 
 // Path: settings.transactions
@@ -1360,6 +1367,16 @@ class _TranslationsSettingsTransactionsUk extends TranslationsSettingsTransactio
 	@override late final _TranslationsSettingsTransactionsSwipeActionsUk swipe_actions = _TranslationsSettingsTransactionsSwipeActionsUk._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesUk default_values = _TranslationsSettingsTransactionsDefaultValuesUk._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeUk default_type = _TranslationsSettingsTransactionsDefaultTypeUk._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportUk extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Автоімпорт банку';
 }
 
 // Path: settings.appearance
@@ -1382,6 +1399,73 @@ class _TranslationsSettingsAppearanceUk extends TranslationsSettingsAppearanceEn
 	@override String get text => 'Текст';
 	@override String get font => 'Шрифт';
 	@override String get font_platform => 'Платформа';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchUk extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsUk extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Quick access';
+	@override String get management => 'Management';
+	@override String get configuration => 'Configuration';
+	@override String get data => 'Data';
+	@override String get tools => 'Tools';
+	@override String get about => 'About';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountUk extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Sign out';
+	@override String get sync_active => 'Synced';
+	@override String get sync_inactive => 'Sync disabled';
+	@override String get no_account => 'No account linked';
+	@override String get fallback_name => 'Your account';
+	@override String get firebase_sync => 'Синхронізація Firebase';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeUk extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Theme';
+	@override String get system => 'System';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
+	@override String get amoled => 'AMOLED mode';
+	@override String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiUk extends TranslationsMoreAiEn {
+	_TranslationsMoreAiUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Set up your financial assistant';
+	@override String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -1861,6 +1945,18 @@ class _TranslationsSettingsGeneralLocaleUk extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get warn => 'Після зміни регіону додаток оновиться';
 	@override String get first_day_of_week => 'Перший день тижня';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricUk extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Use fingerprint/biometrics';
+	@override String get descr => 'Require authentication when opening the app';
+	@override String get section_title => 'Біометричне блокування';
 }
 
 // Path: settings.transactions.style
@@ -2632,6 +2728,9 @@ extension on TranslationsUk {
 			'settings.security.private_mode_descr' => 'Приховати всі грошові значення',
 			'settings.security.private_mode_activated' => 'Приватний режим активовано',
 			'settings.security.private_mode_deactivated' => 'Приватний режим вимкнено',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => 'Біометричне блокування',
 			'settings.transactions.menu_title' => 'Транзакції',
 			'settings.transactions.menu_descr' => 'Налаштуйте поведінку ваших транзакцій',
 			'settings.transactions.title' => 'Налаштування транзакцій',
@@ -2662,6 +2761,7 @@ extension on TranslationsUk {
 			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
 			'settings.transactions.default_type.title' => 'Default Type',
 			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.auto_import.menu_title' => 'Автоімпорт банку',
 			'settings.appearance.menu_title' => 'Тема та стиль',
 			'settings.appearance.menu_descr' => 'Вибір теми, кольори та інші речі, пов\'язані з виглядом програми',
 			'settings.appearance.theme_and_colors' => 'Тема та кольори',
@@ -2680,6 +2780,28 @@ extension on TranslationsUk {
 			'settings.appearance.font_platform' => 'Платформа',
 			'more.title' => 'Більше',
 			'more.title_long' => 'Більше дій',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Синхронізація Firebase',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Дані',
 			'more.data.display_descr' => 'Експортуйте та імпортуйте свої дані, щоб нічого не втратити',
 			'more.data.delete_all' => 'Видалити мої дані',

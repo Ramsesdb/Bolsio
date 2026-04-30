@@ -511,6 +511,7 @@ class _TranslationsSettingsHu extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsGeneralHu general = _TranslationsSettingsGeneralHu._(_root);
 	@override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
 	@override late final _TranslationsSettingsTransactionsHu transactions = _TranslationsSettingsTransactionsHu._(_root);
+	@override late final _TranslationsSettingsAutoImportHu auto_import = _TranslationsSettingsAutoImportHu._(_root);
 	@override late final _TranslationsSettingsAppearanceHu appearance = _TranslationsSettingsAppearanceHu._(_root);
 }
 
@@ -523,6 +524,11 @@ class _TranslationsMoreHu extends TranslationsMoreEn {
 	// Translations
 	@override String get title => 'Továbbiak';
 	@override String get title_long => 'További műveletek';
+	@override late final _TranslationsMoreSearchHu search = _TranslationsMoreSearchHu._(_root);
+	@override late final _TranslationsMoreSectionsHu sections = _TranslationsMoreSectionsHu._(_root);
+	@override late final _TranslationsMoreAccountHu account = _TranslationsMoreAccountHu._(_root);
+	@override late final _TranslationsMoreThemeHu theme = _TranslationsMoreThemeHu._(_root);
+	@override late final _TranslationsMoreAiHu ai = _TranslationsMoreAiHu._(_root);
 	@override late final _TranslationsMoreDataHu data = _TranslationsMoreDataHu._(_root);
 	@override late final _TranslationsMoreAboutUsHu about_us = _TranslationsMoreAboutUsHu._(_root);
 	@override late final _TranslationsMoreHelpUsHu help_us = _TranslationsMoreHelpUsHu._(_root);
@@ -1344,6 +1350,7 @@ class _TranslationsSettingsSecurityHu extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => 'Minden pénzösszeg elrejtése';
 	@override String get private_mode_activated => 'Privát mód aktiválva';
 	@override String get private_mode_deactivated => 'Privát mód letiltva';
+	@override late final _TranslationsSettingsSecurityBiometricHu biometric = _TranslationsSettingsSecurityBiometricHu._(_root);
 }
 
 // Path: settings.transactions
@@ -1360,6 +1367,16 @@ class _TranslationsSettingsTransactionsHu extends TranslationsSettingsTransactio
 	@override late final _TranslationsSettingsTransactionsSwipeActionsHu swipe_actions = _TranslationsSettingsTransactionsSwipeActionsHu._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesHu default_values = _TranslationsSettingsTransactionsDefaultValuesHu._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeHu default_type = _TranslationsSettingsTransactionsDefaultTypeHu._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportHu extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Banki automatikus importálás';
 }
 
 // Path: settings.appearance
@@ -1382,6 +1399,73 @@ class _TranslationsSettingsAppearanceHu extends TranslationsSettingsAppearanceEn
 	@override String get text => 'Szöveg';
 	@override String get font => 'Betűtípus';
 	@override String get font_platform => 'Platform';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchHu extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsHu extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Quick access';
+	@override String get management => 'Management';
+	@override String get configuration => 'Configuration';
+	@override String get data => 'Data';
+	@override String get tools => 'Tools';
+	@override String get about => 'About';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountHu extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Sign out';
+	@override String get sync_active => 'Synced';
+	@override String get sync_inactive => 'Sync disabled';
+	@override String get no_account => 'No account linked';
+	@override String get fallback_name => 'Your account';
+	@override String get firebase_sync => 'Firebase szinkronizálás';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeHu extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Theme';
+	@override String get system => 'System';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
+	@override String get amoled => 'AMOLED mode';
+	@override String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiHu extends TranslationsMoreAiEn {
+	_TranslationsMoreAiHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Set up your financial assistant';
+	@override String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -1861,6 +1945,18 @@ class _TranslationsSettingsGeneralLocaleHu extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Dátumok, számformátumok beállítása...';
 	@override String get warn => 'Régióváltáskor az alkalmazás frissülni fog';
 	@override String get first_day_of_week => 'A hét első napja';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricHu extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricHu._(TranslationsHu root) : this._root = root, super.internal(root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Use fingerprint/biometrics';
+	@override String get descr => 'Require authentication when opening the app';
+	@override String get section_title => 'Biometrikus zár';
 }
 
 // Path: settings.transactions.style
@@ -2632,6 +2728,9 @@ extension on TranslationsHu {
 			'settings.security.private_mode_descr' => 'Minden pénzösszeg elrejtése',
 			'settings.security.private_mode_activated' => 'Privát mód aktiválva',
 			'settings.security.private_mode_deactivated' => 'Privát mód letiltva',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => 'Biometrikus zár',
 			'settings.transactions.menu_title' => 'Tranzakciók',
 			'settings.transactions.menu_descr' => 'Konfigurálja tranzakciói viselkedését',
 			'settings.transactions.title' => 'Tranzakciós beállítások',
@@ -2662,6 +2761,7 @@ extension on TranslationsHu {
 			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
 			'settings.transactions.default_type.title' => 'Default Type',
 			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.auto_import.menu_title' => 'Banki automatikus importálás',
 			'settings.appearance.menu_title' => 'Téma és stílus',
 			'settings.appearance.menu_descr' => 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok',
 			'settings.appearance.theme_and_colors' => 'Témák és színek',
@@ -2680,6 +2780,28 @@ extension on TranslationsHu {
 			'settings.appearance.font_platform' => 'Platform',
 			'more.title' => 'Továbbiak',
 			'more.title_long' => 'További műveletek',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Firebase szinkronizálás',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Adatok',
 			'more.data.display_descr' => 'Exportálja és importálja az adatait, hogy ne veszítsen el semmit se',
 			'more.data.delete_all' => 'Adataim törlése',

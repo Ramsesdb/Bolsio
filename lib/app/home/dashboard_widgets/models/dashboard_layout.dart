@@ -1,4 +1,4 @@
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
 
 /// Immutable serializable representation of the dashboard layout.
 ///

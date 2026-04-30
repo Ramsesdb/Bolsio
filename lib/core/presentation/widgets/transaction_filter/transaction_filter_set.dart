@@ -1,14 +1,14 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:drift/drift.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/utils/drift_utils.dart';
-import 'package:wallex/core/extensions/string.extension.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/utils/drift_utils.dart';
+import 'package:kilatex/core/extensions/string.extension.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 
@@ -184,14 +184,26 @@ class TransactionFilterSet {
           "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}",
         ),
 
+      // Phase 6.x cleanup — the previous CustomExpression referenced the
+      // `excRate` SQL alias from a CTE that Phase 9 removed from
+      // `countTransactions`. The same predicate is consumed by BOTH
+      // `getTransactionsWithFullData` (which still has the JOIN) and
+      // `countTransactions` (which doesn't), so referencing `excRate` would
+      // crash any saved filter with min/max value applied through the count
+      // path. We migrate to `t.exchangeRateApplied` — the immutable per-row
+      // rate captured at insert time (per transactions/spec.md
+      // "exchangeRateApplied inmutable por transacción"). This decouples the
+      // predicate from any JOIN alias and is the more correct semantic too:
+      // a min/max filter on a tx now compares against its locked-in
+      // converted value, not against today's (possibly changed) rate.
       if (maxValue != null)
         CustomExpression(
-          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END) <= $maxValue)',
+          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE t.exchangeRateApplied END) <= $maxValue)',
         ),
 
       if (minValue != null)
         CustomExpression(
-          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END) >= $minValue)',
+          '(ABS(t.value * CASE WHEN a.currencyId = \'$preferredCurrency\' THEN 1.0 ELSE t.exchangeRateApplied END) >= $minValue)',
         ),
 
       // Transaction types:

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
 
 class V3CurrencyTile extends StatelessWidget {
   const V3CurrencyTile({

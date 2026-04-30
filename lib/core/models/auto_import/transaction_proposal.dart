@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 /// A pure Dart model representing a parsed bank transaction proposal.
 ///

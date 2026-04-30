@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/statement_import/screens/capture.page.dart';
-import 'package:wallex/app/accounts/statement_import/screens/confirm.page.dart';
-import 'package:wallex/app/accounts/statement_import/screens/processing.page.dart';
-import 'package:wallex/app/accounts/statement_import/screens/review.page.dart';
-import 'package:wallex/app/accounts/statement_import/screens/success.page.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/services/statement_import/models/extracted_row.dart';
-import 'package:wallex/core/services/statement_import/models/matching_result.dart';
+import 'package:kilatex/app/accounts/statement_import/screens/capture.page.dart';
+import 'package:kilatex/app/accounts/statement_import/screens/confirm.page.dart';
+import 'package:kilatex/app/accounts/statement_import/screens/processing.page.dart';
+import 'package:kilatex/app/accounts/statement_import/screens/review.page.dart';
+import 'package:kilatex/app/accounts/statement_import/screens/success.page.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/services/statement_import/models/extracted_row.dart';
+import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
 
 class StatementImportFlow extends StatefulWidget {
   const StatementImportFlow({super.key, required this.account});

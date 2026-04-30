@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/pin_modal.dart';
-import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
-import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/pin_modal.dart';
+import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
+import 'package:kilatex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Settings page to enable/disable Hidden Mode and rotate the PIN.
 ///
@@ -22,11 +23,13 @@ class HiddenModeSettingsPage extends StatefulWidget {
 
 class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
   bool? _enabled;
+  bool _biometricEnabled = true;
 
   @override
   void initState() {
     super.initState();
     _loadEnabled();
+    _biometricEnabled = appStateSettings[SettingKey.biometricEnabled] != '0';
   }
 
   Future<void> _loadEnabled() async {
@@ -122,6 +125,22 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
                     onTap: _handleChangePin,
                   ),
               ],
+              const Divider(),
+              createListSeparator(context, t.settings.security.biometric.section_title),
+              SwitchListTile.adaptive(
+                secondary: const Icon(Icons.fingerprint_outlined),
+                title: Text(t.settings.security.biometric.title),
+                subtitle: Text(t.settings.security.biometric.descr),
+                value: _biometricEnabled,
+                onChanged: (v) async {
+                  await UserSettingService.instance.setItem(
+                    SettingKey.biometricEnabled,
+                    v ? '1' : '0',
+                    updateGlobalState: true,
+                  );
+                  if (mounted) setState(() => _biometricEnabled = v);
+                },
+              ),
             ],
           ),
         ),

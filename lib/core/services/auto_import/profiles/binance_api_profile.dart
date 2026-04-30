@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/services/auto_import/profiles/bank_profile.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/services/auto_import/profiles/bank_profile.dart';
 
 /// Bank profile for Binance API-sourced transactions.
 ///

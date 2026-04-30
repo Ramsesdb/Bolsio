@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 void showTransactionSelectorModal(
   BuildContext context, {

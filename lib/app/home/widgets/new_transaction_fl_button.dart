@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wallex/app/accounts/account_form.dart';
-import 'package:wallex/app/transactions/form/transaction_form.page.dart';
-import 'package:wallex/app/transactions/receipt_import/receipt_import_flow.dart';
-import 'package:wallex/app/transactions/voice_input/voice_capture_flow.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/account_form.dart';
+import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
+import 'package:kilatex/app/transactions/receipt_import/receipt_import_flow.dart';
+import 'package:kilatex/app/transactions/voice_input/voice_capture_flow.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 void _showShouldCreateAccountWarn(BuildContext context) {
   final t = Translations.of(context);

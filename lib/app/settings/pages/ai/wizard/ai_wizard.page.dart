@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s1_welcome.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s2_choose_provider.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s3_get_key.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s4_paste_key.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s5_testing.step.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/steps/s6_done.step.dart';
-import 'package:wallex/core/services/ai/ai_credentials.dart';
-import 'package:wallex/core/services/ai/ai_credentials_store.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
-import 'package:wallex/core/services/ai/ai_service.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s1_welcome.step.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s2_choose_provider.step.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s3_get_key.step.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s4_paste_key.step.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s5_testing.step.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/steps/s6_done.step.dart';
+import 'package:kilatex/core/services/ai/ai_credentials.dart';
+import 'package:kilatex/core/services/ai/ai_credentials_store.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/core/services/ai/ai_service.dart';
 
 /// Host of the AI setup wizard — owns the [PageController], the provider
 /// selection state, the in-flight credentials, and the "where do we go

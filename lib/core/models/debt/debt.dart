@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' show IconData, Icons;
-import 'package:wallex/core/database/app_db.dart';
+import 'package:kilatex/core/database/app_db.dart';
 
 class Debt extends DebtInDB {
   final CurrencyInDB currency;

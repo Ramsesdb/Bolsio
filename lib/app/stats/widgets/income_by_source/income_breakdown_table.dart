@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
-import 'package:wallex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/tags/tag.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
+import 'package:kilatex/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/tags/tag.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 /// Detailed breakdown table showing amount + percentage per source,
 /// ordered by amount descending.

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/ai_wizard.page.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/ai/ai_credentials.dart';
-import 'package:wallex/core/services/ai/ai_credentials_store.dart';
-import 'package:wallex/core/services/ai/ai_key_validator.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
-import 'package:wallex/core/services/ai/ai_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/ai_wizard.page.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/ai/ai_credentials.dart';
+import 'package:kilatex/core/services/ai/ai_credentials_store.dart';
+import 'package:kilatex/core/services/ai/ai_key_validator.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/core/services/ai/ai_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class AiSettingsPage extends StatefulWidget {
   const AiSettingsPage({super.key});

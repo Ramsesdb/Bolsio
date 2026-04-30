@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/bank_options.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/app/onboarding/bank_options.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 /// Seeds Ramses's personal Venezuelan bank accounts, custom income/expense
 /// categories (hierarchical), and useful tags.

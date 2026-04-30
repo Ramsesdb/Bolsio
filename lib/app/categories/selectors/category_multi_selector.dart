@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:wallex/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/extensions/string.extension.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/count_indicator.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/extensions/string.extension.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/count_indicator.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 Future<List<Category>?> showMultiCategoryListModal(
   BuildContext context,

@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/account_form.dart';
-import 'package:wallex/app/accounts/details/account_details.dart';
-import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:wallex/app/transactions/form/transaction_form.page.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/list_tile_action_item.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/account_form.dart';
+import 'package:kilatex/app/accounts/details/account_details.dart';
+import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/list_tile_action_item.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 

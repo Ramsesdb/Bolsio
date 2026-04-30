@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wallex/core/routes/destinations.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/core/routes/destinations.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
 
 class HandleWillPopScope extends StatefulWidget {
   const HandleWillPopScope({required this.child, super.key});

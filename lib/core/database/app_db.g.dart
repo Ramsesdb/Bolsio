@@ -3233,7 +3233,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     $customConstraints:
-        'CHECK (exchangeRateSource IN (\'bcv\', \'paralelo\', \'manual\', \'auto\'))',
+        'CHECK (exchangeRateSource IN (\'bcv\', \'paralelo\', \'manual\', \'auto_frankfurter\'))',
   );
   static const VerificationMeta _createdByMeta = const VerificationMeta(
     'createdBy',
@@ -3750,7 +3750,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
   /// The exchange rate that was applied when this transaction was created (for audit/traceability)
   final double? exchangeRateApplied;
 
-  /// The source of the exchange rate applied to this transaction
+  /// The source of the exchange rate applied to this transaction.
+  /// Lowercase canonical (post v28 migration). Legacy 'auto' is migrated to
+  /// 'auto_frankfurter'. See RateSource enum.
   final String? exchangeRateSource;
 
   ///--------- Audit data --------------
@@ -10013,12 +10015,9 @@ abstract class _$AppDB extends GeneratedDatabase {
   }
 
   Selectable<CountTransactionsResult> countTransactions({
-    required String rateSource,
-    required DateTime date,
-    required String preferredCurrency,
     CountTransactions$predicate? predicate,
   }) {
-    var $arrayStartIndex = 4;
+    var $arrayStartIndex = 1;
     final generatedpredicate = $write(
       predicate?.call(
             alias(this.transactions, 't'),
@@ -10035,30 +10034,22 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-      'WITH latestRates AS (SELECT currencyCode, exchangeRate FROM (SELECT er.currencyCode, er.exchangeRate, ROW_NUMBER()OVER (PARTITION BY er.currencyCode ORDER BY er.date DESC, CASE WHEN er.source = ?1 THEN 0 ELSE 1 END, er.id RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW EXCLUDE NO OTHERS) AS rn FROM exchangeRates AS er WHERE unixepoch(er.date) <= unixepoch(?2)) WHERE rn = 1) SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * CASE WHEN a.currencyId = ?3 THEN 1.0 ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied) END), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * CASE WHEN COALESCE(ra.currencyId, a.currencyId) = ?3 THEN 1.0 ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied) END), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN latestRates AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN latestRates AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
-      variables: [
-        Variable<String>(rateSource),
-        Variable<DateTime>(date),
-        Variable<String>(preferredCurrency),
-        ...generatedpredicate.introducedVariables,
-      ],
+      'SELECT a.currencyId AS currencyId, COALESCE(ra.currencyId, a.currencyId) AS destinyCurrencyId, COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sumNative, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestinyNative FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id WHERE ${generatedpredicate.sql} GROUP BY a.currencyId, COALESCE(ra.currencyId, a.currencyId)',
+      variables: [...generatedpredicate.introducedVariables],
       readsFrom: {
-        exchangeRates,
-        transactions,
         accounts,
+        transactions,
         currencies,
         categories,
         ...generatedpredicate.watchedTables,
       },
     ).map(
       (QueryRow row) => CountTransactionsResult(
+        currencyId: row.read<String>('currencyId'),
+        destinyCurrencyId: row.read<String>('destinyCurrencyId'),
         transactionsNumber: row.read<int>('transactionsNumber'),
-        sum: row.read<double>('sum'),
-        sumInDestiny: row.read<double>('sumInDestiny'),
-        sumInPrefCurrency: row.read<double>('sumInPrefCurrency'),
-        sumInDestinyInPrefCurrency: row.read<double>(
-          'sumInDestinyInPrefCurrency',
-        ),
+        sumNative: row.read<double>('sumNative'),
+        sumInDestinyNative: row.read<double>('sumInDestinyNative'),
       ),
     );
   }
@@ -10152,6 +10143,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         date: row.read<DateTime>('date'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         exchangeRate: row.read<double>('exchangeRate'),
+        source: row.readNullable<String>('source'),
       ),
     );
   }
@@ -10167,6 +10159,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         date: row.read<DateTime>('date'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         exchangeRate: row.read<double>('exchangeRate'),
+        source: row.readNullable<String>('source'),
       ),
     );
   }
@@ -18695,17 +18688,17 @@ typedef GetTransactionsWithFullData$limit =
     );
 
 class CountTransactionsResult {
+  final String currencyId;
+  final String destinyCurrencyId;
   final int transactionsNumber;
-  final double sum;
-  final double sumInDestiny;
-  final double sumInPrefCurrency;
-  final double sumInDestinyInPrefCurrency;
+  final double sumNative;
+  final double sumInDestinyNative;
   CountTransactionsResult({
+    required this.currencyId,
+    required this.destinyCurrencyId,
     required this.transactionsNumber,
-    required this.sum,
-    required this.sumInDestiny,
-    required this.sumInPrefCurrency,
-    required this.sumInDestinyInPrefCurrency,
+    required this.sumNative,
+    required this.sumInDestinyNative,
   });
 }
 

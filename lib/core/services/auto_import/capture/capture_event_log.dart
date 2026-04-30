@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wallex/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:kilatex/core/services/auto_import/capture/models/capture_event.dart';
 
 /// Simple counter bag over a window of [CaptureEvent]s.
 @immutable

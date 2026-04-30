@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
 
 /// Chip displaying the origin of a captured proposal (SMS, Notification, API).
 class ProposalOriginChip extends StatelessWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/presentation/styles/borders.dart';
-import 'package:wallex/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:wallex/core/utils/text_field_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/presentation/styles/borders.dart';
+import 'package:kilatex/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:kilatex/core/utils/text_field_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class AmountAndCurrencyFormField extends StatelessWidget {
   const AmountAndCurrencyFormField({

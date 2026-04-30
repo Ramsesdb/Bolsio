@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/services/ai/ai_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/services/ai/ai_service.dart';
 
 class AutoCategorySuggestion {
   final String categoryId;

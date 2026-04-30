@@ -90,33 +90,13 @@ getTransactionsWithFullData($predicate = TRUE, :preferredCurrency AS TEXT, :rate
     ORDER BY $orderBy
     LIMIT $limit;
 
-countTransactions($predicate = TRUE, :date AS DATETIME, :preferredCurrency AS TEXT, :rateSource AS TEXT):
-    WITH latestRates AS (
-        SELECT currencyCode, exchangeRate FROM (
-            SELECT
-                er.currencyCode,
-                er.exchangeRate,
-                ROW_NUMBER() OVER (
-                    PARTITION BY er.currencyCode
-                    ORDER BY er.date DESC,
-                        CASE WHEN er.source = :rateSource THEN 0 ELSE 1 END,
-                        er.id
-                ) AS rn
-            FROM exchangeRates er
-            WHERE unixepoch(er.date) <= unixepoch(:date)
-        ) WHERE rn = 1
-    )
-    SELECT COUNT(*) AS transactionsNumber,
-    COALESCE(SUM(t.value), 0) AS sum,
-    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value)), 0) AS sumInDestiny,
-    COALESCE(SUM(t.value * CASE
-      WHEN a.currencyId = :preferredCurrency THEN 1.0
-      ELSE COALESCE(excRate.exchangeRate, t.exchangeRateApplied)
-    END), 0) AS sumInPrefCurrency,
-    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value) * CASE
-      WHEN COALESCE(ra.currencyId, a.currencyId) = :preferredCurrency THEN 1.0
-      ELSE COALESCE(excRateOfDestiny.exchangeRate, t.exchangeRateApplied)
-    END), 0) AS sumInDestinyInPrefCurrency
+countTransactions($predicate = TRUE):
+    SELECT
+        a.currencyId AS currencyId,
+        COALESCE(ra.currencyId, a.currencyId) AS destinyCurrencyId,
+        COUNT(*) AS transactionsNumber,
+        COALESCE(SUM(t.value), 0) AS sumNative,
+        COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestinyNative
     FROM transactions t
         INNER JOIN accounts a
         ON t.accountID = a.id
@@ -130,9 +110,8 @@ countTransactions($predicate = TRUE, :date AS DATETIME, :preferredCurrency AS TE
         ON t.categoryID = c.id
         LEFT JOIN categories pc
         ON c.parentCategoryID = pc.id
-        LEFT JOIN latestRates excRate          ON a.currencyId  = excRate.currencyCode
-        LEFT JOIN latestRates excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode
-    WHERE $predicate;
+    WHERE $predicate
+    GROUP BY a.currencyId, COALESCE(ra.currencyId, a.currencyId);
 
 getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category: 
     SELECT a.*, parentCategory.** 

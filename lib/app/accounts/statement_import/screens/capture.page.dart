@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/services/statement_import/pdf_to_image_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/services/statement_import/pdf_to_image_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class CapturePage extends StatefulWidget {
   const CapturePage({super.key});

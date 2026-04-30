@@ -3,27 +3,27 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/database/sql/initial/seed.dart';
-import 'package:wallex/core/database/utils/database_enum.dart';
-import 'package:wallex/core/database/utils/list_converters.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/budget/budget.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/date-utils/periodicity.dart';
-import 'package:wallex/core/models/exchange-rate/exchange_rate.dart';
-import 'package:wallex/core/models/filters/saved_filter.dart';
-import 'package:wallex/core/models/goal/goal.dart';
-import 'package:wallex/core/models/goal/goal_type.enum.dart';
-import 'package:wallex/core/models/debt/debt.dart';
-import 'package:wallex/core/models/debt/debt_direction.enum.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/utils/logger.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/database/sql/initial/seed.dart';
+import 'package:kilatex/core/database/utils/database_enum.dart';
+import 'package:kilatex/core/database/utils/list_converters.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/budget/budget.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/date-utils/periodicity.dart';
+import 'package:kilatex/core/models/exchange-rate/exchange_rate.dart';
+import 'package:kilatex/core/models/filters/saved_filter.dart';
+import 'package:kilatex/core/models/goal/goal.dart';
+import 'package:kilatex/core/models/goal/goal_type.enum.dart';
+import 'package:kilatex/core/models/debt/debt.dart';
+import 'package:kilatex/core/models/debt/debt_direction.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -95,7 +95,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 27;
+  int get schemaVersion => 28;
 
   @override
   MigrationStrategy get migration {

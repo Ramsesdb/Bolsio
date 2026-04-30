@@ -1,13 +1,13 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
+import 'package:kilatex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Builder mutable usado por el spec del `quickUse` para abrir su
 /// configEditor sin obligar al archivo del widget a importar el sheet

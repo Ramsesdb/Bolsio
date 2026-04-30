@@ -1,4 +1,4 @@
-import 'package:wallex/core/database/services/budget/budget_service.dart';
+import 'package:kilatex/core/database/services/budget/budget_service.dart';
 
 import '../ai_tool.dart';
 

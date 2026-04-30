@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
 
 /// Design tokens for the Wallex AI Chat v2 visual redesign.
 ///

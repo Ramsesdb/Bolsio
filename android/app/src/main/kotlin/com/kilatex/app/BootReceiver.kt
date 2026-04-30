@@ -1,4 +1,4 @@
-package com.wallex.app
+package com.kilatex.app
 
 import android.content.BroadcastReceiver
 import android.content.ComponentName

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/currency/currency.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
 
 /// Card brandeado que se renderiza off-screen y se captura como PNG para
 /// compartir (Tanda 5, task 5.1).

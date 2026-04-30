@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:wallex/core/services/ai/ai_credentials.dart';
-import 'package:wallex/core/services/ai/ai_service.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:kilatex/core/services/ai/ai_credentials.dart';
+import 'package:kilatex/core/services/ai/ai_service.dart';
 
 /// Step 5 — runs `AiService.testCredentials` against the credentials the
 /// user just typed in step 4.

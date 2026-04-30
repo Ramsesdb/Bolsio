@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:kilatex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 Future<ModalResult<TransactionSwipeAction?>?>
 showTransactionSwipeActionSelector(

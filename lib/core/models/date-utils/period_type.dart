@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 enum PeriodType {
   allTime,

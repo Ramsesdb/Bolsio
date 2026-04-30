@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/filters/saved_filter.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/filters/saved_filter.dart';
 
 class SavedFiltersService {
   final AppDB db;

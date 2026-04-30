@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/core/utils/debouncer.dart';
+import 'package:kilatex/core/utils/debouncer.dart';
 
 class WallexTileSwitch extends StatefulWidget {
   const WallexTileSwitch({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:wallex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
-import 'package:wallex/core/services/ai/ai_provider_type.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:kilatex/app/settings/pages/ai/wizard/widgets/wizard_scaffold.dart';
+import 'package:kilatex/core/services/ai/ai_provider_type.dart';
 
 /// Step 3 of the AI setup wizard — provider-specific instructions for
 /// fetching an API key.

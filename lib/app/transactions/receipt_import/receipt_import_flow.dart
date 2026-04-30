@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wallex/app/transactions/form/transaction_form.page.dart';
-import 'package:wallex/app/transactions/receipt_import/receipt_review_page.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:wallex/core/services/receipt_ocr/receipt_image_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/transactions/form/transaction_form.page.dart';
+import 'package:kilatex/app/transactions/receipt_import/receipt_review_page.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:kilatex/core/services/receipt_ocr/receipt_image_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 abstract class ReceiptImportFlow {
   static Future<void> start(

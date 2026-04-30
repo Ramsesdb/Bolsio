@@ -1,4 +1,4 @@
-import 'package:wallex/core/database/app_db.dart';
+import 'package:kilatex/core/database/app_db.dart';
 
 class ExchangeRate extends ExchangeRateInDB {
   CurrencyInDB currency;
@@ -8,5 +8,6 @@ class ExchangeRate extends ExchangeRateInDB {
     required super.date,
     required this.currency,
     required super.exchangeRate,
+    super.source,
   }) : super(currencyCode: currency.code);
 }

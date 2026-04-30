@@ -665,6 +665,7 @@ class _TranslationsSettingsEs extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
 	@override late final _TranslationsSettingsHiddenModeEs hidden_mode = _TranslationsSettingsHiddenModeEs._(_root);
 	@override late final _TranslationsSettingsTransactionsEs transactions = _TranslationsSettingsTransactionsEs._(_root);
+	@override late final _TranslationsSettingsAutoImportEs auto_import = _TranslationsSettingsAutoImportEs._(_root);
 	@override late final _TranslationsSettingsAppearanceEs appearance = _TranslationsSettingsAppearanceEs._(_root);
 }
 
@@ -697,6 +698,11 @@ class _TranslationsMoreEs extends TranslationsMoreEn {
 	// Translations
 	@override String get title => 'Más';
 	@override String get title_long => 'Más acciones';
+	@override late final _TranslationsMoreSearchEs search = _TranslationsMoreSearchEs._(_root);
+	@override late final _TranslationsMoreSectionsEs sections = _TranslationsMoreSectionsEs._(_root);
+	@override late final _TranslationsMoreAccountEs account = _TranslationsMoreAccountEs._(_root);
+	@override late final _TranslationsMoreThemeEs theme = _TranslationsMoreThemeEs._(_root);
+	@override late final _TranslationsMoreAiEs ai = _TranslationsMoreAiEs._(_root);
 	@override late final _TranslationsMoreDataEs data = _TranslationsMoreDataEs._(_root);
 	@override late final _TranslationsMoreAboutUsEs about_us = _TranslationsMoreAboutUsEs._(_root);
 	@override late final _TranslationsMoreHelpUsEs help_us = _TranslationsMoreHelpUsEs._(_root);
@@ -1738,6 +1744,7 @@ class _TranslationsSettingsSecurityEs extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => 'Oculta todos los valores monetarios';
 	@override String get private_mode_activated => 'Modo privado activado';
 	@override String get private_mode_deactivated => 'Modo privado desactivado';
+	@override late final _TranslationsSettingsSecurityBiometricEs biometric = _TranslationsSettingsSecurityBiometricEs._(_root);
 }
 
 // Path: settings.hidden_mode
@@ -1771,6 +1778,16 @@ class _TranslationsSettingsTransactionsEs extends TranslationsSettingsTransactio
 	@override late final _TranslationsSettingsTransactionsSwipeActionsEs swipe_actions = _TranslationsSettingsTransactionsSwipeActionsEs._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesEs default_values = _TranslationsSettingsTransactionsDefaultValuesEs._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeEs default_type = _TranslationsSettingsTransactionsDefaultTypeEs._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportEs extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Auto-import bancario';
 }
 
 // Path: settings.appearance
@@ -1913,6 +1930,73 @@ class _TranslationsStatementImportUndoEs extends TranslationsStatementImportUndo
 	@override String get dialog_confirm => 'Deshacer';
 	@override String get dialog_cancel => 'Cancelar';
 	@override String get success => 'Importación deshecha';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchEs extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Buscar en ajustes…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsEs extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Accesos rápidos';
+	@override String get management => 'Gestión';
+	@override String get configuration => 'Configuración';
+	@override String get data => 'Datos';
+	@override String get tools => 'Herramientas';
+	@override String get about => 'Acerca de';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountEs extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Cerrar sesión';
+	@override String get sync_active => 'Sincronizado';
+	@override String get sync_inactive => 'Sincronización desactivada';
+	@override String get no_account => 'Sin cuenta vinculada';
+	@override String get fallback_name => 'Tu cuenta';
+	@override String get firebase_sync => 'Sincronización Firebase';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeEs extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Tema';
+	@override String get system => 'Sistema';
+	@override String get light => 'Claro';
+	@override String get dark => 'Oscuro';
+	@override String get amoled => 'Modo AMOLED';
+	@override String get more_options => 'Más opciones de apariencia';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiEs extends TranslationsMoreAiEn {
+	_TranslationsMoreAiEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Configura tu asistente financiero';
+	@override String get active_with => 'Activado · {provider}';
 }
 
 // Path: more.data
@@ -2536,6 +2620,18 @@ class _TranslationsSettingsGeneralLocaleEs extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricEs extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricEs._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Usar huella/biometría';
+	@override String get descr => 'Solicitar autenticación al iniciar la aplicación';
+	@override String get section_title => 'Bloqueo biométrico';
 }
 
 // Path: settings.hidden_mode.pin
@@ -3525,6 +3621,9 @@ extension on TranslationsEs {
 			'settings.security.private_mode_descr' => 'Oculta todos los valores monetarios',
 			'settings.security.private_mode_activated' => 'Modo privado activado',
 			'settings.security.private_mode_deactivated' => 'Modo privado desactivado',
+			'settings.security.biometric.title' => 'Usar huella/biometría',
+			'settings.security.biometric.descr' => 'Solicitar autenticación al iniciar la aplicación',
+			'settings.security.biometric.section_title' => 'Bloqueo biométrico',
 			'settings.hidden_mode.title' => 'Modo Oculto',
 			'settings.hidden_mode.menu_descr' => 'Oculta tus cuentas de ahorro detrás de un PIN',
 			'settings.hidden_mode.enable' => 'Activar Modo Oculto',
@@ -3577,6 +3676,7 @@ extension on TranslationsEs {
 			'settings.transactions.default_values.no_tags_selected' => 'Sin etiquetas seleccionadas',
 			'settings.transactions.default_type.title' => 'Tipo por defecto',
 			'settings.transactions.default_type.modal_title' => 'Seleccionar tipo por defecto',
+			'settings.auto_import.menu_title' => 'Auto-import bancario',
 			'settings.appearance.menu_title' => 'Tema y estilo',
 			'settings.appearance.menu_descr' => 'Selección de tema, colores y otras cosas relacionadas con la apariencia de la aplicación',
 			'settings.appearance.theme_and_colors' => 'Tema y colores',
@@ -3656,6 +3756,28 @@ extension on TranslationsEs {
 			'statement_import.entry_point' => 'Importar estado de cuenta',
 			'more.title' => 'Más',
 			'more.title_long' => 'Más acciones',
+			'more.search.hint' => 'Buscar en ajustes…',
+			'more.sections.quick_access' => 'Accesos rápidos',
+			'more.sections.management' => 'Gestión',
+			'more.sections.configuration' => 'Configuración',
+			'more.sections.data' => 'Datos',
+			'more.sections.tools' => 'Herramientas',
+			'more.sections.about' => 'Acerca de',
+			'more.account.sign_out' => 'Cerrar sesión',
+			'more.account.sync_active' => 'Sincronizado',
+			'more.account.sync_inactive' => 'Sincronización desactivada',
+			'more.account.no_account' => 'Sin cuenta vinculada',
+			'more.account.fallback_name' => 'Tu cuenta',
+			'more.account.firebase_sync' => 'Sincronización Firebase',
+			'more.theme.title' => 'Tema',
+			'more.theme.system' => 'Sistema',
+			'more.theme.light' => 'Claro',
+			'more.theme.dark' => 'Oscuro',
+			'more.theme.amoled' => 'Modo AMOLED',
+			'more.theme.more_options' => 'Más opciones de apariencia',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Configura tu asistente financiero',
+			'more.ai.active_with' => 'Activado · {provider}',
 			'more.data.display' => 'Datos',
 			'more.data.display_descr' => 'Exporta y importa tus datos para no perder nada',
 			'more.data.delete_all' => 'Eliminar mis datos',
@@ -3686,6 +3808,8 @@ extension on TranslationsEs {
 			'more.help_us.donate_success' => 'Donación realizada. Muchas gracias por tu contribución! ❤️',
 			'more.help_us.donate_err' => 'Ups! Parece que ha habido un error a la hora de recibir tu pago',
 			'more.help_us.report' => 'Reporta errores, deja sugerencias...',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.thanks_long' => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.',
 			'onboarding.restricted_settings.title' => 'Permite la configuración restringida',
 			'onboarding.restricted_settings.subtitle' => 'Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.',

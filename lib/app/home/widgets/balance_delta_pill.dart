@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/home/widgets/decorative_sparkline.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:kilatex/app/home/widgets/decorative_sparkline.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 class BalanceDeltaPill extends StatelessWidget {
   const BalanceDeltaPill({

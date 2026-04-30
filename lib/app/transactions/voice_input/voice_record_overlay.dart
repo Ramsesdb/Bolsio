@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/widgets/voice_action_buttons.dart';
-import 'package:wallex/core/services/voice/voice_service.dart';
-import 'package:wallex/core/services/voice/voice_service_speech_to_text.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/chat/widgets/voice_action_buttons.dart';
+import 'package:kilatex/core/services/voice/voice_service.dart';
+import 'package:kilatex/core/services/voice/voice_service_speech_to_text.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Wallex "Liquid Glass" voice capture sheet.
 ///

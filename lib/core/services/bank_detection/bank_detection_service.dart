@@ -2,7 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:installed_apps/installed_apps.dart';
-import 'package:wallex/core/services/auto_import/supported_banks.dart'
+import 'package:kilatex/core/services/auto_import/supported_banks.dart'
     as supported_banks;
 
 /// Detects which banking / fintech apps relevant to Wallex auto-import

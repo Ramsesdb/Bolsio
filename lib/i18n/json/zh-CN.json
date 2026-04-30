@@ -869,7 +869,8 @@
       "private_mode": "隐私模式",
       "private_mode_descr": "隐藏所有金额",
       "private_mode_activated": "隐私模式已启用",
-      "private_mode_deactivated": "隐私模式已禁用"
+      "private_mode_deactivated": "隐私模式已禁用",
+      "BIOMETRIC": { "title": "Use fingerprint/biometrics", "descr": "Require authentication when opening the app", "section_title": "生物识别锁" }
     },
     "TRANSACTIONS": {
       "menu_title": "交易",
@@ -911,6 +912,9 @@
         "modal_title": "Select Default Type"
       }
     },
+    "AUTO_IMPORT": {
+      "menu_title": "银行自动导入"
+    },
     "APPEARANCE": {
       "menu_title": "主题与风格",
       "menu_descr": "主题选择、颜色以及与应用程序外观相关的其他内容",
@@ -935,6 +939,11 @@
   "MORE": {
     "title": "更多",
     "title_long": "更多",
+    "SEARCH": { "hint": "Search settings…" },
+    "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
+    "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase 同步" },
+    "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
+    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "数据",
       "display.descr": "导出和导入您的数据，这样您不会丟失任何东西",

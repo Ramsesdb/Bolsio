@@ -1,16 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/income_breakdown_table.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/income_pie_chart.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/income_stacked_bar_chart.dart';
-import 'package:wallex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/card_with_header.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/income_breakdown_table.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/income_pie_chart.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/income_stacked_bar_chart.dart';
+import 'package:kilatex/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 /// Main widget for the "Ingresos" (Income) tab in StatsPage.
 /// Shows a scrollable composition of KPI, stacked bar chart, pie chart,

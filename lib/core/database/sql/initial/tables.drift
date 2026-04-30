@@ -162,8 +162,10 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- The exchange rate that was applied when this transaction was created (for audit/traceability)
   exchangeRateApplied REAL,
 
-  -- The source of the exchange rate applied to this transaction
-  exchangeRateSource TEXT CHECK(exchangeRateSource IN ('bcv','paralelo','manual','auto')),
+  -- The source of the exchange rate applied to this transaction.
+  -- Lowercase canonical (post v28 migration). Legacy 'auto' is migrated to
+  -- 'auto_frankfurter'. See RateSource enum.
+  exchangeRateSource TEXT CHECK(exchangeRateSource IN ('bcv','paralelo','manual','auto_frankfurter')),
 
   ----------- Audit data --------------
 

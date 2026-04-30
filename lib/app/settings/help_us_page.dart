@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/purchases/donate_button.dart';
-import 'package:wallex/app/settings/purchases/in_app_purchase.dart';
-import 'package:wallex/app/settings/widgets/display_app_icon.dart';
-import 'package:wallex/app/settings/widgets/setting_card_item.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/utils/open_external_url.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/purchases/donate_button.dart';
+import 'package:kilatex/app/settings/purchases/in_app_purchase.dart';
+import 'package:kilatex/app/settings/widgets/display_app_icon.dart';
+import 'package:kilatex/app/settings/widgets/setting_card_item.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/utils/open_external_url.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 // import 'package:share_plus/share_plus.dart'; // TODO: re-enable when share button comes back (Play Store launch)
 
 class HelpUsPage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:wallex/core/services/finance_health_service.dart';
+import 'package:kilatex/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:kilatex/core/services/finance_health_service.dart';
 
 class FinanceHealthMainInfo extends StatelessWidget {
   const FinanceHealthMainInfo({super.key, required this.financeHealthData});

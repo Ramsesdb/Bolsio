@@ -1,6 +1,6 @@
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/currency/currency_type.enum.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/currency/currency_type.enum.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Currency extends CurrencyInDB {

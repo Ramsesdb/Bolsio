@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/voice_input/voice_record_overlay.dart';
-import 'package:wallex/app/transactions/voice_input/voice_review_sheet.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/services/ai/agents/agent_run_result.dart';
-import 'package:wallex/core/services/ai/agents/quick_expense_agent.dart';
-import 'package:wallex/core/services/voice/voice_permission_dialog.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/transactions/voice_input/voice_record_overlay.dart';
+import 'package:kilatex/app/transactions/voice_input/voice_review_sheet.dart';
+import 'package:kilatex/core/models/auto_import/capture_channel.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
+import 'package:kilatex/core/services/ai/agents/quick_expense_agent.dart';
+import 'package:kilatex/core/services/voice/voice_permission_dialog.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// End-to-end voice quick-expense flow for the FAB mic action.
 ///

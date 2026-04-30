@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 
 class SnackbarInstance extends SnackbarParams {

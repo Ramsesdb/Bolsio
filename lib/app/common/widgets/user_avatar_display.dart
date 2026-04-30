@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/core/services/attachments/attachment_model.dart';
-import 'package:wallex/core/services/attachments/attachments_service.dart';
-import 'package:wallex/core/presentation/widgets/user_avatar.dart';
+import 'package:kilatex/core/services/attachments/attachment_model.dart';
+import 'package:kilatex/core/services/attachments/attachments_service.dart';
+import 'package:kilatex/core/presentation/widgets/user_avatar.dart';
 
 class UserAvatarDisplay extends StatelessWidget {
   const UserAvatarDisplay({

@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/ai/ai_hub.page.dart';
-import 'package:wallex/app/chat/wallex_chat.page.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/routes/destinations.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/ai/spending_insights_service.dart';
-import 'package:wallex/core/utils/unique_app_widgets_keys.dart';
+import 'package:kilatex/app/ai/ai_hub.page.dart';
+import 'package:kilatex/app/chat/wallex_chat.page.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/routes/destinations.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/ai/spending_insights_service.dart';
+import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
 
 class AppBottomBar extends StatefulWidget {
   const AppBottomBar({super.key, required this.selectedDestination});

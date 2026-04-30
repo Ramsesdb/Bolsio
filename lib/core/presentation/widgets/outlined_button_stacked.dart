@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
 
 class OutlinedButtonStacked extends StatelessWidget {
   const OutlinedButtonStacked({

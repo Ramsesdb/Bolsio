@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:drift/drift.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/debt/debt.dart';
-import 'package:wallex/core/models/debt/debt_direction.enum.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/debt/debt.dart';
+import 'package:kilatex/core/models/debt/debt_direction.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DebtService {
@@ -64,7 +64,15 @@ class DebtService {
                 toCurrency: debt.currencyId,
                 amount: balance,
               )
-              .map((rate) => rate ?? balance);
+              // When the rate is missing, fall back to the unconverted
+              // balance (already in the debt's source currency on the
+              // backend side) so the debt summary stays usable. Surfacing
+              // a "tasa no configurada" hint at the debt detail UI is
+              // tracked separately — for the headline figure, the
+              // unconverted amount is the least-bad approximation and
+              // matches the pre-fix behaviour for users who never had
+              // a rate row in the first place.
+              .map((converted) => converted ?? balance);
         })
         .map((balanceInDebtCurrency) {
           var adjusted = balanceInDebtCurrency;
@@ -103,7 +111,11 @@ class DebtService {
                 toCurrency: debt.currencyId,
                 amount: balance,
               )
-              .map((rate) => rate ?? balance);
+              // See [getDebtTotalAmount] above — null rate falls back to
+              // the unconverted balance so the remaining-amount calc stays
+              // numerically valid; the UI is responsible for any "tasa no
+              // configurada" indicator at the debt detail surface.
+              .map((converted) => converted ?? balance);
         })
         .map((balanceInDebtCurrency) {
           double toReturn = balanceInDebtCurrency;

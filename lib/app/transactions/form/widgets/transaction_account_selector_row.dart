@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/supported-icon/icon_displayer.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/animations/shake_widget.dart';
-import 'package:wallex/core/utils/focus.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/animations/shake_widget.dart';
+import 'package:kilatex/core/utils/focus.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class TransactionAccountSelectorRow extends StatelessWidget {
   const TransactionAccountSelectorRow({

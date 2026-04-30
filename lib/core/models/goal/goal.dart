@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/date-utils/date_period.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/goal/goal_type.enum.dart';
-import 'package:wallex/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:wallex/core/models/mixins/financial_target_mixin.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/date-utils/date_period.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/goal/goal_type.enum.dart';
+import 'package:kilatex/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:kilatex/core/models/mixins/financial_target_mixin.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class Goal extends GoalInDB
     with FinancialTargetMixin

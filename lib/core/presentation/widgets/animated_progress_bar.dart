@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/presentation/animations/fade_in.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/presentation/animations/fade_in.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 class AnimatedProgressBar extends StatefulWidget {
   const AnimatedProgressBar({

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/chat/models/chat_card_payload.dart';
-import 'package:wallex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
+import 'package:kilatex/app/chat/models/chat_card_payload.dart';
+import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
 
 // Maps read-only data-tool results to inline ChatCardPayloads.
 // Only read-only tools become cards; mutating tools (create_transaction,

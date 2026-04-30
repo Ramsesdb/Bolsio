@@ -5,40 +5,43 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:wallex/app/common/widgets/user_avatar_display.dart';
-import 'package:wallex/app/home/dashboard_widgets/dashboard_layout_body.dart';
-import 'package:wallex/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:wallex/app/home/dashboard_widgets/defaults.dart';
-import 'package:wallex/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
-import 'package:wallex/app/home/dashboard_widgets/edit/editable_widget_frame.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
-import 'package:wallex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
-import 'package:wallex/app/home/widgets/income_or_expense_card.dart';
-import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
+import 'package:kilatex/app/home/dashboard_widgets/dashboard_layout_body.dart';
+import 'package:kilatex/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:kilatex/app/home/dashboard_widgets/defaults.dart';
+import 'package:kilatex/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
+import 'package:kilatex/app/home/dashboard_widgets/edit/editable_widget_frame.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
+import 'package:kilatex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:kilatex/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
+import 'package:kilatex/app/home/widgets/income_or_expense_card.dart';
+import 'package:kilatex/app/home/widgets/new_transaction_fl_button.dart';
 
-import 'package:wallex/app/layout/page_context.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/edit_profile_modal.dart';
-import 'package:wallex/app/settings/widgets/pin_modal.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/app-data/app_data_service.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/date-utils/date_period.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/date-utils/period_type.dart';
-import 'package:wallex/core/presentation/debug_page.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/app_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_context.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/edit_profile_modal.dart';
+import 'package:kilatex/app/settings/widgets/pin_modal.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/currency/currency_display_policy.dart';
+import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:kilatex/core/models/date-utils/date_period.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/date-utils/period_type.dart';
+import 'package:kilatex/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:kilatex/core/presentation/debug_page.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/app_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -63,6 +66,20 @@ class _DashboardPageState extends State<DashboardPage>
 
   String _rateSource = 'bcv';
 
+  /// Phase 6.8 of `currency-modes-rework`: subscribe to the persisted
+  /// `preferredRateSource` setting so external mutations (Settings page,
+  /// onboarding rerun, Firebase sync) propagate to the dashboard without
+  /// a manual reload. The subscription is cancelled in [dispose].
+  StreamSubscription<String?>? _rateSourceSubscription;
+
+  /// Phase 6.5/6.8: subscribe to the policy stream so the dashboard
+  /// rebuilds (and downstream descendant widgets re-derive their layout)
+  /// the moment the user switches modes from Settings — without forcing
+  /// a manual reload. The actual policy value is consumed by self-
+  /// subscribed widgets like [TotalBalanceSummaryWidget] (chip gating)
+  /// and [IncomeOrExpenseCard] (single vs dual layout).
+  StreamSubscription<CurrencyDisplayPolicy>? _policySubscription;
+
   /// Counter incremented on pull-to-refresh so descendant widgets that cache
   /// streams in `initState` (`TotalBalanceSummaryWidget`, etc.) see a changed
   /// prop in `didUpdateWidget` and re-subscribe.
@@ -82,6 +99,30 @@ class _DashboardPageState extends State<DashboardPage>
     if (persisted == 'bcv' || persisted == 'paralelo') {
       _rateSource = persisted!;
     }
+
+    // Phase 6.8 — listen for external mutations to `preferredRateSource`
+    // (Settings page, onboarding rerun, Firebase sync) so the dashboard
+    // stays consistent without a manual reload.
+    _rateSourceSubscription = UserSettingService.instance
+        .getSettingFromDB(SettingKey.preferredRateSource)
+        .listen((value) {
+      if (!mounted) return;
+      if (value == 'bcv' || value == 'paralelo') {
+        if (_rateSource != value) setState(() => _rateSource = value!);
+      }
+    });
+
+    // Phase 6.5/6.8 — drive a rebuild whenever the policy changes so
+    // descendant widgets (which subscribe to the same stream
+    // independently) get a fresh frame in step with the chip's new
+    // gating. We don't need to retain the value locally — the
+    // descendants own the state.
+    _policySubscription = CurrencyDisplayPolicyResolver.instance
+        .watch()
+        .listen((_) {
+      if (!mounted) return;
+      setState(() {});
+    });
 
     // Kick off the layout load + fallback gate. This is fire-and-forget —
     // the StreamBuilder downstream observes the BehaviorSubject directly,
@@ -118,6 +159,8 @@ class _DashboardPageState extends State<DashboardPage>
     // case where the user backgrounds the app mid-edit. The service is a
     // singleton so this `flush()` is safe to call at every page dispose.
     unawaited(DashboardLayoutService.instance.flush());
+    unawaited(_rateSourceSubscription?.cancel());
+    unawaited(_policySubscription?.cancel());
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     super.dispose();
@@ -132,6 +175,15 @@ class _DashboardPageState extends State<DashboardPage>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       unawaited(DashboardLayoutService.instance.flush());
+    }
+    // Phase 4.6 of `currency-modes-rework` — 24h scheduler tick on app
+    // resume. The service self-gates against the 24h window, so this is
+    // a no-op when the last successful run is recent. We deliberately
+    // tie this to the dashboard lifecycle (vs main.dart) so the tick is
+    // suspended while the user is in another module (calculator, edit
+    // form, …) — those flows don't need fresh rates.
+    if (state == AppLifecycleState.resumed) {
+      unawaited(RateRefreshService.instance.maybeRunDailyTick());
     }
   }
 
@@ -531,14 +583,12 @@ class _DashboardPageState extends State<DashboardPage>
                         type: TransactionType.expense,
                         periodState: dateRangeService,
                         labelStyle: labelStyle,
-                        rateSource: _rateSource,
                         filters: accountFilter,
                       ),
                       IncomeOrExpenseCard(
                         type: TransactionType.income,
                         periodState: dateRangeService,
                         labelStyle: labelStyle,
-                        rateSource: _rateSource,
                         filters: accountFilter,
                       ),
                     ];

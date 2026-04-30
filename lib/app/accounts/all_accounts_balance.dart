@@ -3,15 +3,15 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/account_form.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:wallex/core/presentation/widgets/card_with_header.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/account_form.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/database/services/currency/currency_service.dart';

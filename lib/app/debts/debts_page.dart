@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:wallex/app/debts/components/debt_fab_button.dart';
-import 'package:wallex/app/debts/components/debt_list.dart';
-import 'package:wallex/app/layout/page_context.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/core/database/services/debts/debt_service.dart';
-import 'package:wallex/core/models/debt/debt.dart';
-import 'package:wallex/core/models/debt/debt_direction.enum.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/no_results.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/debts/components/debt_fab_button.dart';
+import 'package:kilatex/app/debts/components/debt_list.dart';
+import 'package:kilatex/app/layout/page_context.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/core/database/services/debts/debt_service.dart';
+import 'package:kilatex/core/models/debt/debt.dart';
+import 'package:kilatex/core/models/debt/debt_direction.enum.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/widgets/no_results.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DebtsPage extends StatefulWidget {

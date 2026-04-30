@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 enum NextPayStatus {
   /// The payment date has not yet arrived, but it is very close

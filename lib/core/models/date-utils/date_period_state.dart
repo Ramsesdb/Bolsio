@@ -1,12 +1,12 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/extensions/date.extensions.dart';
-import 'package:wallex/core/models/date-utils/date_period.dart';
-import 'package:wallex/core/models/date-utils/period_type.dart';
-import 'package:wallex/core/models/date-utils/periodicity.dart';
-import 'package:wallex/core/utils/constants.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/extensions/date.extensions.dart';
+import 'package:kilatex/core/models/date-utils/date_period.dart';
+import 'package:kilatex/core/models/date-utils/period_type.dart';
+import 'package:kilatex/core/models/date-utils/periodicity.dart';
+import 'package:kilatex/core/utils/constants.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 part 'date_period_state.g.dart';
 

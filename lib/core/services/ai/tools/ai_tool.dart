@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
 
 /// Execution mode for mutating tools (create_transaction, create_transfer).
 ///

@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:wallex/core/services/voice/voice_service.dart';
+import 'package:kilatex/core/services/voice/voice_service.dart';
 
 /// `speech_to_text`-backed [VoiceService] implementation.
 ///

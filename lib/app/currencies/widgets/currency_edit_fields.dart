@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/models/currency/currency_type.enum.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/tappable_text_entry.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/models/currency/currency_type.enum.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/tappable_text_entry.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class CurrencyEditFields extends StatefulWidget {
   const CurrencyEditFields({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> openExternalURL(BuildContext context, String urlToOpen) async {

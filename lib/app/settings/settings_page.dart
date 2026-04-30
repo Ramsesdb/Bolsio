@@ -1,21 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wallex/app/calculator/calculator.page.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/pages/appareance_settings.page.dart';
-import 'package:wallex/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:wallex/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:wallex/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:wallex/app/settings/pages/general_settings.page.dart';
-import 'package:wallex/app/settings/pages/hidden_mode_settings.page.dart';
-import 'package:wallex/app/settings/pages/transactions_settings.page.dart';
-import 'package:wallex/core/database/utils/personal_ve_seeders.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/calculator/calculator.page.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/pages/appareance_settings.page.dart';
+import 'package:kilatex/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:kilatex/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:kilatex/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:kilatex/app/settings/pages/general_settings.page.dart';
+import 'package:kilatex/app/settings/pages/hidden_mode_settings.page.dart';
+import 'package:kilatex/app/settings/pages/transactions_settings.page.dart';
+import 'package:kilatex/core/database/utils/personal_ve_seeders.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -158,7 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             _SettingRouteTile(
-              title: 'Auto-import bancario',
+              title: t.settings.auto_import.menu_title,
               subtitle: 'Captura automatica de SMS, notificaciones y APIs',
               icon: Icons.auto_mode,
               onTap: () => RouteUtils.pushRoute(

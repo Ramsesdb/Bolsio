@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wallex/app/onboarding/bank_options.dart';
-import 'package:wallex/app/onboarding/theme/v3_tokens.dart';
-import 'package:wallex/app/onboarding/widgets/v3_bank_tile.dart';
-import 'package:wallex/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/services/auto_import/supported_banks.dart';
-import 'package:wallex/core/services/bank_detection/bank_detection_service.dart';
+import 'package:kilatex/app/onboarding/bank_options.dart';
+import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_bank_tile.dart';
+import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/services/auto_import/supported_banks.dart';
+import 'package:kilatex/core/services/bank_detection/bank_detection_service.dart';
 
 final RegExp _kPlayStoreUrl = RegExp(
   r'^https://play\.google\.com/store/apps/details\?id=([\w\.]+)',

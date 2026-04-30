@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/tags/tag_form_page.dart';
-import 'package:wallex/core/database/services/tags/tags_service.dart';
-import 'package:wallex/core/extensions/string.extension.dart';
-import 'package:wallex/core/presentation/animations/animated_floating_button.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/widgets/column_with_reorderable_list_and_search.dart';
-import 'package:wallex/core/presentation/widgets/wallex_reorderable_list.dart';
-import 'package:wallex/core/presentation/widgets/no_results.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/tags/tag_form_page.dart';
+import 'package:kilatex/core/database/services/tags/tags_service.dart';
+import 'package:kilatex/core/extensions/string.extension.dart';
+import 'package:kilatex/core/presentation/animations/animated_floating_button.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/widgets/column_with_reorderable_list_and_search.dart';
+import 'package:kilatex/core/presentation/widgets/wallex_reorderable_list.dart';
+import 'package:kilatex/core/presentation/widgets/no_results.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
 

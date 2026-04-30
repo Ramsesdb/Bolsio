@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
 
 /// Scope contextual que el `DashboardPage` provee a sus widgets dinámicos
 /// durante el render iterativo (Wave 2.2).

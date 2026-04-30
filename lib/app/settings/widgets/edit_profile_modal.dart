@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wallex/app/common/widgets/user_avatar_display.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/services/attachments/attachment_model.dart';
-import 'package:wallex/core/services/attachments/attachments_service.dart';
-import 'package:wallex/core/services/receipt_ocr/receipt_image_service.dart';
-import 'package:wallex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:wallex/core/presentation/widgets/modal_container.dart';
-import 'package:wallex/core/presentation/widgets/tappable.dart';
-import 'package:wallex/core/presentation/widgets/user_avatar.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/text_field_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/services/attachments/attachment_model.dart';
+import 'package:kilatex/core/services/attachments/attachments_service.dart';
+import 'package:kilatex/core/services/receipt_ocr/receipt_image_service.dart';
+import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:kilatex/core/presentation/widgets/modal_container.dart';
+import 'package:kilatex/core/presentation/widgets/tappable.dart';
+import 'package:kilatex/core/presentation/widgets/user_avatar.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/text_field_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class EditProfileModal extends StatefulWidget {
   const EditProfileModal({super.key});

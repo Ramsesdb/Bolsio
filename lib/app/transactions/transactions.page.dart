@@ -3,32 +3,32 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wallex/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:wallex/app/layout/page_context.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/transactions/widgets/bulk_edit_transaction_modal.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list.dart';
-import 'package:wallex/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/models/transaction/transaction.dart';
-import 'package:wallex/core/presentation/animations/animated_expanded.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:wallex/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:wallex/core/presentation/widgets/wallex_popup_menu_button.dart';
-import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/presentation/widgets/no_results.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/utils/list_tile_action_item.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:kilatex/app/layout/page_context.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/transactions/widgets/bulk_edit_transaction_modal.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list.dart';
+import 'package:kilatex/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/models/transaction/transaction.dart';
+import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
+import 'package:kilatex/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:kilatex/core/presentation/widgets/wallex_popup_menu_button.dart';
+import 'package:kilatex/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/presentation/widgets/no_results.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/utils/list_tile_action_item.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -193,19 +193,23 @@ class TransactionsPageState extends State<TransactionsPage> {
 
                   return Column(
                     children: [
-                      StreamBuilder(
-                        stream: Rx.combineLatest2(
-                          TransactionService.instance.countTransactions(
-                            filters: effectiveFilters,
-                          ),
-                          TransactionService.instance
-                              .getTransactionsValueBalance(
-                                filters: effectiveFilters,
-                              ),
-                          (a, b) => (count: a, value: b),
-                        ),
+                      StreamBuilder<TransactionQueryStatResultWithMissing>(
+                        stream: TransactionService.instance
+                            .getTransactionsCountAndBalanceWithMissing(
+                              filters: effectiveFilters,
+                            ),
                         builder: (context, snapshot) {
-                          final trCountAndBalance = snapshot.data;
+                          final stat = snapshot.data;
+                          final trCountAndBalance = stat == null
+                              ? null
+                              : (
+                                  count: stat.numberOfRes,
+                                  value: stat.valueSum,
+                                );
+                          final hasMissingRates =
+                              stat?.hasMissingRates ?? false;
+                          final missingCurrencies =
+                              stat?.missingRateCurrencies ?? const <String>{};
 
                           const smallerTextStyle = TextStyle(
                             fontSize: 14,
@@ -299,6 +303,20 @@ class TransactionsPageState extends State<TransactionsPage> {
                                                   )
                                                 : smallerTextStyle,
                                           ),
+                                          if (hasMissingRates) ...[
+                                            const SizedBox(width: 6),
+                                            Tooltip(
+                                              message:
+                                                  'Tasa no configurada para: ${missingCurrencies.join(', ')}',
+                                              child: Icon(
+                                                Icons.info_outline,
+                                                size: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
+                                              ),
+                                            ),
+                                          ],
                                         ],
                                       ),
                                     ],

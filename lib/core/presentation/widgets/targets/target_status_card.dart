@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/models/budget/budget.dart';
-import 'package:wallex/core/models/budget/target_progress_status.enum.dart';
-import 'package:wallex/core/models/budget/target_timeline_status.enum.dart';
-import 'package:wallex/core/models/goal/goal.dart';
-import 'package:wallex/core/models/mixins/financial_target_mixin.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:wallex/core/presentation/widgets/card_with_header.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/models/budget/budget.dart';
+import 'package:kilatex/core/models/budget/target_progress_status.enum.dart';
+import 'package:kilatex/core/models/budget/target_timeline_status.enum.dart';
+import 'package:kilatex/core/models/goal/goal.dart';
+import 'package:kilatex/core/models/mixins/financial_target_mixin.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

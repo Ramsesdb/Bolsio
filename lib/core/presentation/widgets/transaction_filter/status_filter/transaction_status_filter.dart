@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter_chip.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter_chip.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class TransactionStatusFilter extends StatelessWidget {
   const TransactionStatusFilter({

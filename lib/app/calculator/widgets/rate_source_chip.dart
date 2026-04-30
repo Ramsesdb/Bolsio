@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/calculator/models/rate_source.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/calculator/models/rate_source.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Chip que cicla entre las cuatro `RateSource` (BCV → Paralelo → Promedio →
 /// Manual → BCV …) y muestra el timestamp del último fetch como "hace N min".

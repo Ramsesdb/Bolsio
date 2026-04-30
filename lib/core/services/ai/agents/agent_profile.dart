@@ -1,4 +1,4 @@
-import 'package:wallex/core/services/ai/tools/ai_tool_registry.dart';
+import 'package:kilatex/core/services/ai/tools/ai_tool_registry.dart';
 
 /// Immutable description of an agent's configuration: system prompt, scoped
 /// tool registry, loop cap, tool-choice policy, and approval predicate.

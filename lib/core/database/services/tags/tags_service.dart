@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/tags/tag.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/models/tags/tag.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
 
 class TagService {
   final AppDB db;

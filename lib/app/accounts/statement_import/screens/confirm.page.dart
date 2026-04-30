@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:wallex/app/accounts/statement_import/widgets/si_header.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/presentation/helpers/snackbar.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:wallex/core/services/statement_import/models/matching_result.dart';
-import 'package:wallex/core/services/statement_import/statement_batches_service.dart';
-import 'package:wallex/core/utils/uuid.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:kilatex/app/accounts/statement_import/widgets/si_header.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/presentation/helpers/snackbar.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
+import 'package:kilatex/core/services/statement_import/statement_batches_service.dart';
+import 'package:kilatex/core/utils/uuid.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class ConfirmPage extends StatefulWidget {
   const ConfirmPage({super.key});

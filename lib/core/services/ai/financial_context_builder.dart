@@ -1,5 +1,5 @@
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
 
 /// Builds a small bootstrap summary (~1k chars) for the assistant's system
 /// prompt. Lists what the user HAS (account names + currencies, expense

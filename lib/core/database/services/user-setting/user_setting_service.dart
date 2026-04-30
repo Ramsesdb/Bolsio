@@ -1,6 +1,6 @@
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/shared/key_value_pair.dart';
-import 'package:wallex/core/database/services/shared/key_value_service.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/shared/key_value_pair.dart';
+import 'package:kilatex/core/database/services/shared/key_value_service.dart';
 
 /// The keys of the avalaible settings of the app
 enum SettingKey {
@@ -134,6 +134,19 @@ enum SettingKey {
   /// Values: 'bcv', 'paralelo'. Defaults to 'bcv' when null.
   preferredRateSource,
 
+  /// Currency display mode driving how the dashboard renders totals.
+  ///
+  /// Stored values: `'single_usd'` | `'single_bs'` | `'single_other'` | `'dual'`.
+  /// Defaults to `'dual'` when null. Unknown values MUST be treated as `'dual'`
+  /// (forward compat — see `CurrencyMode.fromDb`).
+  currencyMode,
+
+  /// Secondary display currency used only when [currencyMode] is `'dual'`.
+  ///
+  /// ISO 4217 code (e.g. `'VES'`, `'EUR'`) or NULL. Preserved on Dual → Single
+  /// transitions so that re-entering Dual proposes the previous pair as default.
+  secondaryCurrency,
+
   // ──── Hidden mode settings ────
 
   /// Whether the "Hidden Mode" feature is active. '1' = enabled, '0' or null = disabled.
@@ -173,6 +186,10 @@ enum SettingKey {
   /// MUST sync via `firebase_sync_service` (NOT in
   /// `_userSettingsSyncExclusions`).
   dashboardLayout,
+
+  /// Whether biometric lock is enabled on app launch. '1' (default) = enabled, '0' = disabled.
+  /// When disabled, the [BiometricLockScreen] is skipped entirely.
+  biometricEnabled,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

@@ -869,7 +869,8 @@
       "private_mode": "Modalità privata",
       "private_mode_descr": "Nascondi tutti i valori monetari",
       "private_mode_activated": "Modalità privata attivata",
-      "private_mode_deactivated": "Modalità privata disattivata"
+      "private_mode_deactivated": "Modalità privata disattivata",
+      "BIOMETRIC": { "title": "Use fingerprint/biometrics", "descr": "Require authentication when opening the app", "section_title": "Blocco biometrico" }
     },
     "TRANSACTIONS": {
       "menu_title": "Transazioni",
@@ -911,6 +912,9 @@
         "modal_title": "Select Default Type"
       }
     },
+    "AUTO_IMPORT": {
+      "menu_title": "Importazione bancaria automatica"
+    },
     "APPEARANCE": {
       "menu_title": "Tema e stile",
       "menu_descr": "Selezione del tema, colori e altre cose relative all'aspetto dell'app",
@@ -935,6 +939,11 @@
   "MORE": {
     "title": "Altro",
     "title_long": "Altre azioni",
+    "SEARCH": { "hint": "Search settings…" },
+    "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
+    "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Sincronizzazione Firebase" },
+    "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
+    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Dati",
       "display.descr": "Esporta e importa i tuoi dati per non perdere nulla",

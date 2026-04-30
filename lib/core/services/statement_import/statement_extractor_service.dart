@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:wallex/core/services/ai/nexus_ai_service.dart';
-import 'package:wallex/core/services/statement_import/models/extracted_row.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/services/ai/nexus_ai_service.dart';
+import 'package:kilatex/core/services/statement_import/models/extracted_row.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 typedef StatementMultimodalCompleteFn = Future<String?> Function({
   required String systemPrompt,

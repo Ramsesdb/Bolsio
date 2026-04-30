@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/transactions/label_value_info_table.dart';
+import 'package:kilatex/app/transactions/label_value_info_table.dart';
 
 class LabelValueInfoListItem extends LabelValueInfoItem {
   final Widget? trailing;

@@ -1,21 +1,21 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/accounts/account_selector.dart';
-import 'package:wallex/app/categories/selectors/category_picker.dart';
-import 'package:wallex/app/transactions/auto_import/widgets/proposal_origin_chip.dart';
-import 'package:wallex/app/transactions/auto_import/widgets/proposal_status_chip.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/account/account_service.dart';
-import 'package:wallex/core/database/services/category/category_service.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/database/services/transaction/transaction_service.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:wallex/core/models/category/category.dart';
-import 'package:wallex/core/models/transaction/transaction_status.enum.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/app/accounts/account_selector.dart';
+import 'package:kilatex/app/categories/selectors/category_picker.dart';
+import 'package:kilatex/app/transactions/auto_import/widgets/proposal_origin_chip.dart';
+import 'package:kilatex/app/transactions/auto_import/widgets/proposal_status_chip.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/database/services/account/account_service.dart';
+import 'package:kilatex/core/database/services/category/category_service.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:kilatex/core/models/category/category.dart';
+import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 /// Review page for a single pending import proposal.
 ///

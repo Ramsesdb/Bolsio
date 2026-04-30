@@ -1,4 +1,4 @@
-package com.wallex.app
+package com.kilatex.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine

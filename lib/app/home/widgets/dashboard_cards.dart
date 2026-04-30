@@ -2,20 +2,20 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
-import 'package:wallex/app/stats/stats_page.dart';
-import 'package:wallex/app/stats/widgets/balance_bar_chart.dart';
-import 'package:wallex/app/stats/widgets/fund_evolution_info.dart';
-import 'package:wallex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/presentation/responsive/breakpoints.dart';
-import 'package:wallex/core/presentation/responsive/responsive_row_column.dart';
-import 'package:wallex/core/presentation/widgets/card_with_header.dart';
-import 'package:wallex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/services/finance_health_service.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
+import 'package:kilatex/app/stats/stats_page.dart';
+import 'package:kilatex/app/stats/widgets/balance_bar_chart.dart';
+import 'package:kilatex/app/stats/widgets/fund_evolution_info.dart';
+import 'package:kilatex/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:kilatex/core/presentation/responsive/responsive_row_column.dart';
+import 'package:kilatex/core/presentation/widgets/card_with_header.dart';
+import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/services/finance_health_service.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class DashboardCards extends StatefulWidget {
   const DashboardCards({

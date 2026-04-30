@@ -283,7 +283,7 @@
     },
     "share": {
       "action_a11y": "Compartir conversión",
-      "footer": "Generado con Wallex",
+      "footer": "Generado con Kilatex",
       "subject": "Conversión cambiaria",
       "equals_separator": "="
     },
@@ -574,11 +574,11 @@
     "upload-from-camera": "Tomar foto",
     "empty-state": "No hay adjuntos"
   },
-  "WALLEX-AI": {
+  "KILATEX-AI": {
     "voice_settings_title": "Entrada por voz",
     "voice_settings_subtitle": "Dicta gastos y haz preguntas al asistente",
     "voice_permission_title": "Acceso al micrófono",
-    "voice_permission_body": "Wallex necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.",
+    "voice_permission_body": "Kilatex necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.",
     "voice_permission_cta": "Entendido, seguir",
     "voice_permission_denied_title": "Permiso de micrófono denegado",
     "voice_permission_denied_body": "Para dictar o chatear con voz, habilita el permiso en los ajustes del sistema.",
@@ -645,10 +645,10 @@
     "chat_tool_field_from_account": "Desde",
     "chat_tool_field_to_account": "Hacia",
     "chat_tool_field_value_in_destiny": "Monto destino",
-    "chat_header": "Wallex AI",
+    "chat_header": "Kilatex AI",
     "chat_boot_loading": "Cargando contexto financiero...",
     "chat_disabled": "El chat de IA está deshabilitado en configuración.",
-    "chat_welcome_message": "¡Hola! Soy **Wallex AI**, tu asistente financiero.\n\nPuedo ayudarte con:\n- Ver saldos y estado de tus cuentas\n- Analizar tus gastos por categoría\n- Revisar transacciones recientes\n- Consultar presupuestos\n\n¿Qué quieres revisar?"
+    "chat_welcome_message": "¡Hola! Soy **Kilatex AI**, tu asistente financiero.\n\nPuedo ayudarte con:\n- Ver saldos y estado de tus cuentas\n- Analizar tus gastos por categoría\n- Revisar transacciones recientes\n- Consultar presupuestos\n\n¿Qué quieres revisar?"
   },
   "TRANSFER": {
     "display": "Transferencia",
@@ -1165,7 +1165,12 @@
       "private_mode": "Modo privado",
       "private_mode_descr": "Oculta todos los valores monetarios",
       "private_mode_activated": "Modo privado activado",
-      "private_mode_deactivated": "Modo privado desactivado"
+      "private_mode_deactivated": "Modo privado desactivado",
+      "BIOMETRIC": {
+        "title": "Usar huella/biometría",
+        "descr": "Solicitar autenticación al iniciar la aplicación",
+        "section_title": "Bloqueo biométrico"
+      }
     },
     "HIDDEN_MODE": {
       "title": "Modo Oculto",
@@ -1188,7 +1193,7 @@
         "incorrect": "PIN incorrecto",
         "too_many_attempts": "Demasiados intentos. Intenta de nuevo en {{seconds}}s",
         "use_biometric": "Usar huella",
-        "biometric_reason": "Desbloquea Wallex",
+        "biometric_reason": "Desbloquea Kilatex",
         "pin_changed": "PIN actualizado",
         "unlocked": "Modo completo activado"
       }
@@ -1232,6 +1237,9 @@
         "title": "Tipo por defecto",
         "modal_title": "Seleccionar tipo por defecto"
       }
+    },
+    "AUTO_IMPORT": {
+      "menu_title": "Auto-import bancario"
     },
     "APPEARANCE": {
       "menu_title": "Tema y estilo",
@@ -1334,6 +1342,38 @@
   "MORE": {
     "title": "Más",
     "title_long": "Más acciones",
+    "SEARCH": {
+      "hint": "Buscar en ajustes…"
+    },
+    "SECTIONS": {
+      "quick_access": "Accesos rápidos",
+      "management": "Gestión",
+      "configuration": "Configuración",
+      "data": "Datos",
+      "tools": "Herramientas",
+      "about": "Acerca de"
+    },
+    "ACCOUNT": {
+      "sign_out": "Cerrar sesión",
+      "sync_active": "Sincronizado",
+      "sync_inactive": "Sincronización desactivada",
+      "no_account": "Sin cuenta vinculada",
+      "fallback_name": "Tu cuenta",
+      "firebase_sync": "Sincronización Firebase"
+    },
+    "THEME": {
+      "title": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "amoled": "Modo AMOLED",
+      "more_options": "Más opciones de apariencia"
+    },
+    "AI": {
+      "title": "Kilatex AI",
+      "configure": "Configura tu asistente financiero",
+      "active_with": "Activado · {provider}"
+    },
     "DATA": {
       "display": "Datos",
       "display.descr": "Exporta y importa tus datos para no perder nada",
@@ -1382,7 +1422,7 @@
       "subtitle": "Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.",
       "step1": "Toca el menú ⋮ arriba a la derecha.",
       "step2": "Selecciona \"Permitir configuración restringida\".",
-      "step3": "Activa el toggle y vuelve a Wallex.",
+      "step3": "Activa el toggle y vuelve a Kilatex.",
       "step1_xiaomi": "Desliza hasta el final de la pantalla.",
       "step2_xiaomi": "Activa el toggle \"Permitir ajustes restringidos\".",
       "cta_primary": "Abrir información de la app",

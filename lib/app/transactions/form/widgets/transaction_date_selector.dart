@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wallex/core/models/account/account.dart';
-import 'package:wallex/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:wallex/core/presentation/widgets/inline_info_card.dart';
-import 'package:wallex/core/utils/constants.dart';
-import 'package:wallex/core/utils/date_time_picker.dart';
-import 'package:wallex/core/utils/focus.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/core/models/account/account.dart';
+import 'package:kilatex/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
+import 'package:kilatex/core/utils/constants.dart';
+import 'package:kilatex/core/utils/date_time_picker.dart';
+import 'package:kilatex/core/utils/focus.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 class TransactionDateSelector extends StatelessWidget {
   const TransactionDateSelector({

@@ -511,6 +511,7 @@ class _TranslationsSettingsTr extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsGeneralTr general = _TranslationsSettingsGeneralTr._(_root);
 	@override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
 	@override late final _TranslationsSettingsTransactionsTr transactions = _TranslationsSettingsTransactionsTr._(_root);
+	@override late final _TranslationsSettingsAutoImportTr auto_import = _TranslationsSettingsAutoImportTr._(_root);
 	@override late final _TranslationsSettingsAppearanceTr appearance = _TranslationsSettingsAppearanceTr._(_root);
 }
 
@@ -523,6 +524,11 @@ class _TranslationsMoreTr extends TranslationsMoreEn {
 	// Translations
 	@override String get title => 'Daha Fazla';
 	@override String get title_long => 'Daha fazla eylem';
+	@override late final _TranslationsMoreSearchTr search = _TranslationsMoreSearchTr._(_root);
+	@override late final _TranslationsMoreSectionsTr sections = _TranslationsMoreSectionsTr._(_root);
+	@override late final _TranslationsMoreAccountTr account = _TranslationsMoreAccountTr._(_root);
+	@override late final _TranslationsMoreThemeTr theme = _TranslationsMoreThemeTr._(_root);
+	@override late final _TranslationsMoreAiTr ai = _TranslationsMoreAiTr._(_root);
 	@override late final _TranslationsMoreDataTr data = _TranslationsMoreDataTr._(_root);
 	@override late final _TranslationsMoreAboutUsTr about_us = _TranslationsMoreAboutUsTr._(_root);
 	@override late final _TranslationsMoreHelpUsTr help_us = _TranslationsMoreHelpUsTr._(_root);
@@ -1344,6 +1350,7 @@ class _TranslationsSettingsSecurityTr extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => 'Tüm parasal değerleri gizle';
 	@override String get private_mode_activated => 'Özel mod etkinleştirildi';
 	@override String get private_mode_deactivated => 'Özel mod devre dışı bırakıldı';
+	@override late final _TranslationsSettingsSecurityBiometricTr biometric = _TranslationsSettingsSecurityBiometricTr._(_root);
 }
 
 // Path: settings.transactions
@@ -1360,6 +1367,16 @@ class _TranslationsSettingsTransactionsTr extends TranslationsSettingsTransactio
 	@override late final _TranslationsSettingsTransactionsSwipeActionsTr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsTr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesTr default_values = _TranslationsSettingsTransactionsDefaultValuesTr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeTr default_type = _TranslationsSettingsTransactionsDefaultTypeTr._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportTr extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Banka otomatik içe aktarma';
 }
 
 // Path: settings.appearance
@@ -1382,6 +1399,73 @@ class _TranslationsSettingsAppearanceTr extends TranslationsSettingsAppearanceEn
 	@override String get text => 'Metin';
 	@override String get font => 'Yazı tipi';
 	@override String get font_platform => 'platformu';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchTr extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsTr extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Quick access';
+	@override String get management => 'Management';
+	@override String get configuration => 'Configuration';
+	@override String get data => 'Data';
+	@override String get tools => 'Tools';
+	@override String get about => 'About';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountTr extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Sign out';
+	@override String get sync_active => 'Synced';
+	@override String get sync_inactive => 'Sync disabled';
+	@override String get no_account => 'No account linked';
+	@override String get fallback_name => 'Your account';
+	@override String get firebase_sync => 'Firebase senkronizasyonu';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeTr extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Theme';
+	@override String get system => 'System';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
+	@override String get amoled => 'AMOLED mode';
+	@override String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiTr extends TranslationsMoreAiEn {
+	_TranslationsMoreAiTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Set up your financial assistant';
+	@override String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -1861,6 +1945,18 @@ class _TranslationsSettingsGeneralLocaleTr extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 	@override String get warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
 	@override String get first_day_of_week => 'Haftanın ilk günü';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricTr extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricTr._(TranslationsTr root) : this._root = root, super.internal(root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Use fingerprint/biometrics';
+	@override String get descr => 'Require authentication when opening the app';
+	@override String get section_title => 'Biyometrik kilit';
 }
 
 // Path: settings.transactions.style
@@ -2632,6 +2728,9 @@ extension on TranslationsTr {
 			'settings.security.private_mode_descr' => 'Tüm parasal değerleri gizle',
 			'settings.security.private_mode_activated' => 'Özel mod etkinleştirildi',
 			'settings.security.private_mode_deactivated' => 'Özel mod devre dışı bırakıldı',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => 'Biyometrik kilit',
 			'settings.transactions.menu_title' => 'İşlemler',
 			'settings.transactions.menu_descr' => 'İşlemlerinizin davranışını yapılandırın',
 			'settings.transactions.title' => 'İşlem Ayarları',
@@ -2662,6 +2761,7 @@ extension on TranslationsTr {
 			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
 			'settings.transactions.default_type.title' => 'Default Type',
 			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.auto_import.menu_title' => 'Banka otomatik içe aktarma',
 			'settings.appearance.menu_title' => 'Tema ve Stil',
 			'settings.appearance.menu_descr' => 'Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler',
 			'settings.appearance.theme_and_colors' => 'Tema ve renkler',
@@ -2680,6 +2780,28 @@ extension on TranslationsTr {
 			'settings.appearance.font_platform' => 'platformu',
 			'more.title' => 'Daha Fazla',
 			'more.title_long' => 'Daha fazla eylem',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Firebase senkronizasyonu',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Veri',
 			'more.data.display_descr' => 'Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın',
 			'more.data.delete_all' => 'Verilerimi sil',

@@ -3,18 +3,19 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wallex/app/settings/pages/auto_import/binance_api_config.page.dart';
-import 'package:wallex/app/settings/pages/auto_import/capture_diagnostics.page.dart';
-import 'package:wallex/app/settings/pages/auto_import/capture_permissions.page.dart';
-import 'package:wallex/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
-import 'package:wallex/core/services/auto_import/capture/capture_health_monitor.dart';
-import 'package:wallex/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:kilatex/app/settings/pages/auto_import/binance_api_config.page.dart';
+import 'package:kilatex/app/settings/pages/auto_import/capture_diagnostics.page.dart';
+import 'package:kilatex/app/settings/pages/auto_import/capture_permissions.page.dart';
+import 'package:kilatex/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:kilatex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:kilatex/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:kilatex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Settings page for the auto-import feature.
 ///
@@ -133,10 +134,11 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
     final isAndroid = !kIsWeb && Platform.isAndroid;
     final isIOS = !kIsWeb && Platform.isIOS;
     final theme = Theme.of(context);
+    final t = Translations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Auto-import bancario'),
+        title: Text(t.settings.auto_import.menu_title),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 32),

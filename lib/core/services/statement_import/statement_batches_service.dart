@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/services/firebase_sync_service.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:kilatex/core/database/app_db.dart';
+import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:kilatex/core/utils/uuid.dart';
 
 class StatementBatchesService {
   StatementBatchesService({AppDB? database})

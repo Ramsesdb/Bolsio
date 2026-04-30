@@ -1,10 +1,10 @@
-import 'package:wallex/core/services/ai/agents/agent_profile.dart';
-import 'package:wallex/core/services/ai/agents/agent_run_result.dart';
-import 'package:wallex/core/services/ai/agents/agent_runner.dart';
-import 'package:wallex/core/services/ai/financial_context_builder.dart';
-import 'package:wallex/core/services/ai/tools/ai_tool.dart';
-import 'package:wallex/core/services/ai/tools/ai_tool_registry.dart';
-import 'package:wallex/core/services/ai/tools/impl/create_transaction_tool.dart';
+import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
+import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
+import 'package:kilatex/core/services/ai/agents/agent_runner.dart';
+import 'package:kilatex/core/services/ai/financial_context_builder.dart';
+import 'package:kilatex/core/services/ai/tools/ai_tool.dart';
+import 'package:kilatex/core/services/ai/tools/ai_tool_registry.dart';
+import 'package:kilatex/core/services/ai/tools/impl/create_transaction_tool.dart';
 
 /// Agent that converts a Spanish voice transcript into a single
 /// `TransactionProposal` via a forced `create_transaction` tool call.

@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:wallex/app/calculator/models/rate_source.dart';
-import 'package:wallex/app/calculator/utils/share_card_renderer.dart';
-import 'package:wallex/app/calculator/widgets/calculator_keypad.dart';
-import 'package:wallex/app/calculator/widgets/currency_amount_pane.dart';
-import 'package:wallex/app/calculator/widgets/rate_source_chip.dart';
-import 'package:wallex/app/calculator/widgets/share_card.dart';
-import 'package:wallex/app/currencies/exchange_rate_form.dart';
-import 'package:wallex/app/transactions/form/dialogs/evaluate_expression.dart';
-import 'package:wallex/core/database/services/currency/currency_service.dart';
-import 'package:wallex/core/models/currency/currency.dart';
-import 'package:wallex/core/presentation/widgets/inline_info_card.dart';
-import 'package:wallex/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
-import 'package:wallex/core/services/dolar_api_service.dart';
-import 'package:wallex/core/utils/logger.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/calculator/models/rate_source.dart';
+import 'package:kilatex/app/calculator/utils/share_card_renderer.dart';
+import 'package:kilatex/app/calculator/widgets/calculator_keypad.dart';
+import 'package:kilatex/app/calculator/widgets/currency_amount_pane.dart';
+import 'package:kilatex/app/calculator/widgets/rate_source_chip.dart';
+import 'package:kilatex/app/calculator/widgets/share_card.dart';
+import 'package:kilatex/app/currencies/exchange_rate_form.dart';
+import 'package:kilatex/app/transactions/form/dialogs/evaluate_expression.dart';
+import 'package:kilatex/core/database/services/currency/currency_service.dart';
+import 'package:kilatex/core/models/currency/currency.dart';
+import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
+import 'package:kilatex/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
+import 'package:kilatex/core/services/dolar_api_service.dart';
+import 'package:kilatex/core/utils/logger.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 /// Codes que la Calculadora siempre ofrece como pane currency, aunque el
 /// usuario no los tenga habilitados en `CurrencyManager`. USDT en v1 es alias

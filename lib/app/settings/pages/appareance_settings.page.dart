@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/layout/page_framework.dart';
-import 'package:wallex/app/settings/widgets/wallex_tile_switch.dart';
-import 'package:wallex/app/settings/widgets/settings_list_utils.dart';
-import 'package:wallex/core/database/services/user-setting/enum/app-fonts.enum.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:wallex/core/extensions/color.extensions.dart';
-import 'package:wallex/core/extensions/padding.extension.dart';
-import 'package:wallex/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:wallex/core/presentation/app_colors.dart';
-import 'package:wallex/core/presentation/theme.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:wallex/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:wallex/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:wallex/core/presentation/widgets/wallex_dropdown_select.dart';
-import 'package:wallex/core/routes/route_utils.dart';
-import 'package:wallex/i18n/generated/translations.g.dart';
+import 'package:kilatex/app/layout/page_framework.dart';
+import 'package:kilatex/app/settings/widgets/wallex_tile_switch.dart';
+import 'package:kilatex/app/settings/widgets/settings_list_utils.dart';
+import 'package:kilatex/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:kilatex/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:kilatex/core/extensions/color.extensions.dart';
+import 'package:kilatex/core/extensions/padding.extension.dart';
+import 'package:kilatex/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:kilatex/core/presentation/theme.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:kilatex/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:kilatex/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:kilatex/core/presentation/widgets/wallex_dropdown_select.dart';
+import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:kilatex/i18n/generated/translations.g.dart';
 
 final GlobalKey<WallexDropdownSelectState> _themeDropdownKey = GlobalKey();
 

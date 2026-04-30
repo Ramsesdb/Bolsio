@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wallex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:wallex/core/models/date-utils/date_period.dart';
-import 'package:wallex/core/models/date-utils/date_period_state.dart';
-import 'package:wallex/core/models/date-utils/period_type.dart';
-import 'package:wallex/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:kilatex/core/models/date-utils/date_period.dart';
+import 'package:kilatex/core/models/date-utils/date_period_state.dart';
+import 'package:kilatex/core/models/date-utils/period_type.dart';
+import 'package:kilatex/core/presentation/widgets/dates/date_period_modal.dart';
 
 class SegmentedCalendarButton extends StatefulWidget {
   const SegmentedCalendarButton({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
-import 'package:wallex/core/presentation/widgets/wallex_reorderable_list.dart';
+import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:kilatex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:kilatex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
+import 'package:kilatex/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
+import 'package:kilatex/core/presentation/widgets/wallex_reorderable_list.dart';
 
 /// Bottom sheet con dos pestañas para configurar los avatares de un widget
 /// `quickUse`:

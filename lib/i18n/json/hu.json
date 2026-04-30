@@ -869,7 +869,8 @@
       "private_mode": "Privát mód",
       "private_mode_descr": "Minden pénzösszeg elrejtése",
       "private_mode_activated": "Privát mód aktiválva",
-      "private_mode_deactivated": "Privát mód letiltva"
+      "private_mode_deactivated": "Privát mód letiltva",
+      "BIOMETRIC": { "title": "Use fingerprint/biometrics", "descr": "Require authentication when opening the app", "section_title": "Biometrikus zár" }
     },
     "TRANSACTIONS": {
       "menu_title": "Tranzakciók",
@@ -911,6 +912,9 @@
         "modal_title": "Select Default Type"
       }
     },
+    "AUTO_IMPORT": {
+      "menu_title": "Banki automatikus importálás"
+    },
     "APPEARANCE": {
       "menu_title": "Téma és stílus",
       "menu_descr": "Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok",
@@ -935,6 +939,11 @@
   "MORE": {
     "title": "Továbbiak",
     "title_long": "További műveletek",
+    "SEARCH": { "hint": "Search settings…" },
+    "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
+    "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase szinkronizálás" },
+    "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
+    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Adatok",
       "display.descr": "Exportálja és importálja az adatait, hogy ne veszítsen el semmit se",

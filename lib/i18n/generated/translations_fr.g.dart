@@ -511,6 +511,7 @@ class _TranslationsSettingsFr extends TranslationsSettingsEn {
 	@override late final _TranslationsSettingsGeneralFr general = _TranslationsSettingsGeneralFr._(_root);
 	@override late final _TranslationsSettingsSecurityFr security = _TranslationsSettingsSecurityFr._(_root);
 	@override late final _TranslationsSettingsTransactionsFr transactions = _TranslationsSettingsTransactionsFr._(_root);
+	@override late final _TranslationsSettingsAutoImportFr auto_import = _TranslationsSettingsAutoImportFr._(_root);
 	@override late final _TranslationsSettingsAppearanceFr appearance = _TranslationsSettingsAppearanceFr._(_root);
 }
 
@@ -523,6 +524,11 @@ class _TranslationsMoreFr extends TranslationsMoreEn {
 	// Translations
 	@override String get title => 'Plus';
 	@override String get title_long => 'Plus d\'actions';
+	@override late final _TranslationsMoreSearchFr search = _TranslationsMoreSearchFr._(_root);
+	@override late final _TranslationsMoreSectionsFr sections = _TranslationsMoreSectionsFr._(_root);
+	@override late final _TranslationsMoreAccountFr account = _TranslationsMoreAccountFr._(_root);
+	@override late final _TranslationsMoreThemeFr theme = _TranslationsMoreThemeFr._(_root);
+	@override late final _TranslationsMoreAiFr ai = _TranslationsMoreAiFr._(_root);
 	@override late final _TranslationsMoreDataFr data = _TranslationsMoreDataFr._(_root);
 	@override late final _TranslationsMoreAboutUsFr about_us = _TranslationsMoreAboutUsFr._(_root);
 	@override late final _TranslationsMoreHelpUsFr help_us = _TranslationsMoreHelpUsFr._(_root);
@@ -1342,6 +1348,7 @@ class _TranslationsSettingsSecurityFr extends TranslationsSettingsSecurityEn {
 	@override String get private_mode_descr => 'Masquer toutes les valeurs monétaires';
 	@override String get private_mode_activated => 'Mode privé activé';
 	@override String get private_mode_deactivated => 'Mode privé désactivé';
+	@override late final _TranslationsSettingsSecurityBiometricFr biometric = _TranslationsSettingsSecurityBiometricFr._(_root);
 }
 
 // Path: settings.transactions
@@ -1358,6 +1365,16 @@ class _TranslationsSettingsTransactionsFr extends TranslationsSettingsTransactio
 	@override late final _TranslationsSettingsTransactionsSwipeActionsFr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsFr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesFr default_values = _TranslationsSettingsTransactionsDefaultValuesFr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeFr default_type = _TranslationsSettingsTransactionsDefaultTypeFr._(_root);
+}
+
+// Path: settings.auto_import
+class _TranslationsSettingsAutoImportFr extends TranslationsSettingsAutoImportEn {
+	_TranslationsSettingsAutoImportFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Importation automatique bancaire';
 }
 
 // Path: settings.appearance
@@ -1380,6 +1397,73 @@ class _TranslationsSettingsAppearanceFr extends TranslationsSettingsAppearanceEn
 	@override String get text => 'Texte';
 	@override String get font => 'Police';
 	@override String get font_platform => 'Plateforme';
+}
+
+// Path: more.search
+class _TranslationsMoreSearchFr extends TranslationsMoreSearchEn {
+	_TranslationsMoreSearchFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get hint => 'Search settings…';
+}
+
+// Path: more.sections
+class _TranslationsMoreSectionsFr extends TranslationsMoreSectionsEn {
+	_TranslationsMoreSectionsFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get quick_access => 'Quick access';
+	@override String get management => 'Management';
+	@override String get configuration => 'Configuration';
+	@override String get data => 'Data';
+	@override String get tools => 'Tools';
+	@override String get about => 'About';
+}
+
+// Path: more.account
+class _TranslationsMoreAccountFr extends TranslationsMoreAccountEn {
+	_TranslationsMoreAccountFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get sign_out => 'Sign out';
+	@override String get sync_active => 'Synced';
+	@override String get sync_inactive => 'Sync disabled';
+	@override String get no_account => 'No account linked';
+	@override String get fallback_name => 'Your account';
+	@override String get firebase_sync => 'Synchronisation Firebase';
+}
+
+// Path: more.theme
+class _TranslationsMoreThemeFr extends TranslationsMoreThemeEn {
+	_TranslationsMoreThemeFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Theme';
+	@override String get system => 'System';
+	@override String get light => 'Light';
+	@override String get dark => 'Dark';
+	@override String get amoled => 'AMOLED mode';
+	@override String get more_options => 'More appearance options';
+}
+
+// Path: more.ai
+class _TranslationsMoreAiFr extends TranslationsMoreAiEn {
+	_TranslationsMoreAiFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wallex AI';
+	@override String get configure => 'Set up your financial assistant';
+	@override String get active_with => 'Active · {provider}';
 }
 
 // Path: more.data
@@ -1859,6 +1943,18 @@ class _TranslationsSettingsGeneralLocaleFr extends TranslationsSettingsGeneralLo
 	@override String get descr => 'Définissez le format à utiliser pour les dates, les nombres...';
 	@override String get warn => 'Lors du changement de région, l\'application va se mettre à jour';
 	@override String get first_day_of_week => 'Premier jour de la semaine';
+}
+
+// Path: settings.security.biometric
+class _TranslationsSettingsSecurityBiometricFr extends TranslationsSettingsSecurityBiometricEn {
+	_TranslationsSettingsSecurityBiometricFr._(TranslationsFr root) : this._root = root, super.internal(root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Use fingerprint/biometrics';
+	@override String get descr => 'Require authentication when opening the app';
+	@override String get section_title => 'Verrouillage biométrique';
 }
 
 // Path: settings.transactions.style
@@ -2628,6 +2724,9 @@ extension on TranslationsFr {
 			'settings.security.private_mode_descr' => 'Masquer toutes les valeurs monétaires',
 			'settings.security.private_mode_activated' => 'Mode privé activé',
 			'settings.security.private_mode_deactivated' => 'Mode privé désactivé',
+			'settings.security.biometric.title' => 'Use fingerprint/biometrics',
+			'settings.security.biometric.descr' => 'Require authentication when opening the app',
+			'settings.security.biometric.section_title' => 'Verrouillage biométrique',
 			'settings.transactions.menu_title' => 'Transactions',
 			'settings.transactions.menu_descr' => 'Configurer le comportement de vos transactions',
 			'settings.transactions.title' => 'Paramètres des transactions',
@@ -2658,6 +2757,7 @@ extension on TranslationsFr {
 			'settings.transactions.default_values.no_tags_selected' => 'Aucune étiquette sélectionnée',
 			'settings.transactions.default_type.title' => 'Type par défaut',
 			'settings.transactions.default_type.modal_title' => 'Sélectionner le type par défaut',
+			'settings.auto_import.menu_title' => 'Importation automatique bancaire',
 			'settings.appearance.menu_title' => 'Thème et style',
 			'settings.appearance.menu_descr' => 'Sélection du thème, couleurs et autres éléments liés à l\'apparence de l\'application',
 			'settings.appearance.theme_and_colors' => 'Thème et couleurs',
@@ -2676,6 +2776,28 @@ extension on TranslationsFr {
 			'settings.appearance.font_platform' => 'Plateforme',
 			'more.title' => 'Plus',
 			'more.title_long' => 'Plus d\'actions',
+			'more.search.hint' => 'Search settings…',
+			'more.sections.quick_access' => 'Quick access',
+			'more.sections.management' => 'Management',
+			'more.sections.configuration' => 'Configuration',
+			'more.sections.data' => 'Data',
+			'more.sections.tools' => 'Tools',
+			'more.sections.about' => 'About',
+			'more.account.sign_out' => 'Sign out',
+			'more.account.sync_active' => 'Synced',
+			'more.account.sync_inactive' => 'Sync disabled',
+			'more.account.no_account' => 'No account linked',
+			'more.account.fallback_name' => 'Your account',
+			'more.account.firebase_sync' => 'Synchronisation Firebase',
+			'more.theme.title' => 'Theme',
+			'more.theme.system' => 'System',
+			'more.theme.light' => 'Light',
+			'more.theme.dark' => 'Dark',
+			'more.theme.amoled' => 'AMOLED mode',
+			'more.theme.more_options' => 'More appearance options',
+			'more.ai.title' => 'Wallex AI',
+			'more.ai.configure' => 'Set up your financial assistant',
+			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Données',
 			'more.data.display_descr' => 'Exportez et importez vos données pour ne rien perdre',
 			'more.data.delete_all' => 'Supprimer mes données',
