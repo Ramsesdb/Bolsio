@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wallex · Editar perfil — mockup</title>
+<!--
+  Wallex · Editar perfil bottom sheet — redesign mockup
+  ---------------------------------------------------------------
+  Decisiones clave (ver Flutter port):
+  · Selección unificada: la foto subida ocupa el tile #1 ("Tu foto"),
+    por eso el avatar hero arriba refleja exactamente lo elegido en el grid.
+  · El tile de "Subir foto" se mueve al final (#12, dashed) → 4×3 sin huérfanos.
+  · Halo en lugar de borde grueso teal: ring suave de superficie + acento sutil.
+  · Footer: 2 acciones, mismo alto, mismo eje. Mint se reserva para Guardar + ring.
+  · Tokens definidos como CSS vars → mapear 1:1 a WallexAiTokens.
+-->
+<style>
+  /* ──────────────────────────────────────────────────────────────
+     Wallex tokens (dark) — espejo del WallexAiTokens en Flutter
+     ────────────────────────────────────────────────────────────── */
+  :root {
+    /* Surfaces — slight green-tint near-black, escalonadas */
+    --bg-scrim:                rgba(0, 0, 0, 0.62);
+    --bg-app:                  #06090A;     /* fondo de la pantalla detrás del scrim */
+    --bg-sheet:                #0E1413;     /* surface del bottom sheet (tinted) */
+    --surface-container:       #161D1C;     /* tile bg, input wells */
+    --surface-container-high:  #1E2625;     /* hover / selected base */
+
+    /* Borders & dividers */
+    --border-subtle:           rgba(255, 255, 255, 0.06);
+    --border-hairline:         rgba(255, 255, 255, 0.09);
+    --border-dashed:           rgba(255, 255, 255, 0.18);
+
+    /* Text */
+    --text-primary:            #ECF1EF;
+    --text-secondary:          #9AA5A2;
+    --text-tertiary:           #5F6B68;
+
+    /* Accent — teal/mint (mismo del chat module) */
+    --accent-primary:          #4FD1B5;
+    --accent-primary-soft:     rgba(79, 209, 181, 0.16);
+    --accent-primary-faint:    rgba(79, 209, 181, 0.10);
+    --accent-on:               #06241E;
+
+    /* Avatar tile palettes — variaciones suaves del surface-container,
+       NO los verdes oscuros saturados del diseño original */
+    --tile-tint-1:  #1A2120;
+    --tile-tint-2:  #1B201F;
+    --tile-tint-3:  #181F1E;
+    --tile-tint-4:  #1C2222;
+
+    /* Typography */
+    --font-sans:    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                    Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: ui-rounded, "SF Pro Rounded", "Inter", system-ui, sans-serif;
+    --font-mono:    ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
+                    monospace;
+
+    /* Radii */
+    --r-sheet:      28px;
+    --r-surface:    16px;
+    --r-pill:       999px;
+
+    /* Elevación */
+    --shadow-sheet: 0 -24px 60px rgba(0, 0, 0, 0.55),
+                    0 -2px 0 rgba(255, 255, 255, 0.04) inset;
+    --shadow-tile-selected:
+                    0 0 0 2px var(--accent-primary),
+                    0 0 0 6px var(--accent-primary-faint);
+    --shadow-hero-halo:
+                    0 0 0 1px rgba(255, 255, 255, 0.05),
+                    0 0 0 8px rgba(255, 255, 255, 0.025),
+                    0 18px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background: var(--bg-app);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Stage — phone-sized viewport mock con scrim
+     ────────────────────────────────────────────────────────────── */
+  .stage {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 24px 16px;
+    background:
+      radial-gradient(120% 60% at 50% 0%,
+        rgba(79, 209, 181, 0.05) 0%,
+        rgba(0, 0, 0, 0) 60%),
+      var(--bg-app);
+  }
+
+  .phone {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: min(92vh, 820px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 36px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0A0F0E 0%, #050807 100%);
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  /* Faint app shell behind the sheet — sugerencia de pantalla previa */
+  .phone::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 35% at 50% 18%, rgba(79, 209, 181, 0.05), transparent 70%),
+      linear-gradient(180deg, transparent 0%, transparent 38%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none;
+  }
+
+  .phone::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--bg-scrim);
+    pointer-events: none;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Bottom sheet
+     ────────────────────────────────────────────────────────────── */
+  .sheet {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: var(--bg-sheet);
+    border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+    box-shadow: var(--shadow-sheet);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Hint de luz superior — translatable a un BorderSide subtle en Flutter */
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  /* Drag handle */
+  .sheet__handle {
+    width: 36px;
+    height: 4px;
+    border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.14);
+    margin: 10px auto 4px;
+  }
+
+  /* Header */
+  .sheet__header {
+    display: flex;
+    align-items: center;
+    padding: 14px 22px 14px;
+  }
+
+  .sheet__title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .sheet__divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0 22px;
+  }
+
+  /* Scroll area */
+  .sheet__body {
+    padding: 24px 22px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    overflow-y: auto;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Hero block — avatar + name inline
+     ────────────────────────────────────────────────────────────── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding-top: 4px;
+  }
+
+  .hero__avatar {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: var(--shadow-hero-halo);
+    background: var(--surface-container-high);
+  }
+
+  .hero__avatar svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Sutil indicador de "estás editando esto" — anillo acento muy ligero */
+  .hero__avatar::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid rgba(79, 209, 181, 0.22);
+    pointer-events: none;
+  }
+
+  /* Name field — inline, underline-on-focus */
+  .name-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .name-field__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 0 8px;
+    border-bottom: 1.5px solid var(--accent-primary);
+    /* En reposo sería var(--border-hairline). Mockup → focused. */
+  }
+
+  .name-field__input {
+    appearance: none;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-align: center;
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    caret-color: var(--accent-primary);
+  }
+
+  .name-field__input::placeholder { color: var(--text-tertiary); }
+
+  .name-field__pencil {
+    flex: none;
+    color: var(--text-tertiary);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .name-field__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px;
+  }
+
+  .name-field__hint {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.01em;
+  }
+
+  .name-field__counter {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1;
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.02em;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Avatar picker — 4×3 grid
+     ────────────────────────────────────────────────────────────── */
+  .picker {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .picker__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .picker__heading-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-secondary);
+  }
+
+  .picker__heading-aside {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 14px;
+  }
+
+  /* Tile */
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tile__circle {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: var(--surface-container);
+    overflow: hidden;
+    transition: transform 140ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+
+  .tile__circle svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .tile:hover .tile__circle {
+    background: var(--surface-container-high);
+    transform: translateY(-1px);
+  }
+
+  .tile:active .tile__circle { transform: translateY(0) scale(0.98); }
+
+  /* Selected state */
+  .tile--selected .tile__circle {
+    box-shadow: var(--shadow-tile-selected);
+  }
+
+  .tile--selected .tile__check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .tile__check {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    color: var(--accent-on);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 3px var(--bg-sheet);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 140ms ease, transform 140ms ease;
+    pointer-events: none;
+  }
+
+  .tile__check svg { width: 12px; height: 12px; display: block; }
+
+  .tile__label {
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.01em;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Upload tile (dashed) */
+  .tile--upload .tile__circle {
+    background: transparent;
+    border: 1.5px dashed var(--border-dashed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+  }
+
+  .tile--upload:hover .tile__circle {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: var(--accent-primary-faint);
+  }
+
+  .tile--upload .tile__circle svg { width: 36%; height: 36%; }
+
+  /* "Tu foto" mini-label sobre el tile activo subido */
+  .tile__pin {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    background: var(--bg-sheet);
+    padding: 2px 7px;
+    border-radius: var(--r-pill);
+    box-shadow: 0 0 0 1px var(--accent-primary-soft);
+    pointer-events: none;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Footer / action bar
+     ────────────────────────────────────────────────────────────── */
+  .actions {
+    margin-top: 4px;
+    padding: 14px 22px calc(14px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-sheet);
+  }
+
+  .btn {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    height: 48px;
+    border-radius: var(--r-pill);
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 22px;
+    transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0 18px;
+  }
+
+  .btn--ghost:hover {
+    color: var(--text-primary);
+    background: var(--surface-container);
+  }
+
+  .btn--primary {
+    background: var(--accent-primary);
+    color: var(--accent-on);
+  }
+
+  .btn--primary:hover { transform: translateY(-1px); }
+  .btn--primary:active { transform: translateY(0); }
+
+  .btn--primary svg { width: 16px; height: 16px; }
+
+  /* ──────────────────────────────────────────────────────────────
+     Decoración leve detrás del sheet — sugerencia de la app
+     ────────────────────────────────────────────────────────────── */
+  .ghost-screen {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.18);
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     Reduced motion
+     ────────────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0ms !important;
+      animation-duration: 0ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG sprite con todos los avatares y iconos. Inline, offline. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ICONS -->
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+    </symbol>
+
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 15V3"/>
+      <path d="M7 8l5-5 5 5"/>
+      <path d="M5 21h14"/>
+    </symbol>
+
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="5 12 10 17 19 7"/>
+    </symbol>
+
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </symbol>
+
+    <!-- AVATAR — usuario subido (RB initials, color cálido para destacar) -->
+    <symbol id="av-rb" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="rb-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"  stop-color="#3F8C7A"/>
+          <stop offset="100%" stop-color="#1F4A40"/>
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" fill="url(#rb-grad)"/>
+      <text x="50" y="58" text-anchor="middle"
+            font-family="ui-rounded, SF Pro Rounded, Inter, sans-serif"
+            font-weight="600" font-size="38" fill="#ECF1EF"
+            letter-spacing="-0.5">RB</text>
+    </symbol>
+
+    <!-- AVATARES PREDETERMINADOS — siluetas geométricas sobrias.
+         Mismo lenguaje: forma simple, monocromática, paleta restringida.
+         (En Flutter: SvgPicture.asset desde assets/avatars/, con tinte único.) -->
+
+    <!-- Helper: cada avatar es 100×100. Fondo = surface-container (heredado del tile),
+         silueta tinted en var distinta. Aquí inline para mockup. -->
+
+    <symbol id="av-1" viewBox="0 0 100 100">
+      <!-- silueta clásica head+shoulders -->
+      <circle cx="50" cy="40" r="14" fill="#7DB8AA"/>
+      <path d="M22 84c0-14 12-22 28-22s28 8 28 22v8H22z" fill="#7DB8AA"/>
+    </symbol>
+
+    <symbol id="av-2" viewBox="0 0 100 100">
+      <!-- forma con "gorro" -->
+      <path d="M30 36c0-11 9-20 20-20s20 9 20 20v6H30z" fill="#5BA993"/>
+      <circle cx="50" cy="46" r="14" fill="#8DC8B9"/>
+      <path d="M22 86c0-14 12-22 28-22s28 8 28 22v6H22z" fill="#8DC8B9"/>
+    </symbol>
+
+    <symbol id="av-3" viewBox="0 0 100 100">
+      <!-- silueta con coleta (ponytail) -->
+      <circle cx="50" cy="40" r="14" fill="#A8C8BE"/>
+      <path d="M64 40c4 4 8 12 6 22l-6-2c1-7-1-14-3-18z" fill="#A8C8BE"/>
+      <path d="M22 84c0-14 12-22 28-22s28 8 28 22v8H22z" fill="#A8C8BE"/>
+    </symbol>
+
+    <symbol id="av-4" viewBox="0 0 100 100">
+      <!-- gato estilizado: dos triángulos de orejas -->
+      <polygon points="30,30 38,18 44,30" fill="#C2A86F"/>
+      <polygon points="56,30 62,18 70,30" fill="#C2A86F"/>
+      <circle cx="50" cy="46" r="20" fill="#D9BD7F"/>
+      <circle cx="44" cy="46" r="2.2" fill="#1E1A12"/>
+      <circle cx="56" cy="46" r="2.2" fill="#1E1A12"/>
+      <path d="M48 54q2 2 4 0" stroke="#1E1A12" stroke-width="1.4"
+            fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="av-5" viewBox="0 0 100 100">
+      <!-- montaña -->
+      <polygon points="20,76 44,38 60,58 72,46 84,76" fill="#7B96B5"/>
+      <circle cx="70" cy="28" r="6" fill="#D7E2EF"/>
+    </symbol>
+
+    <symbol id="av-6" viewBox="0 0 100 100">
+      <!-- planta -->
+      <path d="M50 80V46" stroke="#6FA98E" stroke-width="3" stroke-linecap="round"/>
+      <path d="M50 56q-12-2-14-14 12 0 14 10z" fill="#6FA98E"/>
+      <path d="M50 50q12-2 14-16-12 2-14 12z" fill="#88C0A6"/>
+      <rect x="38" y="78" width="24" height="10" rx="2" fill="#3D5048"/>
+    </symbol>
+
+    <symbol id="av-7" viewBox="0 0 100 100">
+      <!-- estrella geométrica -->
+      <polygon points="50,22 58,42 80,42 62,56 70,78 50,64 30,78 38,56 20,42 42,42"
+               fill="#D6B25C"/>
+    </symbol>
+
+    <symbol id="av-8" viewBox="0 0 100 100">
+      <!-- onda / océano -->
+      <path d="M14 60q12-12 24 0t24 0 24 0v32H14z" fill="#5C8FB0"/>
+      <path d="M14 70q12-10 24 0t24 0 24 0v22H14z" fill="#7AAFCC" opacity=".75"/>
+      <circle cx="72" cy="34" r="6" fill="#E8C97A"/>
+    </symbol>
+
+    <symbol id="av-9" viewBox="0 0 100 100">
+      <!-- zorro estilizado -->
+      <polygon points="22,40 36,30 38,52" fill="#C7794A"/>
+      <polygon points="78,40 64,30 62,52" fill="#C7794A"/>
+      <path d="M30 50q0-22 20-22t20 22-20 30-20-30z" fill="#E2935A"/>
+      <path d="M40 60q10 8 20 0" stroke="#FFF" stroke-width="3"
+            fill="#FFF" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="42" cy="52" r="2" fill="#1A1410"/>
+      <circle cx="58" cy="52" r="2" fill="#1A1410"/>
+    </symbol>
+
+    <symbol id="av-10" viewBox="0 0 100 100">
+      <!-- tasa / café -->
+      <path d="M26 38h40v22a16 16 0 0 1-16 16H42a16 16 0 0 1-16-16z" fill="#9D7A5A"/>
+      <path d="M66 44h6a8 8 0 0 1 0 16h-6" stroke="#9D7A5A" stroke-width="3"
+            fill="none"/>
+      <path d="M40 24q4 4 0 8M50 22q4 4 0 8M60 24q4 4 0 8"
+            stroke="#C0A484" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </symbol>
+
+    <symbol id="av-11" viewBox="0 0 100 100">
+      <!-- luna -->
+      <path d="M62 22a30 30 0 1 0 16 56 24 24 0 0 1-16-56z" fill="#C9D2DD"/>
+      <circle cx="42" cy="50" r="2" fill="#7E8896"/>
+      <circle cx="56" cy="64" r="1.5" fill="#7E8896"/>
+      <circle cx="36" cy="62" r="1.4" fill="#7E8896"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+
+<main class="stage" role="main">
+  <div class="phone" aria-hidden="false">
+
+    <!-- Faint hint de la pantalla detrás (Ajustes / Perfil) -->
+    <div class="ghost-screen">Ajustes · Perfil</div>
+
+    <section class="sheet" role="dialog" aria-modal="true"
+             aria-labelledby="sheet-title">
+
+      <div class="sheet__handle" aria-hidden="true"></div>
+
+      <header class="sheet__header">
+        <h2 id="sheet-title" class="sheet__title">Editar perfil</h2>
+      </header>
+
+      <div class="sheet__divider" aria-hidden="true"></div>
+
+      <div class="sheet__body">
+
+        <!-- ── HERO ────────────────────────────────────────────── -->
+        <div class="hero">
+
+          <div class="hero__avatar" aria-label="Avatar actual: tu foto subida">
+            <svg aria-hidden="true"><use href="#av-rb"/></svg>
+          </div>
+
+          <div class="name-field">
+            <div class="name-field__row">
+              <input
+                class="name-field__input"
+                type="text"
+                value="Ramses Briceno"
+                maxlength="20"
+                aria-label="Nombre"
+                size="14"
+              />
+              <span class="name-field__pencil" aria-hidden="true">
+                <svg width="14" height="14"><use href="#i-pencil"/></svg>
+              </span>
+            </div>
+            <div class="name-field__meta">
+              <span class="name-field__hint">Tu nombre visible</span>
+              <span class="name-field__counter" aria-live="polite">14 / 20</span>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ── PICKER ──────────────────────────────────────────── -->
+        <section class="picker" aria-label="Selección de avatar">
+
+          <div class="picker__heading">
+            <span class="picker__heading-label">Tu avatar</span>
+            <span class="picker__heading-aside">12 opciones</span>
+          </div>
+
+          <div class="grid" role="radiogroup" aria-label="Avatares disponibles">
+
+            <!-- Tile 1 — UPLOADED (selected) -->
+            <button class="tile tile--selected" role="radio"
+                    aria-checked="true" aria-label="Tu foto subida">
+              <span class="tile__pin">Tu foto</span>
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-rb"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 1">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-1"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 2">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-2"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 3">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-3"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 4">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-4"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 5">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-5"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 6">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-6"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 7">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-7"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 8">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-8"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 9">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-9"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <button class="tile" role="radio" aria-checked="false"
+                    aria-label="Avatar 10">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#av-10"/></svg>
+                <span class="tile__check" aria-hidden="true">
+                  <svg><use href="#i-check"/></svg>
+                </span>
+              </span>
+            </button>
+
+            <!-- Tile 12 — UPLOAD action (dashed) -->
+            <button class="tile tile--upload" type="button"
+                    aria-label="Subir foto personalizada">
+              <span class="tile__circle">
+                <svg aria-hidden="true"><use href="#i-upload"/></svg>
+              </span>
+              <span class="tile__label">Subir foto</span>
+            </button>
+
+          </div>
+        </section>
+
+      </div><!-- /.sheet__body -->
+
+
+      <!-- ── ACTIONS ────────────────────────────────────────────── -->
+      <footer class="actions">
+        <button class="btn btn--ghost" type="button">Cancelar</button>
+        <button class="btn btn--primary" type="button">
+          <svg aria-hidden="true"><use href="#i-save"/></svg>
+          Guardar
+        </button>
+      </footer>
+
+    </section>
+  </div>
+</main>
+
+</body>
+</html>

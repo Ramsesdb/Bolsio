@@ -96,3 +96,16 @@ up_only_files.txt
 
 # Design bundles (Claude Design exports, local-only reference)
 guia/
+
+# Firebase service account keys (NEVER commit — contain private credentials)
+*-firebase-adminsdk-*.json
+
+# Firebase data exports / migration artifacts
+*-backup.json
+users.json
+export-firestore.js
+
+# npm (used for migration scripts, not part of the app)
+node_modules/
+package.json
+package-lock.json
