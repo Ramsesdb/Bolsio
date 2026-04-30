@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:kilatex/core/models/supported-icon/icon_displayer.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
+import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Banner que avisa al usuario sobre transacciones importadas
 /// automáticamente que esperan revisión. Cuando el conteo es `0` el widget

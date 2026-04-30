@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:kilatex/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/app/home/widgets/balance_delta_pill.dart';
-import 'package:kilatex/app/home/widgets/click_tracker.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/private_mode_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:kilatex/core/models/date-utils/date_period_state.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/presentation/widgets/tappable.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/widgets/balance_delta_pill.dart';
+import 'package:bolsio/app/home/widgets/click_tracker.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/models/date-utils/date_period_state.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Phase 6 of `currency-modes-rework`: the widget now derives its layout
 /// from the [CurrencyDisplayPolicy] stream — for [SingleMode] it renders a
@@ -206,7 +207,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
     if (!mounted) return;
 
     if (showSnackbar) {
-      WallexSnackbar.success(
+      BolsioSnackbar.success(
         SnackbarParams(
           !privateMode
               ? t.settings.security.private_mode_activated
@@ -218,6 +219,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
 
   Widget _buildRateChip(BuildContext context, String source, String label) {
     final isSelected = widget.rateSource == source;
+    final colors = AppColors.of(context);
     return GestureDetector(
       onTap: () {
         if (widget.rateSource == source) return;
@@ -227,11 +229,11 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.white.withValues(alpha: 0.15)
+              ? colors.onHeader.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withValues(alpha: isSelected ? 0.4 : 0.15),
+            color: colors.onHeader.withValues(alpha: isSelected ? 0.4 : 0.15),
           ),
         ),
         child: Text(
@@ -239,7 +241,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
           style: TextStyle(
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: Colors.white.withValues(alpha: isSelected ? 0.9 : 0.5),
+            color: colors.onHeader.withValues(alpha: isSelected ? 0.9 : 0.5),
           ),
         ),
       ),
@@ -295,7 +297,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.of(context).onHeaderMuted,
                     ),
                   ),
                   Tappable(
@@ -313,7 +315,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
                                 ? Icons.visibility_off_rounded
                                 : Icons.visibility_rounded,
                             size: 16,
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: AppColors.of(context).onHeaderMuted,
                           );
                         },
                       ),
@@ -362,12 +364,12 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
                                   fontSize: integerFontSize,
                                   fontWeight: FontWeight.w200,
                                   letterSpacing: -0.5,
-                                  color: Colors.white,
+                                  color: AppColors.of(context).onHeader,
                                 ),
                                 currencyStyle: TextStyle(
                                   fontSize: integerFontSize,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                  color: AppColors.of(context).onHeader,
                                   letterSpacing: 4,
                                 ),
                               );
@@ -399,7 +401,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
                       child: Text(
                         '= $formatted $symbol',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: AppColors.of(context).onHeaderSubtle,
                           fontSize: 14,
                           fontWeight: FontWeight.w300,
                         ),

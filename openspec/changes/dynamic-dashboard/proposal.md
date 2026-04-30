@@ -2,7 +2,7 @@
 
 ## Intent
 
-El dashboard actual de wallex ([`lib/app/home/dashboard.page.dart`](../../../lib/app/home/dashboard.page.dart), 1040 líneas) es estático: header + carrusel de cuentas + tasas + 4 cards fijos. El usuario no puede añadir, quitar ni reordenar bloques, y los `onboardingGoals` capturados (`track_expenses`, `save_usd`, `reduce_debt`, `budget`, `analyze`) no influyen en lo que ve al terminar el onboarding.
+El dashboard actual de bolsio ([`lib/app/home/dashboard.page.dart`](../../../lib/app/home/dashboard.page.dart), 1040 líneas) es estático: header + carrusel de cuentas + tasas + 4 cards fijos. El usuario no puede añadir, quitar ni reordenar bloques, y los `onboardingGoals` capturados (`track_expenses`, `save_usd`, `reduce_debt`, `budget`, `analyze`) no influyen en lo que ve al terminar el onboarding.
 
 Esta propuesta convierte el dashboard en un sistema de widgets dinámicos: catálogo registrable, defaults derivados de los goals, modo edición (quitar / poner / reordenar) y un widget `quickUse` con atajos configurables. Hace que el onboarding deje de ser cosmético y entrega control real sobre la pantalla principal.
 
@@ -92,8 +92,8 @@ No hay datos de usuarios reales en juego (la app no se ha publicado) — el cost
 - Onboarding ya persiste `onboardingGoals` (existente en `_applyChoices()`).
 - `UserSettingService` con patrón JSON-encoded en string (existente).
 - `firebase_sync_service.pushUserSettings` / `pullAllData` (existente; no requiere modificación si la verificación pasa).
-- `wallex_reorderable_list.dart` (existente — base del edit mode).
-- `WallexQuickActionsButton` (existente — base UI del `quickUse`).
+- `bolsio_reorderable_list.dart` (existente — base del edit mode).
+- `BolsioQuickActionsButton` (existente — base UI del `quickUse`).
 - Sin nuevas dependencias en `pubspec.yaml`. **No requiere bump de versión** (regla del usuario: no tocar `pubspec.yaml` version/+buildNumber salvo orden directa).
 
 ## Success Criteria

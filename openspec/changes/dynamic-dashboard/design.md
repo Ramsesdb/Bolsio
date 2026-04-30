@@ -4,13 +4,13 @@
 
 El dashboard actual ([`lib/app/home/dashboard.page.dart`](../../../lib/app/home/dashboard.page.dart), 1040 LOC) compone manualmente header + carrusel + tasas + 4 cards fijos. Esta solución lo convierte en un **renderer iterativo** sobre un layout serializable persistido en `SettingKey.dashboardLayout` (JSON-string en `userSettings`).
 
-La estrategia se apoya en patrones ya existentes en wallex y evita introducir tecnología nueva:
+La estrategia se apoya en patrones ya existentes en bolsio y evita introducir tecnología nueva:
 
 1. **Modelo de datos** plain Dart (sin `freezed`) con `toJson` / `fromJson` manuales — `WidgetDescriptor`, `DashboardLayout`, `Migrator`. Coherente con `onboardingGoals`, `preferredCurrency` y demás `SettingKey` del proyecto.
 2. **Servicio singleton** `DashboardLayoutService.instance` con `BehaviorSubject<DashboardLayout>`, debouncer 300 ms (`Timer`) y `flush()` síncrono (al salir de edit mode, al cerrar sheets). Mismo patrón que `HiddenModeService`, `PrivateModeService`, `ExchangeRateService`.
 3. **Registry estático** (`DashboardWidgetRegistry`) inicializado desde `main.dart` vía `registerDashboardWidgets()` antes de `runApp` — paralelo a otros bootstraps (slang, Drift, services init).
 4. **Defaults derivados de `onboardingGoals`** (`DashboardLayoutDefaults.fromGoals`) escritos dentro de `_applyChoices()` del onboarding (un solo call site, evita la divergencia s09 Android / s05 iOS).
-5. **Edit mode** local al `_DashboardPageState` (`bool _editing`), apoyado en el `WallexReorderableList` ya existente con todo el contenido forzado a `fullWidth` durante el drag. Add via bottom sheet `_AddWidgetSheet`. Quick-use config via sheet de dos pestañas.
+5. **Edit mode** local al `_DashboardPageState` (`bool _editing`), apoyado en el `BolsioReorderableList` ya existente con todo el contenido forzado a `fullWidth` durante el drag. Add via bottom sheet `_AddWidgetSheet`. Quick-use config via sheet de dos pestañas.
 6. **Sync Firebase gratis**: el blob `users/{uid}/userSettings/all` de `pushUserSettings()` ya cubre toda settingKey no-excluida; `dashboardLayout` viaja sin código nuevo (estimado < 4 KB, dentro del 1 MiB de Firestore).
 
 Este diseño materializa los specs (`dashboard-dynamic`, `dashboard-onboarding-defaults`, `dashboard-quick-use`) y refleja el Approach A consolidado en la exploración y la propuesta.
@@ -76,9 +76,9 @@ Cada `widgets/{type}_widget.dart` es un `StatelessWidget` que recibe `(WidgetDes
 
 ### ADR-5: Edit mode forzado a 1 columna vs grid 2-col reorderable
 
-**Choice**: En edit mode todo se rinde como `fullWidth` dentro de `WallexReorderableList`. Al salir, se restaura el grid 2-col.
+**Choice**: En edit mode todo se rinde como `fullWidth` dentro de `BolsioReorderableList`. Al salir, se restaura el grid 2-col.
 **Alternatives considered**: `reorderable_grid_view` (paquete externo) con drag multi-columna.
-**Rationale**: `ReorderableListView` de Flutter sólo soporta lista lineal — un grid reorderable requiere una nueva dependencia que NO está en `pubspec.yaml`, con su propia API y bugs. La transición visual (grid → lista de tarjetas anchas → grid) es predecible y el usuario entiende "estoy editando". Patrón ya establecido por `WallexReorderableList` en otras pantallas (categorías, presupuestos).
+**Rationale**: `ReorderableListView` de Flutter sólo soporta lista lineal — un grid reorderable requiere una nueva dependencia que NO está en `pubspec.yaml`, con su propia API y bugs. La transición visual (grid → lista de tarjetas anchas → grid) es predecible y el usuario entiende "estoy editando". Patrón ya establecido por `BolsioReorderableList` en otras pantallas (categorías, presupuestos).
 **Consequences**: En edit mode el layout no es WYSIWYG perfecto. Documentado en spec. Si UX feedback lo exige, fase 2 puede introducir `reorderable_grid_view`.
 
 ### ADR-6: Streams compartidos via `HiddenModeService.shareValue()` vs `DashboardStreamScope` (`InheritedWidget`)
@@ -154,12 +154,12 @@ _applyChoicesAndAdvance() / iOS finish
 Tap lápiz                                  Drag widget i → posición j
    │                                            │
    ▼                                            ▼
-setState(() => _editing = true)        WallexReorderableList.onReorder(i,j)
+setState(() => _editing = true)        BolsioReorderableList.onReorder(i,j)
    │                                            │
    ▼                                            ▼
 build() rinde TODOS los widgets               DashboardLayoutService
         como fullWidth dentro de              .reorder(from:i, to:j)
-        WallexReorderableList                       │
+        BolsioReorderableList                       │
         envueltos en EditableWidgetFrame            │ debounce 300 ms
                                                     ▼
                                               save()
@@ -395,7 +395,7 @@ class DashboardWidgetSpec {
 
 **Edit mode rebuild**: cada widget se envuelve en `KeyedSubtree(key: ValueKey(descriptor.instanceId))` para que `ReorderableListView` preserve el `State` interno (incluyendo `StreamBuilder` ya suscrito). Sin `Key`, Flutter destruye y recrea el subtree en cada reorder ⇒ cascade de re-suscripciones.
 
-**Primer frame**: criterio de éxito `< 500 ms` con 8 widgets en POCO arm64-v8a (release sin obfuscate, sin split-debug-info — recipe oficial wallex).
+**Primer frame**: criterio de éxito `< 500 ms` con 8 widgets en POCO arm64-v8a (release sin obfuscate, sin split-debug-info — recipe oficial bolsio).
 
 ## Seguridad / Privacidad
 
@@ -415,9 +415,9 @@ class DashboardWidgetSpec {
 | Unit | `DashboardLayoutService` debouncer: 5 `save()` consecutivos → 1 escritura tras 300 ms. `flush()` fuerza inmediato. | `fakeAsync` de `package:fake_async`. |
 | Widget | `DashboardPage` rinde N items según layout dado (mock `DashboardLayoutService`). | `pumpWidget`, mock service. |
 | Widget | Edit mode toggle: tap lápiz → todos los items renderizan `EditableWidgetFrame`. | `pumpWidget` + `tap(find.byIcon(Icons.edit))`. |
-| Widget | Drag reorder: from index 0 to index 2 → layout persiste orden nuevo. | `WidgetTester.drag` sobre `WallexReorderableList`. |
+| Widget | Drag reorder: from index 0 to index 2 → layout persiste orden nuevo. | `WidgetTester.drag` sobre `BolsioReorderableList`. |
 | Widget | `_AddWidgetSheet`: muestra chips "recomendado" para los goals dados; deshabilita tipos ya presentes. | `pumpWidget` + verificación de `Chip.label` y `enabled`. |
-| Manual E2E | Ver `proposal.md` Success Criteria. Verificación en POCO arm64-v8a build oficial wallex. | Lista en `verify-report.md`. |
+| Manual E2E | Ver `proposal.md` Success Criteria. Verificación en POCO arm64-v8a build oficial bolsio. | Lista en `verify-report.md`. |
 
 ## Migration / Rollout
 

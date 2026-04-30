@@ -1,6 +1,7 @@
-import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 
 /// Defaults para el layout del dashboard.
 ///
@@ -80,6 +81,19 @@ class DashboardLayoutDefaults {
           QuickActionId.goToCalculator.name,
         ],
       };
+
+  /// Config para el widget exchangeRateCard que respeta la moneda preferida
+  /// del usuario:
+  ///   - pref = USD → mostrar VES + EUR (la pareja volátil para usuarios USD)
+  ///   - pref = VES → mostrar USD + EUR (la pareja de referencia para usuarios VES)
+  ///   - otro / null → mostrar USD + EUR (default seguro para contexto venezolano)
+  static Map<String, dynamic> get _exchangeRateCardConfig {
+    final pref = appStateSettings[SettingKey.preferredCurrency];
+    final currencies = (pref == 'USD')
+        ? <String>['VES', 'EUR']
+        : <String>['USD', 'EUR'];
+    return <String, dynamic>{'currencies': currencies};
+  }
 
   /// Construye un layout default a partir del set de goals seleccionado en
   /// el onboarding.
@@ -223,9 +237,13 @@ class DashboardLayoutDefaults {
 
       // Para quickUse, usar el config fijo con solo 3 acciones en vez del
       // default completo del registry.
-      final config = type == WidgetType.quickUse
-          ? _quickUseFixedConfig
-          : spec.defaultConfig;
+      // Para exchangeRateCard, usar el config pref-aware (REQ-2) que respeta
+      // la moneda preferida del usuario.
+      final config = switch (type) {
+        WidgetType.quickUse => _quickUseFixedConfig,
+        WidgetType.exchangeRateCard => _exchangeRateCardConfig,
+        _ => spec.defaultConfig,
+      };
 
       out.add(
         WidgetDescriptor.create(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/app/home/widgets/horizontal_scrollable_account_list.dart';
-import 'package:kilatex/core/models/date-utils/date_period_state.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/widgets/horizontal_scrollable_account_list.dart';
+import 'package:bolsio/core/models/date-utils/date_period_state.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Wrapper público de [HorizontalScrollableAccountList] para que el
 /// dashboard dinámico pueda renderizarlo desde un `WidgetDescriptor`.

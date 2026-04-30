@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
 
 /// Task 3.4 — `DashboardWidgetRegistry`.
 ///

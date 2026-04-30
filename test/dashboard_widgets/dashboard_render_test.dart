@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/home/dashboard_widgets/dashboard_layout_body.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/dashboard_widgets/dashboard_layout_body.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
 
 /// Task 3.6 — `DashboardLayoutBody` renderiza N items según layout dado.
 ///

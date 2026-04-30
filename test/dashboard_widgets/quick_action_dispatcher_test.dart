@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/budgets/budgets_page.dart';
-import 'package:wallex/app/calculator/calculator.page.dart';
-import 'package:wallex/app/currencies/currency_manager.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
-import 'package:wallex/app/settings/settings_page.dart';
-import 'package:wallex/core/routes/destinations.dart';
+import 'package:bolsio/app/budgets/budgets_page.dart';
+import 'package:bolsio/app/calculator/calculator.page.dart';
+import 'package:bolsio/app/currencies/currency_manager.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
+import 'package:bolsio/app/settings/settings_page.dart';
+import 'package:bolsio/core/routes/destinations.dart';
 
 /// Tests del bug-fix "quick-use chips deben switch tab en lugar de push".
 ///

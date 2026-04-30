@@ -2,7 +2,7 @@
 
 ## Topic
 
-Convertir el dashboard de wallex en un sistema de widgets dinámicos con: catálogo intercambiable, defaults derivados de los `onboardingGoals`, modo edición (quitar/poner/reordenar) y un widget de "uso rápido" con atajos a settings y acciones frecuentes.
+Convertir el dashboard de bolsio en un sistema de widgets dinámicos con: catálogo intercambiable, defaults derivados de los `onboardingGoals`, modo edición (quitar/poner/reordenar) y un widget de "uso rápido" con atajos a settings y acciones frecuentes.
 
 ## Current State
 
@@ -13,7 +13,7 @@ Convertir el dashboard de wallex en un sistema de widgets dinámicos con: catál
   - `isLockedStream`: `BehaviorSubject<bool>.seeded(true).stream.distinct()` (l.74).
   - `visibleAccountIdsStream` (l.95): `Rx.combineLatest2(isLockedStream, getAccounts()).distinct(_listEquals).shareValue()` con caché lazy en `_visibleAccountIdsStream`. **Ya está compartido** — el dashboard hace **una sola** suscripción y propaga `visibleIds` por props.
 - **Layout responsivo**: `ResponsiveRowColumn.withSymetricSpacing(direction: BreakPoint.of(context).isLargerThan(BreakpointID.md) ? Axis.horizontal : Axis.vertical, …)` ([`lib/app/home/widgets/dashboard_cards.dart:151`](lib/app/home/widgets/dashboard_cards.dart#L151)). Breakpoints en [`lib/core/presentation/responsive/app_breakpoints.dart`](lib/core/presentation/responsive/app_breakpoints.dart) (`md = 720px`).
-- **Reorderable abstraction**: [`lib/core/presentation/widgets/wallex_reorderable_list.dart`](lib/core/presentation/widgets/wallex_reorderable_list.dart) envuelve `ReorderableListView.builder` con `itemBuilder`, `onReorder`, `totalItemCount`, `isOrderEnabled` y manejo de opacidad.
+- **Reorderable abstraction**: [`lib/core/presentation/widgets/bolsio_reorderable_list.dart`](lib/core/presentation/widgets/bolsio_reorderable_list.dart) envuelve `ReorderableListView.builder` con `itemBuilder`, `onReorder`, `totalItemCount`, `isOrderEnabled` y manejo de opacidad.
 - **Onboarding** [`lib/app/onboarding/onboarding.dart`](lib/app/onboarding/onboarding.dart):
   - `_applyChoices()` (l.165–178): persiste `onboardingGoals`, `preferredCurrency`, `preferredRateSource` con `await UserSettingService.instance.setItem(...)` secuenciales.
   - Invocado en slide 9 Android (`_applyChoicesAndAdvance` l.305) y slide 5 iOS (l.267).

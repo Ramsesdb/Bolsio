@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define el contrato del modelo de layout del dashboard dinámico de wallex: estructuras de datos (`DashboardLayout`, `WidgetDescriptor`, `WidgetType`, `WidgetSize`), versionado/migraciones, persistencia en `SettingKey.dashboardLayout`, serialización JSON, defaults derivados de `onboardingGoals` y comportamiento de fallback.
+Define el contrato del modelo de layout del dashboard dinámico de bolsio: estructuras de datos (`DashboardLayout`, `WidgetDescriptor`, `WidgetType`, `WidgetSize`), versionado/migraciones, persistencia en `SettingKey.dashboardLayout`, serialización JSON, defaults derivados de `onboardingGoals` y comportamiento de fallback.
 
 ## Requirements
 

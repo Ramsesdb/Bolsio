@@ -3,7 +3,7 @@
 Wave 3B test pass. Each item below maps to a Success Criterion in
 `proposal.md` and is annotated with whether the **automated suite**
 (`flutter test test/dashboard_widgets/`) covers it or whether **manual QA**
-on a release build (POCO arm64-v8a per the wallex build recipe — no
+on a release build (POCO arm64-v8a per the bolsio build recipe — no
 obfuscate, no split-debug-info) is required.
 
 Statuses: `[ ]` not yet verified, `[A]` covered by automated suite, `[M]`
@@ -64,7 +64,7 @@ requires manual QA, `[A+M]` partial automation + manual sign-off.
 
 - [M]
 - **Automated**: not feasible in unit tests.
-- **Manual**: build with the official wallex recipe (`flutter build apk --release --target-platform=android-arm64 --no-tree-shake-icons` — verbatim per user's persisted recipe), launch, and time the first dashboard frame with DevTools or `Trace.startSync`/`Trace.endSync`. Record on the POCO.
+- **Manual**: build with the official bolsio recipe (`flutter build apk --release --target-platform=android-arm64 --no-tree-shake-icons` — verbatim per user's persisted recipe), launch, and time the first dashboard frame with DevTools or `Trace.startSync`/`Trace.endSync`. Record on the POCO.
 
 ### 10. `firebase_sync_service._userSettingsSyncExclusions` confirmado: `dashboardLayout` NO excluido
 

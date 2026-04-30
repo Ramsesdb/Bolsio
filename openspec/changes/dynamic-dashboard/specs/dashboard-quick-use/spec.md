@@ -65,7 +65,7 @@ Toggles MUST usar el servicio singleton existente (no re-implementar estado). Na
 El `configEditor` del `quickUse` MUST abrir un bottom sheet con dos pestañas:
 
 1. **Pestaña "Atajos"**: chips de todos los `QuickActionId` agrupados por categoría. Tap en un chip alterna su presencia en `config.chips`. Chips ya seleccionados MUST mostrarse con check visual.
-2. **Pestaña "Orden"**: lista reorderable (`WallexReorderableList`) de los chips actualmente seleccionados, con drag handle.
+2. **Pestaña "Orden"**: lista reorderable (`BolsioReorderableList`) de los chips actualmente seleccionados, con drag handle.
 
 El sheet MUST tener un botón "Listo" que cierre y persista los cambios. Cerrar con swipe-down o tap fuera MUST equivaler a "Listo" (persistir).
 

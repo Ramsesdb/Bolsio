@@ -217,7 +217,7 @@ Estas tres open questions del `design.md` quedan resueltas para guiar la impleme
 - Estimación: S
 - Dependencias: 1.9
 
-#### 2.4.3 Renderizar `WallexReorderableList` con todos los widgets en `fullWidth` cuando `_editing`
+#### 2.4.3 Renderizar `BolsioReorderableList` con todos los widgets en `fullWidth` cuando `_editing`
 
 - [x] Archivo: `lib/app/home/dashboard.page.dart` (Modify)
 - `onReorder` invoca `DashboardLayoutService.reorder(from, to)` (debounce 300 ms)
@@ -278,7 +278,7 @@ Estas tres open questions del `design.md` quedan resueltas para guiar la impleme
 
 - [x] Archivo: `lib/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart` (Create)
 - Pestaña 1: chips por categoría (toggle / navigation / quickTx) con check visual
-- Pestaña 2: `WallexReorderableList` de chips seleccionados
+- Pestaña 2: `BolsioReorderableList` de chips seleccionados
 - Cierre por botón "Listo" o swipe-down → persist `config.chips` vía `DashboardLayoutService.updateConfig`
 - Spec: `dashboard-quick-use` § configEditor (Scenarios selección y reorden, swipe-down, sin chips)
 - Estimación: M
@@ -356,7 +356,7 @@ Estas tres open questions del `design.md` quedan resueltas para guiar la impleme
 ### 3.8 Widget test: drag reorder persiste el nuevo orden
 
 - [x] Archivo: `test/dashboard_widgets/edit_reorder_test.dart` (Create)
-- `WidgetTester.drag` sobre `WallexReorderableList`
+- `WidgetTester.drag` sobre `BolsioReorderableList`
 - Spec: `dashboard-edit-mode` § Drag-and-drop (Scenario reordenar tres widgets)
 - Estimación: M
 - Dependencias: 2.4.3
@@ -382,7 +382,7 @@ Estas tres open questions del `design.md` quedan resueltas para guiar la impleme
 ### 3.11 Manual E2E checklist (proposal.md Success Criteria)
 
 - [x] Archivo: `openspec/changes/dynamic-dashboard/verify-checklist.md` (Create)
-- Checklist con todos los Success Criteria de `proposal.md`. Verificar en POCO arm64-v8a release sin obfuscate ni split-debug-info (recipe oficial wallex)
+- Checklist con todos los Success Criteria de `proposal.md`. Verificar en POCO arm64-v8a release sin obfuscate ni split-debug-info (recipe oficial bolsio)
 - Estimación: M
 - Dependencias: todas las anteriores de Phase 2
 
