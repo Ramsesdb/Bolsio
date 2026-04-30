@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/models/currency/currency_display_policy.dart';
-import 'package:wallex/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
 
 /// Phase 4.5 of `currency-modes-rework`: the rate refresher derives its
 /// pair set from the active [CurrencyDisplayPolicy] plus any

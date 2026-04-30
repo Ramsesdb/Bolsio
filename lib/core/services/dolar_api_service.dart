@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 /// Model for exchange rate from DolarApi.com
 class DolarApiRate {

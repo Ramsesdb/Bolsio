@@ -9,7 +9,7 @@
 
 ## 1. Intent
 
-The Monekin Finance app uses `COALESCE(excRate.exchangeRate, 1)` in 6 SQL locations to convert account balances and transaction amounts into the user's preferred currency. When no exchange rate exists for a given currency (e.g., VES with preferred currency USD), the fallback value of `1` causes the raw amount in the foreign currency to be treated as if it were already in the preferred currency.
+The Bolsio Finance app uses `COALESCE(excRate.exchangeRate, 1)` in 6 SQL locations to convert account balances and transaction amounts into the user's preferred currency. When no exchange rate exists for a given currency (e.g., VES with preferred currency USD), the fallback value of `1` causes the raw amount in the foreign currency to be treated as if it were already in the preferred currency.
 
 This produces three catastrophic display errors:
 

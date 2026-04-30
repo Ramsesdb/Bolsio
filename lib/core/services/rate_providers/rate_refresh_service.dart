@@ -1,17 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:kilatex/core/services/dolar_api_service.dart';
-import 'package:kilatex/core/services/rate_providers/frankfurter_provider.dart';
-import 'package:kilatex/core/services/rate_providers/rate_provider_chain.dart';
-import 'package:kilatex/core/services/rate_providers/rate_provider_manager.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/services/dolar_api_service.dart';
+import 'package:bolsio/core/services/rate_providers/frankfurter_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider_chain.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider_manager.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Result summary of a rate-refresh cycle.
 class RateRefreshResult {
@@ -220,8 +219,8 @@ class RateRefreshService {
     // via [RateProviderChain].
     final involvesVes =
         preferredCurrency == 'VES' || pairs.any((p) => p.from == 'VES');
-    final hasUsdVesPair =
-        preferredCurrency == 'VES' || pairs.any((p) => p.from == 'USD');
+    final hasUsdVesPair = preferredCurrency == 'VES' ||
+        pairs.any((p) => p.from == 'USD' || p.from == 'VES');
     final hasEurVesPair = pairs.any((p) => p.from == 'EUR');
 
     final Map<String, bool> usdRateSuccess = {
@@ -264,18 +263,6 @@ class RateRefreshService {
                   rate: storeRate,
                   source: source,
                 );
-            await Future<void>.delayed(Duration.zero);
-            if (source == 'bcv') {
-              await ExchangeRateService.instance.insertOrUpdateExchangeRate(
-                ExchangeRateInDB(
-                  id: generateUUID(),
-                  date: now,
-                  currencyCode: storeCurrencyCode,
-                  exchangeRate: storeRate,
-                ),
-              );
-              await Future<void>.delayed(Duration.zero);
-            }
             debugPrint(
               '[init] RateProvider ${source.toUpperCase()}: $storeRate '
               '$storeCurrencyCode via ${result.providerName}',

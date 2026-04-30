@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/rate_providers/rate_provider_chain.dart';
-import 'package:wallex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider_chain.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Unit tests for [RateProviderChain] dispatch decisions.
 ///

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/services/rate_providers/frankfurter_provider.dart';
-import 'package:kilatex/core/services/rate_providers/manual_override_provider.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/services/rate_providers/frankfurter_provider.dart';
+import 'package:bolsio/core/services/rate_providers/manual_override_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Outcome of a chain dispatch — the rate plus which step in the fallback
 /// chain produced it (so callers can drive UI hints like "tasa

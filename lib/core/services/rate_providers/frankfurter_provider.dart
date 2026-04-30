@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:kilatex/core/services/rate_providers/rate_provider.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Auto fiat-fiat rate provider backed by [api.frankfurter.app](https://api.frankfurter.app).
 ///

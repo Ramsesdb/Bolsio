@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:kilatex/core/services/rate_providers/rate_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider.dart';
 
 /// RateProvider implementation using ve.dolarapi.com.
 /// Only supports today's rate (no historical data).

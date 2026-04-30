@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/rate_providers/rate_provider.dart';
-import 'package:wallex/core/services/rate_providers/dolar_api_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider.dart';
+import 'package:bolsio/core/services/rate_providers/dolar_api_provider.dart';
 
 /// Fake provider that returns a fixed rate for today only.
 class FakeTodayOnlyProvider extends RateProvider {

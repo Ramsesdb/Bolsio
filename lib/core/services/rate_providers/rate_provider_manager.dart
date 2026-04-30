@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:kilatex/core/services/rate_providers/rate_provider.dart';
-import 'package:kilatex/core/services/rate_providers/dolar_api_provider.dart';
+import 'package:bolsio/core/services/rate_providers/rate_provider.dart';
+import 'package:bolsio/core/services/rate_providers/dolar_api_provider.dart';
 
 /// Manages a fallback chain of rate providers.
 ///

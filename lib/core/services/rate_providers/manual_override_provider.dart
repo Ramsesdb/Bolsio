@@ -1,5 +1,5 @@
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/services/rate_providers/rate_source.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/services/rate_providers/rate_source.dart';
 
 /// Provider that lets the user override any auto-fetched rate manually.
 ///

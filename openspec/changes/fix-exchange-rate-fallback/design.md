@@ -387,7 +387,7 @@ Files that need to import `user_setting_service.dart`:
 
 Add to each:
 ```dart
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 ```
 
 ---
