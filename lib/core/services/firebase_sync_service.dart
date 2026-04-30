@@ -9,28 +9,28 @@ import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:kilatex/core/database/services/shared/key_value_service.dart'
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:bolsio/core/database/services/shared/key_value_service.dart'
     show onGlobalAppStateRefresh;
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/services/ai/ai_credentials.dart';
-import 'package:kilatex/core/services/ai/ai_credentials_store.dart';
-import 'package:kilatex/core/services/ai/ai_provider_type.dart';
-import 'package:kilatex/core/services/attachments/attachment_model.dart';
-import 'package:kilatex/core/services/attachments/attachments_service.dart';
-import 'package:kilatex/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:kilatex/core/services/firebase_credentials_cipher.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/services/ai/ai_credentials.dart';
+import 'package:bolsio/core/services/ai/ai_credentials_store.dart';
+import 'package:bolsio/core/services/ai/ai_provider_type.dart';
+import 'package:bolsio/core/services/attachments/attachment_model.dart';
+import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:bolsio/core/services/firebase_credentials_cipher.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 /// Service that syncs local data to Firestore for multi-device sharing.
 ///

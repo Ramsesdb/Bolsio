@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/currency/currency_mode.dart';
-import 'package:wallex/core/models/currency/currency_display_policy.dart';
-import 'package:wallex/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_mode.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
 
 /// Phase 10 task 10.9 — Firebase sync round-trip for `currencyMode` /
 /// `secondaryCurrency`.

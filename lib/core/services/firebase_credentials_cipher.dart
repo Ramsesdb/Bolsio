@@ -28,7 +28,7 @@ class FirebaseCredentialsCipher {
   // already-synced credential (users would need to re-enter on the other
   // devices). DO NOT rotate casually.
   static const _pepper =
-      'wallex.v1.pepper.3f7a2c91d4e58b6ac0ef1d92a73b4c8e5f6079182a3b4c5d6e7f80912a3b4c5d6';
+      'bolsio.v1.pepper.3f7a2c91d4e58b6ac0ef1d92a73b4c8e5f6079182a3b4c5d6e7f80912a3b4c5d6';
 
   static const _iterations = 100000;
   static const _keyLengthBytes = 32; // 256-bit AES key
@@ -48,7 +48,7 @@ class FirebaseCredentialsCipher {
     if (cached != null) return cached;
 
     final secret = SecretKey(utf8.encode(uid + _pepper));
-    final salt = utf8.encode('wallex.credentials.salt.v1:$uid');
+    final salt = utf8.encode('bolsio.credentials.salt.v1:$uid');
 
     final derived = await _pbkdf2.deriveKey(secretKey: secret, nonce: salt);
     _keyCache[uid] = derived;
