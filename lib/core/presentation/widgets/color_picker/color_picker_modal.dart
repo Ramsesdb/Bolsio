@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/extensions/lists.extensions.dart';
-import 'package:kilatex/core/presentation/widgets/color_picker/custom_color_picker_modal.dart';
-import 'package:kilatex/core/presentation/widgets/gradient-box.borders.dart';
-import 'package:kilatex/core/presentation/widgets/modal_container.dart';
-import 'package:kilatex/core/presentation/widgets/tappable.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/extensions/lists.extensions.dart';
+import 'package:bolsio/core/presentation/widgets/color_picker/custom_color_picker_modal.dart';
+import 'package:bolsio/core/presentation/widgets/gradient-box.borders.dart';
+import 'package:bolsio/core/presentation/widgets/modal_container.dart';
+import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 Future<void> showColorPickerModal(
   BuildContext context,

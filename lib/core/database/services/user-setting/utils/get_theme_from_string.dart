@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 ThemeMode getThemeFromString(String? themeString) {
   if (themeString == null) return ThemeMode.system;

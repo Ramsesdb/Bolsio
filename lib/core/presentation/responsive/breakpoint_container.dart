@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
 
 class BreakpointContainer extends StatelessWidget {
   /// XS and up child widget

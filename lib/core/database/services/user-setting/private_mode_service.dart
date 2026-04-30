@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PrivateModeService {

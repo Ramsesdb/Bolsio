@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/helpers/global_snackbar.dart';
-import 'package:kilatex/core/presentation/theme.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/core/presentation/helpers/global_snackbar.dart';
+import 'package:bolsio/core/presentation/theme.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
 
 class SnackbarParams {
   /// The amount of time the snack bar should be displayed.
@@ -11,7 +11,7 @@ class SnackbarParams {
   final Duration duration;
   final String title;
   final String? message;
-  final List<WallexSnackbarAction>? actions;
+  final List<BolsioSnackbarAction>? actions;
 
   /// Whether to clear all previous snackbars before showing the new one.
   ///
@@ -21,7 +21,7 @@ class SnackbarParams {
   /// Whether to show the snackbar at the top of the screen using global snackbar
   /// or at the bottom using ScaffoldMessenger.
   ///
-  /// If null, uses the default defined in [WallexSnackbar.showAtTopDefault].
+  /// If null, uses the default defined in [BolsioSnackbar.showAtTopDefault].
   final bool? showAtTop;
 
   SnackbarParams(
@@ -50,7 +50,7 @@ class SnackbarParams {
   );
 }
 
-abstract class WallexSnackbar {
+abstract class BolsioSnackbar {
   /// Whether to show snackbars at the top of the screen using global snackbar
   /// or at the bottom using ScaffoldMessenger.
   static bool get showAtTopDefault => false;
@@ -88,7 +88,7 @@ abstract class WallexSnackbar {
     required Color textColor,
     required IconData iconData,
   }) {
-    final showAtTop = options.showAtTop ?? WallexSnackbar.showAtTopDefault;
+    final showAtTop = options.showAtTop ?? BolsioSnackbar.showAtTopDefault;
 
     if (showAtTop) {
       _getScaffoldMessenger(options);
@@ -112,7 +112,7 @@ abstract class WallexSnackbar {
         //  margin: const EdgeInsets.all(8),
         //  behavior: SnackBarBehavior.floating,
         duration: options.duration,
-        content: WallexSnackbarContent(
+        content: BolsioSnackbarContent(
           title: options.title,
           message: options.message,
           color: textColor,
@@ -124,7 +124,7 @@ abstract class WallexSnackbar {
   }
 
   static dynamic success(SnackbarParams options) {
-    return WallexSnackbar.openSnackbar(
+    return BolsioSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.green[50]!,
       textColor: Colors.green,
@@ -133,7 +133,7 @@ abstract class WallexSnackbar {
   }
 
   static dynamic error(SnackbarParams options) {
-    return WallexSnackbar.openSnackbar(
+    return BolsioSnackbar.openSnackbar(
       options: options,
       bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
           ? Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer
@@ -146,7 +146,7 @@ abstract class WallexSnackbar {
   }
 
   static dynamic warning(SnackbarParams options) {
-    return WallexSnackbar.openSnackbar(
+    return BolsioSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.amber[50]!,
       textColor: Colors.amber,
@@ -155,7 +155,7 @@ abstract class WallexSnackbar {
   }
 
   static dynamic info(SnackbarParams options) {
-    return WallexSnackbar.openSnackbar(
+    return BolsioSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.blue[50]!,
       textColor: Colors.blue,
@@ -164,15 +164,15 @@ abstract class WallexSnackbar {
   }
 }
 
-class WallexSnackbarAction {
+class BolsioSnackbarAction {
   final String label;
   final VoidCallback? onPressed;
 
-  WallexSnackbarAction({required this.label, required this.onPressed});
+  BolsioSnackbarAction({required this.label, required this.onPressed});
 }
 
-class WallexSnackbarContent extends StatelessWidget {
-  const WallexSnackbarContent({
+class BolsioSnackbarContent extends StatelessWidget {
+  const BolsioSnackbarContent({
     super.key,
     required this.title,
     required this.color,
@@ -192,7 +192,7 @@ class WallexSnackbarContent extends StatelessWidget {
   /// `optional` color of the SnackBar/MaterialBanner body
   final IconData? icon;
 
-  final List<WallexSnackbarAction>? actions;
+  final List<BolsioSnackbarAction>? actions;
 
   @override
   Widget build(BuildContext context) {

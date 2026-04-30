@@ -1,5 +1,5 @@
-import 'package:kilatex/core/database/services/user-setting/enum/writing_system.enum.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/services/user-setting/enum/writing_system.enum.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class SupportedLocale {
   final AppLocale locale;

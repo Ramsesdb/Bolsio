@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/models/currency/currency.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:kilatex/core/presentation/widgets/modal_container.dart';
-import 'package:kilatex/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/models/currency/currency.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:bolsio/core/presentation/widgets/modal_container.dart';
+import 'package:bolsio/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 void showCurrencySelectorModal(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/layout/page_framework.dart';
-import 'package:kilatex/core/database/utils/demo_app_seeders.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/loading_overlay.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/app/layout/page_framework.dart';
+import 'package:bolsio/core/database/utils/demo_app_seeders.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/loading_overlay.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -229,7 +229,7 @@ class DebugPage extends StatelessWidget {
                     .then((value) {
                       loadingOverlay.hide();
 
-                      WallexSnackbar.success(
+                      BolsioSnackbar.success(
                         SnackbarParams('Demo data inserted successfully!'),
                       );
 
@@ -238,7 +238,7 @@ class DebugPage extends StatelessWidget {
                     .catchError((error) {
                       loadingOverlay.hide();
                       Logger.printDebug(error);
-                      WallexSnackbar.error(SnackbarParams.fromError(error));
+                      BolsioSnackbar.error(SnackbarParams.fromError(error));
                     });
               },
               child: Text('DEMO DATA'),

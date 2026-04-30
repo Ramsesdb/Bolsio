@@ -1,4 +1,4 @@
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
 
 final Set<BreakPoint> appBreakPoints = {
   const BreakPoint(BreakpointID.xs, width: 400),

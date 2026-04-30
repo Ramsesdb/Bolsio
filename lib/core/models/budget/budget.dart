@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/database/app_db.dart'
+import 'package:bolsio/core/database/app_db.dart'
     show BudgetInDB, TransactionFilterSetInDB;
-import 'package:kilatex/core/models/date-utils/date_period.dart';
-import 'package:kilatex/core/models/date-utils/date_period_state.dart';
-import 'package:kilatex/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:kilatex/core/models/mixins/financial_target_mixin.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/utils/date_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/models/date-utils/date_period.dart';
+import 'package:bolsio/core/models/date-utils/date_period_state.dart';
+import 'package:bolsio/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:bolsio/core/models/mixins/financial_target_mixin.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/utils/date_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 import '../transaction/transaction_type.enum.dart';
 import 'target_timeline_status.enum.dart';

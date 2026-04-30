@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/extensions/lists.extensions.dart';
-import 'package:kilatex/core/models/account/account.dart';
-import 'package:kilatex/core/models/date-utils/periodicity.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/utils/logger.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/extensions/lists.extensions.dart';
+import 'package:bolsio/core/models/account/account.dart';
+import 'package:bolsio/core/models/date-utils/periodicity.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/utils/logger.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 const _cashAccountID = 'acc1';
 const _bankAccountID = 'acc2';

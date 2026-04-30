@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Wallex brand color (very dark muted purple — used for glass surfaces).
+/// Bolsio brand color (very dark muted purple — used for glass surfaces).
 const brandBlue = Color(0xFF1E1B2E);
 
 /// Muted gray-purple accent for active text/icons.
@@ -26,6 +26,18 @@ class AppColors extends ThemeExtension<AppColors> {
   Color get white => colors['white']!;
   Color get black => colors['black']!;
   Color get accentMuted => colors['accentMuted']!;
+
+  /// Full-opacity text on the dashboard header gradient.
+  /// Dark: white — Light: dark navy for contrast on teal.
+  Color get onHeader => colors['onHeader']!;
+
+  /// Semi-transparent text on the dashboard header (labels, secondary info).
+  /// Dark: white @ 70% — Light: black @ 65%.
+  Color get onHeaderMuted => colors['onHeaderMuted']!;
+
+  /// Very faint text / dividers on the dashboard header.
+  /// Dark: white @ 45% — Light: black @ 45%.
+  Color get onHeaderSubtle => colors['onHeaderSubtle']!;
 
   static AppColors fromColorScheme(ColorScheme colorScheme) {
     final isDark = colorScheme.brightness == Brightness.dark;
@@ -62,6 +74,13 @@ class AppColors extends ThemeExtension<AppColors> {
             : colorScheme.onPrimary,
         'white': !isDark ? Colors.white : Colors.black,
         'black': isDark ? Colors.white : Colors.black,
+        'onHeader': isDark ? Colors.white : const Color(0xFF1A1A2E),
+        'onHeaderMuted': isDark
+            ? Colors.white.withValues(alpha: 0.7)
+            : Colors.black.withValues(alpha: 0.65),
+        'onHeaderSubtle': isDark
+            ? Colors.white.withValues(alpha: 0.45)
+            : Colors.black.withValues(alpha: 0.45),
       },
     );
   }

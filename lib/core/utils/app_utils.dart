@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
 
 abstract class AppUtils {
   static bool get isDesktop {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kilatex/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:bolsio/core/presentation/widgets/form_fields/date_field.dart';
 
 /// A [FormField] that contains a [DateTimeField].
 ///

@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DefaultTransactionValues {

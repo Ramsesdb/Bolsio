@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
-import 'package:kilatex/core/database/utils/database_enum.dart';
+import 'package:bolsio/core/database/utils/database_enum.dart';
 
 /// Converter to store a list of strings as a JSON-encoded string in the database
 class StringListTypeConverter extends TypeConverter<List<String>, String> {

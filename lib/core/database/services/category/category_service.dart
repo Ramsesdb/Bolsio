@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
-import 'package:kilatex/core/services/firebase_sync_service.dart';
+import 'package:bolsio/core/services/firebase_sync_service.dart';
 
 class CategoryService {
   final AppDB db;

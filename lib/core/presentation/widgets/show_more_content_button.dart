@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class ShowMoreContentButton extends StatefulWidget {
   const ShowMoreContentButton({

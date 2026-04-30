@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/presentation/widgets/confirm_dialog.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 Future<Null> showExitWithoutSaveWarnDialog(BuildContext context) {
   final t = Translations.of(context);

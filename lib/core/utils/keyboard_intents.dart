@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
 
 /// Handle when the user presses a back button key on the keyboard/mouse
 void _handleKeyBackButton() {

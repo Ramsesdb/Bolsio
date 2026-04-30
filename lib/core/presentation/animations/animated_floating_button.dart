@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kilatex/core/presentation/animations/animated_expanded.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
 
 class AnimatedFloatingButton extends StatelessWidget {
   const AnimatedFloatingButton({
@@ -35,19 +34,16 @@ class AnimatedFloatingButton extends StatelessWidget {
       tooltip: isExtended ? null : text,
       icon: icon,
       isExtended: isExtended,
-      label: AnimatedExpanded(
-        duration: const Duration(milliseconds: 250),
-        expand: isExtended,
-        axis: Axis.horizontal,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
-        ),
-      ),
+      label: isExtended
+          ? Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            )
+          : null,
     );
   }
 }
@@ -74,15 +70,24 @@ class GlassFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
 
-    final content = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconTheme(
-          data: const IconThemeData(color: Colors.white, size: 24),
-          child: icon,
-        ),
-        if (label != null) ...[SizedBox(width: isExtended ? 8 : 0), label!],
-      ],
+    final content = AnimatedSize(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconTheme(
+            data: const IconThemeData(color: Colors.white, size: 24),
+            child: icon,
+          ),
+          if (label != null && isExtended) ...[
+            const SizedBox(width: 8),
+            label!,
+          ],
+        ],
+      ),
     );
 
     Widget button = Material(

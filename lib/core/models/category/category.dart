@@ -1,5 +1,5 @@
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
 
 import '../../services/supported_icon/supported_icon_service.dart';
 import '../supported-icon/supported_icon.dart';

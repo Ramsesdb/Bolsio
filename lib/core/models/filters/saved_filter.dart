@@ -1,4 +1,4 @@
-import 'package:kilatex/core/database/app_db.dart';
+import 'package:bolsio/core/database/app_db.dart';
 
 class SavedFilter extends SavedFilterInDB {
   final TransactionFilterSetInDB filterSet;
