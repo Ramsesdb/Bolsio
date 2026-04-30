@@ -2,7 +2,7 @@
 
 ## Technical Approach
 
-Feature autocontenida bajo `lib/app/accounts/statement_import/` (UI) y `lib/core/services/statement_import/` (lógica). Reutiliza `NexusAiService.completeMultimodal` para vision directa, `ReceiptImageService` para resize/compress, y `Account.trackedSince` para el modo informativas. Tabla nueva `statement_import_batches` para trazabilidad y undo 7 días. El mockup `ejemplo/Wallex Statement Import.html` es la fuente visual de verdad — 5 pantallas, modos chips AND. Sin cambios en core de balance ni en NexusAI Gateway (`AI_infi`).
+Feature autocontenida bajo `lib/app/accounts/statement_import/` (UI) y `lib/core/services/statement_import/` (lógica). Reutiliza `NexusAiService.completeMultimodal` para vision directa, `ReceiptImageService` para resize/compress, y `Account.trackedSince` para el modo informativas. Tabla nueva `statement_import_batches` para trazabilidad y undo 7 días. El mockup `ejemplo/Bolsio Statement Import.html` es la fuente visual de verdad — 5 pantallas, modos chips AND. Sin cambios en core de balance ni en NexusAI Gateway (`AI_infi`).
 
 ---
 

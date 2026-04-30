@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/models/account/account.dart';
+import 'package:bolsio/core/models/account/account.dart';
 
 class SiHeader extends StatelessWidget {
   const SiHeader({super.key, required this.account});

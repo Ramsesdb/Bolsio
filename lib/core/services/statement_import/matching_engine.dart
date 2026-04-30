@@ -1,9 +1,9 @@
-import 'package:kilatex/core/database/services/transaction/transaction_service.dart';
-import 'package:kilatex/core/models/transaction/transaction.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:kilatex/core/services/statement_import/models/extracted_row.dart';
-import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
+import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
+import 'package:bolsio/core/models/transaction/transaction.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:bolsio/core/services/statement_import/models/extracted_row.dart';
+import 'package:bolsio/core/services/statement_import/models/matching_result.dart';
 
 class MatchingEngine {
   MatchingEngine({TransactionService? transactionService})

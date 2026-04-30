@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/si_header.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/models/category/category.dart';
-import 'package:kilatex/core/models/transaction/transaction_status.enum.dart';
-import 'package:kilatex/core/models/transaction/transaction_type.enum.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
-import 'package:kilatex/core/services/statement_import/statement_batches_service.dart';
-import 'package:kilatex/core/utils/uuid.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/si_header.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/models/category/category.dart';
+import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:bolsio/core/services/statement_import/models/matching_result.dart';
+import 'package:bolsio/core/services/statement_import/statement_batches_service.dart';
+import 'package:bolsio/core/utils/uuid.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class ConfirmPage extends StatefulWidget {
   const ConfirmPage({super.key});
@@ -56,7 +56,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
     if (incomeCat == null || expenseCat == null) {
       if (mounted) {
         setState(() => _committing = false);
-        WallexSnackbar.error(
+        BolsioSnackbar.error(
           SnackbarParams(
             Translations.of(context)
                 .statement_import
@@ -110,7 +110,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
       debugPrint('ConfirmPage._commit failed: $e\n$st');
       if (!mounted) return;
       setState(() => _committing = false);
-      WallexSnackbar.error(
+      BolsioSnackbar.error(
         SnackbarParams(
           Translations.of(context).statement_import.confirm.error,
           message: '$e',

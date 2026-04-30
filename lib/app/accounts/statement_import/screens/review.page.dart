@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/accounts/account_form.dart';
-import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/counter.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/mode_chips.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/row_tile.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/si_header.dart';
-import 'package:kilatex/core/presentation/widgets/inline_info_card.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/statement_import/models/matching_result.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/account_form.dart';
+import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/counter.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/mode_chips.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/row_tile.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/si_header.dart';
+import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/statement_import/models/matching_result.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});

@@ -1,5 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:kilatex/core/services/statement_import/models/extracted_row.dart';
+import 'package:bolsio/core/services/statement_import/models/extracted_row.dart';
 
 part 'matching_result.g.dart';
 
