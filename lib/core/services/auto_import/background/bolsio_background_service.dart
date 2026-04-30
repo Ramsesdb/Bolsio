@@ -4,10 +4,10 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/auto_import/capture_channel.dart';
-import 'package:kilatex/core/services/auto_import/background/local_notification_service.dart';
-import 'package:kilatex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/services/auto_import/background/local_notification_service.dart';
+import 'package:bolsio/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// Manages the Android foreground service that keeps auto-import capture
 /// running when the app is closed.
@@ -18,13 +18,13 @@ import 'package:kilatex/core/services/auto_import/orchestrator/capture_orchestra
 ///
 /// The background isolate re-initializes the database and orchestrator
 /// independently from the main isolate.
-class WallexBackgroundService {
-  static final WallexBackgroundService instance = WallexBackgroundService._();
+class BolsioBackgroundService {
+  static final BolsioBackgroundService instance = BolsioBackgroundService._();
 
-  WallexBackgroundService._();
+  BolsioBackgroundService._();
 
   /// For testing: create an instance with a custom service.
-  WallexBackgroundService.forTesting({
+  BolsioBackgroundService.forTesting({
     FlutterBackgroundService? service,
   }) : _serviceOverride = service;
 
@@ -60,7 +60,7 @@ class WallexBackgroundService {
               LocalNotificationService.foregroundNotificationId,
           notificationChannelId:
               LocalNotificationService.captureChannelId,
-          initialNotificationTitle: 'Wallex',
+          initialNotificationTitle: 'Bolsio',
           initialNotificationContent: 'Capturando movimientos bancarios',
           foregroundServiceTypes: [AndroidForegroundType.specialUse],
         ),
@@ -71,11 +71,11 @@ class WallexBackgroundService {
 
       _initialized = true;
       debugPrint(
-        'WallexBackgroundService: configured',
+        'BolsioBackgroundService: configured',
       );
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Failed to configure: $e',
+        'BolsioBackgroundService: Failed to configure: $e',
       );
     }
   }
@@ -90,7 +90,7 @@ class WallexBackgroundService {
     final isRunning = await _service.isRunning();
     if (isRunning) {
       debugPrint(
-        'WallexBackgroundService: Background service already running — skipping start',
+        'BolsioBackgroundService: Background service already running — skipping start',
       );
       return;
     }
@@ -98,11 +98,11 @@ class WallexBackgroundService {
     try {
       await _service.startService();
       debugPrint(
-        'WallexBackgroundService: Background service started',
+        'BolsioBackgroundService: Background service started',
       );
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Failed to start background service: $e',
+        'BolsioBackgroundService: Failed to start background service: $e',
       );
     }
   }
@@ -117,11 +117,11 @@ class WallexBackgroundService {
     try {
       _service.invoke('stop');
       debugPrint(
-        'WallexBackgroundService: Background service stop requested',
+        'BolsioBackgroundService: Background service stop requested',
       );
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Failed to stop background service: $e',
+        'BolsioBackgroundService: Failed to stop background service: $e',
       );
     }
   }
@@ -139,11 +139,11 @@ class WallexBackgroundService {
     try {
       _service.invoke('restart');
       debugPrint(
-        'WallexBackgroundService: Background service restart requested',
+        'BolsioBackgroundService: Background service restart requested',
       );
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Failed to restart background service: $e',
+        'BolsioBackgroundService: Failed to restart background service: $e',
       );
     }
   }
@@ -170,7 +170,7 @@ Future<void> _initSettingsWithRetry() async {
         await Future.delayed(Duration(milliseconds: 500 * (1 << attempt)));
       } else {
         debugPrint(
-          'WallexBackgroundService: settings init failed after $maxAttempts attempts: $e',
+          'BolsioBackgroundService: settings init failed after $maxAttempts attempts: $e',
         );
       }
     }
@@ -188,7 +188,7 @@ Future<void> _onStart(ServiceInstance service) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   debugPrint(
-    'WallexBackgroundService: Background isolate started',
+    'BolsioBackgroundService: Background isolate started',
   );
 
   // Wait for the main isolate to finish its own DB init before touching SQLite.
@@ -206,7 +206,7 @@ Future<void> _onStart(ServiceInstance service) async {
     await localNotif.initialize();
   } catch (e) {
     debugPrint(
-      'WallexBackgroundService: Failed to init local notifications in background: $e',
+      'BolsioBackgroundService: Failed to init local notifications in background: $e',
     );
   }
 
@@ -219,7 +219,7 @@ Future<void> _onStart(ServiceInstance service) async {
       await localNotif.showNewPendingNotification(pendingCount);
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Error showing pending notification: $e',
+        'BolsioBackgroundService: Error showing pending notification: $e',
       );
     }
   };
@@ -234,18 +234,18 @@ Future<void> _onStart(ServiceInstance service) async {
       channels: {CaptureChannel.sms, CaptureChannel.api},
     );
     debugPrint(
-      'WallexBackgroundService: Orchestrator started in background isolate',
+      'BolsioBackgroundService: Orchestrator started in background isolate',
     );
   } catch (e) {
     debugPrint(
-      'WallexBackgroundService: Failed to start orchestrator in background: $e',
+      'BolsioBackgroundService: Failed to start orchestrator in background: $e',
     );
   }
 
   // Listen for commands from the main isolate
   service.on('stop').listen((event) async {
     debugPrint(
-      'WallexBackgroundService: Received stop command',
+      'BolsioBackgroundService: Received stop command',
     );
     await orchestrator.stop();
     await service.stopSelf();
@@ -253,7 +253,7 @@ Future<void> _onStart(ServiceInstance service) async {
 
   service.on('restart').listen((event) async {
     debugPrint(
-      'WallexBackgroundService: Received restart command — reconfiguring orchestrator',
+      'BolsioBackgroundService: Received restart command — reconfiguring orchestrator',
     );
     // Re-read settings (they may have changed in the main isolate's DB)
     try {
@@ -263,7 +263,7 @@ Future<void> _onStart(ServiceInstance service) async {
       );
     } catch (e) {
       debugPrint(
-        'WallexBackgroundService: Error restarting orchestrator: $e',
+        'BolsioBackgroundService: Error restarting orchestrator: $e',
       );
     }
   });
@@ -273,7 +273,7 @@ Future<void> _onStart(ServiceInstance service) async {
     await service.setAsForegroundService();
 
     await service.setForegroundNotificationInfo(
-      title: 'Wallex',
+      title: 'Bolsio',
       content: 'Capturando movimientos bancarios',
     );
   }

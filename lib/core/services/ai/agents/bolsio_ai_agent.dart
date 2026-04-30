@@ -1,17 +1,17 @@
-import 'package:kilatex/core/services/ai/agents/agent_profile.dart';
-import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
-import 'package:kilatex/core/services/ai/agents/agent_runner.dart';
-import 'package:kilatex/core/services/ai/financial_context_builder.dart';
-import 'package:kilatex/core/services/ai/tools/ai_tool.dart';
-import 'package:kilatex/core/services/ai/tools/ai_tool_registry.dart';
-import 'package:kilatex/core/services/ai/tools/impl/create_transaction_tool.dart';
-import 'package:kilatex/core/services/ai/tools/impl/create_transfer_tool.dart';
-import 'package:kilatex/core/services/ai/tools/impl/get_balance_tool.dart';
-import 'package:kilatex/core/services/ai/tools/impl/get_budgets_tool.dart';
-import 'package:kilatex/core/services/ai/tools/impl/get_stats_by_category_tool.dart';
-import 'package:kilatex/core/services/ai/tools/impl/list_transactions_tool.dart';
+import 'package:bolsio/core/services/ai/agents/agent_profile.dart';
+import 'package:bolsio/core/services/ai/agents/agent_run_result.dart';
+import 'package:bolsio/core/services/ai/agents/agent_runner.dart';
+import 'package:bolsio/core/services/ai/financial_context_builder.dart';
+import 'package:bolsio/core/services/ai/tools/ai_tool.dart';
+import 'package:bolsio/core/services/ai/tools/ai_tool_registry.dart';
+import 'package:bolsio/core/services/ai/tools/impl/create_transaction_tool.dart';
+import 'package:bolsio/core/services/ai/tools/impl/create_transfer_tool.dart';
+import 'package:bolsio/core/services/ai/tools/impl/get_balance_tool.dart';
+import 'package:bolsio/core/services/ai/tools/impl/get_budgets_tool.dart';
+import 'package:bolsio/core/services/ai/tools/impl/get_stats_by_category_tool.dart';
+import 'package:bolsio/core/services/ai/tools/impl/list_transactions_tool.dart';
 
-/// Full chat agent for `WallexChatPage`.
+/// Full chat agent for `BolsioChatPage`.
 ///
 /// Contract:
 ///  - `maxLoops = 3` — enough for "list → stats → budget" multi-tool chains
@@ -24,14 +24,14 @@ import 'package:kilatex/core/services/ai/tools/impl/list_transactions_tool.dart'
 ///  - The runner streams text chunks live via the `onTextChunk` callback the
 ///    chat page wires up, so plain-text replies render token-by-token without
 ///    a second roundtrip to the gateway.
-class WallexAiAgent {
+class BolsioAiAgent {
   final AgentProfile profile;
   final AgentRunner _runner;
 
-  WallexAiAgent._({required this.profile, required AgentRunner runner})
+  BolsioAiAgent._({required this.profile, required AgentRunner runner})
       : _runner = runner;
 
-  factory WallexAiAgent({
+  factory BolsioAiAgent({
     AgentRunner? runner,
     String? modelOverride,
     double temperature = 0.3,
@@ -46,7 +46,7 @@ class WallexAiAgent {
       CreateTransferTool(),
     ]);
     final profile = AgentProfile(
-      name: 'wallexAssistant',
+      name: 'bolsioAssistant',
       systemPrompt: '',
       toolRegistry: registry,
       toolChoice: 'auto',
@@ -58,7 +58,7 @@ class WallexAiAgent {
       modelOverride: modelOverride,
       approvalRequiredTools: const {'create_transaction', 'create_transfer'},
     );
-    return WallexAiAgent._(
+    return BolsioAiAgent._(
       profile: profile,
       runner: runner ?? AgentRunner(),
     );
@@ -111,7 +111,7 @@ class WallexAiAgent {
     final fecha = _formatFechaLarga(now);
     final mesActual = _nombreMes(now.month);
     final anio = now.year;
-    return 'Eres Wallex AI, asistente financiero personal. Respondes SIEMPRE en '
+    return 'Eres Bolsi, el asistente financiero personal de Bolsio. Hablas de forma cálida y cercana, como un compañero de bolsillo que ayuda al usuario a entender sus finanzas. Respondes SIEMPRE en '
         'espanol (dialecto venezolano).\n\n'
         'CONTEXTO TEMPORAL (autoridad maxima sobre fechas):\n'
         '- Hoy es $fecha.\n'

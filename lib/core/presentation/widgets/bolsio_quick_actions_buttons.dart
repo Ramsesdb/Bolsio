@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../utils/list_tile_action_item.dart';
 
-class WallexQuickActionsButton extends StatelessWidget {
-  const WallexQuickActionsButton({super.key, required this.actions});
+class BolsioQuickActionsButton extends StatelessWidget {
+  const BolsioQuickActionsButton({super.key, required this.actions});
 
   final List<ListTileActionItem> actions;
 

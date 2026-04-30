@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
-class WallexAiMarkdown extends StatelessWidget {
-  const WallexAiMarkdown({
+class BolsioAiMarkdown extends StatelessWidget {
+  const BolsioAiMarkdown({
     super.key,
     required this.data,
     this.onUser = false,
@@ -121,7 +121,7 @@ class WallexAiMarkdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final base = onUser ? tokens.bubbleBodyOnUser : tokens.bubbleBody;
     final accent = tokens.accent;
     final s = _Styles(
@@ -172,7 +172,7 @@ class WallexAiMarkdown extends StatelessWidget {
     );
   }
 
-  Widget _buildBullets(_BulletBlock b, _Styles s, WallexAiTokens tokens) {
+  Widget _buildBullets(_BulletBlock b, _Styles s, BolsioAiTokens tokens) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -206,7 +206,7 @@ class WallexAiMarkdown extends StatelessWidget {
     );
   }
 
-  Widget _buildTable(_TableBlock b, _Styles s, WallexAiTokens tokens) {
+  Widget _buildTable(_TableBlock b, _Styles s, BolsioAiTokens tokens) {
     final displayRows = b.rows.length > maxTableRows
         ? b.rows.sublist(0, maxTableRows)
         : b.rows;
@@ -235,7 +235,7 @@ class WallexAiMarkdown extends StatelessWidget {
             color: tokens.border.withValues(alpha: 0.4),
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(WallexAiTokens.innerCardRadius),
+          borderRadius: BorderRadius.circular(BolsioAiTokens.innerCardRadius),
         ),
         child: _rowContent(
           header: b.header,

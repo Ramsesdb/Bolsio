@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
 
-class WallexAiOrb extends StatefulWidget {
-  const WallexAiOrb({
+class BolsioAiOrb extends StatefulWidget {
+  const BolsioAiOrb({
     super.key,
     required this.size,
     this.showGlow = true,
@@ -14,10 +14,10 @@ class WallexAiOrb extends StatefulWidget {
   final bool animated;
 
   @override
-  State<WallexAiOrb> createState() => _WallexAiOrbState();
+  State<BolsioAiOrb> createState() => _BolsioAiOrbState();
 }
 
-class _WallexAiOrbState extends State<WallexAiOrb>
+class _BolsioAiOrbState extends State<BolsioAiOrb>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
 
@@ -27,14 +27,14 @@ class _WallexAiOrbState extends State<WallexAiOrb>
     if (widget.animated) {
       _controller = AnimationController(
         vsync: this,
-        duration: WallexAiTokens.orbPulseDuration,
-        reverseDuration: WallexAiTokens.orbPulseDuration,
+        duration: BolsioAiTokens.orbPulseDuration,
+        reverseDuration: BolsioAiTokens.orbPulseDuration,
       )..repeat(reverse: true);
     }
   }
 
   @override
-  void didUpdateWidget(covariant WallexAiOrb oldWidget) {
+  void didUpdateWidget(covariant BolsioAiOrb oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animated != oldWidget.animated) {
       _controller?.dispose();
@@ -42,8 +42,8 @@ class _WallexAiOrbState extends State<WallexAiOrb>
       if (widget.animated) {
         _controller = AnimationController(
           vsync: this,
-          duration: WallexAiTokens.orbPulseDuration,
-          reverseDuration: WallexAiTokens.orbPulseDuration,
+          duration: BolsioAiTokens.orbPulseDuration,
+          reverseDuration: BolsioAiTokens.orbPulseDuration,
         )..repeat(reverse: true);
       }
     }
@@ -57,7 +57,7 @@ class _WallexAiOrbState extends State<WallexAiOrb>
 
   @override
   Widget build(BuildContext context) {
-    final tokens = WallexAiTokens.of(context);
+    final tokens = BolsioAiTokens.of(context);
     final size = widget.size;
 
     final orb = SizedBox(

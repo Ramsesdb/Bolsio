@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class WallexReorderableList extends StatefulWidget {
-  const WallexReorderableList({
+class BolsioReorderableList extends StatefulWidget {
+  const BolsioReorderableList({
     super.key,
     required this.itemBuilder,
     required this.onReorder,
@@ -26,10 +26,10 @@ class WallexReorderableList extends StatefulWidget {
   final ScrollController? scrollController;
 
   @override
-  State<WallexReorderableList> createState() => _WallexReorderableListState();
+  State<BolsioReorderableList> createState() => _BolsioReorderableListState();
 }
 
-class _WallexReorderableListState extends State<WallexReorderableList> {
+class _BolsioReorderableListState extends State<BolsioReorderableList> {
   int? currentOrderingIndex;
 
   @override

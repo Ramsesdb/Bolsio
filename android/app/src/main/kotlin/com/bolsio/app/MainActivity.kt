@@ -1,4 +1,4 @@
-package com.kilatex.app
+package com.bolsio.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
