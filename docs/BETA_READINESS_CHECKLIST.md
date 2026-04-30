@@ -1,4 +1,4 @@
-# Wallex — Beta Readiness Checklist
+# Bolsio — Beta Readiness Checklist
 
 > Auditoría a fondo del repo previa a distribuir un APK a dos amigos para pruebas.
 > Generado: 2026-04-29
@@ -15,7 +15,7 @@
 [ ] 4. Borrar android/app/google-services.json.bak
 [ ] 5. Decidir buildNumber sensato en pubspec.yaml (no auto-bump)
 [ ] 6. (Opcional) parchear null-bang en evaluate_expression.dart:136
-[ ] 7. flutter clean && flutter build apk --release (con receta wallex)
+[ ] 7. flutter clean && flutter build apk --release (con receta bolsio)
 ```
 
 ---
@@ -120,7 +120,7 @@ NO están en `pubspec.yaml > flutter > assets`, no se empaquetan en el APK. Pero
 
 ### Email de contacto público
 - `lib/app/settings/about.page.dart:121` → `mailto:ramsesdavidba@gmail.com` (intencional, contacto oficial).
-- URLs de GitHub apuntan a `Ramsesdb/Wallex` (about.page.dart:105, 114, 130, 139). OK si la marca personal es esa.
+- URLs de GitHub apuntan a `Ramsesdb/Bolsio` (about.page.dart:105, 114, 130, 139). OK si la marca personal es esa.
 
 ### Tag personal
 - `lib/core/database/utils/personal_ve_seeders.dart:770-771` → `'pve_tag_bigwise'` con nombre `'bigwise'`. Renombrar a genérico o parametrizar.
@@ -145,7 +145,7 @@ NO están en `pubspec.yaml > flutter > assets`, no se empaquetan en el APK. Pero
 - `minifyEnabled true` + `shrinkResources true` en release (`build.gradle:59-60`).
 - Sin `usesCleartextTraffic`, sin `android:debuggable="true"`.
 - Todos los endpoints externos HTTPS (OpenAI, Anthropic, Gemini, Binance, dolarapi, ramsesdb).
-- `applicationId = "com.wallex.app"` (no genérico `com.example.*`).
+- `applicationId = "com.bolsio.app"` (no genérico `com.example.*`).
 - `android:exported` correcto en MainActivity, BackgroundService (false), NotificationListener (con permission gate).
 - Permission flow correcto: `voice_permission_dialog.dart`, `permission_coordinator.dart`, SMS graceful degradation.
 - Migraciones DB coherentes: schema v27, v5→v27 todas presentes en `assets/sql/migrations/`.

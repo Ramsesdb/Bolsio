@@ -16,7 +16,7 @@ Before submitting your PR, please ensure the following:
 
 <!--- 💡Tip: Tick checkboxes like this: [x] --->
 
-- [ ] I've read and understand the [Code Contributions Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
+- [ ] I've read and understand the Code Contributions Guide.
 - [ ] I confirm that I've run the code locally and everything works as expected.
 
 ## 📸 Screenshots or Demo (if applicable)

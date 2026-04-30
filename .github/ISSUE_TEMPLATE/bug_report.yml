@@ -8,9 +8,9 @@ body:
       label: Prerequisites
       description: Please ensure you have completed all of the following.
       options:
-        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#report-issues-and-request-features).
+        - label: I have read the Contributing Guidelines.
           required: true
-        - label: I have searched for [existing issues](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aissue) that already report this problem, without success.
+        - label: I have searched for existing issues that already report this problem, without success.
           required: true
         - label: I have the app updated to the latest published version.
           required: true

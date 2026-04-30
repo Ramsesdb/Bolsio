@@ -1,4 +1,4 @@
-# Wallex
+# Bolsio
 
 Fork of [Monekin](https://github.com/enrique-lozano/Monekin) adapted for personal use in Venezuela.
 Adds multi-currency (USD/VES) support, BCV/paralelo rate tracking, auto-import from bank notifications,
@@ -15,7 +15,7 @@ Licensed under GPL-3.0 (inherited from Monekin).
 - Debt tracking (loans owed / owed to you)
 - Recurring transactions
 - Reports and statistics with fl_chart
-- AI chat assistant with transaction context (Wallex Chat)
+- AI chat assistant with transaction context (Bolsio Chat)
 - AI hub page for quick financial queries
 - Auto-import from bank notification parsing (BDV and configurable profiles)
 - Bank statement import (CSV / Excel review flow)
