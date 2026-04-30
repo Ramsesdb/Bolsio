@@ -154,7 +154,7 @@ class _TranslationsHomeZhTw extends TranslationsHomeEn {
 	@override String get my_accounts => '我的帳戶';
 	@override String get active_accounts => '活躍帳戶';
 	@override String get no_accounts => '尚未建立帳戶';
-	@override String get no_accounts_descr => '開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易';
+	@override String get no_accounts_descr => '開始使用 Bolsio 的所有魔力。至少建立一個帳戶以開始添加交易';
 	@override String get last_transactions => '最後的交易';
 	@override String get should_create_account_header => '哎呀！';
 	@override String get should_create_account_message => '您必須至少擁有一個非存檔帳戶才能開始建立交易';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusZhTw extends TranslationsTransactionStatusEn
 	@override String get reconciled => '已驗證';
 	@override String get reconciled_descr => '此交易已經過驗證，並且與您銀行的真實交易相對應';
 	@override String get unreconciled => '未驗證';
-	@override String get unreconciled_descr => '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據';
+	@override String get unreconciled_descr => '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Bolsio 中的餘額和統計數據';
 	@override String get pending => '待辦';
 	@override String get pending_descr => '此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它';
 	@override String get voided => '作廢';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportZhTw extends TranslationsBackupImportEn {
 	@override String get title => '匯入您的資料';
 	@override String get title_short => '匯入';
 	@override String get restore_backup => '恢復備份';
-	@override String get restore_backup_descr => '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料';
-	@override String get restore_backup_warn_description => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin';
+	@override String get restore_backup_descr => '從 Bolsio 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料';
+	@override String get restore_backup_warn_description => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Bolsio';
 	@override String get restore_backup_warn_title => '覆蓋所有數據';
 	@override String get select_other_file => '選擇其他文件';
 	@override String get tap_to_select_file => '點選選擇檔案';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiZhTw extends TranslationsMoreAiEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Wallex AI';
+	@override String get title => 'Bolsi';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsZhTw extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => '應用程式資訊';
-	@override String get description => '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
+	@override String get description => '查找 Bolsio 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
 	@override late final _TranslationsMoreAboutUsLegalZhTw legal = _TranslationsMoreAboutUsLegalZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsProjectZhTw project = _TranslationsMoreAboutUsProjectZhTw._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsZhTw extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => '幫助我們';
-	@override String get description => '了解如何幫助 Monekin 變得越來越好';
+	@override String get description => '了解如何幫助 Bolsio 變得越來越好';
 	@override String get rate_us => '評價我們';
 	@override String get rate_us_descr => '歡迎任何價格！';
-	@override String get share => '分享 Monekin';
+	@override String get share => '分享 Bolsio';
 	@override String get share_descr => '與朋友和家人分享我們的應用程式';
-	@override String get share_text => 'Monekin！最好的個人理財應用程式。在這裡下載';
+	@override String get share_text => 'Bolsio！最好的個人理財應用程式。在這裡下載';
 	@override String get thanks => '謝謝你！';
-	@override String get thanks_long => '您對 Monekin 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。';
+	@override String get thanks_long => '您對 Bolsio 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。';
 	@override String get donate => '做捐贈';
 	@override String get donate_descr => '透過您的捐款，您將幫助該應用程式繼續改進。還有什麼比邀請我喝咖啡來感謝所做的工作更好的方式呢？';
 	@override String get donate_success => '捐款已完成。非常感謝您的貢獻！❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrZhTw extends TranslationsFinancialH
 
 	// Translations
 	@override String get insufficient_data => '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！';
-	@override String get very_good => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習';
+	@override String get very_good => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Bolsio 一起學習';
 	@override String get good => '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！';
 	@override String get normal => '您的財務健康狀況或多或少處於這一時期其他人口的平均水平';
 	@override String get bad => '看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageZhTw extends TranslationsSettingsGener
 	@override String get section => '語言和文本';
 	@override String get title => '應用程式語言';
 	@override String get descr => '應用程式中顯示文字的語言';
-	@override String get help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>我們的指南</a>';
+	@override String get help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>我們的指南</a>';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectZhTw extends TranslationsMoreAboutUsProject
 	// Translations
 	@override String get display => '專案';
 	@override String get contributors => '合作者';
-	@override String get contributors_descr => '所有讓 Monekin 成長的開發者';
+	@override String get contributors_descr => '所有讓 Bolsio 成長的開發者';
 	@override String get contact => '聯絡我們';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsZhTw {
 			'home.my_accounts' => '我的帳戶',
 			'home.active_accounts' => '活躍帳戶',
 			'home.no_accounts' => '尚未建立帳戶',
-			'home.no_accounts_descr' => '開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易',
+			'home.no_accounts_descr' => '開始使用 Bolsio 的所有魔力。至少建立一個帳戶以開始添加交易',
 			'home.last_transactions' => '最後的交易',
 			'home.should_create_account_header' => '哎呀！',
 			'home.should_create_account_message' => '您必須至少擁有一個非存檔帳戶才能開始建立交易',
@@ -2218,7 +2218,7 @@ extension on TranslationsZhTw {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '非常糟糕'; case GenderContext.female: return '非常糟糕'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '數據不足'; case GenderContext.female: return '數據不足'; } }, 
 			'financial_health.review.descr.insufficient_data' => '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！',
-			'financial_health.review.descr.very_good' => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習',
+			'financial_health.review.descr.very_good' => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Bolsio 一起學習',
 			'financial_health.review.descr.good' => '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！',
 			'financial_health.review.descr.normal' => '您的財務健康狀況或多或少處於這一時期其他人口的平均水平',
 			'financial_health.review.descr.bad' => '看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息',
@@ -2362,7 +2362,7 @@ extension on TranslationsZhTw {
 			'transaction.status.reconciled' => '已驗證',
 			'transaction.status.reconciled_descr' => '此交易已經過驗證，並且與您銀行的真實交易相對應',
 			'transaction.status.unreconciled' => '未驗證',
-			'transaction.status.unreconciled_descr' => '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據',
+			'transaction.status.unreconciled_descr' => '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Bolsio 中的餘額和統計數據',
 			'transaction.status.pending' => '待辦',
 			'transaction.status.pending_descr' => '此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它',
 			'transaction.status.voided' => '作廢',
@@ -2672,8 +2672,8 @@ extension on TranslationsZhTw {
 			'backup.import.title' => '匯入您的資料',
 			'backup.import.title_short' => '匯入',
 			'backup.import.restore_backup' => '恢復備份',
-			'backup.import.restore_backup_descr' => '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料',
-			'backup.import.restore_backup_warn_description' => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin',
+			'backup.import.restore_backup_descr' => '從 Bolsio 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料',
+			'backup.import.restore_backup_warn_description' => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Bolsio',
 			'backup.import.restore_backup_warn_title' => '覆蓋所有數據',
 			'backup.import.select_other_file' => '選擇其他文件',
 			'backup.import.tap_to_select_file' => '點選選擇檔案',
@@ -2715,7 +2715,7 @@ extension on TranslationsZhTw {
 			'settings.general.language.section' => '語言和文本',
 			'settings.general.language.title' => '應用程式語言',
 			'settings.general.language.descr' => '應用程式中顯示文字的語言',
-			'settings.general.language.help' => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n\'>我們的指南</a>',
+			'settings.general.language.help' => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>我們的指南</a>',
 			'settings.general.locale.title' => '地區',
 			'settings.general.locale.auto' => '系統',
 			'settings.general.locale.descr' => '設定用於日期、數字的格式...',
@@ -2799,7 +2799,7 @@ extension on TranslationsZhTw {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Wallex AI',
+			'more.ai.title' => 'Bolsi',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => '數據',
@@ -2810,24 +2810,24 @@ extension on TranslationsZhTw {
 			'more.data.delete_all_header2' => '最後一步⚠️⚠️',
 			'more.data.delete_all_message2' => '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？',
 			'more.about_us.display' => '應用程式資訊',
-			'more.about_us.description' => '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫',
+			'more.about_us.description' => '查找 Bolsio 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫',
 			'more.about_us.legal.display' => '法律資訊',
 			'more.about_us.legal.privacy' => '隱私權政策',
 			'more.about_us.legal.terms' => '使用條款',
 			'more.about_us.legal.licenses' => '許可證',
 			'more.about_us.project.display' => '專案',
 			'more.about_us.project.contributors' => '合作者',
-			'more.about_us.project.contributors_descr' => '所有讓 Monekin 成長的開發者',
+			'more.about_us.project.contributors_descr' => '所有讓 Bolsio 成長的開發者',
 			'more.about_us.project.contact' => '聯絡我們',
 			'more.help_us.display' => '幫助我們',
-			'more.help_us.description' => '了解如何幫助 Monekin 變得越來越好',
+			'more.help_us.description' => '了解如何幫助 Bolsio 變得越來越好',
 			'more.help_us.rate_us' => '評價我們',
 			'more.help_us.rate_us_descr' => '歡迎任何價格！',
-			'more.help_us.share' => '分享 Monekin',
+			'more.help_us.share' => '分享 Bolsio',
 			'more.help_us.share_descr' => '與朋友和家人分享我們的應用程式',
-			'more.help_us.share_text' => 'Monekin！最好的個人理財應用程式。在這裡下載',
+			'more.help_us.share_text' => 'Bolsio！最好的個人理財應用程式。在這裡下載',
 			'more.help_us.thanks' => '謝謝你！',
-			'more.help_us.thanks_long' => '您對 Monekin 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。',
+			'more.help_us.thanks_long' => '您對 Bolsio 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。',
 			'more.help_us.donate' => '做捐贈',
 			'more.help_us.donate_descr' => '透過您的捐款，您將幫助該應用程式繼續改進。還有什麼比邀請我喝咖啡來感謝所做的工作更好的方式呢？',
 			'more.help_us.donate_success' => '捐款已完成。非常感謝您的貢獻！❤️',

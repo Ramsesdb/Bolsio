@@ -174,7 +174,7 @@
     "my-accounts": "Hesaplarım",
     "active-accounts": "Aktif hesaplar",
     "no-accounts": "Henüz hesap oluşturulmadı",
-    "no-accounts.descr": "Monekin'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun",
+    "no-accounts.descr": "Bolsio'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun",
     "last-transactions": "Son işlemler",
     "should-create-account.header": "Ups!",
     "should-create-account.message": "İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır"
@@ -202,7 +202,7 @@
       },
       "descr": {
         "insufficient_data": "Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!",
-        "very_good": "Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Monekin ile öğrenmeye devam etmenizi umuyoruz",
+        "very_good": "Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Bolsio ile öğrenmeye devam etmenizi umuyoruz",
         "good": "Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!",
         "normal": "Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit",
         "bad": "Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin",
@@ -391,7 +391,7 @@
       "reconciled": "Mutabık",
       "reconciled.descr": "Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor",
       "unreconciled": "Mutabık değil",
-      "unreconciled.descr": "Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Monekin'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır",
+      "unreconciled.descr": "Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Bolsio'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır",
       "pending": "Beklemede",
       "pending.descr": "Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır",
       "voided": "İptal Edildi",
@@ -796,8 +796,8 @@
       "title": "Verilerinizi içe aktarın",
       "title.short": "İçe Aktar",
       "restore-backup": "Yedeklemeyi Geri Yükle",
-      "restore-backup-descr": "Monekin'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir",
-      "restore-backup-warn.description": "Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Monekin'den indirdiğiniz dosyaları yükleyin",
+      "restore-backup-descr": "Bolsio'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir",
+      "restore-backup-warn.description": "Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Bolsio'den indirdiğiniz dosyaları yükleyin",
       "restore-backup-warn.title": "Tüm verilerin üzerine yaz",
       "select-other-file": "Başka dosya seç",
       "tap-to-select-file": "Bir dosya seçmek için dokunun",
@@ -852,7 +852,7 @@
         "section": "Dil ve metinler",
         "title": "Uygulama dili",
         "descr": "Metinlerin uygulamada görüntüleneceği dil",
-        "help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz"
+        "help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz"
       },
       "LOCALE": {
         "title": "Bölge",
@@ -943,7 +943,7 @@
     "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
     "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase senkronizasyonu" },
     "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
-    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
+    "AI": { "title": "Bolsi", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Veri",
       "display.descr": "Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın",
@@ -955,7 +955,7 @@
     },
     "ABOUT_US": {
       "display": "Uygulama bilgileri",
-      "description": "Monekin'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin",
+      "description": "Bolsio'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin",
       "LEGAL": {
         "display": "Yasal bilgiler",
         "privacy": "Gizlilik politikası",
@@ -965,20 +965,20 @@
       "PROJECT": {
         "display": "Proje",
         "contributors": "Katkıda bulunanlar",
-        "contributors.descr": "Monekin'in büyümesini sağlayan tüm geliştiriciler",
+        "contributors.descr": "Bolsio'in büyümesini sağlayan tüm geliştiriciler",
         "contact": "Bize ulaşın"
       }
     },
     "HELP_US": {
       "display": "Bize yardım edin",
-      "description": "Monekin'in nasıl daha iyi olabileceğini öğrenin",
+      "description": "Bolsio'in nasıl daha iyi olabileceğini öğrenin",
       "rate-us": "Bize oy verin",
       "rate-us.descr": "Herhangi bir puan memnuniyetle karşılanır!",
-      "share": "Monekin'i paylaşın",
+      "share": "Bolsio'i paylaşın",
       "share.descr": "Uygulamamızı arkadaşlarınıza ve ailenize paylaşın",
-      "share.text": "Monekin! En iyi kişisel finans uygulaması. Buradan indirin",
+      "share.text": "Bolsio! En iyi kişisel finans uygulaması. Buradan indirin",
       "thanks": "Teşekkürler!",
-      "thanks_long": "Monekin'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.",
+      "thanks_long": "Bolsio'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.",
       "donate": "Bağış yap",
       "donate.descr": "Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?",
       "donate.success": "Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️",

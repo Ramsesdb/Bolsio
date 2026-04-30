@@ -174,7 +174,7 @@
     "my-accounts": "我的帳戶",
     "active-accounts": "活躍帳戶",
     "no-accounts": "尚未建立帳戶",
-    "no-accounts.descr": "開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易",
+    "no-accounts.descr": "開始使用 Bolsio 的所有魔力。至少建立一個帳戶以開始添加交易",
     "last-transactions": "最後的交易",
     "should-create-account.header": "哎呀！",
     "should-create-account.message": "您必須至少擁有一個非存檔帳戶才能開始建立交易"
@@ -202,7 +202,7 @@
       },
       "descr": {
         "insufficient_data": "看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！",
-        "very_good": "恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習",
+        "very_good": "恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Bolsio 一起學習",
         "good": "太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！",
         "normal": "您的財務健康狀況或多或少處於這一時期其他人口的平均水平",
         "bad": "看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息",
@@ -391,7 +391,7 @@
       "reconciled": "已驗證",
       "reconciled.descr": "此交易已經過驗證，並且與您銀行的真實交易相對應",
       "unreconciled": "未驗證",
-      "unreconciled.descr": "此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據",
+      "unreconciled.descr": "此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Bolsio 中的餘額和統計數據",
       "pending": "待辦",
       "pending.descr": "此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它",
       "voided": "作廢",
@@ -796,8 +796,8 @@
       "title": "匯入您的資料",
       "title.short": "匯入",
       "restore-backup": "恢復備份",
-      "restore-backup-descr": "從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料",
-      "restore-backup-warn.description": "導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin",
+      "restore-backup-descr": "從 Bolsio 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料",
+      "restore-backup-warn.description": "導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Bolsio",
       "restore-backup-warn.title": "覆蓋所有數據",
       "select-other-file": "選擇其他文件",
       "tap-to-select-file": "點選選擇檔案",
@@ -852,7 +852,7 @@
         "section": "語言和文本",
         "title": "應用程式語言",
         "descr": "應用程式中顯示文字的語言",
-        "help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/Ramsesdb/Wallex/tree/main/lib/i18n'>我們的指南</a>"
+        "help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>我們的指南</a>"
       },
       "LOCALE": {
         "title": "地區",
@@ -943,7 +943,7 @@
     "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
     "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase 同步" },
     "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
-    "AI": { "title": "Kilatex AI", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
+    "AI": { "title": "Bolsi", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "數據",
       "display.descr": "匯出和匯入您的數據，這樣您就不會丟失任何東西",
@@ -955,7 +955,7 @@
     },
     "ABOUT_US": {
       "display": "應用程式資訊",
-      "description": "查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫",
+      "description": "查找 Bolsio 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫",
       "LEGAL": {
         "display": "法律資訊",
         "privacy": "隱私權政策",
@@ -965,20 +965,20 @@
       "PROJECT": {
         "display": "專案",
         "contributors": "合作者",
-        "contributors.descr": "所有讓 Monekin 成長的開發者",
+        "contributors.descr": "所有讓 Bolsio 成長的開發者",
         "contact": "聯絡我們"
       }
     },
     "HELP_US": {
       "display": "幫助我們",
-      "description": "了解如何幫助 Monekin 變得越來越好",
+      "description": "了解如何幫助 Bolsio 變得越來越好",
       "rate-us": "評價我們",
       "rate-us.descr": "歡迎任何價格！",
-      "share": "分享 Monekin",
+      "share": "分享 Bolsio",
       "share.descr": "與朋友和家人分享我們的應用程式",
-      "share.text": "Monekin！最好的個人理財應用程式。在這裡下載",
+      "share.text": "Bolsio！最好的個人理財應用程式。在這裡下載",
       "thanks": "謝謝你！",
-      "thanks_long": "您對 Monekin 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。",
+      "thanks_long": "您對 Bolsio 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。",
       "donate": "做捐贈",
       "donate.descr": "透過您的捐款，您將幫助該應用程式繼續改進。還有什麼比邀請我喝咖啡來感謝所做的工作更好的方式呢？",
       "donate.success": "捐款已完成。非常感謝您的貢獻！❤️",
