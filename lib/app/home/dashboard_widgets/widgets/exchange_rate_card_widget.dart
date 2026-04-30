@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/currencies/widgets/manual_override_dialog.dart';
-import 'package:kilatex/app/currencies/widgets/rate_source_badge.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/core/database/services/currency/currency_service.dart';
-import 'package:kilatex/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy.dart';
-import 'package:kilatex/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/currencies/widgets/manual_override_dialog.dart';
+import 'package:bolsio/app/currencies/widgets/rate_source_badge.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/core/database/services/currency/currency_service.dart';
+import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/models/exchange-rate/exchange_rate.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
+
+/// Builder mutable usado por el spec del `exchangeRateCard` para abrir su
+/// configEditor sin obligar al archivo del widget a importar el sheet
+/// (que vive en `edit/exchange_rate_config_sheet.dart`). El bootstrap conecta
+/// el builder real tras registrar el spec — ver
+/// `registry_bootstrap.dart::registerDashboardWidgets`.
+///
+/// Mientras esté en `null`, el spec devuelve un placeholder informativo
+/// para que el patrón sea seguro de invocar incluso si el wiring no se
+/// completó (raro — solo afectaría tests que olviden bootstrap).
+///
+/// Misma indirección que [quickUseConfigEditorBuilder] — ver ADR-5 en
+/// `openspec/changes/exchange-rate-widget-config/design.md`.
+Widget Function(BuildContext, WidgetDescriptor)? exchangeRateConfigEditorBuilder;
 
 /// Phase 6.4 of `currency-modes-rework`: per-pair "Tasas de cambio" card.
 ///
@@ -115,22 +129,22 @@ class ExchangeRateCardWidget extends StatelessWidget {
   }
 
   Future<void> _refreshNow(BuildContext context) async {
-    WallexSnackbar.success(
+    BolsioSnackbar.success(
       SnackbarParams('Actualizando tasas...'),
     );
     try {
       final result = await RateRefreshService.instance.refreshNow();
       if (!context.mounted) return;
       if (result.totalFailure == 0 && result.totalSuccess > 0) {
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(
             'Tasas actualizadas (${result.totalSuccess})',
           ),
         );
       } else if (result.totalSuccess == 0) {
-        WallexSnackbar.error(SnackbarParams('No se pudieron actualizar tasas'));
+        BolsioSnackbar.error(SnackbarParams('No se pudieron actualizar tasas'));
       } else {
-        WallexSnackbar.success(
+        BolsioSnackbar.success(
           SnackbarParams(
             'Tasas actualizadas parcialmente: ok=${result.totalSuccess} '
             'fallos=${result.totalFailure}',
@@ -139,7 +153,7 @@ class ExchangeRateCardWidget extends StatelessWidget {
       }
     } catch (e) {
       if (!context.mounted) return;
-      WallexSnackbar.error(SnackbarParams('Error al refrescar: $e'));
+      BolsioSnackbar.error(SnackbarParams('Error al refrescar: $e'));
     }
   }
 }
@@ -172,12 +186,13 @@ class _RatesList extends StatelessWidget {
         set.add(p.secondary);
       }
     }
-    final pref = appStateSettings[SettingKey.preferredCurrency];
-    if (pref != null) {
-      // The preferred currency itself never has a row (it's the storage
-      // base), so exclude it.
-      set.remove(pref);
-    }
+    // NOTE: previously this method removed `appStateSettings[preferredCurrency]`
+    // from the set on the assumption that the preferred currency had no rate
+    // row. That was the root cause of the EUR/EUR bug — for a USD-preferred
+    // user with `currencies = ['USD','EUR']`, USD was wiped from the set,
+    // leaving only EUR which the user perceived as "EUR/EUR". The preferred
+    // currency does have a valid display rate (e.g. 1 USD = 39 VES), so we
+    // keep it in the effective set.
     return set;
   }
 
@@ -205,6 +220,18 @@ class _RatesList extends StatelessWidget {
             ),
           );
         }
+        // Detect BCV and Paralelo rows for VES (for Promedio computation).
+        // Pure UI math — no DB write. See ADR-4 in design.md.
+        ExchangeRate? bcvRow;
+        ExchangeRate? paraleloRow;
+        if (wanted.contains('VES')) {
+          for (final r in snapshot.data!) {
+            if (r.currencyCode.toUpperCase() == 'VES') {
+              if (r.source == 'bcv') bcvRow = r;
+              if (r.source == 'paralelo') paraleloRow = r;
+            }
+          }
+        }
         return Column(
           children: [
             for (final row in rows)
@@ -214,6 +241,21 @@ class _RatesList extends StatelessWidget {
                 source: row.source,
                 date: row.date,
               ),
+            if (bcvRow != null && paraleloRow != null) ...[
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                indent: 4,
+                endIndent: 4,
+                color: Theme.of(
+                  context,
+                ).colorScheme.outlineVariant.withValues(alpha: 0.5),
+              ),
+              _PromedioRow(
+                bcvRate: bcvRow.exchangeRate,
+                paraleloRate: paraleloRow.exchangeRate,
+              ),
+            ],
           ],
         );
       },
@@ -297,6 +339,82 @@ class _RateRow extends StatelessWidget {
   }
 }
 
+/// Fila calculada de promedio BCV+Paralelo para VES.
+///
+/// Solo se renderiza cuando ambos rows (`source == 'bcv'` y
+/// `source == 'paralelo'`) están presentes en el snapshot del widget. Es
+/// UI pura — no escribe a la base de datos. Ver ADR-4 en design.md.
+///
+/// El badge "Prom." reemplaza al [RateSourceBadge] y el campo `date` se
+/// omite (el valor es siempre derivado del último BCV+Paralelo). Mantiene
+/// la misma estructura visual que [_RateRow] para preservar el lenguaje
+/// visual de Wallex (mismo padding, mismo `bodyMedium`, tabular figures
+/// en el monto, sin colores hardcoded — todo via tokens del tema).
+class _PromedioRow extends StatelessWidget {
+  const _PromedioRow({required this.bcvRate, required this.paraleloRate});
+
+  final double bcvRate;
+  final double paraleloRate;
+
+  double get _promedio => (bcvRate + paraleloRate) / 2;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      child: Row(
+        children: [
+          Text(
+            'VES',
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(width: 8),
+          // "Prom." pill — visual analogue de RateSourceBadge usando el
+          // token `tertiary` del tema para diferenciarlo de las fuentes
+          // reales (BCV verde, Paralelo naranja).
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: cs.tertiary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(color: cs.tertiary.withValues(alpha: 0.4)),
+            ),
+            child: Text(
+              'Prom.',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: cs.tertiary,
+                letterSpacing: 0.2,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Calculado',
+              style: theme.textTheme.bodySmall!.copyWith(
+                color: cs.onSurface.withValues(alpha: 0.55),
+              ),
+            ),
+          ),
+          Text(
+            _promedio.toStringAsFixed(_promedio >= 1000 ? 0 : 2),
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontFeatures: [const FontFeature.tabularFigures()],
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Registra el spec del widget `exchangeRateCard`.
 void registerExchangeRateCardWidget() {
   DashboardWidgetRegistry.instance.register(
@@ -316,7 +434,7 @@ void registerExchangeRateCardWidget() {
       defaultConfig: const <String, dynamic>{
         'pair': 'USD_VES',
         'source': null,
-        'currencies': <String>['USD', 'EUR'],
+        'currencies': <String>['VES', 'EUR'],
         'sources': <String>['bcv', 'paralelo'],
         'showEvolutionChart': false,
       },
@@ -325,7 +443,7 @@ void registerExchangeRateCardWidget() {
         final rawCurrencies = descriptor.config['currencies'];
         final currencies = rawCurrencies is List
             ? rawCurrencies.whereType<String>().toList(growable: false)
-            : const <String>['USD', 'EUR'];
+            : const <String>['VES', 'EUR'];
         final rawSources = descriptor.config['sources'];
         final sources = rawSources is List
             ? rawSources.whereType<String>().toList(growable: false)
@@ -336,7 +454,7 @@ void registerExchangeRateCardWidget() {
           key: ValueKey('${descriptor.type.name}-${descriptor.instanceId}'),
           child: ExchangeRateCardWidget(
             currencies: currencies.isEmpty
-                ? const <String>['USD', 'EUR']
+                ? const <String>['VES', 'EUR']
                 : currencies,
             sources: sources.isEmpty
                 ? const <String>['bcv', 'paralelo']
@@ -344,6 +462,23 @@ void registerExchangeRateCardWidget() {
             showEvolutionChart: showChart,
           ),
         );
+      },
+      configEditor: (context, descriptor) {
+        // Indirección al builder mutable [exchangeRateConfigEditorBuilder].
+        // Mantiene `widgets/exchange_rate_card_widget.dart` desacoplado del
+        // sheet concreto (vive en `edit/`). Mismo patrón que `quickUse`.
+        final builder = exchangeRateConfigEditorBuilder;
+        if (builder == null) {
+          return const Padding(
+            padding: EdgeInsets.all(24),
+            child: Center(
+              child: Text(
+                'Editor no inicializado. Revisa registry_bootstrap.dart.',
+              ),
+            ),
+          );
+        }
+        return builder(context, descriptor);
       },
     ),
   );

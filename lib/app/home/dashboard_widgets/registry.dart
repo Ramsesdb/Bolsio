@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
 
 /// Builder signature for a widget instance. Receives:
 ///   - [context]    — the build context (use for theme/i18n).

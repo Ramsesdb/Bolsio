@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:kilatex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:kilatex/app/home/dashboard_widgets/registry.dart';
-import 'package:kilatex/core/presentation/responsive/breakpoints.dart';
-import 'package:kilatex/core/utils/logger.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
+import 'package:bolsio/core/utils/logger.dart';
 
 /// Renderer responsivo del cuerpo del dashboard.
 ///

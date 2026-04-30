@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
-import 'package:wallex/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:wallex/app/home/dashboard_widgets/registry.dart';
-import 'package:wallex/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/app/home/dashboard_widgets/edit/add_widget_sheet.dart';
+import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 
 /// Task 3.9 — `AddWidgetSheet` shows the recommended badge for goals and
 /// adds a descriptor on tap.

@@ -1,4 +1,4 @@
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 /// Sizes a [WidgetDescriptor] can declare. The MVP only supports two
 /// declarative sizes — the user does not freely resize widgets.

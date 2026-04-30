@@ -75,7 +75,7 @@ Cancelar MUST cerrar el diálogo sin alterar el layout.
 
 ### Requirement: Drag-and-drop para reordenar
 
-En edit mode, el dashboard MUST usar `WallexReorderableList` (wrapper sobre `ReorderableListView`) con `Key(ValueKey(instanceId))` por item.
+En edit mode, el dashboard MUST usar `BolsioReorderableList` (wrapper sobre `ReorderableListView`) con `Key(ValueKey(instanceId))` por item.
 
 `onReorder(oldIndex, newIndex)` MUST: mutar la lista localmente para feedback inmediato, persistir vía `save()` (debounced 300 ms).
 
