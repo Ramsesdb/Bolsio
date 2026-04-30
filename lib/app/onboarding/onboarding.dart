@@ -4,29 +4,29 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/auth/welcome_screen.dart';
-import 'package:kilatex/app/home/dashboard_widgets/defaults.dart';
-import 'package:kilatex/app/layout/page_switcher.dart';
-import 'package:kilatex/app/onboarding/slides/s01_goals.dart';
-import 'package:kilatex/app/onboarding/slides/s02_currency.dart';
-import 'package:kilatex/app/onboarding/slides/s03_rate_source.dart';
-import 'package:kilatex/app/onboarding/slides/s04_initial_accounts.dart';
-import 'package:kilatex/app/onboarding/slides/s05_autoimport_sell.dart';
-import 'package:kilatex/app/onboarding/slides/s06_privacy.dart';
-import 'package:kilatex/app/onboarding/slides/s07_post_notifications.dart';
-import 'package:kilatex/app/onboarding/slides/s075_restricted_settings.dart';
-import 'package:kilatex/app/onboarding/slides/s08_activate_listener.dart';
-import 'package:kilatex/app/onboarding/slides/s09_apps_included.dart';
-import 'package:kilatex/app/onboarding/slides/s10_seeding_overlay.dart';
-import 'package:kilatex/app/onboarding/slides/s11_ready.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_progress_bar.dart';
-import 'package:kilatex/core/database/services/app-data/app_data_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/models/currency/currency_mode.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
-import 'package:kilatex/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:kilatex/core/utils/unique_app_widgets_keys.dart';
+import 'package:bolsio/app/auth/welcome_screen.dart';
+import 'package:bolsio/app/home/dashboard_widgets/defaults.dart';
+import 'package:bolsio/app/layout/page_switcher.dart';
+import 'package:bolsio/app/onboarding/slides/s01_goals.dart';
+import 'package:bolsio/app/onboarding/slides/s02_currency.dart';
+import 'package:bolsio/app/onboarding/slides/s03_rate_source.dart';
+import 'package:bolsio/app/onboarding/slides/s04_initial_accounts.dart';
+import 'package:bolsio/app/onboarding/slides/s05_autoimport_sell.dart';
+import 'package:bolsio/app/onboarding/slides/s06_privacy.dart';
+import 'package:bolsio/app/onboarding/slides/s07_post_notifications.dart';
+import 'package:bolsio/app/onboarding/slides/s075_restricted_settings.dart';
+import 'package:bolsio/app/onboarding/slides/s08_activate_listener.dart';
+import 'package:bolsio/app/onboarding/slides/s09_apps_included.dart';
+import 'package:bolsio/app/onboarding/slides/s10_seeding_overlay.dart';
+import 'package:bolsio/app/onboarding/slides/s11_ready.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_progress_bar.dart';
+import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/currency/currency_mode.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
 
 /// Root widget of the v3 onboarding flow.
 ///
@@ -380,7 +380,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Error al configurar Wallex'),
+          title: const Text('Error al configurar Bolsio'),
           content: const Text(
             'No se pudieron guardar tus preferencias. '
             'Por favor intenta de nuevo.',

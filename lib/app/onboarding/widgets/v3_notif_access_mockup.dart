@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_mini_phone_frame.dart';
 
 /// Mini "Acceso a notificaciones" Android settings mockup, rendered inside a
 /// [V3MiniPhoneFrame].
 ///
-/// Shows Wallex pulsing at the top of the list (or a static green check when
+/// Shows Bolsio pulsing at the top of the list (or a static green check when
 /// the permission is already granted), and four faded peer apps (Google Pay,
 /// Gmail, WhatsApp, Instagram) so the user's eye lands on the action they
 /// need to take in the real Android settings screen.
@@ -43,7 +43,7 @@ class V3NotifAccessMockup extends StatelessWidget {
           ),
           const SizedBox(height: V3Tokens.spaceXs),
           _AppRow(
-            name: 'Wallex',
+            name: 'Bolsio',
             subtitle: 'Servicio de notificaciones',
             icon: Icons.account_balance_wallet,
             iconColor: V3Tokens.accent,

@@ -2,7 +2,7 @@
 
 ## Technical Approach
 
-Insert a dynamic, conditional onboarding step that detects Android's `ACCESS_RESTRICTED_SETTINGS` AppOps gate and walks the user through enabling it before they reach the notification-listener slide. The step is rendered by a single shared widget (`V3RestrictedSettingsStep`) consumed by both `OnboardingPage` (as `Slide075`) and `ReturningUserFlow` (as a new intermediate step). Detection is a single Binder call exposed through the existing `com.wallex.capture/quirks` MethodChannel; lifecycle-resume re-evaluation reuses the canonical `WidgetsBindingObserver` pattern already used by `s07_post_notifications.dart` and `s08_activate_listener.dart`. Zero new packages, zero migrations, zero manifest changes.
+Insert a dynamic, conditional onboarding step that detects Android's `ACCESS_RESTRICTED_SETTINGS` AppOps gate and walks the user through enabling it before they reach the notification-listener slide. The step is rendered by a single shared widget (`V3RestrictedSettingsStep`) consumed by both `OnboardingPage` (as `Slide075`) and `ReturningUserFlow` (as a new intermediate step). Detection is a single Binder call exposed through the existing `com.bolsio.capture/quirks` MethodChannel; lifecycle-resume re-evaluation reuses the canonical `WidgetsBindingObserver` pattern already used by `s07_post_notifications.dart` and `s08_activate_listener.dart`. Zero new packages, zero migrations, zero manifest changes.
 
 ## Architecture Overview
 
@@ -16,7 +16,7 @@ Insert a dynamic, conditional onboarding step that detects Android's `ACCESS_RES
 │  ├─ openAppDetails                │
 │  └─ isRestrictedSettingsAllowed ●NEW
 └──────────┬────────────────────────┘
-           │ MethodChannel "com.wallex.capture/quirks"
+           │ MethodChannel "com.bolsio.capture/quirks"
            ▼
 ┌──────────────────────────────────┐
 │ DeviceQuirksService (Dart)        │
@@ -86,7 +86,7 @@ V3RestrictedSettingsStep
 
 ### Method signature
 
-- Channel: `com.wallex.capture/quirks` (existing)
+- Channel: `com.bolsio.capture/quirks` (existing)
 - Method name: `isRestrictedSettingsAllowed`
 - Returns: `Boolean` (`true` = allowed, `false` = blocked)
 
@@ -109,7 +109,7 @@ private fun isRestrictedSettingsAllowed(context: Context): Boolean {
         )
         mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_DEFAULT
     } catch (e: Exception) {
-        Log.d("Wallex", "isRestrictedSettingsAllowed failed (fail-open): $e")
+        Log.d("Bolsio", "isRestrictedSettingsAllowed failed (fail-open): $e")
         true
     }
 }
@@ -267,7 +267,7 @@ Added under `onboarding.restricted_settings.*` in `lib/i18n/json/en.json` and `l
 | `subtitle` | Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques. | Android blocks some permissions for apps installed outside Play Store. We'll fix it in 3 taps. |
 | `step1` | Toca el menú **⋮** arriba a la derecha. | Tap the **⋮** menu in the top-right. |
 | `step2` | Selecciona **Permitir configuración restringida**. | Select **Allow restricted settings**. |
-| `step3` | Activa el toggle y vuelve a Wallex. | Toggle it on and return to Wallex. |
+| `step3` | Activa el toggle y vuelve a Bolsio. | Toggle it on and return to Bolsio. |
 | `cta_primary` | Abrir información de la app | Open app info |
 | `cta_skip` | Hacer esto más tarde | Skip for now |
 | `still_blocked_hint` | Si ya lo activaste, vuelve a abrir la información de la app. | If you already enabled it, open app info again. |
@@ -279,7 +279,7 @@ Added under `onboarding.restricted_settings.*` in `lib/i18n/json/en.json` and `l
 
 | File | Action | Description |
 |------|--------|-------------|
-| `android/app/src/main/kotlin/com/wallex/app/DeviceQuirksChannel.kt` | Modify | Add `isRestrictedSettingsAllowed` method (~15 LOC) and channel branch. |
+| `android/app/src/main/kotlin/com/bolsio/app/DeviceQuirksChannel.kt` | Modify | Add `isRestrictedSettingsAllowed` method (~15 LOC) and channel branch. |
 | `lib/core/services/auto_import/capture/device_quirks_service.dart` | Modify | Add `isRestrictedSettingsAllowed()` Dart wrapper. |
 | `lib/core/services/auto_import/capture/permission_coordinator.dart` | Modify | Add `restrictedSettingsAllowed` field to `CapturePermissionsState` (with `copyWith`, `==`, `hashCode`, `.initial()`). |
 | `lib/app/onboarding/widgets/v3_restricted_settings_step.dart` | Create | Shared step widget with lifecycle observer + CTAs + still-blocked hint. |
@@ -299,10 +299,10 @@ Added under `onboarding.restricted_settings.*` in `lib/i18n/json/en.json` and `l
 | Widget | `V3RestrictedSettingsStep` renders title/subtitle/CTAs; tapping primary calls `onOpenAppInfo`; tapping skip calls `onContinue`; `showBackPill: false` hides the back-pill | `pumpWidget` + `tap` + assertion on callback invocation count. |
 | Widget | Lifecycle resume re-evaluation: stub `DeviceQuirksService` to return `true` on second call → assert `onContinue` fires | Drive `WidgetsBinding.instance.handleAppLifecycleStateChanged(AppLifecycleState.resumed)`; verify the auto-advance path. |
 | Manual smoke | POCO rodin (HyperOS) gate currently `ignore` — verify slide appears in `OnboardingPage` first-install path AND in `ReturningUserFlow` (Google sign-in with Firebase data); CTA opens App Info; toggling "Allow restricted settings" + back-press auto-advances | Per session test fixture; verify in both Android first-install and returning-user paths. |
-| Manual smoke | Play Store-equivalent simulation: `adb shell appops set com.wallex.app ACCESS_RESTRICTED_SETTINGS allow` → re-enter onboarding → verify slide does NOT render in any path | Side-by-side check vs the blocked baseline. |
+| Manual smoke | Play Store-equivalent simulation: `adb shell appops set com.bolsio.app ACCESS_RESTRICTED_SETTINGS allow` → re-enter onboarding → verify slide does NOT render in any path | Side-by-side check vs the blocked baseline. |
 | Integration / E2E | NOT in scope (no full E2E rig exists yet); deferred. |
 
-`flutter test` shall pass; `flutter analyze` shall be clean. Per project memory (Wallex tests rule): `flutter test` is NOT run inside each tanda — only `flutter analyze`. Tests run as a final pass.
+`flutter test` shall pass; `flutter analyze` shall be clean. Per project memory (Bolsio tests rule): `flutter test` is NOT run inside each tanda — only `flutter analyze`. Tests run as a final pass.
 
 ## Migration / Rollout
 

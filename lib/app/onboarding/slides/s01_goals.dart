@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
-import 'package:kilatex/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
 
 class GoalOption {
   const GoalOption({

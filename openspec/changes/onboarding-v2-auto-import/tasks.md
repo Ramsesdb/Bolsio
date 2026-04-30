@@ -18,8 +18,8 @@
 - [x] 2.2 En `lib/core/database/sql/initial/seed.dart`: añadir la fila `('${SettingKey.onboardingGoals.name}', '[]')` en `settingsInitialSeedSQL()` (sin tocar `schemaVersion`)
 - [x] 2.3 Crear `lib/core/services/bank_detection/bank_detection_service.dart`:
       - método `Future<List<String>> getInstalledBankIds()` — retorna `const []` en no-Android; en Android llama a `InstalledApps.getInstalledApps(true, true)` y cruza package names con un `const Map<String, String> _kPackageToProfileId` (p.ej. `'com.bbva.bbvacontigo': 'provincial_notif'`); captura excepciones y retorna `const []`
-- [x] 2.4 En `lib/core/services/auto_import/capture/device_quirks_service.dart`: añadir `Future<void> openNotificationListenerSettings()` que invoca la operación `'openNotificationListenerSettings'` por el canal `com.wallex.capture/quirks` sin capturar la excepción (el caller en slide 7 la maneja)
-- [x] 2.5 En el handler Kotlin del canal `com.wallex.capture/quirks` (localizar en `android/app/src/main/kotlin/`): añadir el case `'openNotificationListenerSettings'` que dispara `startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })`
+- [x] 2.4 En `lib/core/services/auto_import/capture/device_quirks_service.dart`: añadir `Future<void> openNotificationListenerSettings()` que invoca la operación `'openNotificationListenerSettings'` por el canal `com.bolsio.capture/quirks` sin capturar la excepción (el caller en slide 7 la maneja)
+- [x] 2.5 En el handler Kotlin del canal `com.bolsio.capture/quirks` (localizar en `android/app/src/main/kotlin/`): añadir el case `'openNotificationListenerSettings'` que dispara `startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })`
 
 ## Fase 3 — Tokens y widgets atómicos
 
@@ -84,11 +84,11 @@
 
 Tasks 6.2-6.5 required wiring the v3 slides, the `onboarding.dart` controller, and `v3_seeding_overlay.dart` to a new `t.intro.*` namespace. This was deferred during the minimal-close pass for path A because:
 
-- Wallex's sole active audience is Spanish-speaking Venezuelan users; the other 9 locales are Monekin legacy with no Wallex-specific content.
+- Bolsio's sole active audience is Spanish-speaking Venezuelan users; the other 9 locales are Bolsio legacy with no Bolsio-specific content.
 - The slides' strings are deeply Venezuela-specific (BCV, paralelo, local bank names) and would not translate meaningfully into the other locales.
 - The slides ship working in Spanish today. Hardcoded Spanish is not a correctness bug.
 
-Follow-up: open a new SDD change (e.g. `onboarding-i18n-extension`) if/when Wallex targets a second locale.
+Follow-up: open a new SDD change (e.g. `onboarding-i18n-extension`) if/when Bolsio targets a second locale.
 
 ## Fase 7 — Verificación y smoke tests
 

@@ -29,14 +29,14 @@ Already implements:
 
 There is **no** field for `restrictedSettingsAllowed` today. Adding one is the natural extension.
 
-### 1.4 Platform channel: `com.wallex.capture/quirks`
+### 1.4 Platform channel: `com.bolsio.capture/quirks`
 
-`android/app/src/main/kotlin/com/wallex/app/DeviceQuirksChannel.kt` (~240 LOC).
+`android/app/src/main/kotlin/com/bolsio/app/DeviceQuirksChannel.kt` (~240 LOC).
 
 Already exposes:
 - `isIgnoringBatteryOptimizations` → `Boolean` via `PowerManager.isIgnoringBatteryOptimizations(packageName)`
 - `openBatteryOptimization` / `openAppDetails` / `openAutostart` / `openNotificationListenerSettings`
-- Smart fallback: `openNotificationListenerSettings` uses `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` (lands directly on Wallex's toggle, API 30+) before falling back to the generic listener list. **Important**: on a restricted device, the user lands directly on the grayed-out toggle — perfect "before" state for the new slide's mockup, but useless for completing the action.
+- Smart fallback: `openNotificationListenerSettings` uses `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` (lands directly on Bolsio's toggle, API 30+) before falling back to the generic listener list. **Important**: on a restricted device, the user lands directly on the grayed-out toggle — perfect "before" state for the new slide's mockup, but useless for completing the action.
 
 Adding a new method (e.g. `isRestrictedSettingsAllowed`, `openAppDetailsForRestrictedHint`) is a 20-line addition; the channel is already wired through `MainActivity.kt`.
 
@@ -45,10 +45,10 @@ Adding a new method (e.g. `isRestrictedSettingsAllowed`, `openAppDetailsForRestr
 Confirmed live on POCO rodin (HyperOS / Android 16, SDK 36) via ADB:
 
 ```bash
-$ adb shell appops get com.wallex.app ACCESS_RESTRICTED_SETTINGS
+$ adb shell appops get com.bolsio.app ACCESS_RESTRICTED_SETTINGS
 ACCESS_RESTRICTED_SETTINGS: ignore; rejectTime=+11m26s737ms ago
 
-$ adb shell dumpsys package com.wallex.app | grep installerPackageName
+$ adb shell dumpsys package com.bolsio.app | grep installerPackageName
 installerPackageName=com.google.android.packageinstaller
 ```
 
@@ -58,7 +58,7 @@ Two key findings:
 
 ### 1.6 i18n state
 
-11 locales total (`de, en, es, fr, hu, it, tr, uk, zh-CN, zh-TW` + `es`). Slang is configured to fall back to `en` per project memory. Existing precedent for permission strings: `wallex_ai.voice_permission_*` keys (lines 580-586 of `es.json`). New strings only need to land in `en.json` + `es.json`.
+11 locales total (`de, en, es, fr, hu, it, tr, uk, zh-CN, zh-TW` + `es`). Slang is configured to fall back to `en` per project memory. Existing precedent for permission strings: `bolsio_ai.voice_permission_*` keys (lines 580-586 of `es.json`). New strings only need to land in `en.json` + `es.json`.
 
 ### 1.7 Existing dependencies — what we already have
 
@@ -205,9 +205,9 @@ Settings → Auto-import already shows a permissions checklist (per `PermissionC
 
 The user flow is:
 
-1. User taps primary CTA on the new slide → we deep-link to `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` for `com.wallex.app` (the screen with the ⋮ menu).
+1. User taps primary CTA on the new slide → we deep-link to `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` for `com.bolsio.app` (the screen with the ⋮ menu).
 2. User opens ⋮ → "Permitir configuración restringida" → confirms.
-3. User presses back → returns to Wallex.
+3. User presses back → returns to Bolsio.
 
 We need to know moment (3) happened AND that the AppOp flipped to `allow`/`default`.
 
@@ -246,7 +246,7 @@ class _State extends State<...> with WidgetsBindingObserver {
 ### 4.2 Edge cases worth listing
 
 - **User comes back without enabling**: `_refreshAndMaybeAdvance` sees `allowed == false`, slide stays mounted, primary CTA remains "Abrir ajustes". Add a small "still blocked" inline hint with retry copy ("Si ya lo activaste, presiona Comprobar de nuevo").
-- **User cold-kills the app while in Settings**: when they reopen Wallex, onboarding restarts from slide 0 if `introSeen != '1'`. Detection runs again on each fresh `initState` — the check will catch up.
+- **User cold-kills the app while in Settings**: when they reopen Bolsio, onboarding restarts from slide 0 if `introSeen != '1'`. Detection runs again on each fresh `initState` — the check will catch up.
 - **Race between OS allowing the AppOp and `onResume` firing**: HyperOS appears to update the AppOp synchronously when the user toggles the menu item; the order observed in adb is "user toggles → AppOp flips → user navigates back → onResume fires". Adding a 200-300 ms `Future.delayed` before re-checking is not necessary in initial implementation; only add it if QA reports a flake.
 
 ### 4.3 Decision
@@ -265,7 +265,7 @@ The "Permitir configuración restringida" toggle lives **inside the ⋮ menu of 
 |--------|----------|---------|
 | `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` (with `package:` URI) | App Info screen for our package — the screen that has the ⋮ menu in its top-right | **YES — primary** |
 | `Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS` | Generic listener access list; toggle is grayed | useless for the restricted gate |
-| `Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` | Wallex's specific toggle row; toggle is grayed | useless for the restricted gate |
+| `Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` | Bolsio's specific toggle row; toggle is grayed | useless for the restricted gate |
 
 `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` is **already implemented** in `DeviceQuirksChannel.openAppDetails` (line 84). We don't add a new platform method — we reuse the existing one and call it from the new slide.
 
@@ -290,12 +290,12 @@ New keys to add to `en.json` + `es.json` under a new `onboarding.restricted_sett
 | `step_1` | Toca **Abrir ajustes**. | Tap **Open settings**. |
 | `step_2` | En la pantalla de la app, toca el menú **⋮** arriba a la derecha. | On the app screen, tap the **⋮** menu in the top-right corner. |
 | `step_3` | Selecciona **Permitir configuración restringida** y confirma. | Select **Allow restricted settings** and confirm. |
-| `step_4` | Vuelve a Wallex. Detectaremos el cambio automáticamente. | Return to Wallex. We'll detect the change automatically. |
+| `step_4` | Vuelve a Bolsio. Detectaremos el cambio automáticamente. | Return to Bolsio. We'll detect the change automatically. |
 | `cta_open` | Abrir ajustes | Open settings |
 | `cta_skip` | Hacer esto más tarde | Do this later |
 | `still_blocked_hint` | Si ya activaste la opción, vuelve a tocar **Abrir ajustes** y presiona el botón "Comprobar de nuevo". | If you already enabled the option, tap **Open settings** again and press "Check again". |
 
-These follow the same naming + tone as `wallex_ai.voice_permission_*`. **Per project memory: only add to `en.json` + `es.json` — Slang falls back to `en` for the other 9 locales.**
+These follow the same naming + tone as `bolsio_ai.voice_permission_*`. **Per project memory: only add to `en.json` + `es.json` — Slang falls back to `en` for the other 9 locales.**
 
 ---
 
@@ -305,7 +305,7 @@ These follow the same naming + tone as `wallex_ai.voice_permission_*`. **Per pro
 - `lib/app/onboarding/slides/s075_restricted_settings.dart` — **new** slide (mirror s07/s08).
 - `lib/core/services/auto_import/capture/device_quirks_service.dart` — new Dart method `isRestrictedSettingsAllowed()`.
 - `lib/core/services/auto_import/capture/permission_coordinator.dart` — add `restrictedSettingsAllowed` field to `CapturePermissionsState` (gives Settings → Auto-import a future hook for free).
-- `android/app/src/main/kotlin/com/wallex/app/DeviceQuirksChannel.kt` — new branch `isRestrictedSettingsAllowed` that calls `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", uid, pkg)`.
+- `android/app/src/main/kotlin/com/bolsio/app/DeviceQuirksChannel.kt` — new branch `isRestrictedSettingsAllowed` that calls `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", uid, pkg)`.
 - `lib/i18n/json/en.json` + `lib/i18n/json/es.json` — new keys (~9 strings).
 - `lib/i18n/generated/translations*.g.dart` — regenerated by `dart run slang` (do not hand-edit).
 
@@ -320,7 +320,7 @@ No Drift migration. No new package dep. No `AndroidManifest.xml` changes.
 - **Race conditions on initState detection**: if the slide list is rebuilt before the async detection completes, the user briefly sees the non-restricted flow and then a slide may appear "out of nowhere". Mitigation: gate the conditional with `_restrictedSettingsChecked` and treat unchecked as "not blocked" (no extra slide). The detection is fast (single Binder call) — typically <50 ms. In practice the user is still finishing earlier slides when it resolves.
 - **Skipping the slide silently disables auto-import**: if the user picks "Hacer esto más tarde", slide 8 will still let them try (and likely fail) the listener toggle. We persist `notifListenerEnabled='0'` (existing behaviour) and surface the issue from Settings → Auto-import later. Acceptable.
 - **i18n drift**: If we forget to namespace the keys properly, slang regen could collide. Mitigation: nest under `onboarding.restricted_settings.*` (no existing keys at that path).
-- **adb test fixture relies on `rejectTime` flipping**: If we want an integration test, we would need to flip the AppOp via adb (`adb shell appops set com.wallex.app ACCESS_RESTRICTED_SETTINGS allow`). Document in the tasks.md test fixture.
+- **adb test fixture relies on `rejectTime` flipping**: If we want an integration test, we would need to flip the AppOp via adb (`adb shell appops set com.bolsio.app ACCESS_RESTRICTED_SETTINGS allow`). Document in the tasks.md test fixture.
 
 ---
 
@@ -334,7 +334,7 @@ Concretely:
 
 | Concern | Answer |
 |---------|--------|
-| Detection mechanism | `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", uid, pkg)` via existing `com.wallex.capture/quirks` channel |
+| Detection mechanism | `AppOpsManager.unsafeCheckOpNoThrow("android:access_restricted_settings", uid, pkg)` via existing `com.bolsio.capture/quirks` channel |
 | Heuristic fallback | `package_info_plus.installerStore != 'com.android.vending'` + `sdkInt >= 33` + `listener denied` — only used if AppOps throws |
 | UX surface | Conditional slide between s07 and s08, modeled on `s07_post_notifications.dart` |
 | Deep link | `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` (already exposed as `openAppDetails`) |
@@ -364,7 +364,7 @@ SecurityException: verifyIncomingOp: uid 10478 does not have any of
 **Yes.** All four key questions resolved with concrete, tested-on-device answers. Hand off to `sdd-propose`.
 
 Suggested proposal scope:
-- **Why**: every sideloaded user on Android 13+ hits a 10-step manual workaround that blocks Wallex's core feature. This shrinks the workaround to 3 taps + auto-detected resume.
+- **Why**: every sideloaded user on Android 13+ hits a 10-step manual workaround that blocks Bolsio's core feature. This shrinks the workaround to 3 taps + auto-detected resume.
 - **What**: dynamic onboarding slide + AppOps detection + i18n.
 - **What it is NOT**: a Settings → Auto-import re-design (deferred). Not a Play Store launch (deferred). Not a multi-locale string update (en+es only).
 - **Rollback**: remove the conditional from `_buildSlides`, leave the channel method (it's harmless dead code), revert the `CapturePermissionsState` field.

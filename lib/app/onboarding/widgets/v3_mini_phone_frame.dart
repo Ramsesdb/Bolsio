@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/onboarding/theme/v3_tokens.dart';
+import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
 
 /// Stylised mini-phone mockup used in slides 5 and 7 of the v3 onboarding
 /// flow. Renders a fixed-width 300px phone shell (bezel + inner AMOLED
