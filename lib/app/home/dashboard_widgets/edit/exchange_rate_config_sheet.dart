@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
 import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
 import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 /// Bottom sheet para configurar las divisas mostradas en un widget
 /// `exchangeRateCard`. Dos secciones en una columna scrollable (no `TabBar`,
@@ -34,10 +35,15 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
   /// y se persiste en cada cambio.
   late List<String> _shown;
 
+  /// Pivot seleccionado por el usuario. `null` ⇒ "Automático" (el widget
+  /// auto-deriva: VES si está en el set, si no preferredCurrency).
+  String? _pivot;
+
   @override
   void initState() {
     super.initState();
     _shown = _readCurrenciesFromDescriptor(widget.descriptor);
+    _pivot = _readPivotFromDescriptor(widget.descriptor);
   }
 
   static List<String> _readCurrenciesFromDescriptor(WidgetDescriptor d) {
@@ -45,6 +51,13 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
     if (raw is! List) return <String>['VES', 'EUR'];
     final out = raw.whereType<String>().map((s) => s.toUpperCase()).toList();
     return out.isEmpty ? <String>['VES', 'EUR'] : out;
+  }
+
+  static String? _readPivotFromDescriptor(WidgetDescriptor d) {
+    final raw = d.config['pivotCurrency'];
+    if (raw is! String) return null;
+    final s = raw.trim();
+    return s.isEmpty ? null : s.toUpperCase();
   }
 
   void _persist() {
@@ -65,6 +78,7 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
       <String, dynamic>{
         ...live.config,
         'currencies': List<String>.unmodifiable(_shown),
+        'pivotCurrency': _pivot,
       },
     );
   }
@@ -78,6 +92,13 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
   void _removeCurrency(String code) {
     if (!_shown.contains(code)) return;
     setState(() => _shown.remove(code));
+    _persist();
+  }
+
+  void _setPivot(String? code) {
+    final normalized = code?.toUpperCase();
+    if (_pivot == normalized) return;
+    setState(() => _pivot = normalized);
     _persist();
   }
 
@@ -133,6 +154,8 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
               children: [
                 _buildShownSection(context),
                 const SizedBox(height: 16),
+                _buildPivotSection(context),
+                const SizedBox(height: 16),
                 _buildAddSection(context),
                 const SizedBox(height: 16),
               ],
@@ -140,6 +163,69 @@ class _ExchangeRateConfigSheetState extends State<ExchangeRateConfigSheet> {
           ),
         ],
       ),
+    );
+  }
+
+  // ─────────────── Pivot dropdown (mostrar tasas EN _) ───────────────
+
+  Widget _buildPivotSection(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final t = Translations.of(context).home.dashboard_widgets.exchange_rate_card;
+
+    // El catálogo del dropdown = "Automático" + cada divisa mostrada
+    // (filtramos duplicados y conservamos el orden de _shown). Si el pivot
+    // actual no está en _shown (e.g. el usuario removió la divisa que tenía
+    // como pivot manual), aún así lo dejamos visible para que pueda
+    // cambiarlo conscientemente.
+    final codes = <String>{..._shown.map((c) => c.toUpperCase())};
+    final current = _pivot;
+    if (current != null) codes.add(current);
+
+    final items = <DropdownMenuItem<String?>>[
+      DropdownMenuItem<String?>(
+        value: null,
+        child: Text(t.pivot_auto),
+      ),
+      for (final code in codes)
+        DropdownMenuItem<String?>(
+          value: code,
+          child: Text(code),
+        ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.pivot_label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: cs.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String?>(
+          initialValue: current,
+          isDense: true,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+          ),
+          items: items,
+          onChanged: _setPivot,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          t.pivot_help,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: cs.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
     );
   }
 

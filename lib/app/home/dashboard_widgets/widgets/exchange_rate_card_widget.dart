@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:bolsio/app/currencies/widgets/manual_override_dialog.dart';
 import 'package:bolsio/app/currencies/widgets/rate_source_badge.dart';
 import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
 import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
 import 'package:bolsio/core/database/services/currency/currency_service.dart';
 import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
 import 'package:bolsio/core/models/exchange-rate/exchange_rate.dart';
 import 'package:bolsio/core/models/currency/currency_display_policy.dart';
 import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
@@ -55,6 +57,7 @@ class ExchangeRateCardWidget extends StatelessWidget {
     this.currencies = const <String>['USD', 'EUR'],
     this.sources = const <String>['bcv', 'paralelo'],
     this.showEvolutionChart = false,
+    this.pivotCurrency,
   });
 
   /// Subset de divisas a mostrar.
@@ -65,6 +68,13 @@ class ExchangeRateCardWidget extends StatelessWidget {
 
   /// Reservado para Wave 3 — gráfica de evolución de la tasa.
   final bool showEvolutionChart;
+
+  /// Divisa hacia la que se convierten los valores mostrados ("1 unidad de
+  /// la divisa de la fila = N unidades de pivot"). `null` ⇒ auto-derivar:
+  ///   - si la policy/efectiva incluye VES → pivot = VES (caso típico VE);
+  ///   - de lo contrario → pivot = `preferredCurrency`.
+  /// El pivot también se excluye del set de filas para evitar self-rows.
+  final String? pivotCurrency;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +111,7 @@ class ExchangeRateCardWidget extends StatelessWidget {
               return _RatesList(
                 currencies: currencies,
                 policy: policySnap.data,
+                pivotCurrency: pivotCurrency,
               );
             },
           ),
@@ -158,47 +169,77 @@ class ExchangeRateCardWidget extends StatelessWidget {
   }
 }
 
-/// Internal list builder. Reads the latest rate per currency via
-/// [ExchangeRateService.getExchangeRates] and renders a per-row tile with
-/// badge + last-update + tap-to-edit. The pair set is derived from the
-/// supplied [policy] (when null we default to the `currencies` list).
+/// Internal table builder. Reads the latest rate per currency via
+/// [ExchangeRateService.getExchangeRates] and renders a table with:
+///   - Column headers: (empty) | BCV badge | Paralelo badge | Prom. badge
+///   - One row per currency showing the rate under each applicable column.
+///
+/// Graceful degradation: currencies with only one source (e.g. Auto from
+/// Frankfurter) display their rate in the BCV column so the value is always
+/// visible. The Promedio column is only shown when at least one currency has
+/// both BCV and Paralelo rows. See [_RatesTable] for column layout details.
+///
+/// The pair set is derived from the supplied [policy] (when null we default
+/// to the `currencies` list).
 class _RatesList extends StatelessWidget {
-  const _RatesList({required this.currencies, required this.policy});
+  const _RatesList({
+    required this.currencies,
+    required this.policy,
+    required this.pivotCurrency,
+  });
 
   final List<String> currencies;
   final CurrencyDisplayPolicy? policy;
 
-  /// Currencies that should appear in the card. Combines the configured
-  /// list with the policy-derived pair set so the card stays useful even
-  /// when the user is on a non-VES dual mode.
-  Set<String> _effectiveCurrencies() {
+  /// Pivot explícito (config del usuario). `null` ⇒ derivar.
+  final String? pivotCurrency;
+
+  /// Pre-pivot currency set: la unión configurada + policy-derived antes de
+  /// excluir el pivot. Se usa también como universo válido para auto-derivar
+  /// el pivot ("VES si está, si no preferred").
+  Set<String> _baseCurrencies() {
     final set = <String>{...currencies.map((c) => c.toUpperCase())};
     final p = policy;
     if (p is SingleMode) {
-      // For single-mode users, focus on the currency they care about.
       if (p.code != 'USD') set.add(p.code);
     } else if (p is DualMode) {
-      // For the canonical dual(USD,VES) we keep the configured set
-      // (typically USD + EUR). For non-VES dual we want the primary and
-      // secondary to be visible.
       if (!p.showsRateSourceChip) {
         set.add(p.primary);
         set.add(p.secondary);
       }
     }
-    // NOTE: previously this method removed `appStateSettings[preferredCurrency]`
-    // from the set on the assumption that the preferred currency had no rate
-    // row. That was the root cause of the EUR/EUR bug — for a USD-preferred
-    // user with `currencies = ['USD','EUR']`, USD was wiped from the set,
-    // leaving only EUR which the user perceived as "EUR/EUR". The preferred
-    // currency does have a valid display rate (e.g. 1 USD = 39 VES), so we
-    // keep it in the effective set.
     return set;
+  }
+
+  /// Resuelve el código del pivot (la divisa hacia la que se convierten los
+  /// valores). Heurística cuando no hay override del usuario:
+  ///   1. si la unión incluye VES → 'VES' (caso típico VE);
+  ///   2. de lo contrario → preferredCurrency del usuario;
+  ///   3. fallback duro → 'USD'.
+  String _resolvePivot(Set<String> baseSet) {
+    final explicit = pivotCurrency?.toUpperCase().trim();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+    if (baseSet.contains('VES')) return 'VES';
+    final pref = appStateSettings[SettingKey.preferredCurrency];
+    if (pref != null && pref.isNotEmpty) return pref.toUpperCase();
+    return 'USD';
+  }
+
+  /// Currencies que aparecen como filas. La pivot SIEMPRE se excluye —
+  /// no tiene sentido mostrar "1 VES = 1 VES". Reintroduce la exclusión
+  /// que existía antes del rework, pero ahora apuntando al pivot, no al
+  /// preferredCurrency (que pueden diferir cuando el usuario fuerza un
+  /// pivot manual).
+  Set<String> _rowCurrencies(Set<String> baseSet, String pivot) {
+    return {...baseSet}..remove(pivot);
   }
 
   @override
   Widget build(BuildContext context) {
-    final wanted = _effectiveCurrencies();
+    final baseSet = _baseCurrencies();
+    final pivotCode = _resolvePivot(baseSet);
+    final wanted = _rowCurrencies(baseSet, pivotCode);
+
     return StreamBuilder(
       stream: ExchangeRateService.instance.getExchangeRates(),
       builder: (context, snapshot) {
@@ -208,10 +249,10 @@ class _RatesList extends StatelessWidget {
             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
           );
         }
-        final rows = snapshot.data!
+        final allRows = snapshot.data!
             .where((r) => wanted.contains(r.currencyCode.toUpperCase()))
             .toList();
-        if (rows.isEmpty) {
+        if (allRows.isEmpty || wanted.isEmpty) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
@@ -220,198 +261,311 @@ class _RatesList extends StatelessWidget {
             ),
           );
         }
-        // Detect BCV and Paralelo rows for VES (for Promedio computation).
-        // Pure UI math — no DB write. See ADR-4 in design.md.
-        ExchangeRate? bcvRow;
-        ExchangeRate? paraleloRow;
-        if (wanted.contains('VES')) {
-          for (final r in snapshot.data!) {
-            if (r.currencyCode.toUpperCase() == 'VES') {
-              if (r.source == 'bcv') bcvRow = r;
-              if (r.source == 'paralelo') paraleloRow = r;
-            }
-          }
+
+        // Agrupar las filas por currencyCode (preserva el orden de wanted)
+        // — sólo se usa para resolver el `tapTarget` del row label y para
+        // saber qué fuentes (bcv/paralelo) están disponibles para cada
+        // divisa. Los VALORES mostrados se calculan vía
+        // [ExchangeRateService.calculateExchangeRate] (ver _RatesTable),
+        // que invierte correctamente para producir "1 row = N pivot".
+        final orderedCodes = wanted.toList();
+        final grouped = <String, List<ExchangeRate>>{};
+        for (final r in allRows) {
+          final code = r.currencyCode.toUpperCase();
+          grouped.putIfAbsent(code, () => []).add(r);
         }
-        return Column(
-          children: [
-            for (final row in rows)
-              _RateRow(
-                currencyCode: row.currencyCode,
-                rate: row.exchangeRate,
-                source: row.source,
-                date: row.date,
-              ),
-            if (bcvRow != null && paraleloRow != null) ...[
-              Divider(
-                height: 1,
-                thickness: 0.5,
-                indent: 4,
-                endIndent: 4,
-                color: Theme.of(
-                  context,
-                ).colorScheme.outlineVariant.withValues(alpha: 0.5),
-              ),
-              _PromedioRow(
-                bcvRate: bcvRow.exchangeRate,
-                paraleloRate: paraleloRow.exchangeRate,
-              ),
-            ],
-          ],
+
+        final anyHasBoth = orderedCodes.any((code) {
+          final group = grouped[code] ?? [];
+          return group.any((r) => r.source == 'bcv') &&
+              group.any((r) => r.source == 'paralelo');
+        });
+
+        return _RatesTable(
+          orderedCodes: orderedCodes,
+          grouped: grouped,
+          showPromedioColumn: anyHasBoth,
+          pivotCode: pivotCode,
         );
       },
     );
   }
 }
 
-class _RateRow extends StatelessWidget {
-  const _RateRow({
-    required this.currencyCode,
-    required this.rate,
-    required this.source,
-    required this.date,
-  });
-
-  final String currencyCode;
-  final double rate;
-  final String? source;
-  final DateTime date;
+/// Pill badge for the "Prom." column header and value cells.
+/// Reuses the same visual token (`colorScheme.tertiary`) as the old
+/// `_PromedioRow` badge — no hardcoded hex, consistent with Wallex theme.
+class _PromedioBadge extends StatelessWidget {
+  const _PromedioBadge();
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => _edit(context),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-        child: Row(
-          children: [
-            Text(
-              currencyCode,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(width: 8),
-            RateSourceBadge(rawSource: source),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                _humanizeAge(date),
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.55),
-                ),
-              ),
-            ),
-            Text(
-              rate.toStringAsFixed(rate >= 1000 ? 0 : 2),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontFeatures: [const FontFeature.tabularFigures()],
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: cs.tertiary.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: cs.tertiary.withValues(alpha: 0.4)),
+      ),
+      child: Text(
+        'Prom.',
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: cs.tertiary,
+          letterSpacing: 0.2,
         ),
       ),
     );
   }
+}
 
-  Future<void> _edit(BuildContext context) async {
-    // Resolve the Currency object so the dialog can preselect it and
-    // start the user in edit mode rather than blank.
+/// Table layout for exchange rates. Column structure:
+///   0: currency label (flag prefix + code) — FlexColumnWidth (fills remaining)
+///   1: BCV rate value — FixedColumnWidth(72)
+///   2: Paralelo rate value — FixedColumnWidth(72)
+///   3: Promedio value — FixedColumnWidth(72), only when [showPromedioColumn]
+///
+/// All value columns are right-aligned with tabular figures so digits
+/// stack cleanly regardless of magnitude. Header row carries the source
+/// badges as column labels.
+///
+/// Graceful degradation for single-source currencies: if a currency only
+/// has an Auto (Frankfurter) or Manual row and no Paralelo, its rate
+/// appears in column 1 (BCV slot) and columns 2–3 show `—` in dim color.
+/// This avoids blank rows while keeping the table structure intact.
+class _RatesTable extends StatelessWidget {
+  const _RatesTable({
+    required this.orderedCodes,
+    required this.grouped,
+    required this.showPromedioColumn,
+    required this.pivotCode,
+  });
+
+  final List<String> orderedCodes;
+  final Map<String, List<ExchangeRate>> grouped;
+  final bool showPromedioColumn;
+
+  /// Divisa hacia la que se convierten todos los valores de la tabla.
+  /// "Fila currency = N pivot" (e.g. pivot=VES: "1 USD = 485 VES").
+  final String pivotCode;
+
+  static const double _colWidth = 72;
+  static const List<String> _sources = <String>['bcv', 'paralelo'];
+
+  String _flagFor(String code) {
+    switch (code.toUpperCase()) {
+      case 'USD':
+        return '\$ ';
+      case 'EUR':
+        return '€ ';
+      case 'VES':
+        return 'Bs. ';
+      case 'GBP':
+        return '£ ';
+      case 'COP':
+        return 'COP ';
+      case 'BRL':
+        return 'R\$ ';
+      default:
+        return '';
+    }
+  }
+
+  /// Formato adaptativo:
+  ///   - `null` → guion largo
+  ///   - ≥ 1000 → sin decimales (485, 567, …)
+  ///   - ≥ 0.01 → 2 decimales (1.17, 39.50, …)
+  ///   - resto (sub-centésimas) → 4 decimales para que valores como
+  ///     0.0021 (1 VES = 0.0021 USD) no colapsen a "0.00".
+  String _fmt(double? rate) {
+    if (rate == null) return '—';
+    if (rate >= 1000) return rate.toStringAsFixed(0);
+    if (rate.abs() >= 0.01) return rate.toStringAsFixed(2);
+    return rate.toStringAsFixed(4);
+  }
+
+  /// Build the outer combineLatest stream that materializes a map of
+  /// `(rowCode, source) → convertedRate?`. Single subscription per cell
+  /// is replaced by N×|sources| upstream subscriptions multiplexed at the
+  /// Drift watch layer (no extra DB cost — see ExchangeRateConfigSheet ADR).
+  Stream<Map<(String, String), double?>> _buildRatesStream() {
+    final streams = <Stream<MapEntry<(String, String), double?>>>[];
+    for (final code in orderedCodes) {
+      for (final src in _sources) {
+        streams.add(
+          ExchangeRateService.instance
+              .calculateExchangeRate(
+                fromCurrency: code,
+                toCurrency: pivotCode,
+                source: src,
+              )
+              .map((v) => MapEntry((code, src), v)),
+        );
+      }
+    }
+    if (streams.isEmpty) {
+      return Stream<Map<(String, String), double?>>.value(
+        const <(String, String), double?>{},
+      );
+    }
+    return Rx.combineLatestList(streams).map((entries) {
+      final map = <(String, String), double?>{};
+      for (final e in entries) {
+        map[e.key] = e.value;
+      }
+      return map;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Map<(String, String), double?>>(
+      stream: _buildRatesStream(),
+      builder: (context, snapshot) {
+        final converted = snapshot.data ?? const <(String, String), double?>{};
+        return _buildTable(context, converted);
+      },
+    );
+  }
+
+  Widget _buildTable(
+    BuildContext context,
+    Map<(String, String), double?> converted,
+  ) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final dimColor = cs.onSurface.withValues(alpha: 0.38);
+
+    final columnWidths = <int, TableColumnWidth>{
+      0: const FlexColumnWidth(),
+      1: const FixedColumnWidth(_colWidth),
+      2: const FixedColumnWidth(_colWidth),
+      if (showPromedioColumn) 3: const FixedColumnWidth(_colWidth),
+    };
+
+    // ── Header row ──────────────────────────────────────────────────────
+    final headerCells = <Widget>[
+      const SizedBox.shrink(),
+      const RateSourceBadge(rawSource: 'bcv'),
+      const RateSourceBadge(rawSource: 'paralelo'),
+      if (showPromedioColumn) const _PromedioBadge(),
+    ];
+
+    final headerRow = TableRow(
+      children: List<Widget>.generate(headerCells.length, (i) {
+        // Header de la columna 0 está vacío pero conserva alineación
+        // izquierda para coherencia con el label que va abajo.
+        final align =
+            i == 0 ? Alignment.centerLeft : Alignment.centerRight;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: Align(alignment: align, child: headerCells[i]),
+        );
+      }),
+    );
+
+    // ── Data rows ────────────────────────────────────────────────────────
+    final dataRows = <TableRow>[];
+    for (final code in orderedCodes) {
+      final group = grouped[code];
+      if (group == null || group.isEmpty) continue;
+
+      final bcvConverted = converted[(code, 'bcv')];
+      final paraleloConverted = converted[(code, 'paralelo')];
+
+      // Promedio: media de los DOS valores ya convertidos. Si falta alguno,
+      // mostramos "—" (no inventamos un valor a partir de uno solo).
+      final promedioRate = (bcvConverted != null && paraleloConverted != null)
+          ? (bcvConverted + paraleloConverted) / 2
+          : null;
+
+      // Representative row for tap-to-edit: prefer BCV > Paralelo > first.
+      final tapTarget = group.firstWhere(
+        (r) => r.source == 'bcv',
+        orElse: () => group.firstWhere(
+          (r) => r.source == 'paralelo',
+          orElse: () => group.first,
+        ),
+      );
+
+      final label = '${_flagFor(code)}$code';
+
+      final cells = <Widget>[
+        // Column 0: currency label (left-aligned — aplicado en el padding
+        // outer; ver builder de cells más abajo).
+        GestureDetector(
+          onTap: () => _edit(context, tapTarget.currencyCode),
+          child: Text(
+            label,
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        // Column 1: BCV converted to pivot
+        Text(
+          _fmt(bcvConverted),
+          textAlign: TextAlign.right,
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontFeatures: const [FontFeature.tabularFigures()],
+            fontWeight: FontWeight.w600,
+            color: bcvConverted == null ? dimColor : null,
+          ),
+        ),
+        // Column 2: Paralelo converted to pivot
+        Text(
+          _fmt(paraleloConverted),
+          textAlign: TextAlign.right,
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontFeatures: const [FontFeature.tabularFigures()],
+            fontWeight: FontWeight.w600,
+            color: paraleloConverted == null ? dimColor : null,
+          ),
+        ),
+        // Column 3: Promedio (only rendered when column is visible)
+        if (showPromedioColumn)
+          Text(
+            _fmt(promedioRate),
+            textAlign: TextAlign.right,
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontFeatures: const [FontFeature.tabularFigures()],
+              fontWeight: FontWeight.w600,
+              color: promedioRate == null ? dimColor : cs.tertiary,
+            ),
+          ),
+      ];
+
+      dataRows.add(
+        TableRow(
+          children: List<Widget>.generate(cells.length, (i) {
+            // Columna 0 (label de divisa) alineada a la izquierda; las
+            // columnas numéricas siguen pegadas a la derecha.
+            final align =
+                i == 0 ? Alignment.centerLeft : Alignment.centerRight;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Align(alignment: align, child: cells[i]),
+            );
+          }),
+        ),
+      );
+    }
+
+    return Table(
+      columnWidths: columnWidths,
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [headerRow, ...dataRows],
+    );
+  }
+
+  Future<void> _edit(BuildContext context, String currencyCode) async {
     final currency = await CurrencyService.instance
         .getCurrencyByCode(currencyCode)
         .first;
     if (!context.mounted) return;
     await showManualOverrideDialog(context, initialCurrency: currency);
-  }
-
-  String _humanizeAge(DateTime when) {
-    final now = DateTime.now();
-    final diff = now.difference(when);
-    if (diff.inMinutes < 1) return 'recién';
-    if (diff.inHours < 1) return 'hace ${diff.inMinutes}m';
-    if (diff.inDays < 1) return 'hace ${diff.inHours}h';
-    if (diff.inDays == 1) return 'ayer';
-    if (diff.inDays < 7) return 'hace ${diff.inDays}d';
-    return '${when.year}-${when.month.toString().padLeft(2, '0')}-${when.day.toString().padLeft(2, '0')}';
-  }
-}
-
-/// Fila calculada de promedio BCV+Paralelo para VES.
-///
-/// Solo se renderiza cuando ambos rows (`source == 'bcv'` y
-/// `source == 'paralelo'`) están presentes en el snapshot del widget. Es
-/// UI pura — no escribe a la base de datos. Ver ADR-4 en design.md.
-///
-/// El badge "Prom." reemplaza al [RateSourceBadge] y el campo `date` se
-/// omite (el valor es siempre derivado del último BCV+Paralelo). Mantiene
-/// la misma estructura visual que [_RateRow] para preservar el lenguaje
-/// visual de Wallex (mismo padding, mismo `bodyMedium`, tabular figures
-/// en el monto, sin colores hardcoded — todo via tokens del tema).
-class _PromedioRow extends StatelessWidget {
-  const _PromedioRow({required this.bcvRate, required this.paraleloRate});
-
-  final double bcvRate;
-  final double paraleloRate;
-
-  double get _promedio => (bcvRate + paraleloRate) / 2;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-      child: Row(
-        children: [
-          Text(
-            'VES',
-            style: theme.textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(width: 8),
-          // "Prom." pill — visual analogue de RateSourceBadge usando el
-          // token `tertiary` del tema para diferenciarlo de las fuentes
-          // reales (BCV verde, Paralelo naranja).
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: cs.tertiary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: cs.tertiary.withValues(alpha: 0.4)),
-            ),
-            child: Text(
-              'Prom.',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: cs.tertiary,
-                letterSpacing: 0.2,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              'Calculado',
-              style: theme.textTheme.bodySmall!.copyWith(
-                color: cs.onSurface.withValues(alpha: 0.55),
-              ),
-            ),
-          ),
-          Text(
-            _promedio.toStringAsFixed(_promedio >= 1000 ? 0 : 2),
-            style: theme.textTheme.bodyMedium!.copyWith(
-              fontFeatures: [const FontFeature.tabularFigures()],
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -437,6 +591,10 @@ void registerExchangeRateCardWidget() {
         'currencies': <String>['VES', 'EUR'],
         'sources': <String>['bcv', 'paralelo'],
         'showEvolutionChart': false,
+        // null ⇒ auto-derivar el pivot (VES si está en el set efectivo,
+        // si no preferredCurrency). Un código no-nulo (e.g. "USD") fuerza
+        // el pivot manualmente.
+        'pivotCurrency': null,
       },
       recommendedFor: const <String>{'save_usd', 'analyze'},
       builder: (context, descriptor, {required editing}) {
@@ -450,6 +608,10 @@ void registerExchangeRateCardWidget() {
             : const <String>['bcv', 'paralelo'];
         final rawShowChart = descriptor.config['showEvolutionChart'];
         final showChart = rawShowChart is bool ? rawShowChart : false;
+        final rawPivot = descriptor.config['pivotCurrency'];
+        final pivot = rawPivot is String && rawPivot.trim().isNotEmpty
+            ? rawPivot
+            : null;
         return KeyedSubtree(
           key: ValueKey('${descriptor.type.name}-${descriptor.instanceId}'),
           child: ExchangeRateCardWidget(
@@ -460,6 +622,7 @@ void registerExchangeRateCardWidget() {
                 ? const <String>['bcv', 'paralelo']
                 : sources,
             showEvolutionChart: showChart,
+            pivotCurrency: pivot,
           ),
         );
       },

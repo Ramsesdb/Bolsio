@@ -2227,6 +2227,9 @@ class _TranslationsHomeDashboardWidgetsExchangeRateCardEs extends TranslationsHo
 	// Translations
 	@override String get name => 'Tasas de cambio';
 	@override String get description => 'Tasas USD ↔ VES del BCV y Paralelo.';
+	@override String get pivot_label => 'Mostrar tasas en';
+	@override String get pivot_auto => 'Automático';
+	@override String get pivot_help => '1 unidad de cada divisa = N unidades de la divisa elegida.';
 }
 
 // Path: home.dashboard_widgets.quick_use
@@ -2938,6 +2941,9 @@ extension on TranslationsEs {
 			'home.dashboard_widgets.recent_transactions.description' => 'Los últimos movimientos de tus cuentas.',
 			'home.dashboard_widgets.exchange_rate_card.name' => 'Tasas de cambio',
 			'home.dashboard_widgets.exchange_rate_card.description' => 'Tasas USD ↔ VES del BCV y Paralelo.',
+			'home.dashboard_widgets.exchange_rate_card.pivot_label' => 'Mostrar tasas en',
+			'home.dashboard_widgets.exchange_rate_card.pivot_auto' => 'Automático',
+			'home.dashboard_widgets.exchange_rate_card.pivot_help' => '1 unidad de cada divisa = N unidades de la divisa elegida.',
 			'home.dashboard_widgets.quick_use.name' => 'Atajos rápidos',
 			'home.dashboard_widgets.quick_use.description' => 'Atajos de un toque que tú eliges.',
 			'home.dashboard_widgets.pending_imports_alert.name' => 'Movimientos por revisar',
@@ -3295,11 +3301,11 @@ extension on TranslationsEs {
 			'account.types.saving_descr' => 'Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar',
 			'account.form.name' => 'Nombre de la cuenta',
 			'account.form.name_placeholder' => 'Ej: Cuenta de ahorros',
+			_ => null,
+		} ?? switch (path) {
 			'account.form.notes' => 'Notas',
 			'account.form.notes_placeholder' => 'Escribe algunas notas/descripciones sobre esta cuenta',
 			'account.form.initial_balance' => 'Balance inicial',
-			_ => null,
-		} ?? switch (path) {
 			'account.form.current_balance' => 'Balance actual',
 			'account.form.create' => 'Crear cuenta',
 			'account.form.edit' => 'Editar cuenta',
@@ -3809,11 +3815,11 @@ extension on TranslationsEs {
 			'more.help_us.rate_us_descr' => '¡Cualquier valoración es bienvenida!',
 			'more.help_us.share' => 'Comparte Bolsio',
 			'more.help_us.share_descr' => 'Comparte nuestra app a amigos y familiares',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.share_text' => 'Bolsio! La mejor app de finanzas personales. Descargala aquí',
 			'more.help_us.thanks' => '¡Gracias!',
 			'more.help_us.donate' => 'Haz una donación',
-			_ => null,
-		} ?? switch (path) {
 			'more.help_us.donate_descr' => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?',
 			'more.help_us.donate_success' => 'Donación realizada. Muchas gracias por tu contribución! ❤️',
 			'more.help_us.donate_err' => 'Ups! Parece que ha habido un error a la hora de recibir tu pago',

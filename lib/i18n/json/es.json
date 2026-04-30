@@ -214,7 +214,10 @@
       },
       "exchange-rate-card": {
         "name": "Tasas de cambio",
-        "description": "Tasas USD ↔ VES del BCV y Paralelo."
+        "description": "Tasas USD ↔ VES del BCV y Paralelo.",
+        "pivot-label": "Mostrar tasas en",
+        "pivot-auto": "Automático",
+        "pivot-help": "1 unidad de cada divisa = N unidades de la divisa elegida."
       },
       "quick-use": {
         "name": "Atajos rápidos",

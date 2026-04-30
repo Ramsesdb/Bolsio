@@ -3960,6 +3960,15 @@ class TranslationsHomeDashboardWidgetsExchangeRateCardEn {
 
 	/// en: 'USD ↔ VES rates from BCV and Paralelo.'
 	String get description => 'USD ↔ VES rates from BCV and Paralelo.';
+
+	/// en: 'Show rates in'
+	String get pivot_label => 'Show rates in';
+
+	/// en: 'Automatic'
+	String get pivot_auto => 'Automatic';
+
+	/// en: '1 unit of each currency = N units of the chosen currency.'
+	String get pivot_help => '1 unit of each currency = N units of the chosen currency.';
 }
 
 // Path: home.dashboard_widgets.quick_use
@@ -5036,6 +5045,9 @@ extension on Translations {
 			'home.dashboard_widgets.recent_transactions.description' => 'The latest movements across your accounts.',
 			'home.dashboard_widgets.exchange_rate_card.name' => 'Exchange rates',
 			'home.dashboard_widgets.exchange_rate_card.description' => 'USD ↔ VES rates from BCV and Paralelo.',
+			'home.dashboard_widgets.exchange_rate_card.pivot_label' => 'Show rates in',
+			'home.dashboard_widgets.exchange_rate_card.pivot_auto' => 'Automatic',
+			'home.dashboard_widgets.exchange_rate_card.pivot_help' => '1 unit of each currency = N units of the chosen currency.',
 			'home.dashboard_widgets.quick_use.name' => 'Quick actions',
 			'home.dashboard_widgets.quick_use.description' => 'One-tap shortcuts you choose.',
 			'home.dashboard_widgets.pending_imports_alert.name' => 'Pending imports',
@@ -5393,11 +5405,11 @@ extension on Translations {
 			'account.types.saving_descr' => 'You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money',
 			'account.form.name' => 'Account name',
 			'account.form.name_placeholder' => 'Ex: Savings account',
+			_ => null,
+		} ?? switch (path) {
 			'account.form.notes' => 'Notes',
 			'account.form.notes_placeholder' => 'Type some notes/description about this account',
 			'account.form.initial_balance' => 'Initial balance',
-			_ => null,
-		} ?? switch (path) {
 			'account.form.current_balance' => 'Current balance',
 			'account.form.create' => 'Create account',
 			'account.form.edit' => 'Edit account',
@@ -5907,11 +5919,11 @@ extension on Translations {
 			'more.help_us.rate_us_descr' => 'Any rate is welcome!',
 			'more.help_us.share' => 'Share Bolsio',
 			'more.help_us.share_descr' => 'Share our app to friends and family',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.share_text' => 'Bolsio! The best personal finance app. Download it here',
 			'more.help_us.thanks' => 'Thank you!',
 			'more.help_us.thanks_long' => 'Your contributions to Bolsio and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.',
-			_ => null,
-		} ?? switch (path) {
 			'more.help_us.donate' => 'Make a donation',
 			'more.help_us.donate_descr' => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?',
 			'more.help_us.donate_success' => 'Donation made. Thank you very much for your contribution! ❤️',

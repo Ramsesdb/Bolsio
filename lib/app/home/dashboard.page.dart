@@ -702,6 +702,9 @@ class _DashboardPageState extends State<DashboardPage>
           context: context,
           isScrollControlled: true,
           showDragHandle: true,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
           builder: (context) {
             return const EditProfileModal();
           },
