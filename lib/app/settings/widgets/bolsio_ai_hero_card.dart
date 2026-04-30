@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
-import 'package:kilatex/core/presentation/widgets/tappable.dart';
-import 'package:kilatex/core/routes/route_utils.dart';
+import 'package:bolsio/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:bolsio/core/routes/route_utils.dart';
 
-class WallexAiHeroCard extends StatefulWidget {
-  const WallexAiHeroCard({super.key});
+class BolsioAiHeroCard extends StatefulWidget {
+  const BolsioAiHeroCard({super.key});
 
   @override
-  State<WallexAiHeroCard> createState() => _WallexAiHeroCardState();
+  State<BolsioAiHeroCard> createState() => _BolsioAiHeroCardState();
 }
 
-class _WallexAiHeroCardState extends State<WallexAiHeroCard>
+class _BolsioAiHeroCardState extends State<BolsioAiHeroCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _glowAnim;
@@ -102,7 +102,7 @@ class _WallexAiHeroCardState extends State<WallexAiHeroCard>
                   spacing: 2,
                   children: [
                     Text(
-                      'Wallex AI',
+                      'Bolsi',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),

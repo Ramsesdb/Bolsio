@@ -1,4 +1,4 @@
-package com.kilatex.app
+package com.bolsio.app
 
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -9,7 +9,7 @@ import android.os.SystemClock
 import android.util.Log
 
 /**
- * Boots the Wallex capture foreground service when the device finishes booting.
+ * Boots the Bolsio capture foreground service when the device finishes booting.
  *
  * MIUI / HyperOS (and similar OEM skins) aggressively silence the auto-start
  * mechanism that ships with `flutter_background_service` — our service was
@@ -68,7 +68,7 @@ class BootReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        private const val TAG = "WallexBootReceiver"
+        private const val TAG = "BolsioBootReceiver"
         private const val QUICKBOOT_POWERON =
             "android.intent.action.QUICKBOOT_POWERON"
         private const val BACKGROUND_SERVICE_CLASS =

@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/extensions/color.extensions.dart';
-import 'package:kilatex/core/presentation/app_colors.dart';
+import 'package:bolsio/core/extensions/color.extensions.dart';
+import 'package:bolsio/core/presentation/app_colors.dart';
 
-/// Design tokens for the Wallex AI Chat v2 visual redesign.
+/// Design tokens for Wallex sheet surfaces (chat, profile, future modals).
 ///
 /// Translates the hardcoded tokens from the Claude Design bundle
-/// (see `wai-chrome.jsx` / `wallex-theme.jsx`) to the dynamic Wallex
-/// theme so chat surfaces follow the user's accent / brightness / amoled
+/// (see `wai-chrome.jsx` / `bolsio-theme.jsx`) to the dynamic Bolsio
+/// theme so sheet surfaces follow the user's accent / brightness / amoled
 /// selection at runtime.
 ///
 /// API mirrors [AppColors.of] (context-bound accessor). We deliberately
-/// do NOT implement [ThemeExtension] because these tokens are scoped to
-/// the chat feature; promoting them to a theme extension would be
-/// overkill and would force every theme rebuild to carry them.
-class WallexAiTokens {
-  const WallexAiTokens._(this._context);
+/// do NOT implement [ThemeExtension] because these tokens are a shared
+/// design-token source for Wallex sheet surfaces (chat, profile, future
+/// modals); promoting them to a theme extension would be overkill and
+/// would force every theme rebuild to carry them.
+class BolsioAiTokens {
+  const BolsioAiTokens._(this._context);
 
   final BuildContext _context;
 
-  /// Context-bound accessor. Usage: `WallexAiTokens.of(context).accent`.
-  static WallexAiTokens of(BuildContext context) => WallexAiTokens._(context);
+  /// Context-bound accessor. Usage: `BolsioAiTokens.of(context).accent`.
+  static BolsioAiTokens of(BuildContext context) => BolsioAiTokens._(context);
 
   ColorScheme get _cs => Theme.of(_context).colorScheme;
   AppColors get _app => AppColors.of(_context);
@@ -50,7 +51,7 @@ class WallexAiTokens {
   /// AI chat bubble background (design spec `#1A1A2E`).
   ///
   /// Mapped to `surfaceContainerHighest` (NOT `surfaceContainer` as the
-  /// brief initially suggested) to match the existing `wallex_chat.page.dart`
+  /// brief initially suggested) to match the existing `bolsio_chat.page.dart`
   /// which already paints AI bubbles with `cs.surfaceContainerHighest`.
   /// This preserves visual continuity during the Tanda 2 migration.
   Color get bubbleAi => _cs.surfaceContainerHighest;
@@ -86,6 +87,68 @@ class WallexAiTokens {
 
   /// Success / positive (design spec `#4CAF50`).
   Color get success => _app.success;
+
+  // ---------------------------------------------------------------------------
+  // Sheet surface tokens (profile editor, future modals)
+  //
+  // Mockup contract: `mockups/editar-perfil.html` CSS custom properties.
+  // Mapped to Material 3 ColorScheme so dark/light + accent are respected
+  // automatically (the mockup uses dark-only values; light surfaces fall
+  // out of `surfaceContainer` / `surfaceContainerHigh` per M3 tonal palette).
+  // ---------------------------------------------------------------------------
+
+  /// Tile resting background (mockup `--surface-container` `#161D1C`).
+  /// Used for avatar tiles and input wells in sheet surfaces.
+  Color get tileSurface => _cs.surfaceContainer;
+
+  /// Tile hover / press background (mockup `--surface-container-high` `#1E2625`).
+  Color get tileSurfaceHover => _cs.surfaceContainerHigh;
+
+  /// Tile selected background. Same target as [tileSurfaceHover] — the
+  /// selection cue is the ring + halo + checkmark, not a fill change
+  /// (per design.md §3).
+  Color get tileSurfaceSelected => _cs.surfaceContainerHigh;
+
+  /// Selection cue for avatar tiles: 2-px accent ring + 6-px low-alpha
+  /// accent halo (mockup `--shadow-tile-selected`).
+  List<BoxShadow> get selectedTileShadow => [
+    BoxShadow(color: _cs.primary, spreadRadius: 2),
+    BoxShadow(color: accentFaint, spreadRadius: 6),
+  ];
+
+  /// Hero avatar halo: 1-px white outline + 8-px white wash + 18-px black
+  /// drop shadow (mockup `--shadow-hero-halo`).
+  List<BoxShadow> get heroHaloShadow => [
+    BoxShadow(
+      color: Colors.white.withValues(alpha: 0.05),
+      spreadRadius: 1,
+    ),
+    BoxShadow(
+      color: Colors.white.withValues(alpha: 0.025),
+      spreadRadius: 8,
+    ),
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.5),
+      blurRadius: 40,
+      offset: const Offset(0, 18),
+    ),
+  ];
+
+  /// Dashed border color for the upload tile (mockup `--border-dashed`
+  /// `rgba(255,255,255,0.18)`). Fed to a `CustomPainter`.
+  Color get dashedBorderColor => _cs.onSurface.withValues(alpha: 0.18);
+
+  /// Soft accent fill (mockup `--accent-primary-soft` alpha 0.16).
+  /// Used as the "Tu foto" pin-pill background.
+  Color get accentSoft => _cs.primary.withValues(alpha: 0.16);
+
+  /// Faint accent fill (mockup `--accent-primary-faint` alpha 0.10).
+  /// Used as the dashed-tile hover background and the selected-tile halo.
+  Color get accentFaint => _cs.primary.withValues(alpha: 0.10);
+
+  /// Foreground color drawn on top of accent surfaces (mockup
+  /// `--accent-on`). Used for the selection checkmark icon.
+  Color get accentOn => _cs.onPrimary;
 
   // ---------------------------------------------------------------------------
   // Brand constants (accent-independent)

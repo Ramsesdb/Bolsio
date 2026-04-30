@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kilatex/core/utils/list_tile_action_item.dart';
+import 'package:bolsio/core/utils/list_tile_action_item.dart';
 
-class WallexPopupMenuButton extends StatelessWidget {
-  const WallexPopupMenuButton({
+class BolsioPopupMenuButton extends StatelessWidget {
+  const BolsioPopupMenuButton({
     super.key,
     required this.actionItems,
     this.icon,

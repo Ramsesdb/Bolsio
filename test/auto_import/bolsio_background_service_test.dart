@@ -1,28 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
-import 'package:wallex/core/services/auto_import/background/wallex_background_service.dart';
+import 'package:bolsio/core/services/auto_import/background/local_notification_service.dart';
+import 'package:bolsio/core/services/auto_import/background/bolsio_background_service.dart';
 
 void main() {
-  group('WallexBackgroundService', () {
+  group('BolsioBackgroundService', () {
     test('instance is a singleton', () {
-      final a = WallexBackgroundService.instance;
-      final b = WallexBackgroundService.instance;
+      final a = BolsioBackgroundService.instance;
+      final b = BolsioBackgroundService.instance;
       expect(identical(a, b), isTrue);
     });
 
     test('forTesting constructor does not throw', () {
-      final service = WallexBackgroundService.forTesting();
+      final service = BolsioBackgroundService.forTesting();
       expect(service, isNotNull);
     });
 
     test('notification channel IDs are correct', () {
       expect(
         LocalNotificationService.captureChannelId,
-        equals('wallex_capture'),
+        equals('bolsio_capture'),
       );
       expect(
         LocalNotificationService.pendingChannelId,
-        equals('wallex_pending'),
+        equals('bolsio_pending'),
       );
     });
 

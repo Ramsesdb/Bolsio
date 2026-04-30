@@ -1,4 +1,4 @@
-package com.kilatex.app
+package com.bolsio.app
 
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
@@ -20,7 +20,7 @@ import io.flutter.plugin.common.MethodChannel
  * Registered from [MainActivity.configureFlutterEngine].
  */
 object DeviceQuirksChannel {
-    const val CHANNEL_NAME = "com.wallex.capture/quirks"
+    const val CHANNEL_NAME = "com.bolsio.capture/quirks"
 
     fun register(context: Context, flutterEngine: FlutterEngine) {
         val channel = MethodChannel(
@@ -179,11 +179,11 @@ object DeviceQuirksChannel {
 
     /**
      * Opens the system "Notification access" screen where the user can
-     * enable Wallex as a notification listener. Throws on failure so the
+     * enable Bolsio as a notification listener. Throws on failure so the
      * Dart side can fall back to [openAppDetails] with a toast instruction.
      *
      * On Android 11+ (API 30+) we use ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS
-     * with the Wallex listener component so the user lands directly on our
+     * with the Bolsio listener component so the user lands directly on our
      * app's toggle instead of the generic list of all installed apps.
      * The listener is provided by the `notification_listener_service` plugin
      * and registered in AndroidManifest.xml as

@@ -1,44 +1,44 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/chat/models/chat_card_dispatcher.dart';
-import 'package:kilatex/app/chat/models/chat_card_payload.dart';
-import 'package:kilatex/app/chat/models/chat_text_sanitizer.dart';
-import 'package:kilatex/app/chat/theme/wallex_ai_tokens.dart';
-import 'package:kilatex/app/chat/widgets/ai_bubble.dart';
-import 'package:kilatex/app/chat/widgets/cards/account_pick_card.dart';
-import 'package:kilatex/app/chat/widgets/cards/balance_card.dart';
-import 'package:kilatex/app/chat/widgets/cards/expense_card.dart';
-import 'package:kilatex/app/chat/widgets/chat_empty_state.dart';
-import 'package:kilatex/app/chat/widgets/chat_input_bar.dart';
-import 'package:kilatex/app/chat/widgets/suggest_chips.dart';
-import 'package:kilatex/app/chat/widgets/typing_dots.dart';
-import 'package:kilatex/app/chat/widgets/user_bubble.dart';
-import 'package:kilatex/app/chat/widgets/wallex_ai_markdown.dart';
-import 'package:kilatex/app/chat/widgets/wallex_ai_orb.dart';
-import 'package:kilatex/app/common/widgets/user_avatar_display.dart';
-import 'package:kilatex/app/transactions/voice_input/voice_record_overlay.dart';
-import 'package:kilatex/core/database/services/account/account_service.dart';
-import 'package:kilatex/core/database/services/category/category_service.dart';
-import 'package:kilatex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:kilatex/core/services/ai/agents/agent_run_result.dart';
-import 'package:kilatex/core/services/ai/agents/wallex_ai_agent.dart';
-import 'package:kilatex/core/services/voice/voice_permission_dialog.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/chat/models/chat_card_dispatcher.dart';
+import 'package:bolsio/app/chat/models/chat_card_payload.dart';
+import 'package:bolsio/app/chat/models/chat_text_sanitizer.dart';
+import 'package:bolsio/app/chat/theme/bolsio_ai_tokens.dart';
+import 'package:bolsio/app/chat/widgets/ai_bubble.dart';
+import 'package:bolsio/app/chat/widgets/cards/account_pick_card.dart';
+import 'package:bolsio/app/chat/widgets/cards/balance_card.dart';
+import 'package:bolsio/app/chat/widgets/cards/expense_card.dart';
+import 'package:bolsio/app/chat/widgets/chat_empty_state.dart';
+import 'package:bolsio/app/chat/widgets/chat_input_bar.dart';
+import 'package:bolsio/app/chat/widgets/suggest_chips.dart';
+import 'package:bolsio/app/chat/widgets/typing_dots.dart';
+import 'package:bolsio/app/chat/widgets/user_bubble.dart';
+import 'package:bolsio/app/chat/widgets/bolsio_ai_markdown.dart';
+import 'package:bolsio/app/chat/widgets/bolsio_ai_orb.dart';
+import 'package:bolsio/app/common/widgets/user_avatar_display.dart';
+import 'package:bolsio/app/transactions/voice_input/voice_record_overlay.dart';
+import 'package:bolsio/core/database/services/account/account_service.dart';
+import 'package:bolsio/core/database/services/category/category_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/services/ai/agents/agent_run_result.dart';
+import 'package:bolsio/core/services/ai/agents/bolsio_ai_agent.dart';
+import 'package:bolsio/core/services/voice/voice_permission_dialog.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
-class WallexChatPage extends StatefulWidget {
-  const WallexChatPage({super.key});
+class BolsioChatPage extends StatefulWidget {
+  const BolsioChatPage({super.key});
 
   @override
-  State<WallexChatPage> createState() => _WallexChatPageState();
+  State<BolsioChatPage> createState() => _BolsioChatPageState();
 }
 
-class _WallexChatPageState extends State<WallexChatPage> {
+class _BolsioChatPageState extends State<BolsioChatPage> {
   final _messages = <_ChatMessage>[];
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
   final _inputFocus = FocusNode();
-  final _agent = WallexAiAgent();
+  final _agent = BolsioAiAgent();
   final _cardDispatcher = const ChatCardDispatcher();
 
   bool _isBooting = true;
@@ -64,7 +64,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
     final chatEnabled = appStateSettings[SettingKey.aiChatEnabled] == '1';
 
     if (!mounted) return;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
 
     if (!aiEnabled || !chatEnabled) {
       setState(() {
@@ -83,7 +83,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
 
   Future<void> _onMicTap() async {
     if (_isSending) return;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
 
     final outcome = await ensureMicPermissionWithExplainer(context);
     if (outcome != VoicePermissionOutcome.granted) {
@@ -178,7 +178,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
 
   Future<void> _handleAgentResult(AgentRunResult result) async {
     if (!mounted) return;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
 
     switch (result.status) {
       case AgentRunStatus.finalText:
@@ -213,7 +213,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
         // with provider hiccups (invalid tool args, dispatch crash, empty
         // stream) without surfacing the raw code to the user.
         debugPrint(
-          '[WALLEX_CHAT] agent run returned error code='
+          '[BOLSIO_CHAT] agent run returned error code='
           '${result.error ?? 'unknown'}',
         );
         // If the placeholder bubble was never filled by streaming, either
@@ -266,7 +266,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
               (m['tool_calls'] as List).isNotEmpty)
           .toList();
       debugPrint(
-        '[WALLEX_CHAT_CARDS] scan: total=${messages.length} '
+        '[BOLSIO_CHAT_CARDS] scan: total=${messages.length} '
         'toolMsgs=${toolRoles.length} assistantWithCalls=${assistantToolCalls.length}',
       );
 
@@ -288,7 +288,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
 
       if (lastToolMsg == null || lastAssistantWithCalls == null) {
         debugPrint(
-          '[WALLEX_CHAT_CARDS] no tool/assistant pair found — agent did not '
+          '[BOLSIO_CHAT_CARDS] no tool/assistant pair found — agent did not '
           'call tools this turn',
         );
         return;
@@ -308,7 +308,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
       final fn = matchedCall['function'] as Map<String, dynamic>?;
       final toolName = (fn?['name'] as String?) ?? '';
       if (toolName.isEmpty) {
-        debugPrint('[WALLEX_CHAT_CARDS] abort: empty toolName');
+        debugPrint('[BOLSIO_CHAT_CARDS] abort: empty toolName');
         return;
       }
 
@@ -331,7 +331,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
         rawJson: rawJson,
       );
       debugPrint(
-        '[WALLEX_CHAT_CARDS] dispatch tool=$toolName '
+        '[BOLSIO_CHAT_CARDS] dispatch tool=$toolName '
         'argKeys=${args.keys.toList()} cardProduced=${payload != null} '
         'rawPreview=$rawPreview',
       );
@@ -357,7 +357,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
       });
       _scrollToBottom();
     } catch (e, st) {
-      debugPrint('[WALLEX_CHAT_CARDS] dispatch failed: $e\n$st');
+      debugPrint('[BOLSIO_CHAT_CARDS] dispatch failed: $e\n$st');
     }
   }
 
@@ -508,7 +508,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
 
   void _replaceLastAssistantWithError() {
     if (!mounted) return;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     _replaceLastAssistant(t.chat_error_generic);
   }
 
@@ -526,7 +526,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
 
     // Perf-fix #1: hoist every appStateSettings read out of the widget tree so
     // rebuilds do not re-hash the settings map repeatedly mid-frame. The
@@ -586,7 +586,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                         final chips = _chipsFor(message.card!);
                         return Padding(
                           padding: const EdgeInsets.only(
-                            bottom: WallexAiTokens.bubbleGap,
+                            bottom: BolsioAiTokens.bubbleGap,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -596,7 +596,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                                   alignment: Alignment.centerLeft,
                                   child: AiBubble(
                                     child: RepaintBoundary(
-                                      child: WallexAiMarkdown(
+                                      child: BolsioAiMarkdown(
                                         data: message.text,
                                         onUser: false,
                                       ),
@@ -604,7 +604,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: WallexAiTokens.bubbleGap,
+                                  height: BolsioAiTokens.bubbleGap,
                                 ),
                               ],
                               Align(
@@ -616,7 +616,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                                   suggestions: chips,
                                   onTap: _onChipTap,
                                   padding: const EdgeInsets.only(
-                                    top: WallexAiTokens.bubbleGap,
+                                    top: BolsioAiTokens.bubbleGap,
                                     left: 4,
                                   ),
                                 ),
@@ -627,7 +627,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
 
                       return Padding(
                         padding: const EdgeInsets.only(
-                          bottom: WallexAiTokens.bubbleGap,
+                          bottom: BolsioAiTokens.bubbleGap,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -650,7 +650,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                                       alignment: Alignment.centerLeft,
                                       child: AiBubble(
                                         child: RepaintBoundary(
-                                          child: WallexAiMarkdown(
+                                          child: BolsioAiMarkdown(
                                             data: message.text,
                                             onUser: false,
                                           ),
@@ -659,7 +659,7 @@ class _WallexChatPageState extends State<WallexChatPage> {
                                     ),
                             ),
                             if (isUser) ...[
-                              const SizedBox(width: WallexAiTokens.bubbleGap / 1.5),
+                              const SizedBox(width: BolsioAiTokens.bubbleGap / 1.5),
                               UserAvatarDisplay(avatar: avatarId, size: 24),
                             ],
                           ],
@@ -685,12 +685,12 @@ class _WallexChatPageState extends State<WallexChatPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(TranslationsWallexAiEn t) {
+  PreferredSizeWidget _buildAppBar(TranslationsBolsioAiEn t) {
     return AppBar(
       title: Row(
         spacing: 10,
         children: [
-          const WallexAiOrb(size: 28, showGlow: false),
+          const BolsioAiOrb(size: 28, showGlow: false),
           Text(t.chat_header),
         ],
       ),
@@ -748,7 +748,7 @@ class _ToolApprovalSheet extends StatelessWidget {
   final String toolName;
   final Map<String, dynamic> arguments;
 
-  String _titleFor(TranslationsWallexAiEn t) {
+  String _titleFor(TranslationsBolsioAiEn t) {
     switch (toolName) {
       case 'create_transaction':
         final type = arguments['type'] as String?;
@@ -776,7 +776,7 @@ class _ToolApprovalSheet extends StatelessWidget {
     }
   }
 
-  List<_Summary> _summaryLines(TranslationsWallexAiEn t) {
+  List<_Summary> _summaryLines(TranslationsBolsioAiEn t) {
     switch (toolName) {
       case 'create_transaction':
         final categoryLabel = arguments['__categoryLabel']?.toString() ??
@@ -846,7 +846,7 @@ class _ToolApprovalSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final t = Translations.of(context).wallex_ai;
+    final t = Translations.of(context).bolsio_ai;
     final lines = _summaryLines(t);
 
     return SafeArea(
