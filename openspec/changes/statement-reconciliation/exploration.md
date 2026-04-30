@@ -2,11 +2,11 @@
 
 ### Contexto
 
-Ramses necesita cuadrar Wallex con el estado real de sus cuentas bancarias (BDV, Mercantil, Provincial, Banesco). Hoy tiene movimientos faltantes — especialmente comisiones — y el balance no coincide. La solución: **importar estado de cuenta desde foto o PDF**, con un selector de modos que filtra QUÉ se importa (faltantes, solo ingresos, solo gastos, solo comisiones, informativas-sin-afectar-balance).
+Ramses necesita cuadrar Bolsio con el estado real de sus cuentas bancarias (BDV, Mercantil, Provincial, Banesco). Hoy tiene movimientos faltantes — especialmente comisiones — y el balance no coincide. La solución: **importar estado de cuenta desde foto o PDF**, con un selector de modos que filtra QUÉ se importa (faltantes, solo ingresos, solo gastos, solo comisiones, informativas-sin-afectar-balance).
 
 **Framing único**: este change es **un solo feature** con 5 modos combinables, no 3 changes separados. Los modos son filtros sobre la misma extracción OCR+AI.
 
-**Diseño visual ya definido**: mockup en [ejemplo/Wallex Statement Import.html](../../ejemplo/Wallex%20Statement%20Import.html) con 5 pantallas, React/JSX, tema dark Nunito #C8B560 (accent dorado), decisión cerrada **chips combinables (no radios)**.
+**Diseño visual ya definido**: mockup en [ejemplo/Bolsio Statement Import.html](../../ejemplo/Bolsio%20Statement%20Import.html) con 5 pantallas, React/JSX, tema dark Nunito #C8B560 (accent dorado), decisión cerrada **chips combinables (no radios)**.
 
 **Complementariedad con `account-pre-tracking-period`**: el modo `informative` **reusa** `Account.trackedSince` existente (inserta con fecha < trackedSince → auto pre-tracking → no afecta balance).
 
@@ -50,7 +50,7 @@ sequenceDiagram
 - `lib/core/services/receipt_ocr/receipt_image_service.dart` — resize 1600px + JPEG Q82, temp storage. Reusable tal cual.
 - `lib/core/services/receipt_ocr/receipt_extractor_service.dart` — patrón de parseo JSON tolerante (tolera markdown/prosa en respuestas AI). Extraer a helper genérico.
 - `Account.trackedSince` (del change anterior) — la feature `informative` encaja directo sin lógica adicional.
-- `WallexSnackbar.warning`, `InlineInfoCard`, `AlertDialog` → patrones UI ya usados.
+- `BolsioSnackbar.warning`, `InlineInfoCard`, `AlertDialog` → patrones UI ya usados.
 
 #### Nexus AI Gateway
 - Ubicación: `c:\Users\ramse\OneDrive\Documents\vacas\AI_infi` (repo propio, TypeScript/Bun).
@@ -64,7 +64,7 @@ sequenceDiagram
 - **Sin campo `bankRef`** → dedup cross-pipeline queda por fecha+monto+signo. Aceptado v1.
 
 #### Mockup React — 5 pantallas
-Archivo `ejemplo/Wallex Statement Import.html` + atoms/screens JSX. Decisiones visuales cerradas:
+Archivo `ejemplo/Bolsio Statement Import.html` + atoms/screens JSX. Decisiones visuales cerradas:
 - Tema dark #0a0a0a, accent #C8B560.
 - Android frame 360×780, Nunito.
 - Screen 1: hero doc animado + 2 CTAs (Tomar foto / Subir PDF o imagen).

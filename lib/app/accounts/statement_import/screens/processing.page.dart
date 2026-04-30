@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:kilatex/app/accounts/statement_import/widgets/si_header.dart';
-import 'package:kilatex/core/services/statement_import/matching_engine.dart';
-import 'package:kilatex/core/services/statement_import/models/extracted_row.dart';
-import 'package:kilatex/core/services/statement_import/statement_extractor_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:bolsio/app/accounts/statement_import/widgets/si_header.dart';
+import 'package:bolsio/core/services/statement_import/matching_engine.dart';
+import 'package:bolsio/core/services/statement_import/models/extracted_row.dart';
+import 'package:bolsio/core/services/statement_import/statement_extractor_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class ProcessingPage extends StatefulWidget {
   const ProcessingPage({super.key});

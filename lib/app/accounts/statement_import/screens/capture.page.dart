@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:kilatex/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:kilatex/core/presentation/helpers/snackbar.dart';
-import 'package:kilatex/core/services/statement_import/pdf_to_image_service.dart';
-import 'package:kilatex/i18n/generated/translations.g.dart';
+import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:bolsio/core/presentation/helpers/snackbar.dart';
+import 'package:bolsio/core/services/statement_import/pdf_to_image_service.dart';
+import 'package:bolsio/i18n/generated/translations.g.dart';
 
 class CapturePage extends StatefulWidget {
   const CapturePage({super.key});
@@ -208,7 +208,7 @@ class _CapturePageState extends State<CapturePage> {
 
   void _showReadError() {
     final t = Translations.of(context);
-    WallexSnackbar.error(SnackbarParams(t.statement_import.capture.error_read));
+    BolsioSnackbar.error(SnackbarParams(t.statement_import.capture.error_read));
   }
 
   @override

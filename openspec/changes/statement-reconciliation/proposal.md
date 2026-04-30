@@ -2,7 +2,7 @@
 
 ## Why
 
-Wallex no cuadra con el saldo real de las cuentas del usuario (BDV principalmente). Hay decenas de movimientos y comisiones faltantes; registrarlos manualmente es inviable. Este change introduce un importador de estado de cuenta que lee fotos o PDFs vía Nexus AI multimodal, concilia contra las transacciones existentes y permite aprobar por modos combinables lo que falta.
+Bolsio no cuadra con el saldo real de las cuentas del usuario (BDV principalmente). Hay decenas de movimientos y comisiones faltantes; registrarlos manualmente es inviable. Este change introduce un importador de estado de cuenta que lee fotos o PDFs vía Nexus AI multimodal, concilia contra las transacciones existentes y permite aprobar por modos combinables lo que falta.
 
 ## What Changes
 

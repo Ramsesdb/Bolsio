@@ -191,7 +191,7 @@ Migration `v25.sql` MUST añadir tabla `statement_import_batches(id PK, accountI
 ### Requirement: Edge cases
 
 - OCR devuelve array vacío → Screen 3 MUST mostrar mensaje "No se detectaron movimientos" y botón Volver.
-- Multi-currency: Wallex NO convierte moneda en v1; `amount` se registra tal cual lo devuelve el AI.
+- Multi-currency: Bolsio NO convierte moneda en v1; `amount` se registra tal cual lo devuelve el AI.
 - PDF escaneado vs PDF con texto: ambos tratados igual (rasterizados).
 
 #### Scenario: OCR vacío
