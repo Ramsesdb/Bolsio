@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:wallex/core/database/services/user-setting/user_setting_service.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/services/auto_import/capture/capture_source.dart';
-import 'package:wallex/core/services/auto_import/dedupe/dedupe_checker.dart';
-import 'package:wallex/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
+import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:bolsio/core/services/auto_import/capture/capture_source.dart';
+import 'package:bolsio/core/services/auto_import/dedupe/dedupe_checker.dart';
+import 'package:bolsio/core/services/auto_import/orchestrator/capture_orchestrator.dart';
 
 /// A fake capture source for testing that can be configured per-channel.
 class _FakeCaptureSource implements CaptureSource {

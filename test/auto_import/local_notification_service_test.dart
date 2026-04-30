@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/auto_import/background/local_notification_service.dart';
+import 'package:bolsio/core/services/auto_import/background/local_notification_service.dart';
 
 void main() {
   group('LocalNotificationService', () {
@@ -37,11 +37,11 @@ void main() {
     test('channel IDs match expected values', () {
       expect(
         LocalNotificationService.captureChannelId,
-        equals('wallex_capture'),
+        equals('bolsio_capture'),
       );
       expect(
         LocalNotificationService.pendingChannelId,
-        equals('wallex_pending'),
+        equals('bolsio_pending'),
       );
     });
 

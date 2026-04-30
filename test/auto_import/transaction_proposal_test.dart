@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal.dart';
-import 'package:wallex/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
 
 void main() {
   group('TransactionProposal', () {

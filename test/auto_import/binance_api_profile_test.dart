@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/models/auto_import/capture_channel.dart';
-import 'package:wallex/core/models/auto_import/raw_capture_event.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/services/auto_import/profiles/binance_api_profile.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/services/auto_import/profiles/binance_api_profile.dart';
 
 void main() {
   late BinanceApiProfile profile;

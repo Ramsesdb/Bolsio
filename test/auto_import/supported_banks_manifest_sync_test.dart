@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/auto_import/supported_banks.dart';
+import 'package:bolsio/core/services/auto_import/supported_banks.dart';
 
 /// Guards the contract that every package in [kSupportedBanks] is also
 /// listed in `<queries>` of `android/app/src/main/AndroidManifest.xml`.

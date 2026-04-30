@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/app/transactions/auto_import/widgets/pending_import_tile.dart';
-import 'package:wallex/core/database/app_db.dart';
+import 'package:bolsio/app/transactions/auto_import/widgets/pending_import_tile.dart';
+import 'package:bolsio/core/database/app_db.dart';
 
 /// Helper to build a [PendingImportInDB] directly (no database needed).
 PendingImportInDB _makePendingImport({

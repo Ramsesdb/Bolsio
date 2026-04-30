@@ -12,12 +12,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 /// - [pendingChannelId]: default-importance, used for transient "X pending"
 ///   notifications with sound and badge.
 class LocalNotificationService {
-  static const String captureChannelId = 'wallex_capture';
+  static const String captureChannelId = 'bolsio_capture';
   static const String captureChannelName = 'Captura de movimientos';
   static const String captureChannelDesc =
       'Notificacion persistente del servicio de captura';
 
-  static const String pendingChannelId = 'wallex_pending';
+  static const String pendingChannelId = 'bolsio_pending';
   static const String pendingChannelName = 'Movimientos por revisar';
   static const String pendingChannelDesc =
       'Notificaciones cuando se capturan nuevos movimientos';
@@ -144,7 +144,7 @@ class LocalNotificationService {
 
     await plugin.show(
       pendingNotificationId,
-      'Wallex',
+      'Bolsio',
       body,
       const NotificationDetails(android: androidDetails),
       payload: 'pending_imports',

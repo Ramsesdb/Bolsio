@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/database/app_db.dart';
-import 'package:wallex/core/models/transaction/transaction_type.enum.dart';
-import 'package:wallex/core/utils/uuid.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 /// Tests the logic for building a [TransactionInDB] from a [PendingImportInDB]
 /// with user-edited fields, mirroring what ProposalReviewPage does on confirm.

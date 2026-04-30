@@ -197,6 +197,6 @@ está abierta en foreground, **no hay camino automatizable para capturarla**:
 
 ### Mitigación — entrada manual rápida (Fase 3, fuera de alcance ahora)
 Para las operaciones salientes ejecutadas desde la app bancaria, la única opción es
-registro manual. Como mejora futura se podría exponer un "quick action" en Wallex
+registro manual. Como mejora futura se podría exponer un "quick action" en Bolsio
 (shortcut de Android o tile del panel rápido) que abra directamente el formulario de
 transacción pre-seleccionado con la cuenta BDV/Binance/Zinli activa.

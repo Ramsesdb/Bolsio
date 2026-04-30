@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallex/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
 
 void main() {
   late BinanceCredentialsStore store;

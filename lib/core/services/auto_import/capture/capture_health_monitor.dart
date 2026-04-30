@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kilatex/core/services/auto_import/background/wallex_background_service.dart';
-import 'package:kilatex/core/services/auto_import/capture/capture_event_log.dart';
-import 'package:kilatex/core/services/auto_import/capture/models/capture_event.dart';
-import 'package:kilatex/core/services/auto_import/capture/notification_capture_source.dart';
-import 'package:kilatex/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:kilatex/core/services/auto_import/dedupe/fingerprint_registry.dart';
-import 'package:kilatex/core/utils/uuid.dart';
+import 'package:bolsio/core/services/auto_import/background/bolsio_background_service.dart';
+import 'package:bolsio/core/services/auto_import/capture/capture_event_log.dart';
+import 'package:bolsio/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:bolsio/core/services/auto_import/capture/notification_capture_source.dart';
+import 'package:bolsio/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:bolsio/core/services/auto_import/dedupe/fingerprint_registry.dart';
+import 'package:bolsio/core/utils/uuid.dart';
 
 /// Coarse-grained health status of the notification listener pipeline.
 ///
@@ -264,8 +264,8 @@ class CaptureHealthMonitor {
         reason: 'manual-repair: escalada a stop+start',
       ));
       try {
-        await WallexBackgroundService.instance.stopService();
-        await WallexBackgroundService.instance.startService();
+        await BolsioBackgroundService.instance.stopService();
+        await BolsioBackgroundService.instance.startService();
         final stamp = DateTime.now();
         _lastPipelineRestartAt = stamp;
         _lastPipelineRestartAtNotifier.value = stamp;
@@ -467,7 +467,7 @@ class CaptureHealthMonitor {
         id: generateUUID(),
         timestamp: now,
         source: CaptureEventSource.notification,
-        content: 'Wallex no está en la lista blanca de optimización de batería.',
+        content: 'Bolsio no está en la lista blanca de optimización de batería.',
         status: CaptureEventStatus.systemEvent,
         reason: 'El sistema puede matar el foreground service en Doze. '
             'Sugerir al usuario que abra la pantalla de permisos.',
@@ -561,8 +561,8 @@ class CaptureHealthMonitor {
     ));
 
     try {
-      await WallexBackgroundService.instance.stopService();
-      await WallexBackgroundService.instance.startService();
+      await BolsioBackgroundService.instance.stopService();
+      await BolsioBackgroundService.instance.startService();
     } catch (e) {
       debugPrint('CaptureHealthMonitor: pipeline restart error: $e');
       CaptureEventLog.instance.log(CaptureEvent(

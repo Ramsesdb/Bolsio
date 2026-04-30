@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:drift/drift.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/models/auto_import/capture_channel.dart';
-import 'package:kilatex/core/models/auto_import/raw_capture_event.dart';
-import 'package:kilatex/core/services/auto_import/binance/binance_api_client.dart';
-import 'package:kilatex/core/services/auto_import/binance/binance_api_exception.dart';
-import 'package:kilatex/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:kilatex/core/services/auto_import/capture/capture_source.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/models/auto_import/capture_channel.dart';
+import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:bolsio/core/services/auto_import/binance/binance_api_client.dart';
+import 'package:bolsio/core/services/auto_import/binance/binance_api_exception.dart';
+import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:bolsio/core/services/auto_import/capture/capture_source.dart';
 
 /// Capture source that polls Binance REST API endpoints for transaction history.
 ///

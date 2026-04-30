@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kilatex/core/database/app_db.dart';
-import 'package:kilatex/core/database/services/pending_import/pending_import_service.dart';
-import 'package:kilatex/core/database/utils/drift_utils.dart';
-import 'package:kilatex/core/models/auto_import/transaction_proposal.dart';
+import 'package:bolsio/core/database/app_db.dart';
+import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
+import 'package:bolsio/core/database/utils/drift_utils.dart';
+import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
 
 /// Checks whether a [TransactionProposal] is a duplicate of an existing
 /// transaction or pending import.
