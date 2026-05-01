@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 
-/// Single source of truth for one bank/app supported by bolsio auto-import.
+/// Single source of truth for one bank/app supported by nitido auto-import.
 ///
 /// One entry per bank — package aliases (legacy or platform-variant) are
 /// listed in [packageNames] so a single [profileId] covers them all.
@@ -43,7 +43,7 @@ class SupportedBank {
   final String defaultCurrency;
 }
 
-/// Single source of truth for all banks/apps supported by bolsio auto-import.
+/// Single source of truth for all banks/apps supported by nitido auto-import.
 /// Update this list to add new banks. The package names here are kept in sync
 /// with AndroidManifest.xml `<queries>` via a test in
 /// `test/auto_import/supported_banks_manifest_sync_test.dart`.

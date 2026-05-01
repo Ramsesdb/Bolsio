@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/services/ai/ai_service.dart';
-import 'package:bolsio/core/services/auto_import/supported_banks.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/services/ai/ai_service.dart';
+import 'package:nitido/core/services/auto_import/supported_banks.dart';
 
 import 'bank_profile.dart';
 

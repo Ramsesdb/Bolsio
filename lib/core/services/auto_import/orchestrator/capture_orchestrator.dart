@@ -3,30 +3,30 @@ import 'dart:io' show Platform;
 
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:bolsio/core/services/auto_import/capture/binance_api_capture_source.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_source.dart';
-import 'package:bolsio/core/services/auto_import/capture/notification_capture_source.dart';
-import 'package:bolsio/core/services/auto_import/capture/sms_capture_source.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_event_log.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_health_monitor.dart';
-import 'package:bolsio/core/services/auto_import/capture/models/capture_event.dart';
-import 'package:bolsio/core/services/auto_import/dedupe/dedupe_checker.dart';
-import 'package:bolsio/core/services/auto_import/dedupe/fingerprint_registry.dart';
-import 'package:bolsio/core/services/auto_import/dedupe/notif_fingerprint.dart';
-import 'package:bolsio/core/services/auto_import/profiles/bank_profile.dart';
-import 'package:bolsio/core/services/auto_import/profiles/bank_profiles_registry.dart';
-import 'package:bolsio/core/services/auto_import/profiles/generic_llm_profile.dart';
-import 'package:bolsio/core/services/bank_detection/bank_detection_service.dart';
-import 'package:bolsio/core/services/ai/auto_categorization_service.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/database/services/pending_import/pending_import_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:nitido/core/services/auto_import/capture/binance_api_capture_source.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_source.dart';
+import 'package:nitido/core/services/auto_import/capture/notification_capture_source.dart';
+import 'package:nitido/core/services/auto_import/capture/sms_capture_source.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_event_log.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:nitido/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:nitido/core/services/auto_import/dedupe/dedupe_checker.dart';
+import 'package:nitido/core/services/auto_import/dedupe/fingerprint_registry.dart';
+import 'package:nitido/core/services/auto_import/dedupe/notif_fingerprint.dart';
+import 'package:nitido/core/services/auto_import/profiles/bank_profile.dart';
+import 'package:nitido/core/services/auto_import/profiles/bank_profiles_registry.dart';
+import 'package:nitido/core/services/auto_import/profiles/generic_llm_profile.dart';
+import 'package:nitido/core/services/bank_detection/bank_detection_service.dart';
+import 'package:nitido/core/services/ai/auto_categorization_service.dart';
 
 /// Central orchestrator that manages capture sources and dispatches events
 /// through bank profiles to produce transaction proposals.
@@ -54,6 +54,18 @@ class CaptureOrchestrator {
 
   final List<CaptureSource> _sources = [];
   StreamSubscription<RawCaptureEvent>? _subscription;
+
+  /// Short-lived dedupe set against the rare-but-real case of an event being
+  /// dispatched to [_handleEvent] more than once for a single native notif.
+  /// Symptoms in the wild: two `INSERT_PATH` log lines within the same
+  /// millisecond for the same `bankRef`. Even after we kill that root cause,
+  /// this guard keeps the persistence layer safe from any future regressions
+  /// in the upstream subscription plumbing.
+  ///
+  /// Keys are short composite tokens of `(channel|sender|nativeNotifId|hash)`.
+  /// Entries auto-expire after [_processedEventTtl] so the set never grows.
+  final Map<String, DateTime> _recentlyProcessedKeys = <String, DateTime>{};
+  static const Duration _processedEventTtl = Duration(seconds: 10);
 
   /// LLM fallback parser — called when no regex profile matched a notification
   /// from a known bank sender.
@@ -93,6 +105,26 @@ class CaptureOrchestrator {
           'CaptureOrchestrator: Failed to start capture source ${source.channel.dbValue}: $e',
         );
       }
+    }
+
+    // Idempotency guard: if a previous start() left a live subscription on
+    // the merged stream we MUST cancel it before binding a new one. Failing
+    // to do so means each event is dispatched to `_handleEvent` once per
+    // surviving listener — exactly the upstream cause of the observed
+    // duplicate INSERT_PATH log pair.
+    if (_subscription != null) {
+      debugPrint(
+        '[DEDUPE-DBG] orchestrator.start: cancelling stale _subscription '
+        'before re-binding to avoid double-dispatch',
+      );
+      try {
+        await _subscription!.cancel();
+      } catch (e) {
+        debugPrint(
+          'CaptureOrchestrator: error cancelling stale subscription: $e',
+        );
+      }
+      _subscription = null;
     }
 
     // Merge all event streams
@@ -315,6 +347,24 @@ class CaptureOrchestrator {
   /// Resilient: exceptions in individual profiles are caught and logged,
   /// never crashing the stream.
   Future<void> _handleEvent(RawCaptureEvent event) async {
+    // Defense-in-depth: if a single native notif somehow gets dispatched to
+    // this method more than once (e.g. the merged stream temporarily had two
+    // listeners), drop the second invocation here BEFORE we ever query the
+    // DB. Bugs in the subscription plumbing should not produce duplicate
+    // pending imports.
+    final dedupeKey = _eventDedupeKey(event);
+    if (dedupeKey != null && _wasRecentlyProcessed(dedupeKey)) {
+      debugPrint(
+        '[DEDUPE-DBG] orchestrator: dropping in-flight duplicate dispatch '
+        'key=$dedupeKey channel=${event.channel.dbValue} '
+        'sender=${event.sender} notifId=${event.nativeNotifId}',
+      );
+      return;
+    }
+    if (dedupeKey != null) {
+      _markRecentlyProcessed(dedupeKey);
+    }
+
     // Diagnostic: log the incoming raw event so the diagnostics screen sees
     // every message the orchestrator got, regardless of what happens next.
     final diagnosticBase = _buildDiagnosticBase(event);
@@ -1059,6 +1109,38 @@ class CaptureOrchestrator {
     );
 
     return newAccount.id;
+  }
+
+  /// Build a stable short token identifying [event] for the in-flight
+  /// dedupe set. Returns null when there is not enough material to
+  /// distinguish two events safely (e.g. SMS without nativeNotifId and
+  /// short rawText) — in that case we err on the side of letting the
+  /// event through and rely on downstream dedupe.
+  String? _eventDedupeKey(RawCaptureEvent event) {
+    final channel = event.channel.dbValue;
+    final sender = event.sender;
+    final notifId = event.nativeNotifId ?? '';
+    // `rawText.hashCode` is enough to distinguish two distinct messages from
+    // the same sender; we don't need cryptographic strength here.
+    final contentHash = event.rawText.hashCode;
+    if (sender.isEmpty && notifId.isEmpty) return null;
+    return '$channel|$sender|$notifId|$contentHash';
+  }
+
+  /// Whether [key] is in the recently-processed set and still within TTL.
+  /// Also opportunistically prunes any expired entries.
+  bool _wasRecentlyProcessed(String key) {
+    final now = DateTime.now();
+    final cutoff = now.subtract(_processedEventTtl);
+    _recentlyProcessedKeys
+        .removeWhere((_, ts) => ts.isBefore(cutoff));
+    final seenAt = _recentlyProcessedKeys[key];
+    return seenAt != null && seenAt.isAfter(cutoff);
+  }
+
+  /// Record [key] as just-processed.
+  void _markRecentlyProcessed(String key) {
+    _recentlyProcessedKeys[key] = DateTime.now();
   }
 
   /// Merge multiple streams into one. Uses StreamGroup-like behavior.

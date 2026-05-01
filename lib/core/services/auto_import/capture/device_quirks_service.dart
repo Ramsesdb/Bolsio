@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+﻿import 'dart:io' show Platform;
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -48,13 +48,13 @@ class QuirkInstruction {
 
 /// Detects the OEM of the current device and exposes deep-links to the
 /// OEM-specific autostart / battery optimization screens through the
-/// `com.bolsio.capture/quirks` MethodChannel.
+/// `com.nitido.capture/quirks` MethodChannel.
 class DeviceQuirksService {
   static final DeviceQuirksService instance = DeviceQuirksService._();
 
   DeviceQuirksService._();
 
-  static const MethodChannel _channel = MethodChannel('com.bolsio.capture/quirks');
+  static const MethodChannel _channel = MethodChannel('com.nitido.capture/quirks');
 
   OemQuirk? _cached;
 
@@ -242,10 +242,10 @@ class DeviceQuirksService {
             titleEn: 'Autostart (MIUI)',
             descEs: 'Xiaomi impide que las apps sin autoarranque se '
                 'reactiven después de cerrarlas. Activalo en Seguridad → '
-                'Permisos → Autoarranque → Bolsio.',
+                'Permisos → Autoarranque → Nitido.',
             descEn: 'Xiaomi blocks apps without autostart from restarting '
                 'after being closed. Enable it in Security → Permissions → '
-                'Autostart → Bolsio.',
+                'Autostart → Nitido.',
             ctaEs: 'Abrir autoarranque',
             ctaEn: 'Open autostart',
           ),
@@ -254,11 +254,11 @@ class DeviceQuirksService {
             titleEs: 'Batería sin restricciones (MIUI)',
             titleEn: 'No battery restrictions (MIUI)',
             descEs: 'Además de la lista blanca del sistema, MIUI tiene un '
-                'control extra en Seguridad → Batería → Bolsio → Sin '
+                'control extra en Seguridad → Batería → Nitido → Sin '
                 'restricciones. Sin esto el listener se detiene en segundo '
                 'plano.',
             descEn: 'On top of the system whitelist, MIUI has an extra '
-                'control in Security → Battery → Bolsio → No restrictions. '
+                'control in Security → Battery → Nitido → No restrictions. '
                 'Without it the listener stops in the background.',
             ctaEs: 'Abrir ajustes de la app',
             ctaEn: 'Open app settings',
@@ -271,10 +271,10 @@ class DeviceQuirksService {
             titleEs: 'Apps protegidas (Huawei)',
             titleEn: 'Protected apps (Huawei)',
             descEs: 'EMUI mata las apps al cerrar la pantalla. Marcá '
-                'Bolsio como protegida en Ajustes → Batería → Inicio de '
+                'Nitido como protegida en Ajustes → Batería → Inicio de '
                 'aplicaciones.',
             descEn: 'EMUI kills apps when the screen turns off. Mark '
-                'Bolsio as protected in Settings → Battery → App launch.',
+                'Nitido as protected in Settings → Battery → App launch.',
             ctaEs: 'Abrir inicio de apps',
             ctaEn: 'Open app launch',
           ),
@@ -286,9 +286,9 @@ class DeviceQuirksService {
             id: 'oppo_autostart',
             titleEs: 'Inicio automático (ColorOS)',
             titleEn: 'Auto-launch (ColorOS)',
-            descEs: 'Habilitá Bolsio en Ajustes → Batería → Gestión de '
+            descEs: 'Habilitá Nitido en Ajustes → Batería → Gestión de '
                 'inicio automático.',
-            descEn: 'Enable Bolsio in Settings → Battery → Auto-launch '
+            descEn: 'Enable Nitido in Settings → Battery → Auto-launch '
                 'management.',
             ctaEs: 'Abrir inicio automático',
             ctaEn: 'Open auto-launch',
@@ -300,9 +300,9 @@ class DeviceQuirksService {
             id: 'vivo_autostart',
             titleEs: 'Autoarranque (Funtouch OS)',
             titleEn: 'Autostart (Funtouch OS)',
-            descEs: 'Activá Bolsio en Gestor de teléfono → Apps en segundo '
+            descEs: 'Activá Nitido en Gestor de teléfono → Apps en segundo '
                 'plano.',
-            descEn: 'Enable Bolsio in Phone manager → Background apps.',
+            descEn: 'Enable Nitido in Phone manager → Background apps.',
             ctaEs: 'Abrir autoarranque',
             ctaEn: 'Open autostart',
           ),
@@ -313,8 +313,8 @@ class DeviceQuirksService {
             id: 'samsung_unrestricted',
             titleEs: 'Sin restricciones (One UI)',
             titleEn: 'Unrestricted (One UI)',
-            descEs: 'En Device Care → Batería → Bolsio → Sin restricciones.',
-            descEn: 'In Device Care → Battery → Bolsio → Unrestricted.',
+            descEs: 'En Device Care → Batería → Nitido → Sin restricciones.',
+            descEn: 'In Device Care → Battery → Nitido → Unrestricted.',
             ctaEs: 'Abrir ajustes de batería',
             ctaEn: 'Open battery settings',
           ),

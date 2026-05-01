@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
 
 /// Outcome of a [BankProfile.tryParseWithDetails] invocation.
 ///

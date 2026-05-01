@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
 
 /// Snapshot of every permission / whitelist the capture pipeline needs to
 /// stay alive on modern Android (especially MIUI).

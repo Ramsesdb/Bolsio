@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
 
 import 'bank_profile.dart';
 import 'bdv_sms_profile.dart';

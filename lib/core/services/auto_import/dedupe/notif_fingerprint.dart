@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
 
 /// Stable identifier for a native notification so we can detect reposts and
 /// user-removed events even when the underlying parser fails or the bank

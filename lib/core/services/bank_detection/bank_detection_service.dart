@@ -1,11 +1,11 @@
-import 'dart:io' show Platform;
+﻿import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:installed_apps/installed_apps.dart';
-import 'package:bolsio/core/services/auto_import/supported_banks.dart'
+import 'package:nitido/core/services/auto_import/supported_banks.dart'
     as supported_banks;
 
-/// Detects which banking / fintech apps relevant to Bolsio auto-import
+/// Detects which banking / fintech apps relevant to Nitido auto-import
 /// are installed on the device. Wraps the `installed_apps` package so
 /// UI code never imports it directly — this is the only point in the
 /// codebase allowed to depend on that library.

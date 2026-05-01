@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bolsio/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:nitido/core/services/auto_import/capture/models/capture_event.dart';
 
 /// Simple counter bag over a window of [CaptureEvent]s.
 @immutable
