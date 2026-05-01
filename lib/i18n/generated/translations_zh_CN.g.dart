@@ -154,7 +154,7 @@ class _TranslationsHomeZhCn extends TranslationsHomeEn {
 	@override String get my_accounts => '我的账户';
 	@override String get active_accounts => '活动账户';
 	@override String get no_accounts => '尚未创建账户';
-	@override String get no_accounts_descr => '要开始使用 Bolsio，请创建至少一个账户，以便开始添加交易';
+	@override String get no_accounts_descr => '要开始使用 NITIDO，请创建至少一个账户，以便开始添加交易';
 	@override String get last_transactions => '最近的交易';
 	@override String get should_create_account_header => '哎呀!';
 	@override String get should_create_account_message => '在可以开始创建交易之前，您必须拥有至少一个未被归档的账户';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusZhCn extends TranslationsTransactionStatusEn
 	@override String get reconciled => '已核对';
 	@override String get reconciled_descr => '此交易已被核实，与您银行的一个真实交易相对应';
 	@override String get unreconciled => '未核实';
-	@override String get unreconciled_descr => '此交易尚未被核实，因此尚未出现在您的真实银行账户中。然而，在 Bolsio 中，它将被用于计算余额和其它统计数据';
+	@override String get unreconciled_descr => '此交易尚未被核实，因此尚未出现在您的真实银行账户中。然而，在 NITIDO 中，它将被用于计算余额和其它统计数据';
 	@override String get pending => '待办';
 	@override String get pending_descr => '此交易正在等待处理，因此在计算余额和其它统计数据时暂时不会被考虑';
 	@override String get voided => '作废';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportZhCn extends TranslationsBackupImportEn {
 	@override String get title => '导入您的数据';
 	@override String get title_short => '导入';
 	@override String get restore_backup => '恢复备份';
-	@override String get restore_backup_descr => '导入一个从 Bolsio 保存的数据库。此操作将用新数据覆盖当前应用数据';
-	@override String get restore_backup_warn_description => '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Bolsio 下载的文件';
+	@override String get restore_backup_descr => '导入一个从 NITIDO 保存的数据库。此操作将用新数据覆盖当前应用数据';
+	@override String get restore_backup_warn_description => '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 NITIDO 下载的文件';
 	@override String get restore_backup_warn_title => '覆盖所有数据';
 	@override String get select_other_file => '选择其它文件';
 	@override String get tap_to_select_file => '点击选择文件';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiZhCn extends TranslationsMoreAiEn {
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Bolsi';
+	@override String get title => 'Niti';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsZhCn extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => '应用信息';
-	@override String get description => '查找 Bolsio 的条款、重要信息，并通过报告错误或分享想法与我们联系';
+	@override String get description => '查找 NITIDO 的条款、重要信息，并通过报告错误或分享想法与我们联系';
 	@override late final _TranslationsMoreAboutUsLegalZhCn legal = _TranslationsMoreAboutUsLegalZhCn._(_root);
 	@override late final _TranslationsMoreAboutUsProjectZhCn project = _TranslationsMoreAboutUsProjectZhCn._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsZhCn extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => '帮助我们';
-	@override String get description => '了解如何帮助 Bolsio 变得越来越好';
+	@override String get description => '了解如何帮助 NITIDO 变得越来越好';
 	@override String get rate_us => '评价我们';
 	@override String get rate_us_descr => '欢迎所有分数和评价！';
-	@override String get share => '分享 Bolsio';
+	@override String get share => '分享 NITIDO';
 	@override String get share_descr => '与朋友和家人分享我们的应用';
-	@override String get share_text => 'Bolsio！最好的个人理财应用 。此处下载';
+	@override String get share_text => 'NITIDO！最好的个人理财应用 。此处下载';
 	@override String get thanks => '谢谢您！';
-	@override String get thanks_long => '您对 Bolsio 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。';
+	@override String get thanks_long => '您对 NITIDO 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。';
 	@override String get donate => '捐款';
 	@override String get donate_descr => '通过您的捐款，您将帮助此应用持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？';
 	@override String get donate_success => '捐款已完成。非常感谢您的贡献！❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrZhCn extends TranslationsFinancialH
 
 	// Translations
 	@override String get insufficient_data => '看起来我们没有足够的数据来计算您的财务健康情况。请添加一些支出/收入以便我们帮助您！';
-	@override String get very_good => '恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 Bolsio 一起学习。';
+	@override String get very_good => '恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 NITIDO 一起学习。';
 	@override String get good => '很好！您的财务健康状况良好。请查看分析页面，了解如何省下更多！';
 	@override String get normal => '您的财务健康状况在这一段时间里处于平均水平';
 	@override String get bad => '看起来您的财务状况不是很理想。请查看其余的图表以便进一步了解您的财务情况。';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageZhCn extends TranslationsSettingsGener
 	@override String get section => '语言和文字';
 	@override String get title => '语言/Language';
 	@override String get descr => '应用中显示文字的语言';
-	@override String get help => '如果您想合作翻译此应用，您可参考<a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>我们的指南</a>';
+	@override String get help => '如果您想合作翻译此应用，您可参考<a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>我们的指南</a>';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectZhCn extends TranslationsMoreAboutUsProject
 	// Translations
 	@override String get display => '项目';
 	@override String get contributors => '合作者';
-	@override String get contributors_descr => '所有让 Bolsio 成长的开发者';
+	@override String get contributors_descr => '所有让 NITIDO 成长的开发者';
 	@override String get contact => '联系我们';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsZhCn {
 			'home.my_accounts' => '我的账户',
 			'home.active_accounts' => '活动账户',
 			'home.no_accounts' => '尚未创建账户',
-			'home.no_accounts_descr' => '要开始使用 Bolsio，请创建至少一个账户，以便开始添加交易',
+			'home.no_accounts_descr' => '要开始使用 NITIDO，请创建至少一个账户，以便开始添加交易',
 			'home.last_transactions' => '最近的交易',
 			'home.should_create_account_header' => '哎呀!',
 			'home.should_create_account_message' => '在可以开始创建交易之前，您必须拥有至少一个未被归档的账户',
@@ -2218,7 +2218,7 @@ extension on TranslationsZhCn {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '很不好'; case GenderContext.female: return '很不好'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '数据不足'; case GenderContext.female: return '数据不足'; } }, 
 			'financial_health.review.descr.insufficient_data' => '看起来我们没有足够的数据来计算您的财务健康情况。请添加一些支出/收入以便我们帮助您！',
-			'financial_health.review.descr.very_good' => '恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 Bolsio 一起学习。',
+			'financial_health.review.descr.very_good' => '恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 NITIDO 一起学习。',
 			'financial_health.review.descr.good' => '很好！您的财务健康状况良好。请查看分析页面，了解如何省下更多！',
 			'financial_health.review.descr.normal' => '您的财务健康状况在这一段时间里处于平均水平',
 			'financial_health.review.descr.bad' => '看起来您的财务状况不是很理想。请查看其余的图表以便进一步了解您的财务情况。',
@@ -2362,7 +2362,7 @@ extension on TranslationsZhCn {
 			'transaction.status.reconciled' => '已核对',
 			'transaction.status.reconciled_descr' => '此交易已被核实，与您银行的一个真实交易相对应',
 			'transaction.status.unreconciled' => '未核实',
-			'transaction.status.unreconciled_descr' => '此交易尚未被核实，因此尚未出现在您的真实银行账户中。然而，在 Bolsio 中，它将被用于计算余额和其它统计数据',
+			'transaction.status.unreconciled_descr' => '此交易尚未被核实，因此尚未出现在您的真实银行账户中。然而，在 NITIDO 中，它将被用于计算余额和其它统计数据',
 			'transaction.status.pending' => '待办',
 			'transaction.status.pending_descr' => '此交易正在等待处理，因此在计算余额和其它统计数据时暂时不会被考虑',
 			'transaction.status.voided' => '作废',
@@ -2672,8 +2672,8 @@ extension on TranslationsZhCn {
 			'backup.import.title' => '导入您的数据',
 			'backup.import.title_short' => '导入',
 			'backup.import.restore_backup' => '恢复备份',
-			'backup.import.restore_backup_descr' => '导入一个从 Bolsio 保存的数据库。此操作将用新数据覆盖当前应用数据',
-			'backup.import.restore_backup_warn_description' => '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Bolsio 下载的文件',
+			'backup.import.restore_backup_descr' => '导入一个从 NITIDO 保存的数据库。此操作将用新数据覆盖当前应用数据',
+			'backup.import.restore_backup_warn_description' => '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 NITIDO 下载的文件',
 			'backup.import.restore_backup_warn_title' => '覆盖所有数据',
 			'backup.import.select_other_file' => '选择其它文件',
 			'backup.import.tap_to_select_file' => '点击选择文件',
@@ -2715,7 +2715,7 @@ extension on TranslationsZhCn {
 			'settings.general.language.section' => '语言和文字',
 			'settings.general.language.title' => '语言/Language',
 			'settings.general.language.descr' => '应用中显示文字的语言',
-			'settings.general.language.help' => '如果您想合作翻译此应用，您可参考<a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>我们的指南</a>',
+			'settings.general.language.help' => '如果您想合作翻译此应用，您可参考<a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>我们的指南</a>',
 			'settings.general.locale.title' => '地区',
 			'settings.general.locale.auto' => '系统',
 			'settings.general.locale.descr' => '设置用于日期、数字的格式……',
@@ -2799,7 +2799,7 @@ extension on TranslationsZhCn {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Bolsi',
+			'more.ai.title' => 'Niti',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => '数据',
@@ -2810,24 +2810,24 @@ extension on TranslationsZhCn {
 			'more.data.delete_all_header2' => '最后一步⚠️⚠️',
 			'more.data.delete_all_message2' => '删除账户后，您将删除所有保存的个人数据。您的账户、交易、预算和类别将被删除且无法恢复。您同意吗？',
 			'more.about_us.display' => '应用信息',
-			'more.about_us.description' => '查找 Bolsio 的条款、重要信息，并通过报告错误或分享想法与我们联系',
+			'more.about_us.description' => '查找 NITIDO 的条款、重要信息，并通过报告错误或分享想法与我们联系',
 			'more.about_us.legal.display' => '法律信息',
 			'more.about_us.legal.privacy' => '隐私权政策',
 			'more.about_us.legal.terms' => '使用条款',
 			'more.about_us.legal.licenses' => '许可证',
 			'more.about_us.project.display' => '项目',
 			'more.about_us.project.contributors' => '合作者',
-			'more.about_us.project.contributors_descr' => '所有让 Bolsio 成长的开发者',
+			'more.about_us.project.contributors_descr' => '所有让 NITIDO 成长的开发者',
 			'more.about_us.project.contact' => '联系我们',
 			'more.help_us.display' => '帮助我们',
-			'more.help_us.description' => '了解如何帮助 Bolsio 变得越来越好',
+			'more.help_us.description' => '了解如何帮助 NITIDO 变得越来越好',
 			'more.help_us.rate_us' => '评价我们',
 			'more.help_us.rate_us_descr' => '欢迎所有分数和评价！',
-			'more.help_us.share' => '分享 Bolsio',
+			'more.help_us.share' => '分享 NITIDO',
 			'more.help_us.share_descr' => '与朋友和家人分享我们的应用',
-			'more.help_us.share_text' => 'Bolsio！最好的个人理财应用 。此处下载',
+			'more.help_us.share_text' => 'NITIDO！最好的个人理财应用 。此处下载',
 			'more.help_us.thanks' => '谢谢您！',
-			'more.help_us.thanks_long' => '您对 Bolsio 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。',
+			'more.help_us.thanks_long' => '您对 NITIDO 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。',
 			'more.help_us.donate' => '捐款',
 			'more.help_us.donate_descr' => '通过您的捐款，您将帮助此应用持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？',
 			'more.help_us.donate_success' => '捐款已完成。非常感谢您的贡献！❤️',

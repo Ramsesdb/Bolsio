@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Cancelar",
     "confirm": "Confirmar",
@@ -178,7 +178,7 @@
     "my-accounts": "Mis cuentas",
     "active-accounts": "Cuentas activas",
     "no-accounts": "Aun no hay cuentas creadas",
-    "no-accounts.descr": "Empieza a usar toda la magia de Bolsio. Crea al menos una cuenta para empezar a añadir tranacciones",
+    "no-accounts.descr": "Empieza a usar toda la magia de NITIDO. Crea al menos una cuenta para empezar a añadir tranacciones",
     "last-transactions": "Últimas transacciones",
     "should-create-account.header": "Ops!",
     "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones",
@@ -286,7 +286,7 @@
     },
     "share": {
       "action_a11y": "Compartir conversión",
-      "footer": "Generado con Bolsio",
+      "footer": "Generado con NITIDO",
       "subject": "Conversión cambiaria",
       "equals_separator": "="
     },
@@ -327,7 +327,7 @@
       },
       "descr": {
         "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
-        "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Bolsio",
+        "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con NITIDO",
         "good": "Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!",
         "normal": "Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo",
         "bad": "Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas",
@@ -544,7 +544,7 @@
       "reconciled": "Reconciliada",
       "reconciled.descr": "Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco",
       "unreconciled": "No reconciliada",
-      "unreconciled.descr": "Esta transacción aun no ha sido validada y por tanto aun no figura en sus cuentas bancarias reales. Sin embargo, es tenida en cuenta para el calculo de balances y estadisticas en Bolsio",
+      "unreconciled.descr": "Esta transacción aun no ha sido validada y por tanto aun no figura en sus cuentas bancarias reales. Sin embargo, es tenida en cuenta para el calculo de balances y estadisticas en NITIDO",
       "pending": "Pendiente",
       "pending.descr": "Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas",
       "voided": "Nula",
@@ -577,11 +577,11 @@
     "upload-from-camera": "Tomar foto",
     "empty-state": "No hay adjuntos"
   },
-  "BOLSIO-AI": {
+  "NITIDO-AI": {
     "voice_settings_title": "Entrada por voz",
     "voice_settings_subtitle": "Dicta gastos y haz preguntas al asistente",
     "voice_permission_title": "Acceso al micrófono",
-    "voice_permission_body": "Bolsio necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.",
+    "voice_permission_body": "NITIDO necesita el micrófono para transcribir lo que dictas y convertirlo en transacciones o preguntas. El audio no se guarda.",
     "voice_permission_cta": "Entendido, seguir",
     "voice_permission_denied_title": "Permiso de micrófono denegado",
     "voice_permission_denied_body": "Para dictar o chatear con voz, habilita el permiso en los ajustes del sistema.",
@@ -648,10 +648,10 @@
     "chat_tool_field_from_account": "Desde",
     "chat_tool_field_to_account": "Hacia",
     "chat_tool_field_value_in_destiny": "Monto destino",
-    "chat_header": "Bolsi",
+    "chat_header": "Niti",
     "chat_boot_loading": "Cargando contexto financiero...",
     "chat_disabled": "El chat de IA está deshabilitado en configuración.",
-    "chat_welcome_message": "¡Hola! Soy Bolsi 👛 tu compañero de bolsillo. ¿En qué te ayudo hoy?"
+    "chat_welcome_message": "¡Hola! Soy Niti 🎯, claridad total para tus finanzas. ¿En qué te ayudo hoy?"
   },
   "TRANSFER": {
     "display": "Transferencia",
@@ -1091,8 +1091,8 @@
       "title": "Importar tus datos",
       "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
-      "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Bolsio. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
-      "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Bolsio",
+      "restore-backup-descr": "Importa una base de datos anteriormente guardada desde NITIDO. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
+      "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde NITIDO",
       "restore-backup-warn.title": "Sobreescribir todos los datos",
       "select-other-file": "Selecciona otro fichero",
       "tap-to-select-file": "Pulsa para seleccionar un archivo",
@@ -1155,7 +1155,7 @@
         "section": "Idioma y textos",
         "title": "Idioma de la aplicación",
         "descr": "Idioma en el que se mostrarán los textos en la aplicación",
-        "help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>nuestra guía</a> "
+        "help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='__NITIDO_GITHUB_URL__/tree/main/lib/i18n'>nuestra guía</a> "
       },
       "LOCALE": {
         "title": "Región",
@@ -1200,7 +1200,7 @@
         "incorrect": "PIN incorrecto",
         "too_many_attempts": "Demasiados intentos. Intenta de nuevo en {{seconds}}s",
         "use_biometric": "Usar huella",
-        "biometric_reason": "Desbloquea Bolsio",
+        "biometric_reason": "Desbloquea NITIDO",
         "pin_changed": "PIN actualizado",
         "unlocked": "Modo completo activado"
       }
@@ -1377,7 +1377,7 @@
       "more_options": "Más opciones de apariencia"
     },
     "AI": {
-      "title": "Bolsi",
+      "title": "Niti",
       "configure": "Configura tu asistente financiero",
       "active_with": "Activado · {provider}"
     },
@@ -1392,7 +1392,7 @@
     },
     "ABOUT_US": {
       "display": "Información de la app",
-      "description": "Consulta información relevante sobre Bolsio. Conecta reportando errores o compartiendo ideas",
+      "description": "Consulta información relevante sobre NITIDO. Conecta reportando errores o compartiendo ideas",
       "LEGAL": {
         "display": "Información legal",
         "privacy": "Política de privacidad",
@@ -1402,25 +1402,25 @@
       "PROJECT": {
         "display": "Proyecto",
         "contributors": "Colaboradores",
-        "contributors.descr": "Todos los desarrolladores que han hecho que Bolsio crezca",
+        "contributors.descr": "Todos los desarrolladores que han hecho que NITIDO crezca",
         "contact": "Contacta con nosotros"
       }
     },
     "HELP_US": {
       "display": "Ayúdanos",
-      "description": "Descubre de que formas puedes ayudar a que Bolsio sea cada vez mejor",
+      "description": "Descubre de que formas puedes ayudar a que NITIDO sea cada vez mejor",
       "rate-us": "Califícanos",
       "rate-us.descr": "¡Cualquier valoración es bienvenida!",
-      "share": "Comparte Bolsio",
+      "share": "Comparte NITIDO",
       "share.descr": "Comparte nuestra app a amigos y familiares",
-      "share.text": "Bolsio! La mejor app de finanzas personales. Descargala aquí",
+      "share.text": "NITIDO! La mejor app de finanzas personales. Descargala aquí",
       "thanks": "¡Gracias!",
       "donate": "Haz una donación",
       "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
       "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",
       "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
       "report": "Reporta errores, deja sugerencias...",
-      "thanks.long": "Tus contribuciones a Bolsio y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
+      "thanks.long": "Tus contribuciones a NITIDO y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
     }
   },
   "onboarding": {
@@ -1429,7 +1429,7 @@
       "subtitle": "Android bloquea ciertos permisos en apps instaladas fuera de Play Store. Lo arreglamos en 3 toques.",
       "step1": "Toca el menú ⋮ arriba a la derecha.",
       "step2": "Selecciona \"Permitir configuración restringida\".",
-      "step3": "Activa el toggle y vuelve a Bolsio.",
+      "step3": "Activa el toggle y vuelve a NITIDO.",
       "step1_xiaomi": "Desliza hasta el final de la pantalla.",
       "step2_xiaomi": "Activa el toggle \"Permitir ajustes restringidos\".",
       "cta_primary": "Abrir información de la app",

@@ -154,7 +154,7 @@ class _TranslationsHomeHu extends TranslationsHomeEn {
 	@override String get my_accounts => 'Saját számláim';
 	@override String get active_accounts => 'Aktív számlák';
 	@override String get no_accounts => 'Még nincsenek számlák létrehozva';
-	@override String get no_accounts_descr => 'Kezdje el élvezni a Bolsio összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.';
+	@override String get no_accounts_descr => 'Kezdje el élvezni a NITIDO összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.';
 	@override String get last_transactions => 'Legutóbbi tranzakciók';
 	@override String get should_create_account_header => 'Hoppá!';
 	@override String get should_create_account_message => 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusHu extends TranslationsTransactionStatusEn {
 	@override String get reconciled => 'Egyeztetett';
 	@override String get reconciled_descr => 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.';
 	@override String get unreconciled => 'Nem egyeztetett';
-	@override String get unreconciled_descr => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Bolsio egyenlegeinek és statisztikáinak kiszámításához.';
+	@override String get unreconciled_descr => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a NITIDO egyenlegeinek és statisztikáinak kiszámításához.';
 	@override String get pending => 'Függőben';
 	@override String get pending_descr => 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.';
 	@override String get voided => 'Érvénytelenítve';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportHu extends TranslationsBackupImportEn {
 	@override String get title => 'Adatok importálása';
 	@override String get title_short => 'Importálás';
 	@override String get restore_backup => 'Mentés visszaállítása';
-	@override String get restore_backup_descr => 'Importáljon egy korábban mentett adatbázist a Bolsioből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.';
-	@override String get restore_backup_warn_description => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Bolsio oldaláról.';
+	@override String get restore_backup_descr => 'Importáljon egy korábban mentett adatbázist a Nitidoből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.';
+	@override String get restore_backup_warn_description => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a NITIDO oldaláról.';
 	@override String get restore_backup_warn_title => 'Az összes adat felülírása';
 	@override String get select_other_file => 'Másik fájl kiválasztása';
 	@override String get tap_to_select_file => 'Koppintson a fájl kiválasztásához';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiHu extends TranslationsMoreAiEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Bolsi';
+	@override String get title => 'Niti';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsHu extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Alkalmazásinformációk';
-	@override String get description => 'Találja meg a Bolsio feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával';
+	@override String get description => 'Találja meg a NITIDO feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával';
 	@override late final _TranslationsMoreAboutUsLegalHu legal = _TranslationsMoreAboutUsLegalHu._(_root);
 	@override late final _TranslationsMoreAboutUsProjectHu project = _TranslationsMoreAboutUsProjectHu._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsHu extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Segítsen nekünk';
-	@override String get description => 'Tudja meg, hogyan segíthet a Bolsionek abban, hogy egyre jobb és jobb legyen';
+	@override String get description => 'Tudja meg, hogyan segíthet a Nitidonek abban, hogy egyre jobb és jobb legyen';
 	@override String get rate_us => 'Értékeljen minket';
 	@override String get rate_us_descr => 'Bármilyen értékelést szívesen fogadunk!';
-	@override String get share => 'Bolsio megosztása';
+	@override String get share => 'NITIDO megosztása';
 	@override String get share_descr => 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival';
-	@override String get share_text => 'Bolsio! A legjobb személyes pénzügyi alkalmazás. Töltse le innen';
+	@override String get share_text => 'NITIDO! A legjobb személyes pénzügyi alkalmazás. Töltse le innen';
 	@override String get thanks => 'Köszönjük!';
-	@override String get thanks_long => 'Az Ön hozzájárulása a Bolsiohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.';
+	@override String get thanks_long => 'Az Ön hozzájárulása a Nitidohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.';
 	@override String get donate => 'Adományozás';
 	@override String get donate_descr => 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?';
 	@override String get donate_success => 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrHu extends TranslationsFinancialHea
 
 	// Translations
 	@override String get insufficient_data => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!';
-	@override String get very_good => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Bolsio-nel.';
+	@override String get very_good => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a NITIDO-nel.';
 	@override String get good => 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!';
 	@override String get normal => 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.';
 	@override String get bad => 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageHu extends TranslationsSettingsGeneral
 	@override String get section => 'Nyelv és szövegek';
 	@override String get title => 'Alkalmazás nyelve';
 	@override String get descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
-	@override String get help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'> útmutatónk</a>';
+	@override String get help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'> útmutatónk</a>';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectHu extends TranslationsMoreAboutUsProjectEn
 	// Translations
 	@override String get display => 'Projekt';
 	@override String get contributors => 'Közreműködők';
-	@override String get contributors_descr => 'Az összes fejlesztő, akik hozzájárultak a Bolsio létrehozásához';
+	@override String get contributors_descr => 'Az összes fejlesztő, akik hozzájárultak a NITIDO létrehozásához';
 	@override String get contact => 'Kapcsolatfelvétel';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsHu {
 			'home.my_accounts' => 'Saját számláim',
 			'home.active_accounts' => 'Aktív számlák',
 			'home.no_accounts' => 'Még nincsenek számlák létrehozva',
-			'home.no_accounts_descr' => 'Kezdje el élvezni a Bolsio összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.',
+			'home.no_accounts_descr' => 'Kezdje el élvezni a NITIDO összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.',
 			'home.last_transactions' => 'Legutóbbi tranzakciók',
 			'home.should_create_account_header' => 'Hoppá!',
 			'home.should_create_account_message' => 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie',
@@ -2218,7 +2218,7 @@ extension on TranslationsHu {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Nagyon rossz'; case GenderContext.female: return 'Nagyon rossz'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Hiányos adatok'; case GenderContext.female: return 'Hiányos adatok'; } }, 
 			'financial_health.review.descr.insufficient_data' => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!',
-			'financial_health.review.descr.very_good' => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Bolsio-nel.',
+			'financial_health.review.descr.very_good' => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a NITIDO-nel.',
 			'financial_health.review.descr.good' => 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!',
 			'financial_health.review.descr.normal' => 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.',
 			'financial_health.review.descr.bad' => 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.',
@@ -2362,7 +2362,7 @@ extension on TranslationsHu {
 			'transaction.status.reconciled' => 'Egyeztetett',
 			'transaction.status.reconciled_descr' => 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.',
 			'transaction.status.unreconciled' => 'Nem egyeztetett',
-			'transaction.status.unreconciled_descr' => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Bolsio egyenlegeinek és statisztikáinak kiszámításához.',
+			'transaction.status.unreconciled_descr' => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a NITIDO egyenlegeinek és statisztikáinak kiszámításához.',
 			'transaction.status.pending' => 'Függőben',
 			'transaction.status.pending_descr' => 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.',
 			'transaction.status.voided' => 'Érvénytelenítve',
@@ -2672,8 +2672,8 @@ extension on TranslationsHu {
 			'backup.import.title' => 'Adatok importálása',
 			'backup.import.title_short' => 'Importálás',
 			'backup.import.restore_backup' => 'Mentés visszaállítása',
-			'backup.import.restore_backup_descr' => 'Importáljon egy korábban mentett adatbázist a Bolsioből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.',
-			'backup.import.restore_backup_warn_description' => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Bolsio oldaláról.',
+			'backup.import.restore_backup_descr' => 'Importáljon egy korábban mentett adatbázist a Nitidoből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.',
+			'backup.import.restore_backup_warn_description' => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a NITIDO oldaláról.',
 			'backup.import.restore_backup_warn_title' => 'Az összes adat felülírása',
 			'backup.import.select_other_file' => 'Másik fájl kiválasztása',
 			'backup.import.tap_to_select_file' => 'Koppintson a fájl kiválasztásához',
@@ -2715,7 +2715,7 @@ extension on TranslationsHu {
 			'settings.general.language.section' => 'Nyelv és szövegek',
 			'settings.general.language.title' => 'Alkalmazás nyelve',
 			'settings.general.language.descr' => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban',
-			'settings.general.language.help' => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'> útmutatónk</a>',
+			'settings.general.language.help' => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'> útmutatónk</a>',
 			'settings.general.locale.title' => 'Régió',
 			'settings.general.locale.auto' => 'Rendszer',
 			'settings.general.locale.descr' => 'Dátumok, számformátumok beállítása...',
@@ -2799,7 +2799,7 @@ extension on TranslationsHu {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Bolsi',
+			'more.ai.title' => 'Niti',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Adatok',
@@ -2810,24 +2810,24 @@ extension on TranslationsHu {
 			'more.data.delete_all_header2' => 'Még egy utolsó lépés ⚠️⚠️',
 			'more.data.delete_all_message2' => 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?',
 			'more.about_us.display' => 'Alkalmazásinformációk',
-			'more.about_us.description' => 'Találja meg a Bolsio feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával',
+			'more.about_us.description' => 'Találja meg a NITIDO feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával',
 			'more.about_us.legal.display' => 'Jogi információk',
 			'more.about_us.legal.privacy' => 'Adatvédelem',
 			'more.about_us.legal.terms' => 'Használati feltételek',
 			'more.about_us.legal.licenses' => 'Licencek',
 			'more.about_us.project.display' => 'Projekt',
 			'more.about_us.project.contributors' => 'Közreműködők',
-			'more.about_us.project.contributors_descr' => 'Az összes fejlesztő, akik hozzájárultak a Bolsio létrehozásához',
+			'more.about_us.project.contributors_descr' => 'Az összes fejlesztő, akik hozzájárultak a NITIDO létrehozásához',
 			'more.about_us.project.contact' => 'Kapcsolatfelvétel',
 			'more.help_us.display' => 'Segítsen nekünk',
-			'more.help_us.description' => 'Tudja meg, hogyan segíthet a Bolsionek abban, hogy egyre jobb és jobb legyen',
+			'more.help_us.description' => 'Tudja meg, hogyan segíthet a Nitidonek abban, hogy egyre jobb és jobb legyen',
 			'more.help_us.rate_us' => 'Értékeljen minket',
 			'more.help_us.rate_us_descr' => 'Bármilyen értékelést szívesen fogadunk!',
-			'more.help_us.share' => 'Bolsio megosztása',
+			'more.help_us.share' => 'NITIDO megosztása',
 			'more.help_us.share_descr' => 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival',
-			'more.help_us.share_text' => 'Bolsio! A legjobb személyes pénzügyi alkalmazás. Töltse le innen',
+			'more.help_us.share_text' => 'NITIDO! A legjobb személyes pénzügyi alkalmazás. Töltse le innen',
 			'more.help_us.thanks' => 'Köszönjük!',
-			'more.help_us.thanks_long' => 'Az Ön hozzájárulása a Bolsiohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.',
+			'more.help_us.thanks_long' => 'Az Ön hozzájárulása a Nitidohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.',
 			'more.help_us.donate' => 'Adományozás',
 			'more.help_us.donate_descr' => 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?',
 			'more.help_us.donate_success' => 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️',

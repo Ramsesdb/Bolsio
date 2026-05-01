@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
@@ -174,7 +174,7 @@
     "my-accounts": "Meine Konten",
     "active-accounts": "Aktive Konten",
     "no-accounts": "Es wurden noch keine Konten erstellt",
-    "no-accounts.descr": "Beginne, die ganze Magie von Bolsio zu nutzen. ",
+    "no-accounts.descr": "Beginne, die ganze Magie von NITIDO zu nutzen. ",
     "last-transactions": "Letzte Transaktionen",
     "should-create-account.header": "Hoppla!",
     "should-create-account.message": "Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst"
@@ -832,8 +832,8 @@
       "title": "Daten importieren",
       "title.short": "Import",
       "restore-backup": "Sicherung wiederherstellen",
-      "restore-backup-descr": "Importiere eine zuvor gespeicherte Datenbank von Bolsio. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten",
-      "restore-backup-warn.description": "Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von Bolsio heruntergeladen hast.",
+      "restore-backup-descr": "Importiere eine zuvor gespeicherte Datenbank von NITIDO. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten",
+      "restore-backup-warn.description": "Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von NITIDO heruntergeladen hast.",
       "restore-backup-warn.title": "Alle Daten überschreiben",
       "select-other-file": "Andere Datei auswählen",
       "tap-to-select-file": "Tippe, um eine Datei auszuwählen",
@@ -888,7 +888,7 @@
         "section": "Sprache und Texte",
         "title": "App-Sprache",
         "descr": "Sprache, in der die Texte in der App angezeigt werden",
-        "help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>unser Beschreibung</a> wenden"
+        "help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='__NITIDO_GITHUB_URL__/tree/main/lib/i18n'>unser Beschreibung</a> wenden"
       },
       "LOCALE": {
         "title": "Region",
@@ -1003,7 +1003,7 @@
       "more_options": "More appearance options"
     },
     "AI": {
-      "title": "Bolsi",
+      "title": "Niti",
       "configure": "Set up your financial assistant",
       "active_with": "Active · {provider}"
     },
@@ -1018,7 +1018,7 @@
     },
     "ABOUT_US": {
       "display": "App-Informationen",
-      "description": "Finden Sie die Bedingungen von Bolsio und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen",
+      "description": "Finden Sie die Bedingungen von NITIDO und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen",
       "LEGAL": {
         "display": "Rechtliche Informationen",
         "privacy": "Datenschutzrichtlinie",
@@ -1028,20 +1028,20 @@
       "PROJECT": {
         "display": "Projekt",
         "contributors": "Mitarbeiter",
-        "contributors.descr": "Alle Entwickler, die Bolsio wachsen lassen haben",
+        "contributors.descr": "Alle Entwickler, die NITIDO wachsen lassen haben",
         "contact": "Kontaktiere uns"
       }
     },
     "HELP_US": {
       "display": "Hilf uns",
-      "description": "Finde heraus, wie Du Bolsio dabei helfen kannst, immer besser zu werden",
+      "description": "Finde heraus, wie Du NITIDO dabei helfen kannst, immer besser zu werden",
       "rate-us": "Bewerte uns",
       "rate-us.descr": "Jede Hilfe ist willkommen!",
-      "share": "Teile  Bolsio",
+      "share": "Teile  NITIDO",
       "share.descr": "Teile  unsere App mit Freunden und Familie",
-      "share.text": "Bolsio! ",
+      "share.text": "NITIDO! ",
       "thanks": "Danke schön!",
-      "thanks_long": "Deine Beiträge zu Bolsio und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen",
+      "thanks_long": "Deine Beiträge zu NITIDO und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen",
       "donate": "Mache eine Spende",
       "donate.descr": "Mit Deiner Spende trägst dazu bei, dass die App weiterhin verbessert wird. Was gibt es Schöneres, als sich für die geleistete Arbeit zu bedanken, indem man mich zu einem Kaffee einlädt?",
       "donate.success": "Spende erfolgt. Herzlichen Dank für Deine Beitrag! ❤️",

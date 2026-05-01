@@ -154,7 +154,7 @@ class _TranslationsHomeTr extends TranslationsHomeEn {
 	@override String get my_accounts => 'Hesaplarım';
 	@override String get active_accounts => 'Aktif hesaplar';
 	@override String get no_accounts => 'Henüz hesap oluşturulmadı';
-	@override String get no_accounts_descr => 'Bolsio\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun';
+	@override String get no_accounts_descr => 'NITIDO\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun';
 	@override String get last_transactions => 'Son işlemler';
 	@override String get should_create_account_header => 'Ups!';
 	@override String get should_create_account_message => 'İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır';
@@ -821,7 +821,7 @@ class _TranslationsTransactionStatusTr extends TranslationsTransactionStatusEn {
 	@override String get reconciled => 'Mutabık';
 	@override String get reconciled_descr => 'Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor';
 	@override String get unreconciled => 'Mutabık değil';
-	@override String get unreconciled_descr => 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Bolsio\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır';
+	@override String get unreconciled_descr => 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, NITIDO\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır';
 	@override String get pending => 'Beklemede';
 	@override String get pending_descr => 'Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır';
 	@override String get voided => 'İptal Edildi';
@@ -1296,8 +1296,8 @@ class _TranslationsBackupImportTr extends TranslationsBackupImportEn {
 	@override String get title => 'Verilerinizi içe aktarın';
 	@override String get title_short => 'İçe Aktar';
 	@override String get restore_backup => 'Yedeklemeyi Geri Yükle';
-	@override String get restore_backup_descr => 'Bolsio\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir';
-	@override String get restore_backup_warn_description => 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Bolsio\'den indirdiğiniz dosyaları yükleyin';
+	@override String get restore_backup_descr => 'NITIDO\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir';
+	@override String get restore_backup_warn_description => 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce NITIDO\'den indirdiğiniz dosyaları yükleyin';
 	@override String get restore_backup_warn_title => 'Tüm verilerin üzerine yaz';
 	@override String get select_other_file => 'Başka dosya seç';
 	@override String get tap_to_select_file => 'Bir dosya seçmek için dokunun';
@@ -1463,7 +1463,7 @@ class _TranslationsMoreAiTr extends TranslationsMoreAiEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Bolsi';
+	@override String get title => 'Niti';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1492,7 +1492,7 @@ class _TranslationsMoreAboutUsTr extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Uygulama bilgileri';
-	@override String get description => 'Bolsio\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
+	@override String get description => 'NITIDO\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
 	@override late final _TranslationsMoreAboutUsLegalTr legal = _TranslationsMoreAboutUsLegalTr._(_root);
 	@override late final _TranslationsMoreAboutUsProjectTr project = _TranslationsMoreAboutUsProjectTr._(_root);
 }
@@ -1505,14 +1505,14 @@ class _TranslationsMoreHelpUsTr extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Bize yardım edin';
-	@override String get description => 'Bolsio\'in nasıl daha iyi olabileceğini öğrenin';
+	@override String get description => 'NITIDO\'in nasıl daha iyi olabileceğini öğrenin';
 	@override String get rate_us => 'Bize oy verin';
 	@override String get rate_us_descr => 'Herhangi bir puan memnuniyetle karşılanır!';
-	@override String get share => 'Bolsio\'i paylaşın';
+	@override String get share => 'NITIDO\'i paylaşın';
 	@override String get share_descr => 'Uygulamamızı arkadaşlarınıza ve ailenize paylaşın';
-	@override String get share_text => 'Bolsio! En iyi kişisel finans uygulaması. Buradan indirin';
+	@override String get share_text => 'NITIDO! En iyi kişisel finans uygulaması. Buradan indirin';
 	@override String get thanks => 'Teşekkürler!';
-	@override String get thanks_long => 'Bolsio\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.';
+	@override String get thanks_long => 'NITIDO\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.';
 	@override String get donate => 'Bağış yap';
 	@override String get donate_descr => 'Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?';
 	@override String get donate_success => 'Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️';
@@ -1625,7 +1625,7 @@ class _TranslationsFinancialHealthReviewDescrTr extends TranslationsFinancialHea
 
 	// Translations
 	@override String get insufficient_data => 'Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!';
-	@override String get very_good => 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Bolsio ile öğrenmeye devam etmenizi umuyoruz';
+	@override String get very_good => 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve NITIDO ile öğrenmeye devam etmenizi umuyoruz';
 	@override String get good => 'Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!';
 	@override String get normal => 'Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit';
 	@override String get bad => 'Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin';
@@ -1930,7 +1930,7 @@ class _TranslationsSettingsGeneralLanguageTr extends TranslationsSettingsGeneral
 	@override String get section => 'Dil ve metinler';
 	@override String get title => 'Uygulama dili';
 	@override String get descr => 'Metinlerin uygulamada görüntüleneceği dil';
-	@override String get help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
+	@override String get help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 }
 
 // Path: settings.general.locale
@@ -2057,7 +2057,7 @@ class _TranslationsMoreAboutUsProjectTr extends TranslationsMoreAboutUsProjectEn
 	// Translations
 	@override String get display => 'Proje';
 	@override String get contributors => 'Katkıda bulunanlar';
-	@override String get contributors_descr => 'Bolsio\'in büyümesini sağlayan tüm geliştiriciler';
+	@override String get contributors_descr => 'NITIDO\'in büyümesini sağlayan tüm geliştiriciler';
 	@override String get contact => 'Bize ulaşın';
 }
 
@@ -2206,7 +2206,7 @@ extension on TranslationsTr {
 			'home.my_accounts' => 'Hesaplarım',
 			'home.active_accounts' => 'Aktif hesaplar',
 			'home.no_accounts' => 'Henüz hesap oluşturulmadı',
-			'home.no_accounts_descr' => 'Bolsio\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun',
+			'home.no_accounts_descr' => 'NITIDO\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun',
 			'home.last_transactions' => 'Son işlemler',
 			'home.should_create_account_header' => 'Ups!',
 			'home.should_create_account_message' => 'İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır',
@@ -2218,7 +2218,7 @@ extension on TranslationsTr {
 			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Çok Kötü'; case GenderContext.female: return 'Çok Kötü'; } }, 
 			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Yetersiz veri'; case GenderContext.female: return 'Yetersiz veri'; } }, 
 			'financial_health.review.descr.insufficient_data' => 'Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!',
-			'financial_health.review.descr.very_good' => 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Bolsio ile öğrenmeye devam etmenizi umuyoruz',
+			'financial_health.review.descr.very_good' => 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve NITIDO ile öğrenmeye devam etmenizi umuyoruz',
 			'financial_health.review.descr.good' => 'Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!',
 			'financial_health.review.descr.normal' => 'Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit',
 			'financial_health.review.descr.bad' => 'Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin',
@@ -2362,7 +2362,7 @@ extension on TranslationsTr {
 			'transaction.status.reconciled' => 'Mutabık',
 			'transaction.status.reconciled_descr' => 'Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor',
 			'transaction.status.unreconciled' => 'Mutabık değil',
-			'transaction.status.unreconciled_descr' => 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Bolsio\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır',
+			'transaction.status.unreconciled_descr' => 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, NITIDO\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır',
 			'transaction.status.pending' => 'Beklemede',
 			'transaction.status.pending_descr' => 'Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır',
 			'transaction.status.voided' => 'İptal Edildi',
@@ -2672,8 +2672,8 @@ extension on TranslationsTr {
 			'backup.import.title' => 'Verilerinizi içe aktarın',
 			'backup.import.title_short' => 'İçe Aktar',
 			'backup.import.restore_backup' => 'Yedeklemeyi Geri Yükle',
-			'backup.import.restore_backup_descr' => 'Bolsio\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir',
-			'backup.import.restore_backup_warn_description' => 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Bolsio\'den indirdiğiniz dosyaları yükleyin',
+			'backup.import.restore_backup_descr' => 'NITIDO\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir',
+			'backup.import.restore_backup_warn_description' => 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce NITIDO\'den indirdiğiniz dosyaları yükleyin',
 			'backup.import.restore_backup_warn_title' => 'Tüm verilerin üzerine yaz',
 			'backup.import.select_other_file' => 'Başka dosya seç',
 			'backup.import.tap_to_select_file' => 'Bir dosya seçmek için dokunun',
@@ -2715,7 +2715,7 @@ extension on TranslationsTr {
 			'settings.general.language.section' => 'Dil ve metinler',
 			'settings.general.language.title' => 'Uygulama dili',
 			'settings.general.language.descr' => 'Metinlerin uygulamada görüntüleneceği dil',
-			'settings.general.language.help' => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz',
+			'settings.general.language.help' => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz',
 			'settings.general.locale.title' => 'Bölge',
 			'settings.general.locale.auto' => 'Sistem',
 			'settings.general.locale.descr' => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...',
@@ -2799,7 +2799,7 @@ extension on TranslationsTr {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Bolsi',
+			'more.ai.title' => 'Niti',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Veri',
@@ -2810,24 +2810,24 @@ extension on TranslationsTr {
 			'more.data.delete_all_header2' => 'Son bir adım ⚠️⚠️',
 			'more.data.delete_all_message2' => 'Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?',
 			'more.about_us.display' => 'Uygulama bilgileri',
-			'more.about_us.description' => 'Bolsio\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin',
+			'more.about_us.description' => 'NITIDO\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin',
 			'more.about_us.legal.display' => 'Yasal bilgiler',
 			'more.about_us.legal.privacy' => 'Gizlilik politikası',
 			'more.about_us.legal.terms' => 'Kullanım koşulları',
 			'more.about_us.legal.licenses' => 'Lisanslar',
 			'more.about_us.project.display' => 'Proje',
 			'more.about_us.project.contributors' => 'Katkıda bulunanlar',
-			'more.about_us.project.contributors_descr' => 'Bolsio\'in büyümesini sağlayan tüm geliştiriciler',
+			'more.about_us.project.contributors_descr' => 'NITIDO\'in büyümesini sağlayan tüm geliştiriciler',
 			'more.about_us.project.contact' => 'Bize ulaşın',
 			'more.help_us.display' => 'Bize yardım edin',
-			'more.help_us.description' => 'Bolsio\'in nasıl daha iyi olabileceğini öğrenin',
+			'more.help_us.description' => 'NITIDO\'in nasıl daha iyi olabileceğini öğrenin',
 			'more.help_us.rate_us' => 'Bize oy verin',
 			'more.help_us.rate_us_descr' => 'Herhangi bir puan memnuniyetle karşılanır!',
-			'more.help_us.share' => 'Bolsio\'i paylaşın',
+			'more.help_us.share' => 'NITIDO\'i paylaşın',
 			'more.help_us.share_descr' => 'Uygulamamızı arkadaşlarınıza ve ailenize paylaşın',
-			'more.help_us.share_text' => 'Bolsio! En iyi kişisel finans uygulaması. Buradan indirin',
+			'more.help_us.share_text' => 'NITIDO! En iyi kişisel finans uygulaması. Buradan indirin',
 			'more.help_us.thanks' => 'Teşekkürler!',
-			'more.help_us.thanks_long' => 'Bolsio\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.',
+			'more.help_us.thanks_long' => 'NITIDO\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.',
 			'more.help_us.donate' => 'Bağış yap',
 			'more.help_us.donate_descr' => 'Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?',
 			'more.help_us.donate_success' => 'Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️',

@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Annuler",
     "confirm": "Confirmer",
@@ -174,7 +174,7 @@
     "my-accounts": "Mes comptes",
     "active-accounts": "Comptes actifs",
     "no-accounts": "Aucun compte créé pour le moment",
-    "no-accounts.descr": "Commencez à profiter de toute la magie de Bolsio. Créez au moins un compte pour commencer à ajouter des transactions.",
+    "no-accounts.descr": "Commencez à profiter de toute la magie de NITIDO. Créez au moins un compte pour commencer à ajouter des transactions.",
     "last-transactions": "Dernières transactions",
     "should-create-account.header": "Oups !",
     "should-create-account.message": "Vous devez avoir au moins un compte non archivé avant de pouvoir créer des transactions"
@@ -202,7 +202,7 @@
       },
       "descr": {
         "insufficient_data": "On dirait que nous n'avons pas assez de dépenses pour calculer votre santé financière. Ajoutez quelques dépenses/recettes sur cette période pour que nous puissions vous aider !",
-        "very_good": "Félicitations ! Votre santé financière est excellente. Nous espérons que vous continuerez sur cette lancée et à apprendre avec Bolsio.",
+        "very_good": "Félicitations ! Votre santé financière est excellente. Nous espérons que vous continuerez sur cette lancée et à apprendre avec NITIDO.",
         "good": "Super ! Votre santé financière est bonne. Visitez l'onglet d'analyse pour voir comment économiser encore plus !",
         "normal": "Votre santé financière est plus ou moins dans la moyenne de la population pour cette période.",
         "bad": "Il semble que votre situation financière ne soit pas encore optimale. Explorez le reste des graphiques pour en savoir plus sur vos finances.",
@@ -391,7 +391,7 @@
       "reconciled": "Rapprochée",
       "reconciled.descr": "Cette transaction a déjà été validée et correspond à une transaction réelle de votre banque",
       "unreconciled": "Non rapprochée",
-      "unreconciled.descr": "Cette transaction n'a pas encore été validée et n'apparaît donc pas encore dans vos comptes bancaires réels. Cependant, elle est prise en compte pour le calcul des soldes et des statistiques dans Bolsio",
+      "unreconciled.descr": "Cette transaction n'a pas encore été validée et n'apparaît donc pas encore dans vos comptes bancaires réels. Cependant, elle est prise en compte pour le calcul des soldes et des statistiques dans NITIDO",
       "pending": "En attente",
       "pending.descr": "Cette transaction est en attente et ne sera donc pas prise en compte dans le calcul des soldes et des statistiques",
       "voided": "Annulée",
@@ -795,8 +795,8 @@
       "title": "Importer vos données",
       "title.short": "Importer",
       "restore-backup": "Restaurer une sauvegarde",
-      "restore-backup-descr": "Importez une base de données Bolsio préalablement sauvegardée. Cette action remplacera toutes les données actuelles de l'application par les nouvelles données",
-      "restore-backup-warn.description": "Lors de l'import d'une nouvelle base de données, vous perdrez toutes les données actuellement enregistrées dans l'application. Il est recommandé de réaliser une sauvegarde avant de continuer. N'importez ici aucun fichier dont vous ne connaissez pas l'origine ; importez uniquement des fichiers que vous avez préalablement téléchargés depuis Bolsio",
+      "restore-backup-descr": "Importez une base de données NITIDO préalablement sauvegardée. Cette action remplacera toutes les données actuelles de l'application par les nouvelles données",
+      "restore-backup-warn.description": "Lors de l'import d'une nouvelle base de données, vous perdrez toutes les données actuellement enregistrées dans l'application. Il est recommandé de réaliser une sauvegarde avant de continuer. N'importez ici aucun fichier dont vous ne connaissez pas l'origine ; importez uniquement des fichiers que vous avez préalablement téléchargés depuis NITIDO",
       "restore-backup-warn.title": "Écraser toutes les données",
       "select-other-file": "Sélectionner un autre fichier",
       "tap-to-select-file": "Touchez pour sélectionner un fichier",
@@ -850,7 +850,7 @@
         "section": "Langue et textes",
         "title": "Langue de l'application",
         "descr": "Langue dans laquelle les textes seront affichés dans l'application",
-        "help": "Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>notre guide</a>"
+        "help": "Si vous souhaitez contribuer aux traductions de cette application, vous pouvez consulter <a href='__NITIDO_GITHUB_URL__/tree/main/lib/i18n'>notre guide</a>"
       },
       "LOCALE": {
         "title": "Région",
@@ -965,7 +965,7 @@
       "more_options": "More appearance options"
     },
     "AI": {
-      "title": "Bolsi",
+      "title": "Niti",
       "configure": "Set up your financial assistant",
       "active_with": "Active · {provider}"
     },
@@ -980,7 +980,7 @@
     },
     "ABOUT_US": {
       "display": "Informations sur l'application",
-      "description": "Trouvez les conditions de Bolsio, des informations importantes, et connectez-vous en signalant des bugs ou en partageant des idées",
+      "description": "Trouvez les conditions de NITIDO, des informations importantes, et connectez-vous en signalant des bugs ou en partageant des idées",
       "LEGAL": {
         "display": "Informations légales",
         "privacy": "Politique de confidentialité",
@@ -990,20 +990,20 @@
       "PROJECT": {
         "display": "Projet",
         "contributors": "Collaborateurs",
-        "contributors.descr": "Tous les développeurs qui ont fait grandir Bolsio",
+        "contributors.descr": "Tous les développeurs qui ont fait grandir NITIDO",
         "contact": "Contactez-nous"
       }
     },
     "HELP_US": {
       "display": "Aidez-nous",
-      "description": "Découvrez comment vous pouvez aider Bolsio à devenir toujours meilleur",
+      "description": "Découvrez comment vous pouvez aider NITIDO à devenir toujours meilleur",
       "rate-us": "Notez-nous",
       "rate-us.descr": "Toutes les notes sont les bienvenues !",
-      "share": "Partager Bolsio",
+      "share": "Partager NITIDO",
       "share.descr": "Partagez notre application avec vos amis et votre famille",
-      "share.text": "Bolsio ! La meilleure application de finances personnelles. Téléchargez-la ici",
+      "share.text": "NITIDO ! La meilleure application de finances personnelles. Téléchargez-la ici",
       "thanks": "Merci !",
-      "thanks_long": "Vos contributions à Bolsio et aux autres projets open source, grandes ou petites, rendent possibles de super projets comme celui-ci. Merci de prendre le temps de contribuer.",
+      "thanks_long": "Vos contributions à NITIDO et aux autres projets open source, grandes ou petites, rendent possibles de super projets comme celui-ci. Merci de prendre le temps de contribuer.",
       "donate": "Faire un don",
       "donate.descr": "Avec votre don, vous aiderez l'application à continuer de recevoir des améliorations. Quelle meilleure façon de remercier le travail accompli qu'en m'invitant à un café ?",
       "donate.success": "Don effectué. Merci beaucoup pour votre contribution ! ❤️",

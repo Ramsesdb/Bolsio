@@ -1,4 +1,4 @@
-# Translations Contributing Guide for Bolsio
+﻿# Translations Contributing Guide for Nitido
 
 Welcome! This guide explains how you can contribute in our app translations. We welcome both technical and non-technical contributors to improve and add translations. Thank you for helping make this app accessible to more people!
 
@@ -87,7 +87,7 @@ You can learn more about the slang library tools in the [docs](https://github.co
 - **Maintain formatting**: Be careful not to add or remove commas, braces, or other symbols.
 - **Keep it consistent**: Match the tone and style of the existing translations.
 - **Test your translations**: Read them aloud to ensure they sound natural.
-- **Ask questions**: If something is unclear, feel free to write in the Bolsio Forum.
+- **Ask questions**: If something is unclear, feel free to write in the Nitido Forum.
 
 ---
 
@@ -104,4 +104,4 @@ If you have any doubts or need further guidance, feel free to ask! You can:
 - **Post on the Forum**: Join discussions or raise your queries in our community forum.
 - **Contact Directly**: Reach out to me via email at [lozin.technologies@gmail.com].
 
-We’re here to help and excited to see your contributions to Bolsio!
+We’re here to help and excited to see your contributions to Nitido!

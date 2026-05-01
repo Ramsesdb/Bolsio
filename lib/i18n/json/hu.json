@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Mégse",
     "confirm": "Megerősítés",
@@ -174,7 +174,7 @@
     "my-accounts": "Saját számláim",
     "active-accounts": "Aktív számlák",
     "no-accounts": "Még nincsenek számlák létrehozva",
-    "no-accounts.descr": "Kezdje el élvezni a Bolsio összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.",
+    "no-accounts.descr": "Kezdje el élvezni a NITIDO összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.",
     "last-transactions": "Legutóbbi tranzakciók",
     "should-create-account.header": "Hoppá!",
     "should-create-account.message": "A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie"
@@ -202,7 +202,7 @@
       },
       "descr": {
         "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!",
-        "very_good": "Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Bolsio-nel.",
+        "very_good": "Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a NITIDO-nel.",
         "good": "Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!",
         "normal": "Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.",
         "bad": "Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.",
@@ -391,7 +391,7 @@
       "reconciled": "Egyeztetett",
       "reconciled.descr": "Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.",
       "unreconciled": "Nem egyeztetett",
-      "unreconciled.descr": "Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Bolsio egyenlegeinek és statisztikáinak kiszámításához.",
+      "unreconciled.descr": "Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a NITIDO egyenlegeinek és statisztikáinak kiszámításához.",
       "pending": "Függőben",
       "pending.descr": "Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.",
       "voided": "Érvénytelenítve",
@@ -796,8 +796,8 @@
       "title": "Adatok importálása",
       "title.short": "Importálás",
       "restore-backup": "Mentés visszaállítása",
-      "restore-backup-descr": "Importáljon egy korábban mentett adatbázist a Bolsioből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.",
-      "restore-backup-warn.description": "Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Bolsio oldaláról.",
+      "restore-backup-descr": "Importáljon egy korábban mentett adatbázist a Nitidoből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.",
+      "restore-backup-warn.description": "Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a NITIDO oldaláról.",
       "restore-backup-warn.title": "Az összes adat felülírása",
       "select-other-file": "Másik fájl kiválasztása",
       "tap-to-select-file": "Koppintson a fájl kiválasztásához",
@@ -852,7 +852,7 @@
         "section": "Nyelv és szövegek",
         "title": "Alkalmazás nyelve",
         "descr": "Nyelv, amelyen a szövegek megjelennek az alkalmazásban",
-        "help": "Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'> útmutatónk</a>"
+        "help": "Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href='__NITIDO_GITHUB_URL__/tree/main/lib/i18n'> útmutatónk</a>"
       },
       "LOCALE": {
         "title": "Régió",
@@ -943,7 +943,7 @@
     "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
     "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Firebase szinkronizálás" },
     "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
-    "AI": { "title": "Bolsi", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
+    "AI": { "title": "Niti", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Adatok",
       "display.descr": "Exportálja és importálja az adatait, hogy ne veszítsen el semmit se",
@@ -955,7 +955,7 @@
     },
     "ABOUT_US": {
       "display": "Alkalmazásinformációk",
-      "description": "Találja meg a Bolsio feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával",
+      "description": "Találja meg a NITIDO feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával",
       "LEGAL": {
         "display": "Jogi információk",
         "privacy": "Adatvédelem",
@@ -965,20 +965,20 @@
       "PROJECT": {
         "display": "Projekt",
         "contributors": "Közreműködők",
-        "contributors.descr": "Az összes fejlesztő, akik hozzájárultak a Bolsio létrehozásához",
+        "contributors.descr": "Az összes fejlesztő, akik hozzájárultak a NITIDO létrehozásához",
         "contact": "Kapcsolatfelvétel"
       }
     },
     "HELP_US": {
       "display": "Segítsen nekünk",
-      "description": "Tudja meg, hogyan segíthet a Bolsionek abban, hogy egyre jobb és jobb legyen",
+      "description": "Tudja meg, hogyan segíthet a Nitidonek abban, hogy egyre jobb és jobb legyen",
       "rate-us": "Értékeljen minket",
       "rate-us.descr": "Bármilyen értékelést szívesen fogadunk!",
-      "share": "Bolsio megosztása",
+      "share": "NITIDO megosztása",
       "share.descr": "Ossza meg alkalmazásunkat a barátaival és a családtagjaival",
-      "share.text": "Bolsio! A legjobb személyes pénzügyi alkalmazás. Töltse le innen",
+      "share.text": "NITIDO! A legjobb személyes pénzügyi alkalmazás. Töltse le innen",
       "thanks": "Köszönjük!",
-      "thanks_long": "Az Ön hozzájárulása a Bolsiohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.",
+      "thanks_long": "Az Ön hozzájárulása a Nitidohez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.",
       "donate": "Adományozás",
       "donate.descr": "Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?",
       "donate.success": "Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️",

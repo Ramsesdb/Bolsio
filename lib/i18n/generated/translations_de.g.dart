@@ -155,7 +155,7 @@ class _TranslationsHomeDe extends TranslationsHomeEn {
 	@override String get my_accounts => 'Meine Konten';
 	@override String get active_accounts => 'Aktive Konten';
 	@override String get no_accounts => 'Es wurden noch keine Konten erstellt';
-	@override String get no_accounts_descr => 'Beginne, die ganze Magie von Bolsio zu nutzen. ';
+	@override String get no_accounts_descr => 'Beginne, die ganze Magie von NITIDO zu nutzen. ';
 	@override String get last_transactions => 'Letzte Transaktionen';
 	@override String get should_create_account_header => 'Hoppla!';
 	@override String get should_create_account_message => 'Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst';
@@ -1335,8 +1335,8 @@ class _TranslationsBackupImportDe extends TranslationsBackupImportEn {
 	@override String get title => 'Daten importieren';
 	@override String get title_short => 'Import';
 	@override String get restore_backup => 'Sicherung wiederherstellen';
-	@override String get restore_backup_descr => 'Importiere eine zuvor gespeicherte Datenbank von Bolsio. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten';
-	@override String get restore_backup_warn_description => 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von Bolsio heruntergeladen hast.';
+	@override String get restore_backup_descr => 'Importiere eine zuvor gespeicherte Datenbank von NITIDO. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten';
+	@override String get restore_backup_warn_description => 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von NITIDO heruntergeladen hast.';
 	@override String get restore_backup_warn_title => 'Alle Daten überschreiben';
 	@override String get select_other_file => 'Andere Datei auswählen';
 	@override String get tap_to_select_file => 'Tippe, um eine Datei auszuwählen';
@@ -1502,7 +1502,7 @@ class _TranslationsMoreAiDe extends TranslationsMoreAiEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Bolsi';
+	@override String get title => 'Niti';
 	@override String get configure => 'Set up your financial assistant';
 	@override String get active_with => 'Active · {provider}';
 }
@@ -1531,7 +1531,7 @@ class _TranslationsMoreAboutUsDe extends TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'App-Informationen';
-	@override String get description => 'Finden Sie die Bedingungen von Bolsio und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen';
+	@override String get description => 'Finden Sie die Bedingungen von NITIDO und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen';
 	@override late final _TranslationsMoreAboutUsLegalDe legal = _TranslationsMoreAboutUsLegalDe._(_root);
 	@override late final _TranslationsMoreAboutUsProjectDe project = _TranslationsMoreAboutUsProjectDe._(_root);
 }
@@ -1544,14 +1544,14 @@ class _TranslationsMoreHelpUsDe extends TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Hilf uns';
-	@override String get description => 'Finde heraus, wie Du Bolsio dabei helfen kannst, immer besser zu werden';
+	@override String get description => 'Finde heraus, wie Du NITIDO dabei helfen kannst, immer besser zu werden';
 	@override String get rate_us => 'Bewerte uns';
 	@override String get rate_us_descr => 'Jede Hilfe ist willkommen!';
-	@override String get share => 'Teile  Bolsio';
+	@override String get share => 'Teile  NITIDO';
 	@override String get share_descr => 'Teile  unsere App mit Freunden und Familie';
-	@override String get share_text => 'Bolsio! ';
+	@override String get share_text => 'NITIDO! ';
 	@override String get thanks => 'Danke schön!';
-	@override String get thanks_long => 'Deine Beiträge zu Bolsio und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen';
+	@override String get thanks_long => 'Deine Beiträge zu NITIDO und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen';
 	@override String get donate => 'Mache eine Spende';
 	@override String get donate_descr => 'Mit Deiner Spende trägst dazu bei, dass die App weiterhin verbessert wird. Was gibt es Schöneres, als sich für die geleistete Arbeit zu bedanken, indem man mich zu einem Kaffee einlädt?';
 	@override String get donate_success => 'Spende erfolgt. Herzlichen Dank für Deine Beitrag! ❤️';
@@ -1998,7 +1998,7 @@ class _TranslationsSettingsGeneralLanguageDe extends TranslationsSettingsGeneral
 	@override String get section => 'Sprache und Texte';
 	@override String get title => 'App-Sprache';
 	@override String get descr => 'Sprache, in der die Texte in der App angezeigt werden';
-	@override String get help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
+	@override String get help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
 }
 
 // Path: settings.general.locale
@@ -2125,7 +2125,7 @@ class _TranslationsMoreAboutUsProjectDe extends TranslationsMoreAboutUsProjectEn
 	// Translations
 	@override String get display => 'Projekt';
 	@override String get contributors => 'Mitarbeiter';
-	@override String get contributors_descr => 'Alle Entwickler, die Bolsio wachsen lassen haben';
+	@override String get contributors_descr => 'Alle Entwickler, die NITIDO wachsen lassen haben';
 	@override String get contact => 'Kontaktiere uns';
 }
 
@@ -2274,7 +2274,7 @@ extension on TranslationsDe {
 			'home.my_accounts' => 'Meine Konten',
 			'home.active_accounts' => 'Aktive Konten',
 			'home.no_accounts' => 'Es wurden noch keine Konten erstellt',
-			'home.no_accounts_descr' => 'Beginne, die ganze Magie von Bolsio zu nutzen. ',
+			'home.no_accounts_descr' => 'Beginne, die ganze Magie von NITIDO zu nutzen. ',
 			'home.last_transactions' => 'Letzte Transaktionen',
 			'home.should_create_account_header' => 'Hoppla!',
 			'home.should_create_account_message' => 'Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst',
@@ -2768,8 +2768,8 @@ extension on TranslationsDe {
 			'backup.import.title' => 'Daten importieren',
 			'backup.import.title_short' => 'Import',
 			'backup.import.restore_backup' => 'Sicherung wiederherstellen',
-			'backup.import.restore_backup_descr' => 'Importiere eine zuvor gespeicherte Datenbank von Bolsio. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten',
-			'backup.import.restore_backup_warn_description' => 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von Bolsio heruntergeladen hast.',
+			'backup.import.restore_backup_descr' => 'Importiere eine zuvor gespeicherte Datenbank von NITIDO. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten',
+			'backup.import.restore_backup_warn_description' => 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von NITIDO heruntergeladen hast.',
 			'backup.import.restore_backup_warn_title' => 'Alle Daten überschreiben',
 			'backup.import.select_other_file' => 'Andere Datei auswählen',
 			'backup.import.tap_to_select_file' => 'Tippe, um eine Datei auszuwählen',
@@ -2811,7 +2811,7 @@ extension on TranslationsDe {
 			'settings.general.language.section' => 'Sprache und Texte',
 			'settings.general.language.title' => 'App-Sprache',
 			'settings.general.language.descr' => 'Sprache, in der die Texte in der App angezeigt werden',
-			'settings.general.language.help' => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'__BOLSIO_GITHUB_URL__/tree/main/lib/i18n\'>unser Beschreibung</a> wenden',
+			'settings.general.language.help' => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'__NITIDO_GITHUB_URL__/tree/main/lib/i18n\'>unser Beschreibung</a> wenden',
 			'settings.general.locale.title' => 'Region',
 			'settings.general.locale.auto' => 'System',
 			'settings.general.locale.descr' => 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.',
@@ -2895,7 +2895,7 @@ extension on TranslationsDe {
 			'more.theme.dark' => 'Dark',
 			'more.theme.amoled' => 'AMOLED mode',
 			'more.theme.more_options' => 'More appearance options',
-			'more.ai.title' => 'Bolsi',
+			'more.ai.title' => 'Niti',
 			'more.ai.configure' => 'Set up your financial assistant',
 			'more.ai.active_with' => 'Active · {provider}',
 			'more.data.display' => 'Daten',
@@ -2906,24 +2906,24 @@ extension on TranslationsDe {
 			'more.data.delete_all_header2' => 'Ein letzter Schritt ⚠️⚠️',
 			'more.data.delete_all_message2' => 'Durch das Löschen eines Kontos löschst Du alle Deine gespeicherten persönlichen Daten. Deine Konten, Transaktionen, Budgets und Kategorien werden gelöscht und können nicht wiederhergestellt werden. Bist Du damit einverstanden?',
 			'more.about_us.display' => 'App-Informationen',
-			'more.about_us.description' => 'Finden Sie die Bedingungen von Bolsio und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen',
+			'more.about_us.description' => 'Finden Sie die Bedingungen von NITIDO und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen',
 			'more.about_us.legal.display' => 'Rechtliche Informationen',
 			'more.about_us.legal.privacy' => 'Datenschutzrichtlinie',
 			'more.about_us.legal.terms' => 'Nutzungsbedingungen',
 			'more.about_us.legal.licenses' => 'Lizenzen',
 			'more.about_us.project.display' => 'Projekt',
 			'more.about_us.project.contributors' => 'Mitarbeiter',
-			'more.about_us.project.contributors_descr' => 'Alle Entwickler, die Bolsio wachsen lassen haben',
+			'more.about_us.project.contributors_descr' => 'Alle Entwickler, die NITIDO wachsen lassen haben',
 			'more.about_us.project.contact' => 'Kontaktiere uns',
 			'more.help_us.display' => 'Hilf uns',
-			'more.help_us.description' => 'Finde heraus, wie Du Bolsio dabei helfen kannst, immer besser zu werden',
+			'more.help_us.description' => 'Finde heraus, wie Du NITIDO dabei helfen kannst, immer besser zu werden',
 			'more.help_us.rate_us' => 'Bewerte uns',
 			'more.help_us.rate_us_descr' => 'Jede Hilfe ist willkommen!',
-			'more.help_us.share' => 'Teile  Bolsio',
+			'more.help_us.share' => 'Teile  NITIDO',
 			'more.help_us.share_descr' => 'Teile  unsere App mit Freunden und Familie',
-			'more.help_us.share_text' => 'Bolsio! ',
+			'more.help_us.share_text' => 'NITIDO! ',
 			'more.help_us.thanks' => 'Danke schön!',
-			'more.help_us.thanks_long' => 'Deine Beiträge zu Bolsio und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen',
+			'more.help_us.thanks_long' => 'Deine Beiträge zu NITIDO und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen',
 			'more.help_us.donate' => 'Mache eine Spende',
 			'more.help_us.donate_descr' => 'Mit Deiner Spende trägst dazu bei, dass die App weiterhin verbessert wird. Was gibt es Schöneres, als sich für die geleistete Arbeit zu bedanken, indem man mich zu einem Kaffee einlädt?',
 			'more.help_us.donate_success' => 'Spende erfolgt. Herzlichen Dank für Deine Beitrag! ❤️',

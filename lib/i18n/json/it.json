@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Annulla",
     "confirm": "Conferma",
@@ -174,7 +174,7 @@
     "my-accounts": "I miei conti",
     "active-accounts": "Conti attivi",
     "no-accounts": "Nessun conto creato ancora",
-    "no-accounts.descr": "Inizia a usare tutta la magia di Bolsio. Crea almeno un conto per iniziare ad aggiungere transazioni",
+    "no-accounts.descr": "Inizia a usare tutta la magia di NITIDO. Crea almeno un conto per iniziare ad aggiungere transazioni",
     "last-transactions": "Ultime transazioni",
     "should-create-account.header": "Oops!",
     "should-create-account.message": "Devi avere almeno un conto non archiviato prima di poter iniziare a creare transazioni"
@@ -202,7 +202,7 @@
       },
       "descr": {
         "insufficient_data": "Sembra che non abbiamo abbastanza spese per calcolare la tua salute finanziaria. Aggiungi alcune spese/entrate in questo periodo per permetterci di aiutarti!",
-        "very_good": "Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Bolsio",
+        "very_good": "Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con NITIDO",
         "good": "Ottimo! La tua salute finanziaria è buona. Visita la scheda di analisi per vedere come risparmiare ancora di più!",
         "normal": "La tua salute finanziaria è più o meno nella media del resto della popolazione per questo periodo",
         "bad": "Sembra che la tua situazione finanziaria non sia ancora delle migliori. Esplora il resto dei grafici per saperne di più sulle tue finanze",
@@ -391,7 +391,7 @@
       "reconciled": "Riconciliata",
       "reconciled.descr": "Questa transazione è già stata convalidata e corrisponde a una transazione reale della tua banca",
       "unreconciled": "Non riconciliata",
-      "unreconciled.descr": "Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Bolsio",
+      "unreconciled.descr": "Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in NITIDO",
       "pending": "In sospeso",
       "pending.descr": "Questa transazione è in sospeso e pertanto non verrà presa in considerazione nel calcolo dei saldi e delle statistiche",
       "voided": "Annullata",
@@ -796,8 +796,8 @@
       "title": "Importa i tuoi dati",
       "title.short": "Importa",
       "restore-backup": "Ripristina backup",
-      "restore-backup-descr": "Importa un database precedentemente salvato da Bolsio. Questa azione sostituirà tutti i dati attuali dell'applicazione con i nuovi dati",
-      "restore-backup-warn.description": "Importando un nuovo database, perderai tutti i dati attualmente salvati nell'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Bolsio",
+      "restore-backup-descr": "Importa un database precedentemente salvato da NITIDO. Questa azione sostituirà tutti i dati attuali dell'applicazione con i nuovi dati",
+      "restore-backup-warn.description": "Importando un nuovo database, perderai tutti i dati attualmente salvati nell'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da NITIDO",
       "restore-backup-warn.title": "Sovrascrivi tutti i dati",
       "select-other-file": "Seleziona un altro file",
       "tap-to-select-file": "Tocca per selezionare un file",
@@ -852,7 +852,7 @@
         "section": "Lingua e testi",
         "title": "Lingua dell'app",
         "descr": "Lingua in cui i testi verranno visualizzati nell'app",
-        "help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='__BOLSIO_GITHUB_URL__/tree/main/lib/i18n'>la nostra guida</a>"
+        "help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='__NITIDO_GITHUB_URL__/tree/main/lib/i18n'>la nostra guida</a>"
       },
       "LOCALE": {
         "title": "Regione",
@@ -943,7 +943,7 @@
     "SECTIONS": { "quick_access": "Quick access", "management": "Management", "configuration": "Configuration", "data": "Data", "tools": "Tools", "about": "About" },
     "ACCOUNT": { "sign_out": "Sign out", "sync_active": "Synced", "sync_inactive": "Sync disabled", "no_account": "No account linked", "fallback_name": "Your account", "firebase_sync": "Sincronizzazione Firebase" },
     "THEME": { "title": "Theme", "system": "System", "light": "Light", "dark": "Dark", "amoled": "AMOLED mode", "more_options": "More appearance options" },
-    "AI": { "title": "Bolsi", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
+    "AI": { "title": "Niti", "configure": "Set up your financial assistant", "active_with": "Active · {provider}" },
     "DATA": {
       "display": "Dati",
       "display.descr": "Esporta e importa i tuoi dati per non perdere nulla",
@@ -955,7 +955,7 @@
     },
     "ABOUT_US": {
       "display": "Informazioni sull'app",
-      "description": "Trova i termini di Bolsio, informazioni importanti e connettiti segnalando bug o condividendo idee",
+      "description": "Trova i termini di NITIDO, informazioni importanti e connettiti segnalando bug o condividendo idee",
       "LEGAL": {
         "display": "Informazioni legali",
         "privacy": "Informativa sulla privacy",
@@ -965,20 +965,20 @@
       "PROJECT": {
         "display": "Progetto",
         "contributors": "Collaboratori",
-        "contributors.descr": "Tutti gli sviluppatori che hanno fatto crescere Bolsio",
+        "contributors.descr": "Tutti gli sviluppatori che hanno fatto crescere NITIDO",
         "contact": "Contattaci"
       }
     },
     "HELP_US": {
       "display": "Aiutaci",
-      "description": "Scopri come puoi aiutare Bolsio a migliorare sempre di più",
+      "description": "Scopri come puoi aiutare NITIDO a migliorare sempre di più",
       "rate-us": "Valutaci",
       "rate-us.descr": "Ogni valutazione è benvenuta!",
-      "share": "Condividi Bolsio",
+      "share": "Condividi NITIDO",
       "share.descr": "Condividi la nostra app con amici e famiglia",
-      "share.text": "Bolsio! La migliore app di finanza personale. Scaricala qui",
+      "share.text": "NITIDO! La migliore app di finanza personale. Scaricala qui",
       "thanks": "Grazie!",
-      "thanks_long": "I tuoi contributi a Bolsio e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.",
+      "thanks_long": "I tuoi contributi a NITIDO e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.",
       "donate": "Fai una donazione",
       "donate.descr": "Con la tua donazione aiuterai l'app a continuare a ricevere miglioramenti. Quale modo migliore per ringraziare il lavoro svolto se non invitandomi per un caffè?",
       "donate.success": "Donazione effettuata. Grazie mille per il tuo contributo! ❤️",
