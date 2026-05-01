@@ -1,4 +1,4 @@
-package com.bolsio.app
+package com.nitido.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine

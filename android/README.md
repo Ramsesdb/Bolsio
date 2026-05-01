@@ -1,4 +1,4 @@
-# Bolsio Android App
+# Nitido Android App
 
 This folder contains the Android-specific code and configuration for the app. Follow these instructions to build and run the Android version of the app.
 

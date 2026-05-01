@@ -33,8 +33,8 @@
         android:required="false" />
 
     <application
-        android:label="Bolsio"
-        android:name="${applicationName}"
+        android:label="Nitido"
+        android:name=".NitidoApplication"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">
         <activity
