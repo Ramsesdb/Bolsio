@@ -1,5 +1,5 @@
 <!--
-  Notification small icon for Bolsio foreground capture service.
+  Notification small icon for Nitido foreground capture service.
 
   Overrides flutter_background_service's bundled ic_bg_service_small
   by colliding on the resource name (Gradle merge prefers app res).
