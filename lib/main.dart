@@ -1,4 +1,4 @@
-import 'dart:async' show unawaited;
+﻿import 'dart:async' show unawaited;
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,44 +8,44 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/auth/biometric_lock_screen.dart';
-import 'package:bolsio/app/auth/welcome_screen.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry_bootstrap.dart';
-import 'package:bolsio/app/layout/page_switcher.dart';
-import 'package:bolsio/app/layout/widgets/app_navigation_sidebar.dart';
-import 'package:bolsio/app/layout/window_bar.dart';
-import 'package:bolsio/app/onboarding/onboarding.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/shared/key_value_service.dart';
-import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:bolsio/core/presentation/helpers/global_snackbar.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/routes/handle_will_pop_scope.dart';
-import 'package:bolsio/core/routes/root_navigator_observer.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/firebase_sync_service.dart';
-import 'package:bolsio/core/services/ai/ai_credentials_store.dart';
-import 'package:bolsio/core/services/attachments/attachments_service.dart';
-import 'package:bolsio/core/utils/app_utils.dart';
-import 'package:bolsio/core/utils/keyboard_intents.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/core/utils/scroll_behavior_override.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
-import 'package:bolsio/core/services/auto_import/background/local_notification_service.dart';
-import 'package:bolsio/core/services/auto_import/background/bolsio_background_service.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_health_monitor.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/services/auto_import/orchestrator/capture_orchestrator.dart';
-import 'package:bolsio/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/services/statement_import/statement_batches_service.dart';
+import 'package:nitido/app/auth/biometric_lock_screen.dart';
+import 'package:nitido/app/auth/welcome_screen.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry_bootstrap.dart';
+import 'package:nitido/app/layout/page_switcher.dart';
+import 'package:nitido/app/layout/widgets/app_navigation_sidebar.dart';
+import 'package:nitido/app/layout/window_bar.dart';
+import 'package:nitido/app/onboarding/onboarding.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/shared/key_value_service.dart';
+import 'package:nitido/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/private_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:nitido/core/presentation/helpers/global_snackbar.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/routes/handle_will_pop_scope.dart';
+import 'package:nitido/core/routes/root_navigator_observer.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/firebase_sync_service.dart';
+import 'package:nitido/core/services/ai/ai_credentials_store.dart';
+import 'package:nitido/core/services/attachments/attachments_service.dart';
+import 'package:nitido/core/utils/app_utils.dart';
+import 'package:nitido/core/utils/keyboard_intents.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/core/utils/scroll_behavior_override.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
+import 'package:nitido/core/services/auto_import/background/local_notification_service.dart';
+import 'package:nitido/core/services/auto_import/background/nitido_background_service.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:nitido/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:nitido/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/services/statement_import/statement_batches_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bolsio/core/database/app_db.dart';
+import 'package:nitido/core/database/app_db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -172,7 +172,7 @@ void main() async {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     Future.delayed(const Duration(seconds: 8), () {
       unawaited(
-        BolsioBackgroundService.instance
+        NitidoBackgroundService.instance
             .initialize()
             .then((_) async {
               if (autoImportEnabled) {
@@ -202,7 +202,7 @@ void main() async {
                 // the app is closed.  The notification_listener_service plugin uses
                 // a BroadcastReceiver that works in both isolates; running it only
                 // in the background service avoids duplicate captures.
-                await BolsioBackgroundService.instance.startService();
+                await NitidoBackgroundService.instance.startService();
               }
             })
             .catchError((e) {
@@ -344,11 +344,11 @@ class _InitializeAppState extends State<InitializeApp>
     if (!autoImportEnabled || !isAndroid) return;
 
     try {
-      await BolsioBackgroundService.instance.initialize();
-      final isRunning = await BolsioBackgroundService.instance.isRunning();
+      await NitidoBackgroundService.instance.initialize();
+      final isRunning = await NitidoBackgroundService.instance.isRunning();
 
       if (!isRunning) {
-        await BolsioBackgroundService.instance.startService();
+        await NitidoBackgroundService.instance.startService();
         debugPrint(
           'AutoImport watchdog: background service was down on resume and was restarted',
         );
@@ -368,7 +368,14 @@ class _InitializeAppState extends State<InitializeApp>
 
   @override
   Widget build(BuildContext context) {
-    if (!_biometricPassed) {
+    // Skip the lock entirely when there is no user session yet (pre-onboarding
+    // installs). Locking the WelcomeScreen has no protective value and breaks
+    // first-impression UX. `appStateData` is hydrated synchronously in main()
+    // before runApp(), so no flicker.
+    final hasSession = appStateData[AppDataKey.onboarded] == '1';
+    final biometricEnabled =
+        appStateSettings[SettingKey.biometricEnabled] == '1';
+    if (hasSession && biometricEnabled && !_biometricPassed) {
       // Show biometric lock gate before any app content.
       // Uses a minimal MaterialApp so the lock screen has a theme.
       return MaterialApp(
@@ -385,12 +392,12 @@ class _InitializeAppState extends State<InitializeApp>
     }
 
     // ignore: prefer_const_constructors
-    return BolsioAppEntryPoint(key: const ValueKey('App Entry Point'));
+    return NitidoAppEntryPoint(key: const ValueKey('App Entry Point'));
   }
 }
 
-class BolsioAppEntryPoint extends StatelessWidget {
-  const BolsioAppEntryPoint({super.key});
+class NitidoAppEntryPoint extends StatelessWidget {
+  const NitidoAppEntryPoint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -453,7 +460,7 @@ class MaterialAppContainer extends StatelessWidget {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp(
-          title: 'Bolsio',
+          title: 'Nitido',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
           shortcuts: appShortcuts,

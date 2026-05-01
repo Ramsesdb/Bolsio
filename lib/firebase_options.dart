@@ -53,11 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBjW6vC8KLXy54e1rPYMgkhtnPBO5_fwVY',
-    appId: '1:805363518948:android:128f9d6fd341eda99c8bf1',
-    messagingSenderId: '805363518948',
-    projectId: 'bolsio',
-    storageBucket: 'bolsio.firebasestorage.app',
+    apiKey: 'AIzaSyBxjc4NH4FEcRO9Nd1FbUuHe8SHhqyZhgY',
+    appId: '1:699649729013:android:e8f230f353a3e13e6c40bc',
+    messagingSenderId: '699649729013',
+    projectId: 'nitido-1c416',
+    storageBucket: 'nitido-1c416.firebasestorage.app',
   );
-
 }
