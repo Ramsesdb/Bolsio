@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_api_client.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_api_exception.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_api_client.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_api_exception.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_credentials_store.dart';
 
 /// Configuration page for Binance API credentials.
 ///

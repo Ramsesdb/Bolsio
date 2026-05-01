@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/pin_modal.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
-import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/pin_modal.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/app/settings/widgets/nitido_tile_switch.dart';
+import 'package:nitido/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Settings page to enable/disable Hidden Mode and rotate the PIN.
 ///
@@ -23,13 +22,11 @@ class HiddenModeSettingsPage extends StatefulWidget {
 
 class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
   bool? _enabled;
-  bool _biometricEnabled = true;
 
   @override
   void initState() {
     super.initState();
     _loadEnabled();
-    _biometricEnabled = appStateSettings[SettingKey.biometricEnabled] != '0';
   }
 
   Future<void> _loadEnabled() async {
@@ -70,7 +67,7 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
     if (!mounted) return;
     if (changed) {
       final t = Translations.of(context);
-      BolsioSnackbar.info(SnackbarParams(t.settings.hidden_mode.pin.pin_changed));
+      NitidoSnackbar.info(SnackbarParams(t.settings.hidden_mode.pin.pin_changed));
     }
   }
 
@@ -104,7 +101,7 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else ...[
-                BolsioTileSwitch(
+                NitidoTileSwitch(
                   title: t.settings.hidden_mode.enable,
                   subtitle: isEnabled
                       ? t.settings.hidden_mode.enabled_badge
@@ -125,22 +122,6 @@ class _HiddenModeSettingsPageState extends State<HiddenModeSettingsPage> {
                     onTap: _handleChangePin,
                   ),
               ],
-              const Divider(),
-              createListSeparator(context, t.settings.security.biometric.section_title),
-              SwitchListTile.adaptive(
-                secondary: const Icon(Icons.fingerprint_outlined),
-                title: Text(t.settings.security.biometric.title),
-                subtitle: Text(t.settings.security.biometric.descr),
-                value: _biometricEnabled,
-                onChanged: (v) async {
-                  await UserSettingService.instance.setItem(
-                    SettingKey.biometricEnabled,
-                    v ? '1' : '0',
-                    updateGlobalState: true,
-                  );
-                  if (mounted) setState(() => _biometricEnabled = v);
-                },
-              ),
             ],
           ),
         ),

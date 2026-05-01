@@ -1,10 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/utils/debouncer.dart';
+import 'package:nitido/core/utils/debouncer.dart';
 
-class BolsioTileSwitch extends StatefulWidget {
-  const BolsioTileSwitch({
+class NitidoTileSwitch extends StatefulWidget {
+  const NitidoTileSwitch({
     super.key,
     required this.title,
     this.subtitle,
@@ -43,10 +43,10 @@ class BolsioTileSwitch extends StatefulWidget {
   final bool disabled;
 
   @override
-  State<BolsioTileSwitch> createState() => _BolsioTileSwitchState();
+  State<NitidoTileSwitch> createState() => _NitidoTileSwitchState();
 }
 
-class _BolsioTileSwitchState extends State<BolsioTileSwitch> {
+class _NitidoTileSwitchState extends State<NitidoTileSwitch> {
   bool value = true;
   late final Debouncer _debouncer;
 
@@ -58,7 +58,7 @@ class _BolsioTileSwitchState extends State<BolsioTileSwitch> {
   }
 
   @override
-  void didUpdateWidget(BolsioTileSwitch oldWidget) {
+  void didUpdateWidget(NitidoTileSwitch oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.initialValue != value && widget.syncWithInitialValue) {

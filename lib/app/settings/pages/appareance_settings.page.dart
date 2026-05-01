@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/core/database/services/user-setting/enum/app-fonts.enum.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:bolsio/core/presentation/widgets/bolsio_dropdown_select.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/nitido_tile_switch.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:nitido/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:nitido/core/presentation/widgets/nitido_dropdown_select.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
-final GlobalKey<BolsioDropdownSelectState> _themeDropdownKey = GlobalKey();
+final GlobalKey<NitidoDropdownSelectState> _themeDropdownKey = GlobalKey();
 
 class AppareanceSettingsPage extends StatelessWidget {
   const AppareanceSettingsPage({super.key});
@@ -66,7 +66,7 @@ class AppareanceSettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              BolsioTileSwitch(
+              NitidoTileSwitch(
                 title: t.settings.appearance.amoled_mode,
                 subtitle: t.settings.appearance.amoled_mode_descr,
                 initialValue: appStateSettings[SettingKey.amoledMode] == '1',
@@ -80,7 +80,7 @@ class AppareanceSettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              BolsioTileSwitch(
+              NitidoTileSwitch(
                 title: t.settings.appearance.dynamic_colors,
                 subtitle: t.settings.appearance.dynamic_colors_descr,
                 initialValue:
@@ -217,7 +217,7 @@ class AppareanceSettingsPage extends StatelessWidget {
     return Focus(
       canRequestFocus: false,
       descendantsAreFocusable: false,
-      child: BolsioDropdownSelect(
+      child: NitidoDropdownSelect(
         key: _themeDropdownKey,
         initial: theme,
         compact: true,

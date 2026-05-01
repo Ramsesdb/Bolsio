@@ -1,16 +1,16 @@
-import 'package:collection/collection.dart';
+﻿import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/language_selector.dart';
-import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/core/database/services/user-setting/enum/supported_locales.dart';
-import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/language_selector.dart';
+import 'package:nitido/app/settings/widgets/nitido_tile_switch.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/core/database/services/user-setting/enum/supported_locales.dart';
+import 'package:nitido/core/database/services/user-setting/private_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});
@@ -73,7 +73,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       updateGlobalState: true,
                     );
                   } catch (e) {
-                    BolsioSnackbar.error(
+                    NitidoSnackbar.error(
                       SnackbarParams.fromError(
                         'There was an error persisting this setting on your device. Contact the developers for more information',
                       ),
@@ -83,7 +83,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ),
               ShowAllDecimalPlacesSwitch(),
               createListSeparator(context, t.settings.security.title),
-              BolsioTileSwitch(
+              NitidoTileSwitch(
                 title: t.settings.security.private_mode_at_launch,
                 subtitle: t.settings.security.private_mode_at_launch_descr,
                 icon: const Icon(Icons.phonelink_lock_outlined),
@@ -100,7 +100,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 builder: (context, snapshot) {
                   final initialValue = (snapshot.data ?? false);
 
-                  return BolsioTileSwitch(
+                  return NitidoTileSwitch(
                     title: t.settings.security.private_mode,
                     subtitle: t.settings.security.private_mode_descr,
                     icon: ScaledAnimatedSwitcher(
@@ -134,7 +134,7 @@ class ShowAllDecimalPlacesSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return BolsioTileSwitch(
+    return NitidoTileSwitch(
       title: t.settings.general.show_all_decimals,
       subtitle: t.settings.general.show_all_decimals_descr,
       icon: DecoratedBox(

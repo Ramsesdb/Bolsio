@@ -1,18 +1,18 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/styles/big_button_style.dart';
-import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/styles/big_button_style.dart';
+import 'package:nitido/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -36,7 +36,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
   bool _isSharing = false;
 
   void _showErrorSnackBar(String error) {
-    BolsioSnackbar.error(SnackbarParams.fromError(error));
+    NitidoSnackbar.error(SnackbarParams.fromError(error));
   }
 
   Future<File> _generateExportFile(String directoryPath) async {
@@ -122,13 +122,13 @@ class _ExportDataPageState extends State<ExportDataPage> {
       }
 
       if (path == null) {
-        BolsioSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
+        NitidoSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
         return;
       }
 
       try {
         final file = await _generateExportFile(path);
-        BolsioSnackbar.success(
+        NitidoSnackbar.success(
           SnackbarParams(t.backup.export.success(x: file.parent.path)),
         );
       } on PathAccessException catch (_) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:nitido/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 Future<ModalResult<TransactionSwipeAction?>?>
 showTransactionSwipeActionSelector(

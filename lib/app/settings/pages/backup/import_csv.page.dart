@@ -1,34 +1,34 @@
-import 'package:collection/collection.dart';
+﻿import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/accounts/account_selector.dart';
-import 'package:bolsio/app/categories/selectors/category_picker.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/backup/backup_database_service.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/currency/currency_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/loading_overlay.dart';
-import 'package:bolsio/core/routes/destinations.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_selector.dart';
+import 'package:nitido/app/categories/selectors/category_picker.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/backup/backup_database_service.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/currency/currency_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/supported-icon/supported_icon.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/loading_overlay.dart';
+import 'package:nitido/core/routes/destinations.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/supported_icon/supported_icon_service.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});
@@ -93,7 +93,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       );
 
       if (!allRowsSameLength) {
-        BolsioSnackbar.error(
+        NitidoSnackbar.error(
           SnackbarParams(
             'All rows in the CSV must have the same number of columns.',
           ),
@@ -106,7 +106,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         csvData = parsedCSV;
       });
     } catch (err) {
-      BolsioSnackbar.error(SnackbarParams.fromError(err));
+      NitidoSnackbar.error(SnackbarParams.fromError(err));
     }
   }
 
@@ -185,7 +185,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       RouteUtils.popAllRoutesExceptFirst();
       tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
 
-      BolsioSnackbar.success(
+      NitidoSnackbar.success(
         SnackbarParams(
           t.backup.import.manual_import.success(x: csvData!.slice(1).length),
         ),
@@ -193,7 +193,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     }
 
     if (amountColumn == null) {
-      BolsioSnackbar.warning(SnackbarParams('Amount column can not be null'));
+      NitidoSnackbar.warning(SnackbarParams('Amount column can not be null'));
       return;
     }
 
@@ -329,7 +329,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       Logger.printDebug(e);
       loadingOverlay.hide();
 
-      BolsioSnackbar.error(SnackbarParams.fromError(e));
+      NitidoSnackbar.error(SnackbarParams.fromError(e));
     }
   }
 

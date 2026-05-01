@@ -1,21 +1,21 @@
-import 'dart:io' show Platform;
+﻿import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:bolsio/app/settings/pages/auto_import/binance_api_config.page.dart';
-import 'package:bolsio/app/settings/pages/auto_import/capture_diagnostics.page.dart';
-import 'package:bolsio/app/settings/pages/auto_import/capture_permissions.page.dart';
-import 'package:bolsio/app/transactions/auto_import/pending_imports.page.dart';
-import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:bolsio/core/services/auto_import/background/bolsio_background_service.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_health_monitor.dart';
-import 'package:bolsio/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:bolsio/core/services/auto_import/orchestrator/capture_orchestrator.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/settings/pages/auto_import/binance_api_config.page.dart';
+import 'package:nitido/app/settings/pages/auto_import/capture_diagnostics.page.dart';
+import 'package:nitido/app/settings/pages/auto_import/capture_permissions.page.dart';
+import 'package:nitido/app/transactions/auto_import/pending_imports.page.dart';
+import 'package:nitido/core/database/services/pending_import/pending_import_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:nitido/core/services/auto_import/background/nitido_background_service.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:nitido/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:nitido/core/services/auto_import/orchestrator/capture_orchestrator.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Settings page for the auto-import feature.
 ///
@@ -116,15 +116,15 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
     if (key == SettingKey.autoImportEnabled) {
       try {
         if (value) {
-          await BolsioBackgroundService.instance.startService();
+          await NitidoBackgroundService.instance.startService();
         } else {
-          await BolsioBackgroundService.instance.stopService();
+          await NitidoBackgroundService.instance.stopService();
         }
       } catch (_) {}
     } else if (_autoImportEnabled) {
       // For channel/credential changes, restart the background orchestrator
       try {
-        await BolsioBackgroundService.instance.restartOrchestrator();
+        await NitidoBackgroundService.instance.restartOrchestrator();
       } catch (_) {}
     }
   }
@@ -285,7 +285,7 @@ class _AutoImportSettingsPageState extends State<AutoImportSettingsPage> {
                     // Re-apply settings after config change
                     try {
                       await CaptureOrchestrator.instance.applySettings();
-                      await BolsioBackgroundService.instance
+                      await NitidoBackgroundService.instance
                           .restartOrchestrator();
                     } catch (_) {}
                   },

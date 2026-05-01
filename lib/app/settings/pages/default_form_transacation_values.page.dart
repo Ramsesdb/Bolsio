@@ -1,23 +1,23 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/categories/selectors/category_picker.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/bolsio_tile_switch.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/app/tags/tags_selector.modal.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/database/services/user-setting/default_transaction_values.service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/categories/selectors/category_picker.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/nitido_tile_switch.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/app/tags/tags_selector.modal.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:nitido/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class DefaultFormTransactionValuesPage extends StatelessWidget {
   const DefaultFormTransactionValuesPage({super.key});
@@ -46,7 +46,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BolsioTileSwitch(
+                  NitidoTileSwitch(
                     title: t
                         .settings
                         .transactions

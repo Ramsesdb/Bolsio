@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:bolsio/app/settings/widgets/theme_quick_picker_sheet.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:nitido/app/settings/widgets/theme_quick_picker_sheet.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/database/services/user-setting/private_mode_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class SettingsQuickAccess extends StatefulWidget {
   const SettingsQuickAccess({super.key});

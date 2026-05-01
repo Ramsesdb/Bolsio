@@ -1,12 +1,12 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:bolsio/app/settings/purchases/in_app_purchase.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/settings/purchases/in_app_purchase.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -48,7 +48,7 @@ class _DonateButtonState extends State<DonateButton> {
                 _subscription?.cancel();
               },
               onError: (error) {
-                BolsioSnackbar.error(
+                NitidoSnackbar.error(
                   SnackbarParams.fromError(t.more.help_us.donate_err),
                 );
               },
@@ -64,11 +64,11 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          BolsioSnackbar.error(
+          NitidoSnackbar.error(
             SnackbarParams.fromError(t.more.help_us.donate_err),
           );
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          BolsioSnackbar.success(
+          NitidoSnackbar.success(
             SnackbarParams(t.more.help_us.donate_success),
           );
         }
@@ -92,7 +92,7 @@ class _DonateButtonState extends State<DonateButton> {
         onTap: () async {
           if (!(await IAPConnection.isAvailable())) {
             // TODO: Implement other payment methods
-            BolsioSnackbar.error(
+            NitidoSnackbar.error(
               SnackbarParams.fromError(
                 'The current platform not supported or the store is not ready yet',
               ),
@@ -107,7 +107,7 @@ class _DonateButtonState extends State<DonateButton> {
               .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
-            BolsioSnackbar.error(
+            NitidoSnackbar.error(
               SnackbarParams.fromError(
                 "Products not found -> ${response.notFoundIDs.join(',')}",
               ),
@@ -115,7 +115,7 @@ class _DonateButtonState extends State<DonateButton> {
 
             return;
           } else if (response.error != null) {
-            BolsioSnackbar.error(
+            NitidoSnackbar.error(
               SnackbarParams.fromError(response.error!.message),
             );
 

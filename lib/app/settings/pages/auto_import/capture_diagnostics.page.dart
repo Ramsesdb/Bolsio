@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_event_log.dart';
-import 'package:bolsio/core/services/auto_import/capture/capture_health_monitor.dart';
-import 'package:bolsio/core/services/auto_import/capture/models/capture_event.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_event_log.dart';
+import 'package:nitido/core/services/auto_import/capture/capture_health_monitor.dart';
+import 'package:nitido/core/services/auto_import/capture/models/capture_event.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Diagnostic screen that surfaces the ring buffer of capture events so the
 /// user can see exactly what happens to every SMS / notification that reaches

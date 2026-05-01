@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
+import 'package:nitido/core/routes/route_utils.dart';
 
-class BolsioAiHeroCard extends StatefulWidget {
-  const BolsioAiHeroCard({super.key});
+class NitidoAiHeroCard extends StatefulWidget {
+  const NitidoAiHeroCard({super.key});
 
   @override
-  State<BolsioAiHeroCard> createState() => _BolsioAiHeroCardState();
+  State<NitidoAiHeroCard> createState() => _NitidoAiHeroCardState();
 }
 
-class _BolsioAiHeroCardState extends State<BolsioAiHeroCard>
+class _NitidoAiHeroCardState extends State<NitidoAiHeroCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _glowAnim;
@@ -102,7 +102,7 @@ class _BolsioAiHeroCardState extends State<BolsioAiHeroCard>
                   spacing: 2,
                   children: [
                     Text(
-                      'Bolsi',
+                      'Niti',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),

@@ -1,40 +1,41 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/all_accounts_page.dart';
-import 'package:bolsio/app/auth/welcome_screen.dart';
-import 'package:bolsio/app/budgets/budgets_page.dart';
-import 'package:bolsio/app/calculator/calculator.page.dart';
-import 'package:bolsio/app/categories/categories_list_page.dart';
-import 'package:bolsio/app/currencies/currency_manager.dart';
-import 'package:bolsio/app/debts/debts_page.dart';
-import 'package:bolsio/app/goals/goals_page.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/about.page.dart';
-import 'package:bolsio/app/settings/pages/ai/ai_settings.page.dart';
-import 'package:bolsio/app/settings/pages/appareance_settings.page.dart';
-import 'package:bolsio/app/settings/pages/auto_import/auto_import_settings.page.dart';
-import 'package:bolsio/app/settings/pages/backup/backup_settings.page.dart';
-import 'package:bolsio/app/settings/pages/general_settings.page.dart';
-import 'package:bolsio/app/settings/pages/hidden_mode_settings.page.dart';
-import 'package:bolsio/app/settings/pages/transactions_settings.page.dart';
-import 'package:bolsio/app/settings/widgets/profile_hero_card.dart';
-import 'package:bolsio/app/settings/widgets/setting_card_item.dart';
-import 'package:bolsio/app/settings/widgets/settings_quick_access.dart';
-import 'package:bolsio/app/settings/widgets/settings_search_bar.dart';
-import 'package:bolsio/app/settings/widgets/bolsio_ai_hero_card.dart';
-import 'package:bolsio/app/tags/tag_list.page.dart';
-import 'package:bolsio/app/transactions/recurrent_transactions_page.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/database/utils/personal_ve_seeders.dart';
-import 'package:bolsio/core/models/goal/goal.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/firebase_sync_service.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/all_accounts_page.dart';
+import 'package:nitido/app/auth/welcome_screen.dart';
+import 'package:nitido/app/budgets/budgets_page.dart';
+import 'package:nitido/app/calculator/calculator.page.dart';
+import 'package:nitido/app/categories/categories_list_page.dart';
+import 'package:nitido/app/currencies/currency_manager.dart';
+import 'package:nitido/app/debts/debts_page.dart';
+import 'package:nitido/app/goals/goals_page.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/about.page.dart';
+import 'package:nitido/app/settings/pages/ai/ai_settings.page.dart';
+import 'package:nitido/app/settings/pages/appareance_settings.page.dart';
+import 'package:nitido/app/settings/pages/auto_import/auto_import_settings.page.dart';
+import 'package:nitido/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:nitido/app/settings/pages/general_settings.page.dart';
+import 'package:nitido/app/settings/pages/app_lock_settings.page.dart';
+import 'package:nitido/app/settings/pages/hidden_mode_settings.page.dart';
+import 'package:nitido/app/settings/pages/transactions_settings.page.dart';
+import 'package:nitido/app/settings/widgets/profile_hero_card.dart';
+import 'package:nitido/app/settings/widgets/setting_card_item.dart';
+import 'package:nitido/app/settings/widgets/settings_quick_access.dart';
+import 'package:nitido/app/settings/widgets/settings_search_bar.dart';
+import 'package:nitido/app/settings/widgets/nitido_ai_hero_card.dart';
+import 'package:nitido/app/tags/tag_list.page.dart';
+import 'package:nitido/app/transactions/recurrent_transactions_page.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/database/utils/personal_ve_seeders.dart';
+import 'package:nitido/core/models/goal/goal.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/firebase_sync_service.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class MoreActionsPage extends StatefulWidget {
@@ -64,6 +65,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
       _SearchItem(label: t.settings.appearance.menu_title, section: sections.configuration, icon: Icons.palette_outlined, onTap: () => RouteUtils.pushRoute(const AppareanceSettingsPage())),
       _SearchItem(label: t.settings.transactions.menu_title, section: sections.configuration, icon: Icons.swap_horiz, onTap: () => RouteUtils.pushRoute(const TransactionsSettingsPage())),
       _SearchItem(label: t.settings.hidden_mode.title, section: sections.configuration, icon: Icons.lock_outline, onTap: () => RouteUtils.pushRoute(const HiddenModeSettingsPage())),
+      _SearchItem(label: t.settings.security.biometric.section_title, section: sections.configuration, icon: Icons.fingerprint_outlined, onTap: () => RouteUtils.pushRoute(const AppLockSettingsPage())),
       _SearchItem(label: t.settings.general.menu_title, section: sections.configuration, icon: Icons.language, onTap: () => RouteUtils.pushRoute(const GeneralSettingsPage())),
       _SearchItem(label: t.backup.export.title, section: sections.data, icon: Icons.upload_outlined, onTap: () => RouteUtils.pushRoute(const BackupSettingsPage())),
       _SearchItem(label: t.backup.import.title, section: sections.data, icon: Icons.download_outlined, onTap: () => RouteUtils.pushRoute(const BackupSettingsPage())),
@@ -333,7 +335,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
           spacing: 16,
           children: [
             const ProfileHeroCard(),
-            const BolsioAiHeroCard(),
+            const NitidoAiHeroCard(),
             SettingsSearchBar(onChanged: (q) => setState(() => _searchQuery = q)),
 
             if (_searchQuery.isNotEmpty) ...[
@@ -374,6 +376,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
                 _settingsTile(icon: Icons.palette_outlined, title: t.settings.appearance.menu_title, onTap: () => RouteUtils.pushRoute(const AppareanceSettingsPage())),
                 _settingsTile(icon: Icons.swap_horiz, title: t.settings.transactions.menu_title, onTap: () => RouteUtils.pushRoute(const TransactionsSettingsPage())),
                 _settingsTile(icon: Icons.lock_outline, title: t.settings.hidden_mode.title, onTap: () => RouteUtils.pushRoute(const HiddenModeSettingsPage())),
+                _settingsTile(icon: Icons.fingerprint_outlined, title: t.settings.security.biometric.section_title, onTap: () => RouteUtils.pushRoute(const AppLockSettingsPage())),
                 _settingsTile(icon: Icons.language, title: t.settings.general.menu_title, onTap: () => RouteUtils.pushRoute(const GeneralSettingsPage())),
               ]),
 

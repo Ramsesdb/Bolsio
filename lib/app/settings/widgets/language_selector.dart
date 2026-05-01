@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/database/services/user-setting/enum/supported_locales.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:bolsio/core/presentation/widgets/html_text.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/services/user-setting/enum/supported_locales.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:nitido/core/presentation/widgets/html_text.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 Future<ModalResult<String?>?> showLanguageSelectorBottomSheet(
   BuildContext context,

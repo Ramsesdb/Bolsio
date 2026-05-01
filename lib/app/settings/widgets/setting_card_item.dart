@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
 
 class SettingCardItem extends StatelessWidget {
   const SettingCardItem({
