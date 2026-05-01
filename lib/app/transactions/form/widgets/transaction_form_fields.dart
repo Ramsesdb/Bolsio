@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:bolsio/core/utils/constants.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:nitido/core/utils/constants.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class TransactionTitleField extends StatelessWidget {
   const TransactionTitleField({super.key, required this.controller});

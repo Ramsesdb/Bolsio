@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/goals/goal_form_page.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/services/goal/goal_service.dart';
-import 'package:bolsio/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/goals/goal_form_page.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/services/goal/goal_service.dart';
+import 'package:nitido/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class GoalsPage extends StatelessWidget {
   const GoalsPage({super.key});

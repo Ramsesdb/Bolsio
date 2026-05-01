@@ -1,15 +1,15 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/models/transaction/transaction.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/list_tile_action_item.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/models/transaction/transaction.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/list_tile_action_item.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 List<ListTileActionItem> getPayActions(
   BuildContext context,
@@ -68,7 +68,7 @@ List<ListTileActionItem> getPayActions(
 
         await transactionService.deleteTransaction(transaction.id);
 
-        BolsioSnackbar.success(
+        NitidoSnackbar.success(
           SnackbarParams(
             '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
           ),
@@ -90,10 +90,10 @@ List<ListTileActionItem> getPayActions(
           .setTransactionNextPayment(transaction);
 
       if (nextPaymentResult > 0) {
-        BolsioSnackbar.success(SnackbarParams(t.transaction.new_success));
+        NitidoSnackbar.success(SnackbarParams(t.transaction.new_success));
       }
     } else {
-      BolsioSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      NitidoSnackbar.success(SnackbarParams(t.transaction.edit_success));
     }
   }
 

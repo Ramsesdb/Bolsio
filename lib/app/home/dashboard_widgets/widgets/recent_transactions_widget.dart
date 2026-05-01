@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/app/transactions/transactions.page.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/app/transactions/transactions.page.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Wrapper público que muestra las últimas N transacciones del usuario,
 /// con tap a la fila navegando al detalle (vía la propia [TransactionListTile])

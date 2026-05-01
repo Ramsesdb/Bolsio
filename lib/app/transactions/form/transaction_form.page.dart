@@ -1,48 +1,48 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/account_selector.dart';
-import 'package:bolsio/app/categories/selectors/category_picker.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/transactions/form/dialogs/amount_selector.dart';
-import 'package:bolsio/app/transactions/form/widgets/transaction_account_selector_row.dart';
-import 'package:bolsio/app/transactions/form/widgets/transaction_amount_display.dart';
-import 'package:bolsio/app/transactions/form/widgets/transaction_date_selector.dart';
-import 'package:bolsio/app/transactions/form/widgets/transaction_form_fields.dart';
-import 'package:bolsio/app/transactions/form/widgets/exchange_rate_selector.dart';
-import 'package:bolsio/app/transactions/form/widgets/transaction_selectors.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/currency/currency_service.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/database/services/user-setting/default_transaction_values.service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/database/utils/drift_utils.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/models/transaction/recurrency_data.dart';
-import 'package:bolsio/core/models/transaction/transaction.dart';
-import 'package:bolsio/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/presentation/animations/shake_widget.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoint_container.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/attachments/attachment_model.dart';
-import 'package:bolsio/core/services/attachments/attachments_service.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/app/transactions/form/widgets/debt_link_banner.dart';
-import 'package:bolsio/core/models/debt/debt.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_selector.dart';
+import 'package:nitido/app/categories/selectors/category_picker.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:nitido/app/transactions/form/widgets/transaction_account_selector_row.dart';
+import 'package:nitido/app/transactions/form/widgets/transaction_amount_display.dart';
+import 'package:nitido/app/transactions/form/widgets/transaction_date_selector.dart';
+import 'package:nitido/app/transactions/form/widgets/transaction_form_fields.dart';
+import 'package:nitido/app/transactions/form/widgets/exchange_rate_selector.dart';
+import 'package:nitido/app/transactions/form/widgets/transaction_selectors.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/currency/currency_service.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/database/utils/drift_utils.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/models/transaction/recurrency_data.dart';
+import 'package:nitido/core/models/transaction/transaction.dart';
+import 'package:nitido/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/presentation/animations/shake_widget.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/responsive/breakpoint_container.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/attachments/attachment_model.dart';
+import 'package:nitido/core/services/attachments/attachments_service.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/app/transactions/form/widgets/debt_link_banner.dart';
+import 'package:nitido/core/models/debt/debt.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -364,7 +364,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     // a fallback category, but manual edits could still clear it.
     if (transactionType.isIncomeOrExpense && selectedCategory == null) {
       _shakeKey.currentState?.shake();
-      BolsioSnackbar.warning(
+      NitidoSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.category_required),
       );
       return;
@@ -376,7 +376,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (transactionValue == 0) {
-      BolsioSnackbar.warning(
+      NitidoSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.zero),
       );
 
@@ -384,7 +384,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (transactionValue < 0 && transactionType.isTransfer) {
-      BolsioSnackbar.warning(
+      NitidoSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.negative_transfer),
       );
 
@@ -392,7 +392,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
-      BolsioSnackbar.warning(
+      NitidoSnackbar.warning(
         SnackbarParams(
           t.transaction.form.validators.date_after_account_creation,
         ),
@@ -533,7 +533,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             );
 
             // Show success message FIRST
-            BolsioSnackbar.success(
+            NitidoSnackbar.success(
               SnackbarParams(
                 isEditMode
                     ? t.transaction.edit_success
@@ -549,12 +549,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               setState(() => _isSaving = false);
               RouteUtils.popRoute();
             }
-            BolsioSnackbar.error(SnackbarParams.fromError(error));
+            NitidoSnackbar.error(SnackbarParams.fromError(error));
           }
         })
         .catchError((error) {
           if (mounted) setState(() => _isSaving = false);
-          BolsioSnackbar.error(SnackbarParams.fromError(error));
+          NitidoSnackbar.error(SnackbarParams.fromError(error));
         });
   }
 
@@ -856,7 +856,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
                         submitForm();
                       } else {
-                        BolsioSnackbar.error(
+                        NitidoSnackbar.error(
                           SnackbarParams(t.general.validations.form_error),
                         );
                       }

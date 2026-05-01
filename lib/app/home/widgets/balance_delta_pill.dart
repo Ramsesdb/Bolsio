@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/widgets/decorative_sparkline.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:nitido/app/home/widgets/decorative_sparkline.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 class BalanceDeltaPill extends StatelessWidget {
   const BalanceDeltaPill({

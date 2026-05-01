@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/debts/debt_details_page.dart';
-import 'package:bolsio/core/database/services/debts/debt_service.dart';
-import 'package:bolsio/core/models/debt/debt.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/debts/debt_details_page.dart';
+import 'package:nitido/core/database/services/debts/debt_service.dart';
+import 'package:nitido/core/models/debt/debt.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/supported_icon/supported_icon_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class DebtList extends StatelessWidget {
   const DebtList({

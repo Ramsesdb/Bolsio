@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Shared onboarding step that walks the user through enabling the Android
 /// "Allow restricted settings" AppOp before reaching the notification listener
@@ -121,7 +121,7 @@ class _V3RestrictedSettingsStepState extends State<V3RestrictedSettingsStep>
     final isXiaomi = _vendor == 'xiaomi';
     final step1Text = isXiaomi ? copy.step1_xiaomi : copy.step1;
     final step2Text = isXiaomi ? copy.step2_xiaomi : copy.step2;
-    // step3 is identical for both vendors ("return to Bolsio").
+    // step3 is identical for both vendors ("return to Nitido").
     final step3Text = copy.step3;
 
     final primaryLabel =
@@ -299,7 +299,7 @@ class _AppInfoMockup extends StatelessWidget {
               ),
               const SizedBox(width: V3Tokens.spaceMd),
               Text(
-                'Bolsio',
+                'Nitido',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),

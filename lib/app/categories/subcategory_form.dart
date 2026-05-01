@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
-import 'package:bolsio/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:bolsio/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/constants.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/supported-icon/supported_icon.dart';
+import 'package:nitido/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:nitido/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/constants.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class SubcategoryFormDialog extends StatefulWidget {
   const SubcategoryFormDialog({

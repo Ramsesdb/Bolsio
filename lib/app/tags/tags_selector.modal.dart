@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/extensions/string.extension.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:bolsio/core/presentation/widgets/count_indicator.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/extensions/string.extension.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:nitido/core/presentation/widgets/count_indicator.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 Future<List<Tag?>?> showTagListModal(
   BuildContext context, {

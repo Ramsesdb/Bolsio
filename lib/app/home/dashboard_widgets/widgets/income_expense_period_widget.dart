@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/app/home/widgets/income_or_expense_card.dart';
-import 'package:bolsio/core/models/date-utils/date_period_state.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/app/home/widgets/income_or_expense_card.dart';
+import 'package:nitido/core/models/date-utils/date_period_state.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Modos del widget — coinciden con el contrato declarado en
 /// `WidgetDescriptor.config['mode']`. Encapsulamos la (de)serialización en

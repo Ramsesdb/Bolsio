@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/budgets/budget_form_page.dart';
-import 'package:bolsio/app/layout/page_context.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/services/budget/budget_service.dart';
-import 'package:bolsio/core/presentation/animations/animated_floating_button.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/budgets/budget_form_page.dart';
+import 'package:nitido/app/layout/page_context.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/services/budget/budget_service.dart';
+import 'package:nitido/core/presentation/animations/animated_floating_button.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class BudgetsPage extends StatefulWidget {
   const BudgetsPage({super.key});

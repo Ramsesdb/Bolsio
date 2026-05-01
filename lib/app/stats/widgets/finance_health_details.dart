@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/stats/widgets/finance_health/finance_health_main_info.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/html_text.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/services/finance_health_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/stats/widgets/finance_health/finance_health_main_info.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/html_text.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/services/finance_health_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class FinanceHealthDetails extends StatefulWidget {
   const FinanceHealthDetails({super.key, required this.filters});

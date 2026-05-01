@@ -1,16 +1,16 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/account_form.dart';
-import 'package:bolsio/app/accounts/details/account_details.dart';
-import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/list_tile_action_item.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_form.dart';
+import 'package:nitido/app/accounts/details/account_details.dart';
+import 'package:nitido/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/list_tile_action_item.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -128,13 +128,13 @@ abstract class AccountDetailsActions {
           .updateAccount(account.copyWith(closingDate: const drift.Value(null)))
           .then((value) {
             if (value) {
-              BolsioSnackbar.success(
+              NitidoSnackbar.success(
                 SnackbarParams(t.account.close.unarchive_succes),
               );
             }
           })
           .catchError((err) {
-            BolsioSnackbar.error(SnackbarParams.fromError(err));
+            NitidoSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -175,10 +175,10 @@ abstract class AccountDetailsActions {
               RouteUtils.popRoute();
             }
 
-            BolsioSnackbar.success(SnackbarParams(t.account.delete.success));
+            NitidoSnackbar.success(SnackbarParams(t.account.delete.success));
           })
           .catchError((err) {
-            BolsioSnackbar.error(SnackbarParams.fromError(err));
+            NitidoSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }

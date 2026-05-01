@@ -1,11 +1,11 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/services/statement_import/statement_batches_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/services/statement_import/statement_batches_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Banner sticky que aparece encima de la lista de transacciones de la cuenta
 /// cuando existe al menos un batch de statement_import reciente (≤ 7 días)
@@ -78,12 +78,12 @@ class _BannerState extends State<_Banner> {
     try {
       await StatementBatchesService.instance.undo(widget.batch.id);
       if (!mounted) return;
-      BolsioSnackbar.success(
+      NitidoSnackbar.success(
         SnackbarParams(Translations.of(context).statement_import.undo.success),
       );
     } catch (e) {
       if (!mounted) return;
-      BolsioSnackbar.error(
+      NitidoSnackbar.error(
         SnackbarParams.fromError(e),
       );
     } finally {

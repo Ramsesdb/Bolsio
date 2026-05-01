@@ -1,4 +1,4 @@
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
 
 /// Immutable serializable representation of the dashboard layout.
 ///

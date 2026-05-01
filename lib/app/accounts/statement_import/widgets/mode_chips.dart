@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 const List<String> kStatementImportModeOrder = [
   'missing',

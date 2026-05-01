@@ -1,35 +1,35 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/calculator/calculator.page.dart';
-import 'package:bolsio/app/currencies/edit_currency_page.dart';
-import 'package:bolsio/app/currencies/exchange_rate_details.dart';
-import 'package:bolsio/app/currencies/exchange_rate_form.dart';
-import 'package:bolsio/app/currencies/widgets/currency_mode_picker.dart';
-import 'package:bolsio/app/currencies/widgets/manual_override_dialog.dart';
-import 'package:bolsio/app/currencies/widgets/rate_source_badge.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/settings/widgets/settings_list_utils.dart';
-import 'package:bolsio/core/database/services/currency/currency_service.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/models/currency/currency.dart';
-import 'package:bolsio/core/models/currency/currency_mode.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/calculator/calculator.page.dart';
+import 'package:nitido/app/currencies/edit_currency_page.dart';
+import 'package:nitido/app/currencies/exchange_rate_details.dart';
+import 'package:nitido/app/currencies/exchange_rate_form.dart';
+import 'package:nitido/app/currencies/widgets/currency_mode_picker.dart';
+import 'package:nitido/app/currencies/widgets/manual_override_dialog.dart';
+import 'package:nitido/app/currencies/widgets/rate_source_badge.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/settings/widgets/settings_list_utils.dart';
+import 'package:nitido/core/database/services/currency/currency_service.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/models/currency/currency.dart';
+import 'package:nitido/core/models/currency/currency_mode.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
-import 'package:bolsio/core/services/dolar_api_service.dart';
-import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/utils/uuid.dart';
+import 'package:nitido/core/services/dolar_api_service.dart';
+import 'package:nitido/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/utils/uuid.dart';
 
 class CurrencyManagerPage extends StatelessWidget {
   const CurrencyManagerPage({super.key});
@@ -76,7 +76,7 @@ class CurrencyManagerPage extends StatelessWidget {
     await persistCurrencyModeChange(writes);
 
     if (!context.mounted) return;
-    BolsioSnackbar.success(
+    NitidoSnackbar.success(
       SnackbarParams(_modeChangeMessage(choice.mode)),
     );
   }
@@ -93,7 +93,7 @@ class CurrencyManagerPage extends StatelessWidget {
     );
     if (!context.mounted) return;
     if (saved) {
-      BolsioSnackbar.success(
+      NitidoSnackbar.success(
         SnackbarParams('Tasa manual guardada.'),
       );
     }
@@ -127,7 +127,7 @@ class CurrencyManagerPage extends StatelessWidget {
   }
 
   Future<void> forceRefreshRates(BuildContext context) async {
-    BolsioSnackbar.success(
+    NitidoSnackbar.success(
       SnackbarParams('Actualizando tasas...'),
     );
     try {
@@ -135,14 +135,14 @@ class CurrencyManagerPage extends StatelessWidget {
       if (!context.mounted) return;
       final total = result.totalSuccess + result.totalFailure;
       if (result.totalFailure == 0 && result.totalSuccess > 0) {
-        BolsioSnackbar.success(
+        NitidoSnackbar.success(
           SnackbarParams(
             'Tasas actualizadas: ${result.totalSuccess}/$total '
             '(USD ok=${result.usdSuccessCount}, EUR ok=${result.eurSuccessCount})',
           ),
         );
       } else {
-        BolsioSnackbar.error(
+        NitidoSnackbar.error(
           SnackbarParams(
             'Actualización parcial: ok=${result.totalSuccess} fallos=${result.totalFailure} '
             '(USD ok=${result.usdSuccessCount}/${result.usdSuccessCount + result.usdFailureCount}, '
@@ -152,7 +152,7 @@ class CurrencyManagerPage extends StatelessWidget {
       }
     } catch (e) {
       if (!context.mounted) return;
-      BolsioSnackbar.error(SnackbarParams('Error al actualizar tasas: $e'));
+      NitidoSnackbar.error(SnackbarParams('Error al actualizar tasas: $e'));
     }
   }
 
@@ -494,7 +494,7 @@ class CurrencyManagerPage extends StatelessWidget {
                               .fetchAllRates();
                           if (rates.isEmpty) {
                             if (context.mounted) {
-                              BolsioSnackbar.error(
+                              NitidoSnackbar.error(
                                 SnackbarParams(
                                   'Error al obtener tasas de cambio',
                                 ),
@@ -572,7 +572,7 @@ class CurrencyManagerPage extends StatelessWidget {
                                   ),
                                 );
                             if (context.mounted) {
-                              BolsioSnackbar.success(
+                              NitidoSnackbar.success(
                                 SnackbarParams(
                                   'Tasa actualizada: ${rate.promedio} '
                                   '(almacenado: $storeCurrencyCode = $storeRate)',
@@ -581,7 +581,7 @@ class CurrencyManagerPage extends StatelessWidget {
                             }
                           } catch (e) {
                             if (context.mounted) {
-                              BolsioSnackbar.error(
+                              NitidoSnackbar.error(
                                 SnackbarParams('Error: $e'),
                               );
                             }

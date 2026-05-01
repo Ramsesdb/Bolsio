@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:nitido/app/onboarding/widgets/v3_secondary_button.dart';
 
 /// Standard scaffold for every v3 onboarding slide.
 ///

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/utils/logger.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/utils/logger.dart';
 
 /// Renderer responsivo del cuerpo del dashboard.
 ///

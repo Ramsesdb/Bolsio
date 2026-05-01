@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
 
 class CategoryButtonSelector extends StatelessWidget {
   const CategoryButtonSelector({

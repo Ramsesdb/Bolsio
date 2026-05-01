@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_restricted_settings_step.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/onboarding/widgets/v3_restricted_settings_step.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
 
 /// Onboarding slide adapter for the "Allow restricted settings" gate, sitting
 /// between [Slide07PostNotifications] and [Slide08ActivateListener] when the
@@ -13,7 +13,7 @@ import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.d
 ///
 /// - forwards the primary CTA (`onOpenAppInfo`) to
 ///   [DeviceQuirksService.openAppDetails], which fires
-///   `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` for `com.bolsio.app`;
+///   `Settings.ACTION_APPLICATION_DETAILS_SETTINGS` for `com.nitido.app`;
 /// - forwards `onContinue` (skip OR auto-advance after a successful resume
 ///   re-check) to the host's [onNext] page-controller advance;
 /// - sets `showBackPill: true` as the documentary contract for

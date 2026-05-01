@@ -3,12 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/migrator.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/utils/debouncer.dart';
-import 'package:bolsio/core/utils/logger.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/migrator.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/utils/debouncer.dart';
+import 'package:nitido/core/utils/logger.dart';
 
 /// Singleton service that owns the in-memory copy of the dashboard layout
 /// and persists changes to `SettingKey.dashboardLayout` (debounced 300 ms).

@@ -2,17 +2,17 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/models/date-utils/periodicity.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/no_results.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/models/date-utils/periodicity.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/no_results.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});

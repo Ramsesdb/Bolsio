@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:bolsio/app/transactions/transactions.page.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:nitido/app/transactions/transactions.page.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class SuccessPage extends StatefulWidget {
   const SuccessPage({super.key});

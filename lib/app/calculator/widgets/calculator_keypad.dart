@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Tipos lógicos de tecla emitidos por `CalculatorKeypad`. El page los traduce
 /// a mutaciones del buffer `_activeExpression` — el widget en sí no conoce el

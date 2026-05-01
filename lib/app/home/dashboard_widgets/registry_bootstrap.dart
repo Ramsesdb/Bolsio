@@ -1,12 +1,12 @@
-import 'package:bolsio/app/home/dashboard_widgets/edit/exchange_rate_config_sheet.dart';
-import 'package:bolsio/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/account_carousel_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/exchange_rate_card_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/income_expense_period_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/recent_transactions_widget.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/edit/exchange_rate_config_sheet.dart';
+import 'package:nitido/app/home/dashboard_widgets/edit/quick_use_config_sheet.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/account_carousel_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/exchange_rate_card_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/income_expense_period_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/recent_transactions_widget.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/total_balance_summary_widget.dart';
 
 /// Registers every dashboard widget spec into
 /// [DashboardWidgetRegistry.instance].

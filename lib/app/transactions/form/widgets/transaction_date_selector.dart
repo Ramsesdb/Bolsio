@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/transaction/transaction_form_field.enum.dart';
-import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
-import 'package:bolsio/core/utils/constants.dart';
-import 'package:bolsio/core/utils/date_time_picker.dart';
-import 'package:bolsio/core/utils/focus.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/transaction/transaction_form_field.enum.dart';
+import 'package:nitido/core/presentation/widgets/inline_info_card.dart';
+import 'package:nitido/core/utils/constants.dart';
+import 'package:nitido/core/utils/date_time_picker.dart';
+import 'package:nitido/core/utils/focus.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class TransactionDateSelector extends StatelessWidget {
   const TransactionDateSelector({

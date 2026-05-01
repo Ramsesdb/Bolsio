@@ -1,24 +1,24 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bolsio/app/budgets/budgets_page.dart';
-import 'package:bolsio/app/calculator/calculator.page.dart';
-import 'package:bolsio/app/currencies/currency_manager.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/settings/settings_page.dart';
-import 'package:bolsio/app/stats/stats_page.dart';
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/app/transactions/transactions.page.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/routes/destinations.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/budgets/budgets_page.dart';
+import 'package:nitido/app/calculator/calculator.page.dart';
+import 'package:nitido/app/currencies/currency_manager.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/settings/settings_page.dart';
+import 'package:nitido/app/stats/stats_page.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/app/transactions/transactions.page.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/private_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/routes/destinations.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Categorías visuales del catálogo de quick actions. Usadas por
 /// [QuickUseConfigSheet] para agrupar los chips disponibles.
@@ -220,7 +220,7 @@ final Map<QuickActionId, QuickAction> kQuickActions = <QuickActionId, QuickActio
         Translations.of(ctx).home.quick_actions.open_exchange_rates,
     category: QuickActionCategory.navigation,
     action: (ctx) {
-      // Bolsio no expone una "ExchangeRatesPage" raíz: el flujo canónico es
+      // Nitido no expone una "ExchangeRatesPage" raíz: el flujo canónico es
       // entrar al gestor de monedas, donde el usuario ve las tasas y puede
       // tocar una para abrir su detalle. Es el equivalente más cercano a
       // "abrir tasas" que pide el spec sin obligar a elegir divisa primero.

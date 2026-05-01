@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/tags/tags_selector.modal.dart';
-import 'package:bolsio/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:bolsio/app/transactions/form/widgets/custom_interval_selector.dart';
-import 'package:bolsio/app/transactions/form/widgets/tr_form_interval_selector.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/models/transaction/recurrency_data.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/presentation/animations/scaled_animated_switcher.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/dynamic_selector_modal.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/focus.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/tags/tags_selector.modal.dart';
+import 'package:nitido/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:nitido/app/transactions/form/widgets/custom_interval_selector.dart';
+import 'package:nitido/app/transactions/form/widgets/tr_form_interval_selector.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/models/transaction/recurrency_data.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/focus.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class TransactionStatusSelector extends StatelessWidget {
   const TransactionStatusSelector({

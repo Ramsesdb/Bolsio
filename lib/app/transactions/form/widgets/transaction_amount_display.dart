@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
 
 class TransactionAmountDisplay extends StatelessWidget {
   const TransactionAmountDisplay({

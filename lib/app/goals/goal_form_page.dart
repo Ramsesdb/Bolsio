@@ -1,30 +1,30 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/accounts/account_selector.dart';
-import 'package:bolsio/app/categories/selectors/category_multi_selector.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/currency/currency_service.dart';
-import 'package:bolsio/core/database/services/goal/goal_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/extensions/lists.extensions.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/goal/goal.dart';
-import 'package:bolsio/core/models/goal/goal_type.enum.dart';
-import 'package:bolsio/core/models/goal/goal_type_selector.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/count_indicator.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/list_tile_field.dart';
-import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_selector.dart';
+import 'package:nitido/app/categories/selectors/category_multi_selector.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/currency/currency_service.dart';
+import 'package:nitido/core/database/services/goal/goal_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/extensions/lists.extensions.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/goal/goal.dart';
+import 'package:nitido/core/models/goal/goal_type.enum.dart';
+import 'package:nitido/core/models/goal/goal_type_selector.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/count_indicator.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/list_tile_field.dart';
+import 'package:nitido/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class GoalFormPage extends StatefulWidget {
   const GoalFormPage({super.key, this.goalToEdit});
@@ -102,7 +102,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     _formKey.currentState!.save();
 
     if ((amountToNumber ?? 0) < 0 || (initialAmountToNumber ?? 0) < 0) {
-      BolsioSnackbar.warning(SnackbarParams(t.goals.form.negative_warn));
+      NitidoSnackbar.warning(SnackbarParams(t.goals.form.negative_warn));
       return;
     }
 
@@ -128,7 +128,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     saveOperation
         .then((value) {
           RouteUtils.popRoute();
-          BolsioSnackbar.success(
+          NitidoSnackbar.success(
             SnackbarParams(
               isEditMode
                   ? t.goals.form.edit_success
@@ -137,7 +137,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
           );
         })
         .catchError((error) {
-          BolsioSnackbar.error(SnackbarParams.fromError(error));
+          NitidoSnackbar.error(SnackbarParams.fromError(error));
         });
   }
 

@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:bolsio/app/debts/components/debt_fab_button.dart';
-import 'package:bolsio/app/debts/components/debt_list.dart';
-import 'package:bolsio/app/layout/page_context.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/services/debts/debt_service.dart';
-import 'package:bolsio/core/models/debt/debt.dart';
-import 'package:bolsio/core/models/debt/debt_direction.enum.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/no_results.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/debts/components/debt_fab_button.dart';
+import 'package:nitido/app/debts/components/debt_list.dart';
+import 'package:nitido/app/layout/page_context.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/services/debts/debt_service.dart';
+import 'package:nitido/core/models/debt/debt.dart';
+import 'package:nitido/core/models/debt/debt_direction.enum.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/no_results.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DebtsPage extends StatefulWidget {

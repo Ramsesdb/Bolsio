@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_currency_tile.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:bolsio/core/models/currency/currency_mode.dart';
-import 'package:bolsio/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_currency_tile.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:nitido/core/models/currency/currency_mode.dart';
+import 'package:nitido/core/presentation/widgets/currency_selector_modal.dart';
 
 /// Slide 2 — currency mode selection.
 ///

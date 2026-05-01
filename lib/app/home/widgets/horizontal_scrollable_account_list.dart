@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/account_form.dart';
-import 'package:bolsio/app/accounts/details/account_details.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/date-utils/date_period_state.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/responsive/responsive_row_column.dart';
-import 'package:bolsio/core/presentation/styles/borders.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
-import 'package:bolsio/core/presentation/widgets/trending_value.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_form.dart';
+import 'package:nitido/app/accounts/details/account_details.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/date-utils/date_period_state.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/responsive/responsive_row_column.dart';
+import 'package:nitido/core/presentation/styles/borders.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
+import 'package:nitido/core/presentation/widgets/trending_value.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 bool _useSmallLayout(BuildContext context) =>
     BreakPoint.of(context).isSmallerThan(BreakpointID.lg);

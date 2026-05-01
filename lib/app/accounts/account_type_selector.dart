@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/account/account.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/core/models/account/account.dart';
 
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector({
@@ -34,7 +34,7 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
           final AccountType item = AccountType.values[index];
 
           return Flexible(
-            child: BolsioFilterChip(
+            child: NitidoFilterChip(
               accountType: item,
               onPressed: () {
                 setState(() {
@@ -51,8 +51,8 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
   }
 }
 
-class BolsioFilterChip extends StatelessWidget {
-  const BolsioFilterChip({
+class NitidoFilterChip extends StatelessWidget {
+  const NitidoFilterChip({
     super.key,
     required this.accountType,
     required this.onPressed,

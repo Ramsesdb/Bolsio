@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/supported-icon/supported_icon.dart';
-import 'package:bolsio/core/presentation/styles/borders.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:bolsio/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/supported-icon/supported_icon.dart';
+import 'package:nitido/core/presentation/styles/borders.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:nitido/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class IconAndColorSelector extends StatelessWidget {
   const IconAndColorSelector({

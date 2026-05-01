@@ -1,32 +1,33 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/auth/welcome_screen.dart';
-import 'package:bolsio/app/home/dashboard_widgets/defaults.dart';
-import 'package:bolsio/app/layout/page_switcher.dart';
-import 'package:bolsio/app/onboarding/slides/s01_goals.dart';
-import 'package:bolsio/app/onboarding/slides/s02_currency.dart';
-import 'package:bolsio/app/onboarding/slides/s03_rate_source.dart';
-import 'package:bolsio/app/onboarding/slides/s04_initial_accounts.dart';
-import 'package:bolsio/app/onboarding/slides/s05_autoimport_sell.dart';
-import 'package:bolsio/app/onboarding/slides/s06_privacy.dart';
-import 'package:bolsio/app/onboarding/slides/s07_post_notifications.dart';
-import 'package:bolsio/app/onboarding/slides/s075_restricted_settings.dart';
-import 'package:bolsio/app/onboarding/slides/s08_activate_listener.dart';
-import 'package:bolsio/app/onboarding/slides/s09_apps_included.dart';
-import 'package:bolsio/app/onboarding/slides/s10_seeding_overlay.dart';
-import 'package:bolsio/app/onboarding/slides/s11_ready.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_progress_bar.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/currency/currency_mode.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/app/auth/welcome_screen.dart';
+import 'package:nitido/app/home/dashboard_widgets/defaults.dart';
+import 'package:nitido/app/layout/page_switcher.dart';
+import 'package:nitido/app/onboarding/slides/s01_goals.dart';
+import 'package:nitido/app/onboarding/slides/s02_currency.dart';
+import 'package:nitido/app/onboarding/slides/s03_rate_source.dart';
+import 'package:nitido/app/onboarding/slides/s04_initial_accounts.dart';
+import 'package:nitido/app/onboarding/slides/s05_autoimport_sell.dart';
+import 'package:nitido/app/onboarding/slides/s06_privacy.dart';
+import 'package:nitido/app/onboarding/slides/s07_post_notifications.dart';
+import 'package:nitido/app/onboarding/slides/s075_restricted_settings.dart';
+import 'package:nitido/app/onboarding/slides/s08_activate_listener.dart';
+import 'package:nitido/app/onboarding/slides/s09_apps_included.dart';
+import 'package:nitido/app/onboarding/slides/s10_seeding_overlay.dart';
+import 'package:nitido/app/onboarding/slides/s11_ready.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_progress_bar.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/currency/currency_mode.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:nitido/core/presentation/widgets/nitido_animated_logo.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
 
 /// Root widget of the v3 onboarding flow.
 ///
@@ -380,7 +381,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Error al configurar Bolsio'),
+          title: const Text('Error al configurar Nitido'),
           content: const Text(
             'No se pudieron guardar tus preferencias. '
             'Por favor intenta de nuevo.',
@@ -613,6 +614,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                   ),
                 ),
+                if (_currentIndex == 0)
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: NitidoAnimatedLogo(
+                      showIcon: false,
+                      fontSize: 28,
+                      animateIn: false,
+                    ),
+                  ),
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,

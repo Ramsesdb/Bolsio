@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/accounts/statement_import/screens/capture.page.dart';
-import 'package:bolsio/app/accounts/statement_import/screens/confirm.page.dart';
-import 'package:bolsio/app/accounts/statement_import/screens/processing.page.dart';
-import 'package:bolsio/app/accounts/statement_import/screens/review.page.dart';
-import 'package:bolsio/app/accounts/statement_import/screens/success.page.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/services/statement_import/models/extracted_row.dart';
-import 'package:bolsio/core/services/statement_import/models/matching_result.dart';
+import 'package:nitido/app/accounts/statement_import/screens/capture.page.dart';
+import 'package:nitido/app/accounts/statement_import/screens/confirm.page.dart';
+import 'package:nitido/app/accounts/statement_import/screens/processing.page.dart';
+import 'package:nitido/app/accounts/statement_import/screens/review.page.dart';
+import 'package:nitido/app/accounts/statement_import/screens/success.page.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/services/statement_import/models/extracted_row.dart';
+import 'package:nitido/core/services/statement_import/models/matching_result.dart';
 
 class StatementImportFlow extends StatefulWidget {
   const StatementImportFlow({super.key, required this.account});

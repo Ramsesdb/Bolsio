@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/services/attachments/attachment_model.dart';
-import 'package:bolsio/core/services/attachments/attachments_service.dart';
-import 'package:bolsio/core/presentation/widgets/user_avatar.dart';
+import 'package:nitido/core/services/attachments/attachment_model.dart';
+import 'package:nitido/core/services/attachments/attachments_service.dart';
+import 'package:nitido/core/presentation/widgets/user_avatar.dart';
 
 class UserAvatarDisplay extends StatelessWidget {
   const UserAvatarDisplay({

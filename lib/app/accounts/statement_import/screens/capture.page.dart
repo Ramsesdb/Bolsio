@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:exif/exif.dart';
@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:bolsio/app/accounts/statement_import/statement_import_flow.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/services/statement_import/pdf_to_image_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/statement_import/statement_import_flow.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/services/statement_import/pdf_to_image_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class CapturePage extends StatefulWidget {
   const CapturePage({super.key});
@@ -208,7 +208,7 @@ class _CapturePageState extends State<CapturePage> {
 
   void _showReadError() {
     final t = Translations.of(context);
-    BolsioSnackbar.error(SnackbarParams(t.statement_import.capture.error_read));
+    NitidoSnackbar.error(SnackbarParams(t.statement_import.capture.error_read));
   }
 
   @override

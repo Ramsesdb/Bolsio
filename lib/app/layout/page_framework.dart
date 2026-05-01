@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/transactions/animate_fab.dart';
-import 'package:bolsio/core/presentation/helpers/empty_app_bar.dart';
-import 'package:bolsio/core/utils/app_utils.dart';
+import 'package:nitido/app/transactions/animate_fab.dart';
+import 'package:nitido/core/presentation/helpers/empty_app_bar.dart';
+import 'package:nitido/core/utils/app_utils.dart';
 
 class PageFramework extends StatelessWidget {
   const PageFramework({

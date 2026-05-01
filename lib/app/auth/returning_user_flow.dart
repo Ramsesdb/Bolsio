@@ -1,22 +1,22 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bolsio/app/layout/page_switcher.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_notif_access_mockup.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_restricted_settings_step.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_secondary_button.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/auto_import/capture/permission_coordinator.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:bolsio/core/utils/logger.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/app/layout/page_switcher.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_notif_access_mockup.dart';
+import 'package:nitido/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:nitido/app/onboarding/widgets/v3_restricted_settings_step.dart';
+import 'package:nitido/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:nitido/core/utils/logger.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
 
 /// Mini-flow shown to a returning Google user (data already in Firebase).
 ///
@@ -270,7 +270,7 @@ class _WelcomeBackStep extends StatelessWidget {
 
     final greeting = firstName != null
         ? 'Hola, $firstName.'
-        : 'Tu Bolsio sigue listo.';
+        : 'Tu Nitido sigue listo.';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -373,7 +373,7 @@ class _ActivateListenerStepState extends State<_ActivateListenerStep>
   /// Re-check the permission after the app resumes. If the user came back
   /// from the system settings screen with the permission granted, we
   /// auto-finish the flow (mark intro/onboarded + navigate to home).
-  /// Otherwise we just refresh the UI so the pulsing Bolsio row keeps
+  /// Otherwise we just refresh the UI so the pulsing Nitido row keeps
   /// reflecting the current state.
   Future<void> _refreshPermissionAndMaybeFinish() async {
     final result = await PermissionCoordinator.instance.check();
@@ -396,7 +396,7 @@ class _ActivateListenerStepState extends State<_ActivateListenerStep>
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Abrí la configuración de la app. Busca "Notificaciones" y habilita Bolsio.',
+            'Abrí la configuración de la app. Busca "Notificaciones" y habilita Nitido.',
           ),
         ),
       );
@@ -479,7 +479,7 @@ class _ActivateListenerStepState extends State<_ActivateListenerStep>
           ),
           const SizedBox(height: V3Tokens.space24),
           // Mini-phone shell (300x300) with the Android "Acceso a
-          // notificaciones" mockup — Bolsio pulsing on top, peer apps
+          // notificaciones" mockup — Nitido pulsing on top, peer apps
           // faded — same widget the full onboarding (s07) renders.
           Align(
             alignment: Alignment.topCenter,

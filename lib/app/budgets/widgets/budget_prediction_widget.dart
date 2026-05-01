@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/budget/budget.dart';
-import 'package:bolsio/core/services/ai/budget_prediction_service.dart';
+import 'package:nitido/core/models/budget/budget.dart';
+import 'package:nitido/core/services/ai/budget_prediction_service.dart';
 
 class BudgetPredictionWidget extends StatefulWidget {
   const BudgetPredictionWidget({super.key, required this.budget});

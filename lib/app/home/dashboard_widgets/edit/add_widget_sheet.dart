@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
 
 /// Bottom sheet con catálogo completo de widgets disponibles. Cada item
 /// del catálogo se puede tocar para añadir una nueva instancia al layout.

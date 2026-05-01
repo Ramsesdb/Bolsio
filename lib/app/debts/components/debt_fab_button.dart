@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:bolsio/app/debts/debt_form_page.dart';
-import 'package:bolsio/core/models/debt/debt_direction.enum.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:nitido/app/debts/debt_form_page.dart';
+import 'package:nitido/core/models/debt/debt_direction.enum.dart';
+import 'package:nitido/core/routes/route_utils.dart';
 
 class DebtFabButton extends StatefulWidget {
   const DebtFabButton({super.key});

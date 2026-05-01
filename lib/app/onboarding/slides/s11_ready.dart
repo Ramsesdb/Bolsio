@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
 
 class Slide11Ready extends StatelessWidget {
   const Slide11Ready({
@@ -49,7 +49,7 @@ class Slide11Ready extends StatelessWidget {
           ),
           const SizedBox(height: V3Tokens.space24),
           Text(
-            'Bolsio ya está configurado a tu medida. Empieza a controlar tus finanzas.',
+            'Nitido ya está configurado a tu medida. Empieza a controlar tus finanzas.',
             style: V3Tokens.uiStyle(
               size: 14,
               weight: FontWeight.w500,

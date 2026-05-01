@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/services/statement_import/models/matching_result.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/services/statement_import/models/matching_result.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class RowTile extends StatelessWidget {
   const RowTile({

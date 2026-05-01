@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_switch.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_switch.dart';
 
 /// Geometric placeholder tile for bank logos. Used both in slide 4
 /// (selectable, single-column layout) and slide 8 (toggleable). When

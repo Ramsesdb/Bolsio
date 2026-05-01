@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
 
 /// Colored chip indicating the status of a pending import proposal.
 class ProposalStatusChip extends StatelessWidget {

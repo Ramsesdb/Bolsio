@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_mini_phone_frame.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_notification_card.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_mini_phone_frame.dart';
+import 'package:nitido/app/onboarding/widgets/v3_notification_card.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
 
 class Slide05AutoImportSell extends StatelessWidget {
   const Slide05AutoImportSell({
@@ -31,7 +31,7 @@ class Slide05AutoImportSell extends StatelessWidget {
           ),
           const SizedBox(height: V3Tokens.spaceMd),
           Text(
-            'Bolsio lee tus notificaciones de banco y agrega transacciones automáticamente.',
+            'Nitido lee tus notificaciones de banco y agrega transacciones automáticamente.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -39,7 +39,7 @@ class Slide05AutoImportSell extends StatelessWidget {
           const SizedBox(height: V3Tokens.space24),
           // V3MiniPhone (300x280) centered, framing two stacked notifs:
           //   1. Banesco Móvil (source bank) — delay 200ms, no highlight
-          //   2. Bolsio (auto-categorised) — delay 1000ms, highlighted
+          //   2. Nitido (auto-categorised) — delay 1000ms, highlighted
           // The v3 spec stacks them with a 8px vertical gap inside the
           // AMOLED interior. The frame itself "floats" centered against
           // the slide background.
@@ -63,7 +63,7 @@ class Slide05AutoImportSell extends StatelessWidget {
                   ),
                   SizedBox(height: V3Tokens.spaceXs),
                   V3NotificationCard(
-                    appName: 'Bolsio',
+                    appName: 'Nitido',
                     title: '−\$12,50 · Farmatodo',
                     body: 'Categoría: Salud · Banesco',
                     amount: '09:41',

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_seeding_overlay.dart';
-import 'package:bolsio/core/database/utils/personal_ve_seeders.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/onboarding/widgets/v3_seeding_overlay.dart';
+import 'package:nitido/core/database/utils/personal_ve_seeders.dart';
 
 /// Theatrical seeding slide. Calls `PersonalVESeeder.seedAll` and waits for
 /// both the seeding future and a 500 ms minimum visual delay before advancing.
@@ -57,7 +57,7 @@ class _Slide10SeedingOverlayState extends State<Slide10SeedingOverlay> {
   @override
   Widget build(BuildContext context) {
     return const V3SeedingOverlay(
-      title: 'Preparando tu Bolsio…',
+      title: 'Preparando tu Nitido…',
       subtitle: 'Creamos tus cuentas y categorías iniciales. Tomará un momento.',
     );
   }

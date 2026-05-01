@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
 
 /// Marco visual aplicado a cada widget durante edit mode. Spec
 /// `dashboard-edit-mode` § Edit frame.
@@ -57,7 +57,7 @@ class EditableWidgetFrame extends StatelessWidget {
 
   /// Índice del item en la lista (no usado directamente — el padre envuelve
   /// con `ReorderableDragStartListener`). Se conserva por simetría con el
-  /// patrón de `BolsioReorderableList` por si en el futuro queremos un
+  /// patrón de `NitidoReorderableList` por si en el futuro queremos un
   /// handle dedicado.
   final int? dragHandleIndex;
 

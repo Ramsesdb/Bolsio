@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bolsio/app/transactions/form/dialogs/evaluate_expression.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/extensions/bool.extension.dart';
-import 'package:bolsio/core/extensions/numbers.extensions.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
+import 'package:nitido/app/transactions/form/dialogs/evaluate_expression.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/extensions/bool.extension.dart';
+import 'package:nitido/core/extensions/numbers.extensions.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/routes/route_utils.dart';
 
 class AmountSelector extends StatefulWidget {
   const AmountSelector({

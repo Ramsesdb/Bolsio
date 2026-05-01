@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_date_separator.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/models/transaction/transaction.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_date_separator.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/models/transaction/transaction.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({

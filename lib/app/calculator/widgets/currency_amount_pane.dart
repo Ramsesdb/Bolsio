@@ -2,8 +2,8 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/number_symbols_data.dart';
-import 'package:bolsio/core/models/currency/currency.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
+import 'package:nitido/core/models/currency/currency.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
 
 /// Visual pane mostrando una currency + monto display dentro de la
 /// `CalculatorPage`.

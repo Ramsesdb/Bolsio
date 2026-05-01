@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
 
 class V3GoalChip extends StatelessWidget {
   const V3GoalChip({

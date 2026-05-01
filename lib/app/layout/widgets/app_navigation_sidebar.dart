@@ -1,18 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/widgets/app_navigation_drawer.dart';
-import 'package:bolsio/app/layout/window_bar.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoint_container.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/app/common/widgets/user_avatar_display.dart';
-import 'package:bolsio/core/routes/destinations.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/app_utils.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/app/layout/widgets/app_navigation_drawer.dart';
+import 'package:nitido/app/layout/window_bar.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/responsive/breakpoint_container.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/app/common/widgets/user_avatar_display.dart';
+import 'package:nitido/core/routes/destinations.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/app_utils.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
 
 /// Returns the appropriate width for the app navigation sidebar based on screen size
 double getNavigationSidebarWidth(BuildContext context) {

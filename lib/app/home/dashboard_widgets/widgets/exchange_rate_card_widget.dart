@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:bolsio/app/currencies/widgets/manual_override_dialog.dart';
-import 'package:bolsio/app/currencies/widgets/rate_source_badge.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/core/database/services/currency/currency_service.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/exchange-rate/exchange_rate.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/services/rate_providers/rate_refresh_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/currencies/widgets/manual_override_dialog.dart';
+import 'package:nitido/app/currencies/widgets/rate_source_badge.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/core/database/services/currency/currency_service.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/exchange-rate/exchange_rate.dart';
+import 'package:nitido/core/models/currency/currency_display_policy.dart';
+import 'package:nitido/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/services/rate_providers/rate_refresh_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Builder mutable usado por el spec del `exchangeRateCard` para abrir su
 /// configEditor sin obligar al archivo del widget a importar el sheet
@@ -140,22 +140,22 @@ class ExchangeRateCardWidget extends StatelessWidget {
   }
 
   Future<void> _refreshNow(BuildContext context) async {
-    BolsioSnackbar.success(
+    NitidoSnackbar.success(
       SnackbarParams('Actualizando tasas...'),
     );
     try {
       final result = await RateRefreshService.instance.refreshNow();
       if (!context.mounted) return;
       if (result.totalFailure == 0 && result.totalSuccess > 0) {
-        BolsioSnackbar.success(
+        NitidoSnackbar.success(
           SnackbarParams(
             'Tasas actualizadas (${result.totalSuccess})',
           ),
         );
       } else if (result.totalSuccess == 0) {
-        BolsioSnackbar.error(SnackbarParams('No se pudieron actualizar tasas'));
+        NitidoSnackbar.error(SnackbarParams('No se pudieron actualizar tasas'));
       } else {
-        BolsioSnackbar.success(
+        NitidoSnackbar.success(
           SnackbarParams(
             'Tasas actualizadas parcialmente: ok=${result.totalSuccess} '
             'fallos=${result.totalFailure}',
@@ -164,7 +164,7 @@ class ExchangeRateCardWidget extends StatelessWidget {
       }
     } catch (e) {
       if (!context.mounted) return;
-      BolsioSnackbar.error(SnackbarParams('Error al refrescar: $e'));
+      NitidoSnackbar.error(SnackbarParams('Error al refrescar: $e'));
     }
   }
 }
@@ -206,8 +206,23 @@ class _RatesList extends StatelessWidget {
       if (!p.showsRateSourceChip) {
         set.add(p.primary);
         set.add(p.secondary);
+      } else {
+        // DualMode(USD,VES) explicitly enables BCV/Paralelo: hacemos que VES
+        // forme parte del universo para que auto-derive como pivot.
+        set.add('VES');
       }
     }
+    // Storage-convention bridge: cuando preferredCurrency == 'USD', el
+    // refresh de DolarApi guarda filas con currencyCode='VES' (ver
+    // RateRefreshService._runJob). Para que la tabla muestre "1 USD = N VES"
+    // y "1 EUR = N VES" hay que tener VES en el universo de modo que el
+    // pivot auto-derivado sea VES (no USD). Sin esto, pivot=USD ⇒ wanted
+    // queda sin filas porque la única fila base (VES) coincide con el pivot
+    // y la fila USD literalmente no existe en la DB.
+    final pref = (appStateSettings[SettingKey.preferredCurrency] ?? 'USD')
+        .toUpperCase();
+    final isCryptoDual = p is DualMode && !p.showsRateSourceChip;
+    if (pref == 'USD' && !isCryptoDual) set.add('VES');
     return set;
   }
 
@@ -230,6 +245,13 @@ class _RatesList extends StatelessWidget {
   /// que existía antes del rework, pero ahora apuntando al pivot, no al
   /// preferredCurrency (que pueden diferir cuando el usuario fuerza un
   /// pivot manual).
+  ///
+  /// NOTA: NO se excluye preferredCurrency aunque "no tenga fila en DB".
+  /// El widget no consume `r.exchangeRate` directamente para los valores —
+  /// usa [ExchangeRateService.calculateExchangeRate], que tiene un
+  /// short-circuit identitario y maneja la moneda base como `rate=1.0`.
+  /// Excluir `pref` del wanted rompe el caso típico VE (pref=USD, pivot=VES,
+  /// usuario quiere ver "1 USD = N VES").
   Set<String> _rowCurrencies(Set<String> baseSet, String pivot) {
     return {...baseSet}..remove(pivot);
   }
@@ -249,10 +271,20 @@ class _RatesList extends StatelessWidget {
             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
           );
         }
-        final allRows = snapshot.data!
-            .where((r) => wanted.contains(r.currencyCode.toUpperCase()))
+        // Fila DB que el widget va a procesar. Incluye:
+        //   - filas cuyo currencyCode está en wanted (matching directo);
+        //   - filas cuyo currencyCode == pivot (necesarias para inferir
+        //     fuentes BCV/Paralelo del storage-base implícito — ver más
+        //     abajo).
+        final pref = (appStateSettings[SettingKey.preferredCurrency] ?? 'USD')
+            .toUpperCase();
+        final relevantRows = snapshot.data!
+            .where((r) {
+              final code = r.currencyCode.toUpperCase();
+              return wanted.contains(code) || code == pivotCode;
+            })
             .toList();
-        if (allRows.isEmpty || wanted.isEmpty) {
+        if (relevantRows.isEmpty || wanted.isEmpty) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
@@ -262,23 +294,40 @@ class _RatesList extends StatelessWidget {
           );
         }
 
-        // Agrupar las filas por currencyCode (preserva el orden de wanted)
-        // — sólo se usa para resolver el `tapTarget` del row label y para
-        // saber qué fuentes (bcv/paralelo) están disponibles para cada
-        // divisa. Los VALORES mostrados se calculan vía
+        // Agrupar las filas por currencyCode. Sólo se usa para:
+        //   (a) `tapTarget` del label de cada row;
+        //   (b) detectar qué `sources` (bcv/paralelo) están disponibles
+        //       para cada divisa, lo que decide la columna Promedio.
+        // Los VALORES mostrados se calculan vía
         // [ExchangeRateService.calculateExchangeRate] (ver _RatesTable),
         // que invierte correctamente para producir "1 row = N pivot".
         final orderedCodes = wanted.toList();
         final grouped = <String, List<ExchangeRate>>{};
-        for (final r in allRows) {
+        for (final r in relevantRows) {
           final code = r.currencyCode.toUpperCase();
           grouped.putIfAbsent(code, () => []).add(r);
         }
 
+        // Storage-convention bridge: cuando el storage-base (preferredCurrency
+        // cuando != VES, p.ej. 'USD') aparece como fila pero no tiene fila
+        // propia en la DB, sus fuentes disponibles son las MISMAS que tiene
+        // el pivot. Razón: por la convención de almacenamiento de
+        // RateRefreshService._runJob, una fila con currencyCode=pivot,
+        // source='bcv' implica que existe la tasa USD→VES@bcv. Sin este
+        // alias, la fila USD no renderizaría y la columna Promedio no
+        // aparecería aunque haya BCV+Paralelo disponibles.
+        if (orderedCodes.contains(pref) &&
+            (grouped[pref] == null || grouped[pref]!.isEmpty)) {
+          final pivotRows = grouped[pivotCode] ?? const <ExchangeRate>[];
+          if (pivotRows.isNotEmpty) {
+            grouped[pref] = pivotRows;
+          }
+        }
+
         final anyHasBoth = orderedCodes.any((code) {
           final group = grouped[code] ?? [];
-          return group.any((r) => r.source == 'bcv') &&
-              group.any((r) => r.source == 'paralelo');
+          final sources = group.map((r) => r.source?.toLowerCase() ?? '').toSet();
+          return sources.contains('bcv') && sources.contains('paralelo');
         });
 
         return _RatesTable(
@@ -294,7 +343,7 @@ class _RatesList extends StatelessWidget {
 
 /// Pill badge for the "Prom." column header and value cells.
 /// Reuses the same visual token (`colorScheme.tertiary`) as the old
-/// `_PromedioRow` badge — no hardcoded hex, consistent with Wallex theme.
+/// `_PromedioRow` badge — no hardcoded hex, consistent with Nitido theme.
 class _PromedioBadge extends StatelessWidget {
   const _PromedioBadge();
 

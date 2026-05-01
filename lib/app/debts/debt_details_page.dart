@@ -1,28 +1,28 @@
-// ignore_for_file: prefer_single_quotes
+﻿// ignore_for_file: prefer_single_quotes
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/debts/components/add_register_to_debt_modal.dart';
-import 'package:bolsio/app/debts/debt_form_page.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/transactions/transaction_details.page.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/debts/debt_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/models/debt/debt.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/supported_icon/supported_icon_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/debts/components/add_register_to_debt_modal.dart';
+import 'package:nitido/app/debts/debt_form_page.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/transactions/transaction_details.page.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/debts/debt_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/models/debt/debt.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/supported_icon/supported_icon_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 Color _labelColorInHeader(BuildContext context) => Theme.of(context)
@@ -68,12 +68,12 @@ class DebtDetailsPage extends StatelessWidget {
                 if (confirmed != true) return;
                 try {
                   await DebtService.instance.deleteDebt(debt.id);
-                  BolsioSnackbar.success(
+                  NitidoSnackbar.success(
                     SnackbarParams(t.general.delete_success),
                   );
                   if (context.mounted) Navigator.of(context).pop();
                 } catch (e) {
-                  BolsioSnackbar.error(SnackbarParams.fromError(e));
+                  NitidoSnackbar.error(SnackbarParams.fromError(e));
                 }
               },
             ),

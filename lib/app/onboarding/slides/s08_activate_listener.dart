@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_notif_access_mockup.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/services/auto_import/capture/device_quirks_service.dart';
-import 'package:bolsio/core/services/auto_import/capture/permission_coordinator.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_notif_access_mockup.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/services/auto_import/capture/device_quirks_service.dart';
+import 'package:nitido/core/services/auto_import/capture/permission_coordinator.dart';
 
 class Slide08ActivateListener extends StatefulWidget {
   const Slide08ActivateListener({
@@ -79,7 +79,7 @@ class _Slide08ActivateListenerState extends State<Slide08ActivateListener>
   /// Re-check the permission after the app resumes. If the user came back
   /// from the system settings screen with the permission granted, we
   /// auto-advance to the next slide. Otherwise we just refresh the UI so
-  /// the pulsing Bolsio row keeps reflecting the current state.
+  /// the pulsing Nitido row keeps reflecting the current state.
   Future<void> _refreshPermissionAndMaybeAdvance() async {
     final result = await PermissionCoordinator.instance.check();
     if (!mounted) return;
@@ -121,7 +121,7 @@ class _Slide08ActivateListenerState extends State<Slide08ActivateListener>
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Abrí la configuración de la app. Busca "Notificaciones" y habilita Bolsio.',
+            'Abrí la configuración de la app. Busca "Notificaciones" y habilita Nitido.',
           ),
         ),
       );
@@ -175,14 +175,14 @@ class _Slide08ActivateListenerState extends State<Slide08ActivateListener>
           ),
           const SizedBox(height: V3Tokens.spaceMd),
           Text(
-            'Concede acceso a las notificaciones para que Bolsio registre automáticamente tus transacciones.',
+            'Concede acceso a las notificaciones para que Nitido registre automáticamente tus transacciones.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
           ),
           const SizedBox(height: V3Tokens.space24),
           // V3MiniPhone shell (300x300) showing a mock of the Android
-          // "Acceso a notificaciones" settings screen. Bolsio appears at
+          // "Acceso a notificaciones" settings screen. Nitido appears at
           // the top with a pulsing accent halo (or a static check when the
           // permission is already granted), and the other apps are faded
           // out so the user's eye lands on the action they need to take.

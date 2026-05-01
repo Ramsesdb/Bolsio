@@ -1,27 +1,27 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:bolsio/app/home/dashboard_widgets/dashboard_scope.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/app/home/widgets/balance_delta_pill.dart';
-import 'package:bolsio/app/home/widgets/click_tracker.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/private_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:bolsio/core/models/date-utils/date_period_state.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/tappable.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/home/dashboard_widgets/dashboard_scope.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/app/home/widgets/balance_delta_pill.dart';
+import 'package:nitido/app/home/widgets/click_tracker.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/private_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/currency/currency_display_policy.dart';
+import 'package:nitido/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:nitido/core/models/date-utils/date_period_state.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/tappable.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Phase 6 of `currency-modes-rework`: the widget now derives its layout
 /// from the [CurrencyDisplayPolicy] stream — for [SingleMode] it renders a
@@ -207,7 +207,7 @@ class _TotalBalanceSummaryWidgetState extends State<TotalBalanceSummaryWidget> {
     if (!mounted) return;
 
     if (showSnackbar) {
-      BolsioSnackbar.success(
+      NitidoSnackbar.success(
         SnackbarParams(
           !privateMode
               ? t.settings.security.private_mode_activated

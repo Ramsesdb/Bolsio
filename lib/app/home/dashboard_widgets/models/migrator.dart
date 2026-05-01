@@ -1,6 +1,6 @@
-import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/core/utils/logger.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/core/utils/logger.dart';
 
 /// Result of running [DashboardLayoutMigrator.migrate]. Includes the
 /// migrated layout and a flag telling the caller whether the on-disk JSON

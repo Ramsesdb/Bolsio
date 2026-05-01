@@ -1,16 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
+﻿import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:bolsio/app/auth/returning_user_flow.dart';
-import 'package:bolsio/app/onboarding/onboarding.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_primary_button.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_secondary_button.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/services/firebase_sync_service.dart';
-import 'package:bolsio/core/utils/logger.dart';
+import 'package:nitido/app/auth/returning_user_flow.dart';
+import 'package:nitido/app/onboarding/onboarding.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_primary_button.dart';
+import 'package:nitido/app/onboarding/widgets/v3_secondary_button.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/presentation/widgets/nitido_animated_logo.dart';
+import 'package:nitido/core/services/firebase_sync_service.dart';
+import 'package:nitido/core/utils/logger.dart';
 
 /// First-run welcome screen. Offers two paths:
 /// 1. "Iniciar con Google" (primary) — signs in, pulls Firebase data, seeds if empty.
@@ -23,7 +24,7 @@ import 'package:bolsio/core/utils/logger.dart';
 ///
 /// Layout (v3 hero):
 /// - Background: pure AMOLED black (#000000) on dark, #FAFAF7 on light.
-/// - Top-left: small "Bolsio" wordmark.
+/// - Top-left: small "Nitido" wordmark.
 /// - Middle: large display title left-aligned ("Tu dinero en bolívares y
 ///   dólares, al día.") using Gabarito 900 (clamped to fit the viewport).
 /// - Bottom: full-width primary + secondary pill buttons.
@@ -216,18 +217,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
-
-    final Color fg = isDark ? Colors.white : const Color(0xFF141414);
-    final Color brandFg = isDark
-        ? Colors.white.withValues(alpha: 0.85)
-        : const Color(0xFF141414).withValues(alpha: 0.85);
-
-    // Clamp display size to viewport: 38–56pt, ~12% of viewport height.
-    final double viewportHeight = MediaQuery.of(context).size.height;
-    final double displaySize = viewportHeight * 0.085;
-    final double displaySizeClamped =
-        displaySize.clamp(38.0, 56.0).toDouble();
 
     return Scaffold(
       body: Stack(
@@ -255,109 +244,74 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
 
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                V3Tokens.space24,
-                V3Tokens.space24,
-                V3Tokens.space24,
-                V3Tokens.space24,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Top: minimal Bolsio wordmark, left-aligned.
-                  Row(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: Center(
+                    child: NitidoAnimatedLogo(
+                      showIcon: true,
+                      subtitle: 'Tus cuentas, por fin claras.',
+                      iconSize: 110,
+                      fontSize: 44,
+                      animateIn: true,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(32, 0, 32, 40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: V3Tokens.accent.withValues(alpha: 0.15),
-                          shape: BoxShape.circle,
+                      // Error banner.
+                      if (_errorMessage != null) ...[
+                        Container(
+                          padding: const EdgeInsets.all(V3Tokens.spaceMd),
+                          decoration: BoxDecoration(
+                            color: colorScheme.errorContainer.withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.circular(V3Tokens.radiusMd),
+                            border: Border.all(
+                              color: colorScheme.error.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.error,
+                                  color: colorScheme.onErrorContainer, size: 20),
+                              const SizedBox(width: V3Tokens.spaceXs),
+                              Expanded(
+                                child: Text(
+                                  _errorMessage!,
+                                  style: TextStyle(
+                                    color: colorScheme.onErrorContainer,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        child: const Icon(
-                          Icons.account_balance_wallet,
-                          color: V3Tokens.accent,
-                          size: 16,
-                        ),
+                        const SizedBox(height: V3Tokens.space16),
+                      ],
+
+                      // Primary CTA — full width via stretch crossAxisAlignment.
+                      V3PrimaryButton(
+                        label: 'Iniciar con Google',
+                        onPressed: _isLoading ? null : _signInWithGoogle,
+                        trailingIcon: Icons.arrow_forward,
+                        loading: _isLoading,
                       ),
-                      const SizedBox(width: V3Tokens.spaceXs),
-                      Text(
-                        'Bolsio',
-                        style: V3Tokens.uiStyle(
-                          size: 14,
-                          weight: FontWeight.w700,
-                          color: brandFg,
-                          letterSpacing: -0.2,
-                        ),
+                      const SizedBox(height: V3Tokens.spaceMd),
+
+                      // Secondary CTA.
+                      V3SecondaryButton(
+                        label: 'Continuar sin cuenta',
+                        onPressed: _isLoading ? null : _continueWithoutAccount,
                       ),
                     ],
                   ),
-
-                  const Spacer(flex: 2),
-
-                  // Hero display copy — left-aligned, large, tight tracking.
-                  Text(
-                    'Tu dinero en bolívares y dólares, al día.',
-                    style: V3Tokens.displayStyle(
-                      size: displaySizeClamped,
-                      letterSpacing: -2.5,
-                      color: fg,
-                      height: 1.02,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-
-                  const Spacer(flex: 3),
-
-                  // Error banner.
-                  if (_errorMessage != null) ...[
-                    Container(
-                      padding: const EdgeInsets.all(V3Tokens.spaceMd),
-                      decoration: BoxDecoration(
-                        color: colorScheme.errorContainer.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(V3Tokens.radiusMd),
-                        border: Border.all(
-                          color: colorScheme.error.withValues(alpha: 0.5),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.error,
-                              color: colorScheme.onErrorContainer, size: 20),
-                          const SizedBox(width: V3Tokens.spaceXs),
-                          Expanded(
-                            child: Text(
-                              _errorMessage!,
-                              style: TextStyle(
-                                color: colorScheme.onErrorContainer,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: V3Tokens.space16),
-                  ],
-
-                  // Primary CTA — full width via stretch crossAxisAlignment.
-                  V3PrimaryButton(
-                    label: 'Iniciar con Google',
-                    onPressed: _isLoading ? null : _signInWithGoogle,
-                    trailingIcon: Icons.arrow_forward,
-                    loading: _isLoading,
-                  ),
-                  const SizedBox(height: V3Tokens.spaceMd),
-
-                  // Secondary CTA.
-                  V3SecondaryButton(
-                    label: 'Continuar sin cuenta',
-                    onPressed: _isLoading ? null : _continueWithoutAccount,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

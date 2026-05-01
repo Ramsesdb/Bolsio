@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/core/models/currency/currency.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/core/models/currency/currency.dart';
 
 /// Card brandeado que se renderiza off-screen y se captura como PNG para
 /// compartir (Tanda 5, task 5.1).
@@ -10,7 +10,7 @@ import 'package:bolsio/core/models/currency/currency.dart';
 ///
 /// Branding: usa `Theme.of(context).colorScheme.*` y el asset existente
 /// `assets/resources/appIcon.png` — sin colores hardcodeados ni hex (per
-/// memory `project_bolsio_ai_chat_v2`).
+/// memory `project_nitido_ai_chat_v2`).
 ///
 /// El card se monta SIEMPRE en el árbol bajo `Offstage(offstage: true)` con
 /// `RepaintBoundary` + `GlobalKey` (per design § "Render del share card off-
@@ -55,7 +55,7 @@ class ShareCard extends StatelessWidget {
   /// localizable si hace falta).
   final String equalsSeparator;
 
-  /// Footer brandeado (`Generado con Bolsio` o equivalente).
+  /// Footer brandeado (`Generado con Nitido` o equivalente).
   final String footerText;
 
   @override

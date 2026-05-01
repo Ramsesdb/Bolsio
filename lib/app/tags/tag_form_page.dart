@@ -1,22 +1,22 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/extensions/lists.extensions.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:bolsio/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/constants.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/core/utils/uuid.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/extensions/lists.extensions.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:nitido/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:nitido/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/constants.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/core/utils/uuid.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});
@@ -61,10 +61,10 @@ class _TagFormPageState extends State<TagFormPage> {
       await TagService.instance
           .updateTag(tagToEdit)
           .then((value) {
-            BolsioSnackbar.success(SnackbarParams(t.tags.edit_success));
+            NitidoSnackbar.success(SnackbarParams(t.tags.edit_success));
           })
           .catchError((error) {
-            BolsioSnackbar.error(SnackbarParams.fromError(error));
+            NitidoSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       final db = AppDB.instance;
@@ -74,7 +74,7 @@ class _TagFormPageState extends State<TagFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        BolsioSnackbar.error(SnackbarParams(t.tags.already_exists));
+        NitidoSnackbar.error(SnackbarParams(t.tags.already_exists));
         return;
       }
 
@@ -82,10 +82,10 @@ class _TagFormPageState extends State<TagFormPage> {
           .insertTag(tagToEdit)
           .then((value) {
             if (mounted) RouteUtils.popRoute();
-            BolsioSnackbar.success(SnackbarParams(t.tags.create_success));
+            NitidoSnackbar.success(SnackbarParams(t.tags.create_success));
           })
           .catchError((error) {
-            BolsioSnackbar.error(SnackbarParams.fromError(error));
+            NitidoSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }
@@ -115,12 +115,12 @@ class _TagFormPageState extends State<TagFormPage> {
                     .then((value) {
                       RouteUtils.popRoute();
 
-                      BolsioSnackbar.success(
+                      NitidoSnackbar.success(
                         SnackbarParams(t.tags.delete_success),
                       );
                     })
                     .catchError((err) {
-                      BolsioSnackbar.error(SnackbarParams.fromError(err));
+                      NitidoSnackbar.error(SnackbarParams.fromError(err));
                     });
               });
             },

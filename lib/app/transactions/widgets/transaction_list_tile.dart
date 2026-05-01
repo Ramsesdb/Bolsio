@@ -1,26 +1,26 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/app/transactions/transaction_details.page.dart';
-import 'package:bolsio/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/date-utils/periodicity.dart';
-import 'package:bolsio/core/models/supported-icon/icon_displayer.dart';
-import 'package:bolsio/core/models/transaction/transaction.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/presentation/animations/animated_expanded.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:bolsio/core/utils/constants.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/app/transactions/transaction_details.page.dart';
+import 'package:nitido/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/date-utils/periodicity.dart';
+import 'package:nitido/core/models/supported-icon/icon_displayer.dart';
+import 'package:nitido/core/models/transaction/transaction.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/presentation/animations/animated_expanded.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:nitido/core/utils/constants.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -513,7 +513,7 @@ Future<bool> executeTransactionSwipeAction(
         newTrStatus,
       );
 
-      BolsioSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      NitidoSnackbar.success(SnackbarParams(t.transaction.edit_success));
       break;
   }
 

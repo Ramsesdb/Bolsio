@@ -1,34 +1,34 @@
-import 'dart:math';
+﻿import 'dart:math';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/accounts/account_form.dart';
-import 'package:bolsio/app/accounts/details/account_details_actions.dart';
-import 'package:bolsio/app/accounts/statement_import/widgets/undo_banner.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/transactions/label_value_info_list.dart';
-import 'package:bolsio/app/transactions/transactions.page.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/extensions/padding.extension.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/widgets/bottom_sheet_footer.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:bolsio/core/presentation/widgets/inline_info_card.dart';
-import 'package:bolsio/core/presentation/widgets/modal_container.dart';
-import 'package:bolsio/core/presentation/widgets/bolsio_quick_actions_buttons.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_form.dart';
+import 'package:nitido/app/accounts/details/account_details_actions.dart';
+import 'package:nitido/app/accounts/statement_import/widgets/undo_banner.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/transactions/label_value_info_list.dart';
+import 'package:nitido/app/transactions/transactions.page.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/extensions/padding.extension.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/widgets/bottom_sheet_footer.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:nitido/core/presentation/widgets/inline_info_card.dart';
+import 'package:nitido/core/presentation/widgets/modal_container.dart';
+import 'package:nitido/core/presentation/widgets/nitido_quick_actions_buttons.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({
@@ -54,12 +54,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         onPressed: () {
           Clipboard.setData(ClipboardData(text: value))
               .then((_) {
-                BolsioSnackbar.success(
+                NitidoSnackbar.success(
                   SnackbarParams(t.general.clipboard.success(x: title)),
                 );
               })
               .catchError((_) {
-                BolsioSnackbar.error(
+                NitidoSnackbar.error(
                   SnackbarParams(t.general.clipboard.error),
                 );
               });
@@ -225,7 +225,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                       const SizedBox(height: 16),
                       CardWithHeader(
                         title: t.general.quick_actions,
-                        body: BolsioQuickActionsButton(
+                        body: NitidoQuickActionsButton(
                           actions: accountDetailsActions,
                         ),
                       ),
@@ -407,14 +407,14 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                         .then((value) {
                           RouteUtils.popRoute(true);
 
-                          BolsioSnackbar.success(
+                          NitidoSnackbar.success(
                             SnackbarParams(t.account.close.success),
                           );
                         })
                         .catchError((err) {
                           RouteUtils.popRoute();
 
-                          BolsioSnackbar.error(SnackbarParams.fromError(err));
+                          NitidoSnackbar.error(SnackbarParams.fromError(err));
                         });
                   },
           ),

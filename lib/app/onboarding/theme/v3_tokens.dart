@@ -8,10 +8,10 @@ class V3Tokens {
 
   /// Brand accent used as a fallback when dynamic colors (Material You)
   /// are not available or not expressive enough.
-  static const Color accent = Color(0xFFC8B560);
+  static const Color accent = Color(0xFF00897B);
 
   /// Halo color for the `v3-pulse` animation on the activate-listener tile.
-  static const Color pulseHalo = Color(0x26C8B560); // rgba(200,181,96,0.15)
+  static const Color pulseHalo = Color(0x2600897B); // rgba(0,137,123,0.15)
 
   // ── Surfaces & pill backgrounds ──
   /// Frame surface used in primary buttons in dark mode.

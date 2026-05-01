@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/bank_options.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_bank_tile.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_switch.dart';
+import 'package:nitido/app/onboarding/bank_options.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_bank_tile.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:nitido/app/onboarding/widgets/v3_switch.dart';
 
 class Slide04InitialAccounts extends StatefulWidget {
   const Slide04InitialAccounts({

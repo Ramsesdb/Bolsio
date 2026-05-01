@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:bolsio/app/accounts/account_form.dart';
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/app/transactions/receipt_import/receipt_import_flow.dart';
-import 'package:bolsio/app/transactions/voice_input/voice_capture_flow.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_form.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/app/transactions/receipt_import/receipt_import_flow.dart';
+import 'package:nitido/app/transactions/voice_input/voice_capture_flow.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 void _showShouldCreateAccountWarn(BuildContext context) {
   final t = Translations.of(context);
@@ -212,7 +212,7 @@ class _NewTransactionButtonState extends State<NewTransactionButton>
       if (voiceAffordance)
         _FanAction(
           icon: Icons.mic_rounded,
-          tooltip: t.bolsio_ai.voice_fab_tooltip,
+          tooltip: t.nitido_ai.voice_fab_tooltip,
           onPressed: _startVoiceCapture,
         ),
       // Middle

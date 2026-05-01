@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
-import 'package:bolsio/core/presentation/widgets/bolsio_reorderable_list.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/quick_use/quick_action_dispatcher.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/quick_use_widget.dart';
+import 'package:nitido/core/presentation/widgets/nitido_reorderable_list.dart';
 
 /// Bottom sheet con dos pestañas para configurar los avatares de un widget
 /// `quickUse`:
-///   1. **Mostrados** — `BolsioReorderableList` con drag-and-drop para
+///   1. **Mostrados** — `NitidoReorderableList` con drag-and-drop para
 ///      reordenar; cada fila incluye avatar circular + label + botón
 ///      remover (`−`).
 ///   2. **Ocultos** — `Wrap` de avatares no seleccionados con un badge `+`
@@ -183,7 +183,7 @@ class _QuickUseConfigSheetState extends State<QuickUseConfigSheet>
         ),
       );
     }
-    return BolsioReorderableList(
+    return NitidoReorderableList(
       totalItemCount: _chips.length,
       onReorder: _reorderChip,
       spaceBetween: 8,
@@ -297,7 +297,7 @@ class _QuickUseConfigSheetState extends State<QuickUseConfigSheet>
 }
 
 /// Fila de "Mostrados" — avatar circular + label + drag handle + botón
-/// remover. El gesto de drag real viene del [BolsioReorderableList] padre
+/// remover. El gesto de drag real viene del [NitidoReorderableList] padre
 /// (`ReorderableDelayedDragStartListener`); el icono es solo afordancia
 /// visual.
 class _ShownRow extends StatelessWidget {

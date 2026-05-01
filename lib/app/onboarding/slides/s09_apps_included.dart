@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bolsio/app/onboarding/bank_options.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_bank_tile.dart';
-import 'package:bolsio/app/onboarding/widgets/v3_slide_template.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/services/auto_import/supported_banks.dart';
-import 'package:bolsio/core/services/bank_detection/bank_detection_service.dart';
+import 'package:nitido/app/onboarding/bank_options.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/widgets/v3_bank_tile.dart';
+import 'package:nitido/app/onboarding/widgets/v3_slide_template.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/services/auto_import/supported_banks.dart';
+import 'package:nitido/core/services/bank_detection/bank_detection_service.dart';
 
 final RegExp _kPlayStoreUrl = RegExp(
   r'^https://play\.google\.com/store/apps/details\?id=([\w\.]+)',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/onboarding/theme/v3_tokens.dart';
+import 'package:nitido/app/onboarding/theme/v3_tokens.dart';
 
 /// Segmented 3px progress bar rendered at the top of each slide.
 /// Displays one segment per slide; completed segments are filled with

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/core/models/date-utils/periodicity.dart';
-import 'package:bolsio/core/models/transaction/recurrency_data.dart';
-import 'package:bolsio/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:bolsio/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:bolsio/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/text_field_utils.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/core/models/date-utils/periodicity.dart';
+import 'package:nitido/core/models/transaction/recurrency_data.dart';
+import 'package:nitido/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:nitido/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:nitido/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/text_field_utils.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class IntervalSelectorPage extends StatefulWidget {
   const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});

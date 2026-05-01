@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
-import 'package:bolsio/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/tags/tags_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/extensions/color.extensions.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/tags/tag.dart';
-import 'package:bolsio/core/models/transaction/transaction.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/app/stats/widgets/income_by_source/source_dimension_toggle.dart';
+import 'package:nitido/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/tags/tags_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/extensions/color.extensions.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/tags/tag.dart';
+import 'package:nitido/core/models/transaction/transaction.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 /// Pie chart showing total income breakdown by tag or category for the entire
 /// date range (no temporal granularity). Follows the same pattern as

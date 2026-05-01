@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Simple confirmation dialog shown when changing `trackedSince` on an
 /// existing account produces a balance delta that is not "dangerous" enough

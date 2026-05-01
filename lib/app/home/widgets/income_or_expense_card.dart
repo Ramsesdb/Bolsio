@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
-import 'package:bolsio/core/models/date-utils/date_period_state.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/models/currency/currency_display_policy.dart';
+import 'package:nitido/core/models/currency/currency_display_policy_resolver.dart';
+import 'package:nitido/core/models/date-utils/date_period_state.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 

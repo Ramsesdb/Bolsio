@@ -1,26 +1,26 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/budgets/budget_form_page.dart';
-import 'package:bolsio/app/budgets/budgets_page.dart';
-import 'package:bolsio/app/budgets/components/budget_evolution_chart.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list.dart';
-import 'package:bolsio/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:bolsio/core/database/services/budget/budget_service.dart';
-import 'package:bolsio/core/models/budget/budget.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/responsive/responsive_row_column.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/confirm_dialog.dart';
-import 'package:bolsio/core/presentation/widgets/bolsio_popup_menu_button.dart';
-import 'package:bolsio/core/presentation/widgets/targets/financial_target_card.dart';
-import 'package:bolsio/core/presentation/widgets/targets/target_status_card.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/utils/list_tile_action_item.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/budgets/budget_form_page.dart';
+import 'package:nitido/app/budgets/budgets_page.dart';
+import 'package:nitido/app/budgets/components/budget_evolution_chart.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list.dart';
+import 'package:nitido/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:nitido/core/database/services/budget/budget_service.dart';
+import 'package:nitido/core/models/budget/budget.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/responsive/responsive_row_column.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/confirm_dialog.dart';
+import 'package:nitido/core/presentation/widgets/nitido_popup_menu_button.dart';
+import 'package:nitido/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:nitido/core/presentation/widgets/targets/target_status_card.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/utils/list_tile_action_item.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 
@@ -97,7 +97,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
             ],
           ),
           appBarActions: [
-            BolsioPopupMenuButton(
+            NitidoPopupMenuButton(
               actionItems: [
                 ListTileActionItem(
                   label: t.budgets.form.edit,
@@ -130,12 +130,12 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                           .then((value) {
                             RouteUtils.popRoute();
 
-                            BolsioSnackbar.success(
+                            NitidoSnackbar.success(
                               SnackbarParams(t.general.delete_success),
                             );
                           })
                           .catchError((err) {
-                            BolsioSnackbar.error(
+                            NitidoSnackbar.error(
                               SnackbarParams.fromError(err),
                             );
                           });

@@ -2,20 +2,20 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
-import 'package:bolsio/app/stats/stats_page.dart';
-import 'package:bolsio/app/stats/widgets/balance_bar_chart.dart';
-import 'package:bolsio/app/stats/widgets/fund_evolution_info.dart';
-import 'package:bolsio/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:bolsio/core/models/date-utils/date_period_state.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/presentation/responsive/responsive_row_column.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/presentation/app_colors.dart';
-import 'package:bolsio/core/services/finance_health_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/home/dashboard_widgets/widgets/pending_imports_alert_widget.dart';
+import 'package:nitido/app/stats/stats_page.dart';
+import 'package:nitido/app/stats/widgets/balance_bar_chart.dart';
+import 'package:nitido/app/stats/widgets/fund_evolution_info.dart';
+import 'package:nitido/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
+import 'package:nitido/core/models/date-utils/date_period_state.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/presentation/responsive/responsive_row_column.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/presentation/app_colors.dart';
+import 'package:nitido/core/services/finance_health_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class DashboardCards extends StatefulWidget {
   const DashboardCards({

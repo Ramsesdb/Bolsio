@@ -1,21 +1,21 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bolsio/app/accounts/account_selector.dart';
-import 'package:bolsio/app/categories/selectors/category_picker.dart';
-import 'package:bolsio/app/transactions/auto_import/widgets/proposal_origin_chip.dart';
-import 'package:bolsio/app/transactions/auto_import/widgets/proposal_status_chip.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/account/account_service.dart';
-import 'package:bolsio/core/database/services/category/category_service.dart';
-import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/transaction/transaction_status.enum.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/utils/uuid.dart';
+import 'package:nitido/app/accounts/account_selector.dart';
+import 'package:nitido/app/categories/selectors/category_picker.dart';
+import 'package:nitido/app/transactions/auto_import/widgets/proposal_origin_chip.dart';
+import 'package:nitido/app/transactions/auto_import/widgets/proposal_status_chip.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/account/account_service.dart';
+import 'package:nitido/core/database/services/category/category_service.dart';
+import 'package:nitido/core/database/services/pending_import/pending_import_service.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/transaction/transaction_status.enum.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/utils/uuid.dart';
 
 /// Review page for a single pending import proposal.
 ///

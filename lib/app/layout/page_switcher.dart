@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart' hide BottomNavigationBar;
-import 'package:bolsio/app/budgets/budgets_page.dart';
-import 'package:bolsio/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:bolsio/app/layout/indexed_stacks/fade_indexed_stack.dart';
-import 'package:bolsio/app/layout/page_context.dart';
-import 'package:bolsio/app/layout/page_framework.dart';
-import 'package:bolsio/app/layout/widgets/app_bottom_bar.dart';
-import 'package:bolsio/app/transactions/animate_fab.dart';
-import 'package:bolsio/core/presentation/responsive/breakpoints.dart';
-import 'package:bolsio/core/routes/destinations.dart';
-import 'package:bolsio/core/utils/app_utils.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/app/budgets/budgets_page.dart';
+import 'package:nitido/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:nitido/app/layout/indexed_stacks/fade_indexed_stack.dart';
+import 'package:nitido/app/layout/page_context.dart';
+import 'package:nitido/app/layout/page_framework.dart';
+import 'package:nitido/app/layout/widgets/app_bottom_bar.dart';
+import 'package:nitido/app/transactions/animate_fab.dart';
+import 'package:nitido/core/presentation/responsive/breakpoints.dart';
+import 'package:nitido/core/routes/destinations.dart';
+import 'package:nitido/core/utils/app_utils.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
 
 /// This page is the entry point of the app once the user has complete onboarding
 ///

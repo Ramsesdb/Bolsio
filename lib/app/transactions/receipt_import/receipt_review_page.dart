@@ -1,13 +1,13 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/helpers/snackbar.dart';
-import 'package:bolsio/core/routes/route_utils.dart';
-import 'package:bolsio/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/helpers/snackbar.dart';
+import 'package:nitido/core/routes/route_utils.dart';
+import 'package:nitido/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 class ReceiptReviewPage extends StatefulWidget {
   const ReceiptReviewPage({
@@ -97,7 +97,7 @@ class _ReceiptReviewPageState extends State<ReceiptReviewPage> {
     final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
 
     if (amount == null || amount <= 0) {
-      BolsioSnackbar.warning(
+      NitidoSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.zero),
       );
       return;

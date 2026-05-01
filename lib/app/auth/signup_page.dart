@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/app-data/app_data_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/services/firebase_sync_service.dart';
-import 'package:bolsio/core/utils/logger.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/app-data/app_data_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/services/firebase_sync_service.dart';
+import 'package:nitido/core/utils/logger.dart';
 
 /// Signup page for new users with Firebase Auth.
 class SignupPage extends StatefulWidget {
