@@ -1,7 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/migrator.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/migrator.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
 
 /// Task 3.2 — `DashboardLayoutMigrator`.
 ///

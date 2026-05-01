@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -120,7 +120,7 @@ void main() {
         final uiContents = uiRateSource.readAsStringSync();
         expect(
           uiContents.contains(
-            "import 'package:bolsio/core/services/rate_providers/rate_source.dart'",
+            "import 'package:nitido/core/services/rate_providers/rate_source.dart'",
           ),
           isFalse,
           reason:

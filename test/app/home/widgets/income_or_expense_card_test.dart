@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/models/currency/currency_display_policy.dart';
 
 /// Phase 6 of `currency-modes-rework` widget-shape contract tests for
 /// [IncomeOrExpenseCard]. The widget itself is a thin shell over a

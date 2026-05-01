@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:bolsio/core/services/ai/nexus_ai_service.dart';
+import 'package:nitido/core/services/ai/nexus_ai_service.dart';
 
 class _CaptureClient extends http.BaseClient {
   http.BaseRequest? lastRequest;

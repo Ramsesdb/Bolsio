@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/app/settings/widgets/pin_modal.dart';
-import 'package:bolsio/core/database/services/user-setting/hidden_mode_service.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/settings/widgets/pin_modal.dart';
+import 'package:nitido/core/database/services/user-setting/hidden_mode_service.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 /// Widget tests for the PIN modal. We pump [PinModal] directly inside a
 /// `Scaffold` (skipping the `showModalBottomSheet` wrapper) and inject a

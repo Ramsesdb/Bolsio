@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/app/accounts/account_form.dart';
-import 'package:bolsio/app/home/dashboard.page.dart';
-import 'package:bolsio/app/settings/widgets/edit_profile_modal.dart';
-import 'package:bolsio/app/stats/stats_page.dart';
-import 'package:bolsio/app/transactions/transactions.page.dart';
-import 'package:bolsio/core/presentation/widgets/card_with_header.dart';
-import 'package:bolsio/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/accounts/account_form.dart';
+import 'package:nitido/app/home/dashboard.page.dart';
+import 'package:nitido/app/settings/widgets/edit_profile_modal.dart';
+import 'package:nitido/app/stats/stats_page.dart';
+import 'package:nitido/app/transactions/transactions.page.dart';
+import 'package:nitido/core/presentation/widgets/card_with_header.dart';
+import 'package:nitido/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 import '../helpers.dart';
 
 void main() {
   setUpAll(() async {
-    await setupBolsio();
+    await setupNitido();
   });
 
   testWidgets('Navigation', (tester) async {
-    await startBolsio(tester);
+    await startNitido(tester);
 
     await tester.tap(find.text('User'));
     await tester.pumpAndSettle();

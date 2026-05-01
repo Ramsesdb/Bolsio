@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/raw_capture_event.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/services/auto_import/profiles/bdv_sms_profile.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/raw_capture_event.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/services/auto_import/profiles/bdv_sms_profile.dart';
 
 void main() {
   late BdvSmsProfile profile;

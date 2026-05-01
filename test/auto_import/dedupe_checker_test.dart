@@ -1,15 +1,15 @@
-import 'package:drift/drift.dart' hide isNull, isNotNull;
+﻿import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/services/auto_import/dedupe/dedupe_checker.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/pending_import/pending_import_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/services/auto_import/dedupe/dedupe_checker.dart';
 
 AppDB _createTestDb() {
   return AppDB.forTesting(NativeDatabase.memory());

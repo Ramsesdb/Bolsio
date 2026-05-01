@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/app/home/dashboard_widgets/defaults.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/dashboard_layout.dart';
-import 'package:bolsio/app/home/dashboard_widgets/models/widget_descriptor.dart';
-import 'package:bolsio/app/home/dashboard_widgets/registry.dart';
-import 'package:bolsio/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
+import 'package:nitido/app/home/dashboard_widgets/defaults.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
+import 'package:nitido/app/home/dashboard_widgets/models/widget_descriptor.dart';
+import 'package:nitido/app/home/dashboard_widgets/registry.dart';
+import 'package:nitido/app/home/dashboard_widgets/services/dashboard_layout_service.dart';
 
 /// Task 3.7 — Layout vacío + introSeen='1' applies fallback().
 ///

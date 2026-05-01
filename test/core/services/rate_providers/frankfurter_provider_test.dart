@@ -1,10 +1,10 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart' as http_testing;
-import 'package:bolsio/core/services/rate_providers/frankfurter_provider.dart';
-import 'package:bolsio/core/services/rate_providers/rate_source.dart';
+import 'package:nitido/core/services/rate_providers/frankfurter_provider.dart';
+import 'package:nitido/core/services/rate_providers/rate_source.dart';
 
 /// Unit tests for [FrankfurterRateProvider].
 ///

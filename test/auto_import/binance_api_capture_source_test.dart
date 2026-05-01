@@ -1,14 +1,14 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart' as http_testing;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_api_client.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_credentials_store.dart';
-import 'package:bolsio/core/services/auto_import/capture/binance_api_capture_source.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_api_client.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_credentials_store.dart';
+import 'package:nitido/core/services/auto_import/capture/binance_api_capture_source.dart';
 
 void main() {
   late BinanceCredentialsStore credentialsStore;

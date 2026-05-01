@@ -1,16 +1,16 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 Widget _wrap(Widget child) {
   return TranslationProvider(
@@ -51,7 +51,7 @@ void main() {
     appStateSettings[SettingKey.amoledMode] = '0';
     appStateSettings[SettingKey.themeMode] = 'system';
 
-    tempRoot = await Directory.systemTemp.createTemp('bolsio_fab_test_');
+    tempRoot = await Directory.systemTemp.createTemp('nitido_fab_test_');
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(pathProviderChannel, (MethodCall call) async {

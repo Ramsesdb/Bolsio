@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/services/currency/currency_conversion_helper.dart';
-import 'package:bolsio/core/services/rate_providers/rate_source.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/services/currency/currency_conversion_helper.dart';
+import 'package:nitido/core/services/rate_providers/rate_source.dart';
 
 /// Phase 9 unit suite for [CurrencyConversionHelper.convertMixedCurrenciesToTarget].
 ///

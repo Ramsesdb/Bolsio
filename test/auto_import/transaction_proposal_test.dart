@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
 
 void main() {
   group('TransactionProposal', () {

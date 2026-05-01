@@ -1,12 +1,12 @@
-import 'package:drift/drift.dart' hide isNull, isNotNull;
+﻿import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/pending_import/pending_import_service.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal_status.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/pending_import/pending_import_service.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal_status.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
 
 /// Creates an in-memory [AppDB] for testing with all tables created.
 AppDB _createTestDb() {

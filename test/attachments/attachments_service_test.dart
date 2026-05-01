@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -7,13 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart' as sqlite;
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/transaction/transaction_service.dart';
-import 'package:bolsio/core/services/attachments/attachment_model.dart';
-import 'package:bolsio/core/services/attachments/attachments_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/transaction/transaction_service.dart';
+import 'package:nitido/core/services/attachments/attachment_model.dart';
+import 'package:nitido/core/services/attachments/attachments_service.dart';
 
 class _FakeAttachmentsService extends AttachmentsService {
   _FakeAttachmentsService(super.db) : super.forTesting();
@@ -113,7 +113,7 @@ void main() {
   setUp(() async {
     db = _createTestDb();
     service = AttachmentsService.forTesting(db);
-    tempRoot = await Directory.systemTemp.createTemp('bolsio_attachments_test_');
+    tempRoot = await Directory.systemTemp.createTemp('nitido_attachments_test_');
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(pathProviderChannel, (MethodCall call) async {

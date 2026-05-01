@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/currency/currency_mode.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy.dart';
-import 'package:bolsio/core/models/currency/currency_display_policy_resolver.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/currency/currency_mode.dart';
+import 'package:nitido/core/models/currency/currency_display_policy.dart';
+import 'package:nitido/core/models/currency/currency_display_policy_resolver.dart';
 
 /// Phase 10 task 10.11 — Onboarding flow + persistence shape per mode +
 /// `Slide03RateSource` gating.

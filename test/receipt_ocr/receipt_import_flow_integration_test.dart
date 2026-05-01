@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -6,21 +6,21 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:bolsio/app/transactions/receipt_import/receipt_review_page.dart';
-import 'package:bolsio/core/database/app_db.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/account/account.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/category/category.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/services/attachments/attachment_model.dart';
-import 'package:bolsio/core/services/attachments/attachments_service.dart';
-import 'package:bolsio/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:bolsio/core/services/receipt_ocr/receipt_image_service.dart';
-import 'package:bolsio/core/utils/unique_app_widgets_keys.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/transactions/receipt_import/receipt_review_page.dart';
+import 'package:nitido/core/database/app_db.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/account/account.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/category/category.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/services/attachments/attachment_model.dart';
+import 'package:nitido/core/services/attachments/attachments_service.dart';
+import 'package:nitido/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:nitido/core/services/receipt_ocr/receipt_image_service.dart';
+import 'package:nitido/core/utils/unique_app_widgets_keys.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 import 'package:flutter/services.dart';
 
 class _FakeReceiptImageService extends ReceiptImageService {
@@ -148,7 +148,7 @@ void main() {
     appStateSettings[SettingKey.amoledMode] = '0';
     appStateSettings[SettingKey.themeMode] = 'system';
 
-    tempRoot = await Directory.systemTemp.createTemp('bolsio_flow_4_13_');
+    tempRoot = await Directory.systemTemp.createTemp('nitido_flow_4_13_');
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(pathProviderChannel, (MethodCall call) async {

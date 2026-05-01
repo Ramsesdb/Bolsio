@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/services/auto_import/binance/binance_api_client.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/services/auto_import/binance/binance_api_client.dart';
 
 void main() {
   group('BinanceApiClient.sign (HMAC-SHA256)', () {

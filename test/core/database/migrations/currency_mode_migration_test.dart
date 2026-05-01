@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/models/currency/currency_mode.dart';
-import 'package:bolsio/core/services/rate_providers/rate_source.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/models/currency/currency_mode.dart';
+import 'package:nitido/core/services/rate_providers/rate_source.dart';
 
 /// Phase 10 task 10.1 + 10.2 — migration surrogate tests.
 ///

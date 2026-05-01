@@ -1,18 +1,18 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:bolsio/app/transactions/form/transaction_form.page.dart';
-import 'package:bolsio/app/transactions/receipt_import/receipt_review_page.dart';
-import 'package:bolsio/core/database/services/user-setting/user_setting_service.dart';
-import 'package:bolsio/core/models/auto_import/capture_channel.dart';
-import 'package:bolsio/core/models/auto_import/transaction_proposal.dart';
-import 'package:bolsio/core/models/transaction/transaction_type.enum.dart';
-import 'package:bolsio/core/presentation/theme.dart';
-import 'package:bolsio/core/services/receipt_ocr/receipt_extractor_service.dart';
-import 'package:bolsio/i18n/generated/translations.g.dart';
+import 'package:nitido/app/transactions/form/transaction_form.page.dart';
+import 'package:nitido/app/transactions/receipt_import/receipt_review_page.dart';
+import 'package:nitido/core/database/services/user-setting/user_setting_service.dart';
+import 'package:nitido/core/models/auto_import/capture_channel.dart';
+import 'package:nitido/core/models/auto_import/transaction_proposal.dart';
+import 'package:nitido/core/models/transaction/transaction_type.enum.dart';
+import 'package:nitido/core/presentation/theme.dart';
+import 'package:nitido/core/services/receipt_ocr/receipt_extractor_service.dart';
+import 'package:nitido/i18n/generated/translations.g.dart';
 
 Widget _wrap(Widget child) {
   return TranslationProvider(
@@ -79,7 +79,7 @@ void main() {
     appStateSettings[SettingKey.amoledMode] = '0';
     appStateSettings[SettingKey.themeMode] = 'system';
     tempRoot = await Directory.systemTemp.createTemp(
-      'bolsio_review_page_test_',
+      'nitido_review_page_test_',
     );
   });
 

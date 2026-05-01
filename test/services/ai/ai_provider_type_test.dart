@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bolsio/core/services/ai/ai_provider_type.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:nitido/core/services/ai/ai_provider_type.dart';
 
 void main() {
   group('AiProviderType metadata', () {
