@@ -1,7 +1,9 @@
-﻿import 'dart:async' show unawaited;
+import 'dart:async';
+import 'dart:ui';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -47,243 +49,270 @@ import 'package:nitido/core/services/statement_import/statement_batches_service.
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nitido/core/database/app_db.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Hold the native splash screen while Vulkan shader pipelines compile.
-  // The first 3 frames take ~85 ms each on cold start; deferring the first
-  // frame keeps the OS splash visible until we explicitly call allowFirstFrame,
-  // so the user never sees the shader-compilation jank.
-  // This only runs on cold start — warm/hot restarts do not re-enter main().
-  WidgetsBinding.instance.deferFirstFrame();
-
-  // Wire the KeyValueService refresh hook to the live root state. The base
-  // service avoids importing main.dart (so unit tests for any subclass can
-  // run without pulling the full app graph); we install the callback here
-  // before the first setItem can fire from app startup code.
-  onGlobalAppStateRefresh = () {
-    appStateKey.currentState?.refreshAppState();
-  };
-
-  // Initialize settings first so we can check the sync flag
-  await UserSettingService.instance.initializeGlobalStateMap();
-  await AppDataService.instance.initializeGlobalStateMap();
-
-  // One-time migration: move pre-BYOK Nexus credentials into the new
-  // per-provider store. Idempotent — subsequent runs no-op.
+Future<void> main() async {
   unawaited(
-    AiCredentialsStore.instance.migrateFromLegacyStore().catchError((e) {
-      debugPrint('AiCredentialsStore.migrateFromLegacyStore error: $e');
-      return false;
-    }),
-  );
+    runZonedGuarded<Future<void>>(
+      () async {
+        WidgetsFlutterBinding.ensureInitialized();
 
-  // Must complete BEFORE runApp: visibleAccountIdsStream seeds from the
-  // locked state, and a late init lets the dashboard render with
-  // `visibleIds == null` for the first frame — leaking saving accounts.
-  await HiddenModeService.instance.init();
+        // Hold the native splash screen while Vulkan shader pipelines compile.
+        // The first 3 frames take ~85 ms each on cold start; deferring the first
+        // frame keeps the OS splash visible until we explicitly call allowFirstFrame,
+        // so the user never sees the shader-compilation jank.
+        // This only runs on cold start — warm/hot restarts do not re-enter main().
+        WidgetsBinding.instance.deferFirstFrame();
 
-  // Populate the dashboard widget registry BEFORE runApp so the dashboard
-  // renderer always observes a fully populated registry on its first frame
-  // (see dashboard-widgets spec § DashboardWidgetRegistry).
-  registerDashboardWidgets();
+        // Wire the KeyValueService refresh hook to the live root state. The base
+        // service avoids importing main.dart (so unit tests for any subclass can
+        // run without pulling the full app graph); we install the callback here
+        // before the first setItem can fire from app startup code.
+        onGlobalAppStateRefresh = () {
+          appStateKey.currentState?.refreshAppState();
+        };
 
-  // Always initialize Firebase — sync is always available.
-  // If Firebase init fails (offline, misconfigured), the app works offline.
-  try {
-    await Firebase.initializeApp();
-    await FirebaseSyncService.instance.initialize();
-  } catch (e) {
-    debugPrint('Firebase initialization failed (app works offline): $e');
-  }
+        // Initialize settings first so we can check the sync flag
+        await UserSettingService.instance.initializeGlobalStateMap();
+        await AppDataService.instance.initializeGlobalStateMap();
 
-  // --- One-time migration: fix inverted exchangeRateApplied values ---
-  // Fire-and-forget: SQL/HTTP work that is NOT required for first frame.
-  // The "migrated v1" flag gate is preserved inside the function, so running
-  // in the background changes only timing, not behavior.
-  unawaited(
-    _migrateInvertedExchangeRates().catchError((e) {
-      debugPrint('Error running exchange rate migration: $e');
-    }),
-  );
-  // -----------------------------------------
-
-  // --- One-time migration: purge legacy color/type fields on Firestore
-  // subcategory docs (see cleanupLegacySubcategoryFields for context).
-  // Fire-and-forget: gated internally by a SharedPreferences flag, no-ops
-  // when Firebase sync is not initialized or the user is signed out.
-  unawaited(
-    FirebaseSyncService.instance.cleanupLegacySubcategoryFields().catchError((
-      e,
-    ) {
-      debugPrint('Error running Firebase subcategory cleanup: $e');
-    }),
-  );
-  // -----------------------------------------
-
-  // --- Auto-update Currency Rate (Daily) ---
-  // Fire-and-forget: 12h cooldown gate is preserved inside the function.
-  unawaited(
-    _checkAndAutoUpdateCurrencyRate().catchError((e) {
-      debugPrint('Error auto-updating currency rate: $e');
-    }),
-  );
-  // -----------------------------------------
-
-  if (kDebugMode) {
-    // Debug-only housekeeping to keep attachment storage clean while iterating.
-    unawaited(
-      AttachmentsService.instance
-          .purgeOrphans()
-          .then((removed) {
-            debugPrint('purgeOrphans removed $removed items');
-          })
-          .catchError((e) {
-            debugPrint('purgeOrphans error: $e');
-          }),
-    );
-  }
-
-  // --- Local notifications bootstrap ---
-  unawaited(
-    LocalNotificationService.instance
-        .initialize(
-          onTap: (response) {
-            // Navigate to PendingImportsPage when user taps the notification
-            if (response.payload == 'pending_imports') {
-              RouteUtils.pushRoute(const PendingImportsPage());
-            }
-          },
-        )
-        .catchError((e) {
-          debugPrint('Local notification init error: $e');
-        }),
-  );
-  // -----------------------------------------
-
-  // --- Background service + Auto-import bootstrap (DEFERRED) ---
-  // The background service spins up a second Flutter engine (second
-  // libflutter.so load) which visibly delays the cold-start frame on MIUI /
-  // HyperOS. We configure + start the service 3s AFTER the first frame so the
-  // main UI renders immediately; the service is not needed to paint the UI.
-  final autoImportEnabled =
-      appStateSettings[SettingKey.autoImportEnabled] == '1';
-
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    Future.delayed(const Duration(seconds: 8), () {
-      unawaited(
-        NitidoBackgroundService.instance
-            .initialize()
-            .then((_) async {
-              if (autoImportEnabled) {
-                // Wire the orchestrator's callback so the main isolate can show
-                // local notifications when a new pending import arrives.
-                CaptureOrchestrator.instance.onNewPendingImport =
-                    (int count) async {
-                      await LocalNotificationService.instance
-                          .showNewPendingNotification(count);
-                    };
-
-                // The notification EventChannel is bound to the main FlutterEngine,
-                // so the background isolate excludes it — the main isolate must
-                // own the notification capture source and its health monitor.
-                unawaited(
-                  CaptureOrchestrator.instance
-                      .applySettings(channels: {CaptureChannel.notification})
-                      .catchError((e) {
-                        debugPrint(
-                          'CaptureOrchestrator.applySettings (main isolate) error: $e',
-                        );
-                      }),
-                );
-
-                // Start the background service — it handles ALL capture sources
-                // (SMS, notifications, Binance API) and keeps capture alive when
-                // the app is closed.  The notification_listener_service plugin uses
-                // a BroadcastReceiver that works in both isolates; running it only
-                // in the background service avoids duplicate captures.
-                await NitidoBackgroundService.instance.startService();
-              }
-            })
-            .catchError((e) {
-              debugPrint('Auto-import bootstrap error: $e');
-            })
-            .whenComplete(() {
-              // Mark startup window as closed so the lifecycle watchdog
-              // is now allowed to trigger background service restarts.
-              appStateKey.currentState?._startupComplete = true;
-            }),
-      );
-    });
-  });
-  // ---------------------------------------------------
-
-  // Initial state: ON if the user asked us to start locked, OR if the user
-  // left the runtime toggle ON in the previous session. This keeps the
-  // toggle sticky across restarts (FIX: was only reading privateModeAtLaunch).
-  unawaited(
-    PrivateModeService.instance.setPrivateMode(
-      appStateSettings[SettingKey.privateModeAtLaunch] == '1' ||
-          appStateSettings[SettingKey.privateMode] == '1',
-    ),
-  );
-
-  // Set plural resolver for Turkish
-  unawaited(
-    LocaleSettings.setPluralResolver(
-      language: 'tr',
-      cardinalResolver:
-          (
-            n, {
-            String? few,
-            String? many,
-            String? one,
-            String? other,
-            String? two,
-            String? zero,
-          }) {
-            if (n == 1) return 'one';
-            return 'other';
-          },
-    ),
-  );
-
-  // --- Preload locale asynchronously BEFORE runApp ---
-  // slang uses deferred imports for locale libs, so the *Sync variants fail
-  // at runtime with "Deferred library l_xx was not loaded". Awaiting the
-  // async version here still guarantees the locale is ready before the first
-  // frame, avoiding the translation-stream pulse that caused extra rebuilds.
-  try {
-    final lang = appStateSettings[SettingKey.appLanguage];
-    if (lang != null && lang.isNotEmpty) {
-      final setLocale = await LocaleSettings.setLocaleRaw(lang);
-      if (setLocale.languageTag != lang) {
-        Logger.printDebug(
-          'Warning: requested locale `$lang` unavailable. '
-          'Fallback to `${setLocale.languageTag}`.',
-        );
-        // Clear the stored value so we fall back to device locale next launch.
+        // One-time migration: move pre-BYOK Nexus credentials into the new
+        // per-provider store. Idempotent — subsequent runs no-op.
         unawaited(
-          UserSettingService.instance
-              .setItem(SettingKey.appLanguage, null)
-              .then((_) {}),
+          AiCredentialsStore.instance.migrateFromLegacyStore().catchError((e) {
+            debugPrint('AiCredentialsStore.migrateFromLegacyStore error: $e');
+            return false;
+          }),
         );
-      }
-    } else {
-      await LocaleSettings.useDeviceLocale();
-    }
-  } catch (e) {
-    debugPrint('Error preloading locale: $e');
-  }
-  // -----------------------------------------
 
-  debugPaintSizeEnabled = false;
-  runApp(InitializeApp(key: appStateKey));
+        // Must complete BEFORE runApp: visibleAccountIdsStream seeds from the
+        // locked state, and a late init lets the dashboard render with
+        // `visibleIds == null` for the first frame — leaking saving accounts.
+        await HiddenModeService.instance.init();
 
-  // Release the native splash after 1.5 s to let Vulkan shader pipelines
-  // finish compiling in the background before the user sees interactive UI.
-  await Future.delayed(const Duration(milliseconds: 1500));
-  WidgetsBinding.instance.allowFirstFrame();
+        // Populate the dashboard widget registry BEFORE runApp so the dashboard
+        // renderer always observes a fully populated registry on its first frame
+        // (see dashboard-widgets spec § DashboardWidgetRegistry).
+        registerDashboardWidgets();
+
+        // Always initialize Firebase — sync is always available.
+        // If Firebase init fails (offline, misconfigured), the app works offline.
+        try {
+          await Firebase.initializeApp();
+          await FirebaseSyncService.instance.initialize();
+
+          // Hook 1: errores de Flutter framework
+          FlutterError.onError =
+              FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+          // Hook 2: errores async no capturados a nivel platform
+          PlatformDispatcher.instance.onError = (error, stack) {
+            FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+            return true;
+          };
+
+          // Solo reportar en release (evita ruido en debug)
+          await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+            !kDebugMode,
+          );
+        } catch (e) {
+          debugPrint('Firebase initialization failed (app works offline): $e');
+        }
+
+        // --- One-time migration: fix inverted exchangeRateApplied values ---
+        // Fire-and-forget: SQL/HTTP work that is NOT required for first frame.
+        // The "migrated v1" flag gate is preserved inside the function, so running
+        // in the background changes only timing, not behavior.
+        unawaited(
+          _migrateInvertedExchangeRates().catchError((e) {
+            debugPrint('Error running exchange rate migration: $e');
+          }),
+        );
+        // -----------------------------------------
+
+        // --- One-time migration: purge legacy color/type fields on Firestore
+        // subcategory docs (see cleanupLegacySubcategoryFields for context).
+        // Fire-and-forget: gated internally by a SharedPreferences flag, no-ops
+        // when Firebase sync is not initialized or the user is signed out.
+        unawaited(
+          FirebaseSyncService.instance
+              .cleanupLegacySubcategoryFields()
+              .catchError((e) {
+                debugPrint('Error running Firebase subcategory cleanup: $e');
+              }),
+        );
+        // -----------------------------------------
+
+        // --- Auto-update Currency Rate (Daily) ---
+        // Fire-and-forget: 12h cooldown gate is preserved inside the function.
+        unawaited(
+          _checkAndAutoUpdateCurrencyRate().catchError((e) {
+            debugPrint('Error auto-updating currency rate: $e');
+          }),
+        );
+        // -----------------------------------------
+
+        if (kDebugMode) {
+          // Debug-only housekeeping to keep attachment storage clean while iterating.
+          unawaited(
+            AttachmentsService.instance
+                .purgeOrphans()
+                .then((removed) {
+                  debugPrint('purgeOrphans removed $removed items');
+                })
+                .catchError((e) {
+                  debugPrint('purgeOrphans error: $e');
+                }),
+          );
+        }
+
+        // --- Local notifications bootstrap ---
+        unawaited(
+          LocalNotificationService.instance
+              .initialize(
+                onTap: (response) {
+                  // Navigate to PendingImportsPage when user taps the notification
+                  if (response.payload == 'pending_imports') {
+                    RouteUtils.pushRoute(const PendingImportsPage());
+                  }
+                },
+              )
+              .catchError((e) {
+                debugPrint('Local notification init error: $e');
+              }),
+        );
+        // -----------------------------------------
+
+        // --- Background service + Auto-import bootstrap (DEFERRED) ---
+        // The background service spins up a second Flutter engine (second
+        // libflutter.so load) which visibly delays the cold-start frame on MIUI /
+        // HyperOS. We configure + start the service 3s AFTER the first frame so the
+        // main UI renders immediately; the service is not needed to paint the UI.
+        final autoImportEnabled =
+            appStateSettings[SettingKey.autoImportEnabled] == '1';
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Future.delayed(const Duration(seconds: 8), () {
+            unawaited(
+              NitidoBackgroundService.instance
+                  .initialize()
+                  .then((_) async {
+                    if (autoImportEnabled) {
+                      // Wire the orchestrator's callback so the main isolate can show
+                      // local notifications when a new pending import arrives.
+                      CaptureOrchestrator.instance.onNewPendingImport =
+                          (int count) async {
+                            await LocalNotificationService.instance
+                                .showNewPendingNotification(count);
+                          };
+
+                      // The notification EventChannel is bound to the main FlutterEngine,
+                      // so the background isolate excludes it — the main isolate must
+                      // own the notification capture source and its health monitor.
+                      unawaited(
+                        CaptureOrchestrator.instance
+                            .applySettings(
+                              channels: {CaptureChannel.notification},
+                            )
+                            .catchError((e) {
+                              debugPrint(
+                                'CaptureOrchestrator.applySettings (main isolate) error: $e',
+                              );
+                            }),
+                      );
+
+                      // Start the background service — it handles ALL capture sources
+                      // (SMS, notifications, Binance API) and keeps capture alive when
+                      // the app is closed.  The notification_listener_service plugin uses
+                      // a BroadcastReceiver that works in both isolates; running it only
+                      // in the background service avoids duplicate captures.
+                      await NitidoBackgroundService.instance.startService();
+                    }
+                  })
+                  .catchError((e) {
+                    debugPrint('Auto-import bootstrap error: $e');
+                  })
+                  .whenComplete(() {
+                    // Mark startup window as closed so the lifecycle watchdog
+                    // is now allowed to trigger background service restarts.
+                    appStateKey.currentState?._startupComplete = true;
+                  }),
+            );
+          });
+        });
+        // ---------------------------------------------------
+
+        // Initial state: ON if the user asked us to start locked, OR if the user
+        // left the runtime toggle ON in the previous session. This keeps the
+        // toggle sticky across restarts (FIX: was only reading privateModeAtLaunch).
+        unawaited(
+          PrivateModeService.instance.setPrivateMode(
+            appStateSettings[SettingKey.privateModeAtLaunch] == '1' ||
+                appStateSettings[SettingKey.privateMode] == '1',
+          ),
+        );
+
+        // Set plural resolver for Turkish
+        unawaited(
+          LocaleSettings.setPluralResolver(
+            language: 'tr',
+            cardinalResolver:
+                (
+                  n, {
+                  String? few,
+                  String? many,
+                  String? one,
+                  String? other,
+                  String? two,
+                  String? zero,
+                }) {
+                  if (n == 1) return 'one';
+                  return 'other';
+                },
+          ),
+        );
+
+        // --- Preload locale asynchronously BEFORE runApp ---
+        // slang uses deferred imports for locale libs, so the *Sync variants fail
+        // at runtime with "Deferred library l_xx was not loaded". Awaiting the
+        // async version here still guarantees the locale is ready before the first
+        // frame, avoiding the translation-stream pulse that caused extra rebuilds.
+        try {
+          final lang = appStateSettings[SettingKey.appLanguage];
+          if (lang != null && lang.isNotEmpty) {
+            final setLocale = await LocaleSettings.setLocaleRaw(lang);
+            if (setLocale.languageTag != lang) {
+              Logger.printDebug(
+                'Warning: requested locale `$lang` unavailable. '
+                'Fallback to `${setLocale.languageTag}`.',
+              );
+              // Clear the stored value so we fall back to device locale next launch.
+              unawaited(
+                UserSettingService.instance
+                    .setItem(SettingKey.appLanguage, null)
+                    .then((_) {}),
+              );
+            }
+          } else {
+            await LocaleSettings.useDeviceLocale();
+          }
+        } catch (e) {
+          debugPrint('Error preloading locale: $e');
+        }
+        // -----------------------------------------
+
+        debugPaintSizeEnabled = false;
+        runApp(InitializeApp(key: appStateKey));
+
+        // Release the native splash after 1.5 s to let Vulkan shader pipelines
+        // finish compiling in the background before the user sees interactive UI.
+        await Future.delayed(const Duration(milliseconds: 1500));
+        WidgetsBinding.instance.allowFirstFrame();
+      },
+      (error, stack) {
+        // Hook 3: errores async dentro de la zona
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      },
+    ),
+  );
 }
 
 // ignore: library_private_types_in_public_api
@@ -651,7 +680,9 @@ class _InitialPageRouteNavigatorState extends State<InitialPageRouteNavigator> {
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          widget.introSeen ? PageSwitcher(key: tabsPageKey) : const OnboardingPage(),
+          widget.introSeen
+              ? PageSwitcher(key: tabsPageKey)
+              : const OnboardingPage(),
         ),
       ),
     );
