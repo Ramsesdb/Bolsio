@@ -4,7 +4,16 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
+    id 'com.google.firebase.appdistribution'
 }
+
+// Read version name from pubspec.yaml (strips build number, e.g. "1.0.0+1" -> "1.0.0")
+def pubspecFile = new File("${rootProject.projectDir.parent}/pubspec.yaml")
+def nitidoVersion = pubspecFile.readLines()
+    .find { it.startsWith('version:') }
+    ?.replaceAll(/^version:\s*/, '')
+    ?.replaceAll(/\+.*/, '')
+    ?.trim() ?: 'unknown'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // key.properties file, in the rootProject folder ([project]/android/keys/...).
@@ -62,6 +71,12 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseAppDistribution {
+                artifactPath = "${rootProject.projectDir.parent}/build/app/outputs/flutter-apk/Nitido-${nitidoVersion}.apk"
+                serviceCredentialsFile = "${rootProject.projectDir.parent}/nitido-1c416-firebase-adminsdk-fbsvc-fd1cf17133.json"
+                releaseNotes = "Build de prueba"
+                groups = "internal-testers"
+            }
         }
     }
 
