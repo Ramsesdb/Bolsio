@@ -4,7 +4,7 @@ Fork of [Monekin](https://github.com/enrique-lozano/Monekin) adapted for persona
 Adds multi-currency (USD/VES) support, BCV/paralelo rate tracking, auto-import from bank notifications,
 and AI-assisted transaction entry on top of the original Monekin base.
 
-Licensed under GPL-3.0 (inherited from Monekin).
+Licensed under AGPL-3.0 (inherited from Monekin).
 
 ## Features
 
@@ -68,4 +68,4 @@ model change. Generated files (`*.g.dart`) are excluded from the repo; regenerat
 
 ## License
 
-GPL-3.0 (inherited from Monekin upstream).
+AGPL-3.0 (inherited from Monekin upstream).
