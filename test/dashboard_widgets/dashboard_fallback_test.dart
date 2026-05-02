@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nitido/app/home/dashboard_widgets/defaults.dart';
 import 'package:nitido/app/home/dashboard_widgets/models/dashboard_layout.dart';
@@ -35,10 +35,7 @@ DashboardWidgetSpec _stubSpec(WidgetType type) {
     defaultSize: type == WidgetType.exchangeRateCard
         ? WidgetSize.medium
         : WidgetSize.fullWidth,
-    allowedSizes: const <WidgetSize>{
-      WidgetSize.medium,
-      WidgetSize.fullWidth,
-    },
+    allowedSizes: const <WidgetSize>{WidgetSize.medium, WidgetSize.fullWidth},
     builder: (_, _, {required editing}) => const SizedBox.shrink(),
   );
 }
@@ -56,50 +53,53 @@ void main() {
     DashboardWidgetRegistry.instance.reset();
   });
 
-  test('empty layout + introSeen="1" gate triggers fallback() persist',
-      () async {
-    var introSeen = '1';
-    final writes = <DashboardLayout>[];
+  test(
+    'empty layout + introSeen="1" gate triggers fallback() persist',
+    () async {
+      var introSeen = '1';
+      final writes = <DashboardLayout>[];
 
-    final service = DashboardLayoutService.forTesting(
-      debounceMs: 1,
-      writer: (_) async {
-        // Capture the layout that would have been persisted.
-        // (The service emits the new layout synchronously on the stream
-        // before scheduling the write; we can read `current` here.)
-      },
-    );
+      final service = DashboardLayoutService.forTesting(
+        debounceMs: 1,
+        writer: (_) async {
+          // Capture the layout that would have been persisted.
+          // (The service emits the new layout synchronously on the stream
+          // before scheduling the write; we can read `current` here.)
+        },
+      );
 
-    // Sanity: brand new service starts empty.
-    expect(service.current.isEmpty, isTrue);
-    expect(service.isFutureVersion, isFalse);
+      // Sanity: brand new service starts empty.
+      expect(service.current.isEmpty, isTrue);
+      expect(service.isFutureVersion, isFalse);
 
-    // Subscribe to capture emissions.
-    final sub = service.stream.listen(writes.add);
+      // Subscribe to capture emissions.
+      final sub = service.stream.listen(writes.add);
 
-    // Replicate DashboardPage._initLayout() gate.
-    if (service.current.isEmpty &&
-        introSeen == '1' &&
-        !service.isFutureVersion) {
-      service.save(DashboardLayoutDefaults.fallback());
-      await service.flush();
-    }
+      // Replicate DashboardPage._initLayout() gate.
+      if (service.current.isEmpty &&
+          introSeen == '1' &&
+          !service.isFutureVersion) {
+        service.save(DashboardLayoutDefaults.fallback());
+        await service.flush();
+      }
 
-    // Pump microtasks so the BehaviorSubject emits to the listener.
-    await Future<void>.delayed(Duration.zero);
+      // Pump microtasks so the BehaviorSubject emits to the listener.
+      await Future<void>.delayed(Duration.zero);
 
-    // The stream emitted at least one non-empty layout.
-    expect(writes.where((l) => !l.isEmpty), isNotEmpty);
+      // The stream emitted at least one non-empty layout.
+      expect(writes.where((l) => !l.isEmpty), isNotEmpty);
 
-    // The fallback() shape: 7 widgets, quickUse first.
-    final last = writes.last;
-    expect(last.widgets.length, 7);
-    expect(last.widgets.first.type, WidgetType.quickUse);
+      // The fallback() shape: 4 fixed widgets, quickUse first.
+      // (Simplified default — see lib/app/home/dashboard_widgets/defaults.dart.)
+      final last = writes.last;
+      expect(last.widgets.length, 4);
+      expect(last.widgets.first.type, WidgetType.quickUse);
 
-    await sub.cancel();
-    introSeen = ''; // unused tail — silences linter
-    expect(introSeen.isEmpty, isTrue);
-  });
+      await sub.cancel();
+      introSeen = ''; // unused tail — silences linter
+      expect(introSeen.isEmpty, isTrue);
+    },
+  );
 
   test('empty layout + introSeen="0" does NOT trigger fallback', () async {
     final introSeen = '0';
@@ -120,37 +120,51 @@ void main() {
 
     await Future<void>.delayed(const Duration(milliseconds: 5));
 
-    expect(service.current.isEmpty, isTrue,
-        reason: 'fallback must NOT run while onboarding is incomplete');
+    expect(
+      service.current.isEmpty,
+      isTrue,
+      reason: 'fallback must NOT run while onboarding is incomplete',
+    );
     expect(saveCount, 0);
   });
 
-  test('non-empty layout + introSeen="1" does NOT overwrite with fallback',
-      () async {
-    const introSeen = '1';
-    final service = DashboardLayoutService.forTesting(
-      debounceMs: 1,
-      writer: (_) async {},
-    );
+  test(
+    'non-empty layout + introSeen="1" does NOT overwrite with fallback',
+    () async {
+      const introSeen = '1';
+      final service = DashboardLayoutService.forTesting(
+        debounceMs: 1,
+        writer: (_) async {},
+      );
 
-    // Seed the service with a single user-chosen widget.
-    service.add(WidgetDescriptor(
-      instanceId: 'user-pick',
-      type: WidgetType.quickUse,
-      size: WidgetSize.fullWidth,
-    ));
+      // Seed the service with a single user-chosen widget.
+      service.add(
+        WidgetDescriptor(
+          instanceId: 'user-pick',
+          type: WidgetType.quickUse,
+          size: WidgetSize.fullWidth,
+        ),
+      );
 
-    final beforeIds = service.current.widgets.map((w) => w.instanceId).toList();
+      final beforeIds = service.current.widgets
+          .map((w) => w.instanceId)
+          .toList();
 
-    if (service.current.isEmpty &&
-        introSeen == '1' &&
-        !service.isFutureVersion) {
-      service.save(DashboardLayoutDefaults.fallback());
-      await service.flush();
-    }
+      if (service.current.isEmpty &&
+          introSeen == '1' &&
+          !service.isFutureVersion) {
+        service.save(DashboardLayoutDefaults.fallback());
+        await service.flush();
+      }
 
-    final afterIds = service.current.widgets.map((w) => w.instanceId).toList();
-    expect(afterIds, equals(beforeIds),
-        reason: 'fallback must only fire when the layout is genuinely empty');
-  });
+      final afterIds = service.current.widgets
+          .map((w) => w.instanceId)
+          .toList();
+      expect(
+        afterIds,
+        equals(beforeIds),
+        reason: 'fallback must only fire when the layout is genuinely empty',
+      );
+    },
+  );
 }
