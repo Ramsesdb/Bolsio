@@ -3659,18 +3659,6 @@ class TranslationsMoreHelpUsEn {
 	/// en: 'Your contributions to NITIDO and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.'
 	String get thanks_long => 'Your contributions to NITIDO and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
 
-	/// en: 'Make a donation'
-	String get donate => 'Make a donation';
-
-	/// en: 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?'
-	String get donate_descr => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
-
-	/// en: 'Donation made. Thank you very much for your contribution! ❤️'
-	String get donate_success => 'Donation made. Thank you very much for your contribution! ❤️';
-
-	/// en: 'Oops! It seems there was an error receiving your payment'
-	String get donate_err => 'Oops! It seems there was an error receiving your payment';
-
 	/// en: 'Report bugs, leave suggestions...'
 	String get report => 'Report bugs, leave suggestions...';
 }
@@ -4838,6 +4826,15 @@ class TranslationsMoreAboutUsLegalEn {
 
 	/// en: 'Licenses'
 	String get licenses => 'Licenses';
+
+	/// en: 'App license'
+	String get app_license => 'App license';
+
+	/// en: 'Based on Monekin'
+	String get upstream => 'Based on Monekin';
+
+	/// en: '© Enrique Lozano'
+	String get upstream_author => '© Enrique Lozano';
 }
 
 // Path: more.about_us.project
@@ -5909,6 +5906,9 @@ extension on Translations {
 			'more.about_us.legal.privacy' => 'Privacy policy',
 			'more.about_us.legal.terms' => 'Terms of use',
 			'more.about_us.legal.licenses' => 'Licenses',
+			'more.about_us.legal.app_license' => 'App license',
+			'more.about_us.legal.upstream' => 'Based on Monekin',
+			'more.about_us.legal.upstream_author' => '© Enrique Lozano',
 			'more.about_us.project.display' => 'Project',
 			'more.about_us.project.contributors' => 'Collaborators',
 			'more.about_us.project.contributors_descr' => 'All the developers who have made NITIDO grow',
@@ -5916,18 +5916,14 @@ extension on Translations {
 			'more.help_us.display' => 'Help us',
 			'more.help_us.description' => 'Find out how you can help NITIDO become better and better',
 			'more.help_us.rate_us' => 'Rate us',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.rate_us_descr' => 'Any rate is welcome!',
 			'more.help_us.share' => 'Share NITIDO',
 			'more.help_us.share_descr' => 'Share our app to friends and family',
-			_ => null,
-		} ?? switch (path) {
 			'more.help_us.share_text' => 'NITIDO! The best personal finance app. Download it here',
 			'more.help_us.thanks' => 'Thank you!',
 			'more.help_us.thanks_long' => 'Your contributions to NITIDO and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.',
-			'more.help_us.donate' => 'Make a donation',
-			'more.help_us.donate_descr' => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?',
-			'more.help_us.donate_success' => 'Donation made. Thank you very much for your contribution! ❤️',
-			'more.help_us.donate_err' => 'Oops! It seems there was an error receiving your payment',
 			'more.help_us.report' => 'Report bugs, leave suggestions...',
 			'onboarding.restricted_settings.title' => 'Allow restricted settings',
 			'onboarding.restricted_settings.subtitle' => 'Android blocks some permissions for apps installed outside Play Store. We\'ll fix it in 3 taps.',

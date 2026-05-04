@@ -155,6 +155,26 @@ class _AboutPageState extends State<AboutPage> {
                 openLicense(appName: info.appName, version: info.version);
               },
             ),
+            buildLinkItem(
+              t.more.about_us.legal.app_license,
+              subtitle: 'AGPL-3.0-or-later',
+              onTap: () {
+                openExternalURL(
+                  context,
+                  '__nitido_GITHUB_URL__/blob/main/LICENSE',
+                );
+              },
+            ),
+            buildLinkItem(
+              t.more.about_us.legal.upstream,
+              subtitle: t.more.about_us.legal.upstream_author,
+              onTap: () {
+                openExternalURL(
+                  context,
+                  'https://github.com/enrique-lozano/Monekin',
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -1397,7 +1397,10 @@
         "display": "Información legal",
         "privacy": "Política de privacidad",
         "terms": "Términos de uso",
-        "licenses": "Licencias"
+        "licenses": "Licencias",
+        "app_license": "Licencia de la app",
+        "upstream": "Basado en Monekin",
+        "upstream_author": "© Enrique Lozano"
       },
       "PROJECT": {
         "display": "Proyecto",
@@ -1415,10 +1418,6 @@
       "share.descr": "Comparte nuestra app a amigos y familiares",
       "share.text": "NITIDO! La mejor app de finanzas personales. Descargala aquí",
       "thanks": "¡Gracias!",
-      "donate": "Haz una donación",
-      "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
-      "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",
-      "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
       "report": "Reporta errores, deja sugerencias...",
       "thanks.long": "Tus contribuciones a NITIDO y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
     }

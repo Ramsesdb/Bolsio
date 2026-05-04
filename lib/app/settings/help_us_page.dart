@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nitido/app/layout/page_framework.dart';
-import 'package:nitido/app/settings/purchases/donate_button.dart';
-import 'package:nitido/app/settings/purchases/in_app_purchase.dart';
 import 'package:nitido/app/settings/widgets/display_app_icon.dart';
 import 'package:nitido/app/settings/widgets/setting_card_item.dart';
 import 'package:nitido/core/extensions/padding.extension.dart';
@@ -9,18 +7,12 @@ import 'package:nitido/core/utils/open_external_url.dart';
 import 'package:nitido/i18n/generated/translations.g.dart';
 // import 'package:share_plus/share_plus.dart'; // TODO: re-enable when share button comes back (Play Store launch)
 
-class HelpUsPage extends StatefulWidget {
+class HelpUsPage extends StatelessWidget {
   const HelpUsPage({super.key});
 
   @override
-  State<HelpUsPage> createState() => _HelpUsPageState();
-}
-
-class _HelpUsPageState extends State<HelpUsPage> {
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final iapConnection = IAPConnection.instance;
 
     return PageFramework(
       title: t.more.help_us.display,
@@ -93,7 +85,6 @@ class _HelpUsPageState extends State<HelpUsPage> {
                 ],
               ),
             ),
-            DonateButton(iapConnection: iapConnection),
           ],
         ),
       ),

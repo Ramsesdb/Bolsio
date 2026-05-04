@@ -73,7 +73,6 @@ dependencies:
   dynamic_color: ^1.7.0
   copy_with_extension: ^11.0.0
   freezed_annotation: ^3.1.0
-  in_app_purchase: ^3.1.11
   flutter_colorpicker: ^1.1.0
   smooth_page_indicator: ^1.2.1
   another_flushbar: ^1.12.32

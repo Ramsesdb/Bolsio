@@ -2047,10 +2047,6 @@ class _TranslationsMoreHelpUsEs extends TranslationsMoreHelpUsEn {
 	@override String get share_descr => 'Comparte nuestra app a amigos y familiares';
 	@override String get share_text => 'NITIDO! La mejor app de finanzas personales. Descargala aquí';
 	@override String get thanks => '¡Gracias!';
-	@override String get donate => 'Haz una donación';
-	@override String get donate_descr => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
-	@override String get donate_success => 'Donación realizada. Muchas gracias por tu contribución! ❤️';
-	@override String get donate_err => 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
 	@override String get report => 'Reporta errores, deja sugerencias...';
 	@override String get thanks_long => 'Tus contribuciones a NITIDO y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 }
@@ -2752,6 +2748,9 @@ class _TranslationsMoreAboutUsLegalEs extends TranslationsMoreAboutUsLegalEn {
 	@override String get privacy => 'Política de privacidad';
 	@override String get terms => 'Términos de uso';
 	@override String get licenses => 'Licencias';
+	@override String get app_license => 'Licencia de la app';
+	@override String get upstream => 'Basado en Monekin';
+	@override String get upstream_author => '© Enrique Lozano';
 }
 
 // Path: more.about_us.project
@@ -3805,6 +3804,9 @@ extension on TranslationsEs {
 			'more.about_us.legal.privacy' => 'Política de privacidad',
 			'more.about_us.legal.terms' => 'Términos de uso',
 			'more.about_us.legal.licenses' => 'Licencias',
+			'more.about_us.legal.app_license' => 'Licencia de la app',
+			'more.about_us.legal.upstream' => 'Basado en Monekin',
+			'more.about_us.legal.upstream_author' => '© Enrique Lozano',
 			'more.about_us.project.display' => 'Proyecto',
 			'more.about_us.project.contributors' => 'Colaboradores',
 			'more.about_us.project.contributors_descr' => 'Todos los desarrolladores que han hecho que NITIDO crezca',
@@ -3812,17 +3814,13 @@ extension on TranslationsEs {
 			'more.help_us.display' => 'Ayúdanos',
 			'more.help_us.description' => 'Descubre de que formas puedes ayudar a que NITIDO sea cada vez mejor',
 			'more.help_us.rate_us' => 'Califícanos',
+			_ => null,
+		} ?? switch (path) {
 			'more.help_us.rate_us_descr' => '¡Cualquier valoración es bienvenida!',
 			'more.help_us.share' => 'Comparte NITIDO',
 			'more.help_us.share_descr' => 'Comparte nuestra app a amigos y familiares',
-			_ => null,
-		} ?? switch (path) {
 			'more.help_us.share_text' => 'NITIDO! La mejor app de finanzas personales. Descargala aquí',
 			'more.help_us.thanks' => '¡Gracias!',
-			'more.help_us.donate' => 'Haz una donación',
-			'more.help_us.donate_descr' => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?',
-			'more.help_us.donate_success' => 'Donación realizada. Muchas gracias por tu contribución! ❤️',
-			'more.help_us.donate_err' => 'Ups! Parece que ha habido un error a la hora de recibir tu pago',
 			'more.help_us.report' => 'Reporta errores, deja sugerencias...',
 			'more.help_us.thanks_long' => 'Tus contribuciones a NITIDO y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.',
 			'onboarding.restricted_settings.title' => 'Permite la configuración restringida',
