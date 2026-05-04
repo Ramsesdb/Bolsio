@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- No QUERY_ALL_PACKAGES. Package visibility provided by <queries>
+         in the base manifest (main/AndroidManifest.xml). -->
+</manifest>

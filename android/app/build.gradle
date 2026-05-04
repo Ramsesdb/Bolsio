@@ -53,6 +53,16 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions = ["distribution"]
+    productFlavors {
+        foss {
+            dimension "distribution"
+        }
+        play {
+            dimension "distribution"
+        }
+    }
+
     signingConfigs {
         release {
             keyAlias = keystoreProperties['keyAlias']

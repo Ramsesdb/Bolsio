@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- QUERY_ALL_PACKAGES as fallback for MIUI/HyperOS devices where <queries>
+         may be restricted at the OEM level. The foss flavor omits this and
+         relies on the explicit <queries> in the base manifest. -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+</manifest>
