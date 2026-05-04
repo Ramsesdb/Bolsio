@@ -65,6 +65,17 @@ class AppDB extends _$AppDB {
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
+  /// Version numbers that are permanently skipped in the migration sequence.
+  ///
+  /// v10 — Introduced by upstream branch `feat/debts` (table `debts` +
+  /// `transactions.debtId` FK). That branch was never merged into main.
+  /// The gap is **intentional and permanent**. Users skip from v9 → v11
+  /// without issue because Nitido never shipped v10.
+  ///
+  /// IMPORTANT: Any future migration must renumber from v30+ to avoid
+  /// accidentally filling this gap and corrupting existing installs.
+  static const _kSkippedMigrations = {10};
+
   Future<void> migrateDB(int from, int to) async {
     Logger.printDebug('Executing migrations from previous version [$from]...');
 
@@ -72,23 +83,42 @@ class AppDB extends _$AppDB {
     await AppDataService.instance.initializeGlobalStateMap();
 
     for (var i = from + 1; i <= to; i++) {
-      Logger.printDebug('Migrating database to v$i...');
-
-      String initialSQL = await rootBundle.loadString(
-        'assets/sql/migrations/v$i.sql',
-      );
-
-      for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        Logger.printDebug(
-          'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
-        );
-        await customStatement(sqlStatement);
+      // v10 is permanently skipped — see _kSkippedMigrations comment above.
+      if (_kSkippedMigrations.contains(i)) {
+        Logger.printDebug('Skipping migration v$i (permanently excluded).');
+        continue;
       }
 
-      await AppDataService.instance.setItem(
-        AppDataKey.dbVersion,
-        i.toStringAsFixed(0),
-      );
+      Logger.printDebug('Migrating database to v$i...');
+
+      try {
+        final initialSQL = await rootBundle.loadString(
+          'assets/sql/migrations/v$i.sql',
+        );
+
+        await transaction(() async {
+          for (final sqlStatement in splitSQLStatements(initialSQL)) {
+            Logger.printDebug(
+              'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+            );
+            await customStatement(sqlStatement);
+          }
+
+          await AppDataService.instance.setItem(
+            AppDataKey.dbVersion,
+            i.toStringAsFixed(0),
+          );
+        });
+      } catch (e, stack) {
+        Logger.recordError(
+          e,
+          stack,
+          reason:
+              'Migration v$i failed (from=$from, to=$to). '
+              'DB version NOT advanced.',
+        );
+        rethrow;
+      }
     }
 
     Logger.printDebug('Migration completed!');
